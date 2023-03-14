@@ -18,55 +18,56 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
-    {
+  {
         path: '/SupplierMaintenance',
         name: 'SupplierMaintenance',
         component: () => import('../views/psasod/SupplierMaintenance.vue')
-    },
-    {
+  },
+  {
         path: '/PurchaseLnbound',
         name: 'PurchaseLnbound',
         component: () => import('../views/psasod/PurchaseLnbound.vue')
-    },
-    {
+  },
+  {
         path: '/InboundAudit',
         name: 'InboundAudit',
         component: () => import('../views/psasod/InboundAudit.vue')
-    },
-    {
+  },
+  {
         path: '/InventoryLnquiry',
         name: 'InventoryLnquiry',
         component: () => import('../views/psasod/InventoryLnquiry.vue')
-    },
-    {
+  },
+  {
         path: '/na',
         name: 'na',
-        component: () => import(/* webpackChunkName: "about" */ '../views/System/NotificationAnnouncements.vue')
-    },
-
-    {
+        component: () => import('../views/System/NotificationAnnouncements.vue')
+  },
+  {
         path: '/olm',
         name: 'olm',
-        component: () => import(/* webpackChunkName: "about" */ '../views/System/OperationalLogManagement.vue')
-    },
-
-    {
+        component: () => import('../views/System/OperationalLogManagement.vue')
+  },
+  {
         path: '/lotlm',
         name: 'lotlm',
-        component: () => import(/* webpackChunkName: "about" */ '../views/System/LogOnToLogManagement.vue')
-    },{
+        component: () => import('../views/System/LogOnToLogManagement.vue')
+  },
+  {
         path: '/cem',
         name: 'cem',
-        component: () => import(/* webpackChunkName: "about" */ '../views/System/CheckExpenseManagement.vue')
-    },{
+        component: () => import('../views/System/CheckExpenseManagement.vue')
+  },
+  {
         path: '/rfs',
         name: 'rfs',
-        component: () => import(/* webpackChunkName: "about" */ '../views/System/RegisteredFeeSettings.vue')
-    },{
+        component: () => import('../views/System/RegisteredFeeSettings.vue')
+  },
+  {
         path: '/dm',
         name: 'dm',
-        component: () => import(/* webpackChunkName: "about" */ '../views/System/DictionaryManagement.vue')
-    }
+        component: () => import('../views/System/DictionaryManagement.vue')
+  }
 ]
 
 const router = new VueRouter({
