@@ -67,6 +67,16 @@ const routes = [
         path: '/dm',
         name: 'dm',
         component: () => import('../views/System/DictionaryManagement.vue')
+  },
+  {
+        path: '/pc',
+        name: 'pc',
+        component: () => import('../views/ChargeMana/PrescriptionCharges.vue')
+  },
+  {
+        path: '/pc2',
+        name: 'pc2',
+        component: () => import('../views/ChargeMana/PrescriptionCharges2.vue')
   }
 ]
 
