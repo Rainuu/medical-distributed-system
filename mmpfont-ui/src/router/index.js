@@ -77,7 +77,17 @@ const routes = [
         path: '/pc2',
         name: 'pc2',
         component: () => import('../views/ChargeMana/PrescriptionCharges2.vue')
-  }
+  },
+    {
+        path: '/ManufacturerMaintenance',
+        name: 'ManufacturerMaintenance',
+        component: () => import('../views/psasod/ManufacturerMaintenance.vue')
+    },
+    {
+        path: '/DrugLnformationMaintenance',
+        name: 'DrugLnformationMaintenance',
+        component: () => import('../views/psasod/DrugLnformationMaintenance.vue')
+    }
 ]
 
 const router = new VueRouter({
