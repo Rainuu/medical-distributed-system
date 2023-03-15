@@ -36,33 +36,73 @@
               <span slot="title">ueditor</span>
             </el-menu-item>
           </el-submenu>
+          <el-submenu index="demo2">
+            <template slot="title">
+              <i class="el-icon-star-off"></i>
+              <span>系统管理</span>
+            </template>
+            <el-menu-item index="demo-na" @click="$router.push({ name: 'na' })">
+              <i class="el-icon-s-data"></i>
+              <span slot="title">通知公告</span>
+            </el-menu-item>
+            <el-menu-item index="demo-olm" @click="$router.push({ name: 'olm' })">
+              <i class="el-icon-document"></i>
+              <span slot="title">操作日志管理</span>
+            </el-menu-item>
+            <el-menu-item index="demo-cem" @click="$router.push({ name: 'cem' })">
+              <i class="el-icon-s-data"></i>
+              <span slot="title">检查费用设置</span>
+            </el-menu-item>
+            <el-menu-item index="demo-lotlm" @click="$router.push({ name: 'lotlm' })">
+              <i class="el-icon-s-data"></i>
+              <span slot="title">登录日志管理</span>
+            </el-menu-item>
+            <el-menu-item index="demo-dm" @click="$router.push({ name: 'dm' })">
+              <i class="el-icon-s-data"></i>
+              <span slot="title">字典管理</span>
+            </el-menu-item>
+            <el-menu-item index="demo-rfs" @click="$router.push({ name: 'rfs' })">
+              <i class="el-icon-s-data"></i>
+              <span slot="title">挂号费用设置</span>
+            </el-menu-item>
+          </el-submenu>
+          <el-submenu index="demo3">
+            <template slot="title">
+              <i class="el-icon-star-off"></i>
+              <span>收费管理</span>
+            </template>
+            <el-menu-item index="demo-pc" @click="$router.push({ name: 'pc' })">
+              <i class="el-icon-s-data"></i>
+              <span slot="title">处方收费</span>
+            </el-menu-item>
+          </el-submenu>
 
           <el-submenu index="药品进销存">
             <template slot="title">
               <i class="el-icon-star-off"></i>
               <span>药品进销存</span>
             </template>
-            <el-menu-item index="demo-echarts" @click="$router.push({ name: 'ManufacturerMaintenance' })">
+            <el-menu-item index="demo-ManufacturerMaintenance" @click="$router.push({ name: 'ManufacturerMaintenance' })">
               <i class="el-icon-s-data"></i>
               <span slot="title">生产厂家维护</span>
             </el-menu-item>
-            <el-menu-item index="demo-echarts" @click="$router.push({ name: 'DrugLnformationMaintenance' })">
+            <el-menu-item index="demo-DrugLnformationMaintenance" @click="$router.push({ name: 'DrugLnformationMaintenance' })">
               <i class="el-icon-s-data"></i>
               <span slot="title">药品信息维护</span>
             </el-menu-item>
-            <el-menu-item index="demo-ueditor" @click="$router.push({ name: 'SupplierMaintenance' })">
+            <el-menu-item index="demo-SupplierMaintenance" @click="$router.push({ name: 'SupplierMaintenance' })">
               <i class="el-icon-document"></i>
               <span slot="title">供应商维护</span>
             </el-menu-item>
-            <el-menu-item index="demo-ueditor" @click="$router.push({ name: 'PurchaseLnbound' })">
+            <el-menu-item index="demo-PurchaseLnbound" @click="$router.push({ name: 'PurchaseLnbound' })">
               <i class="el-icon-document"></i>
               <span slot="title">采购入库列表</span>
             </el-menu-item>
-            <el-menu-item index="demo-ueditor" @click="$router.push({ name: 'InboundAudit' })">
+            <el-menu-item index="demo-InboundAudit" @click="$router.push({ name: 'InboundAudit' })">
               <i class="el-icon-document"></i>
               <span slot="title">入库审核</span>
             </el-menu-item>
-            <el-menu-item index="demo-ueditor" @click="$router.push({ name: 'InventoryInquiry' })">
+            <el-menu-item index="demo-InventoryInquiry" @click="$router.push({ name: 'InventoryInquiry' })">
               <i class="el-icon-document"></i>
               <span slot="title">库存查询</span>
             </el-menu-item>
