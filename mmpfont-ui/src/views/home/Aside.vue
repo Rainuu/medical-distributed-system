@@ -27,11 +27,11 @@
               <i class="el-icon-star-off"></i>
               <span>demo</span>
             </template>
-            <el-menu-item index="demo-echarts" @click="$router.push({ name: 'Echarts' })">
+            <el-menu-item index="demo-echarts" @click="$router.push({ name: 'SupplierMaintenance' })">
               <i class="el-icon-s-data"></i>
               <span slot="title">echarts</span>
             </el-menu-item>
-            <el-menu-item index="demo-ueditor" @click="$router.push({ name: 'Ueditor' })">
+            <el-menu-item index="demo-ueditor" @click="$router.push({ name: 'PurchaseLnbound' })">
               <i class="el-icon-document"></i>
               <span slot="title">ueditor</span>
             </el-menu-item>
