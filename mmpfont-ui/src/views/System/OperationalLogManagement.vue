@@ -10,7 +10,7 @@
       <el-form-item label="操作类型" style="float:left">
         <el-input v-model="formInline.user" placeholder="请输入操作类型"></el-input>
       </el-form-item>&nbsp&nbsp
-      <el-form-item label="操作状态" style="float:left">
+      <el-form-item label="操作状态" style="float:left;clear: both">
         <el-select v-model="formInline.region" placeholder="请选择操作状态">
           <el-option label="区域一" value="shanghai"></el-option>
           <el-option label="区域二" value="beijing"></el-option>
@@ -31,7 +31,7 @@
         <el-button type="primary" @click="resetForm('ruleForm')" icon="el-icon-refresh">重置</el-button>
       </el-form-item>
     </el-form>
-    <div style="float: left">
+    <div style="float: left;clear: both">
       <el-button type="danger" icon="el-icon-delete">删除</el-button>
       <el-button type="warning" icon="el-icon-error">清空</el-button>
     </div>
@@ -83,61 +83,61 @@
           align="center"
           prop="ksid"
           label="日志ID"
-          width="130">
+          min-width="100">
       </el-table-column>
       <el-table-column
           align="center"
           prop="ksmc"
           label="系统模块"
-          width="130">
+          min-width="100">
       </el-table-column>
       <el-table-column
           align="center"
           prop="zt1"
           label="操作类型"
-          width="130">
+          min-width="100">
       </el-table-column>
       <el-table-column
           align="center"
           prop="zt2"
           label="请求方式"
-          width="130">
+          min-width="100">
       </el-table-column>
       <el-table-column
           align="center"
           prop="fbz"
           label="操作人员"
-          width="130">
+          min-width="100">
       </el-table-column>
       <el-table-column
           align="center"
           prop="fbz"
           label="主机"
-          width="130">
+          min-width="100">
       </el-table-column>
       <el-table-column
           align="center"
           prop="fbz"
           label="操作地点"
-          width="130">
+          min-width="100">
       </el-table-column>
       <el-table-column
           align="center"
           prop="fbz"
           label="操作状态"
-          width="130">
+          min-width="100">
       </el-table-column>
       <el-table-column
           align="center"
           label="操作时间"
-          width="180">
+          min-width="150">
         <template slot-scope="scope">{{ scope.row.date }}</template>
       </el-table-column>
       <el-table-column
           align="center"
           fixed="right"
           label="操作"
-          width="130">
+          min-width="100">
         <template slot-scope="scope"  align="center">
           <el-button @click="shanchu(scope.row)" type="text" size="small" icon="el-icon-delete">删除</el-button>
         </template>
@@ -149,7 +149,7 @@
           @current-change="handleCurrentChange"
           :current-page="currentPage4"
           :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
+          :page-size="4"
           layout="total, sizes, prev, pager, next, jumper"
           :total="400">
       </el-pagination>
@@ -221,34 +221,6 @@ export default {
         address: '上海市普陀区真北路',
         shop: '王小虎夫妻店',
         shopId: '10333'
-      },{
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-08',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-06',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-07',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
       }],
       multipleSelection: [],
       formInline: {

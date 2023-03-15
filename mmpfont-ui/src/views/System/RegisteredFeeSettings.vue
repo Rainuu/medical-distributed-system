@@ -3,7 +3,7 @@
     <el-form :inline="true" :model="formInline" class="demo-form-inline" style="float: left">
       <el-form-item label="挂号项目名称">
         <el-input v-model="formInline.user" placeholder="请输入挂号项目名称"></el-input>
-      </el-form-item>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+      </el-form-item>
       <el-form-item label="类型">
         <el-select v-model="formInline.region" placeholder="类型">
           <el-option label="区域一" value="shanghai"></el-option>
@@ -35,37 +35,37 @@
           align="center"
           prop="ksid"
           label="挂号项目ID"
-          width="234">
+          min-width="150">
       </el-table-column>
       <el-table-column
           align="center"
           prop="ksmc"
           label="挂号项目名称"
-          width="234">
+          min-width="150">
       </el-table-column>
       <el-table-column
           align="center"
           prop="zt1"
           label="挂号项目费用"
-          width="234">
+          min-width="150">
       </el-table-column>
       <el-table-column
           align="center"
           prop="zt2"
           label="状态"
-          width="234">
+          min-width="150">
       </el-table-column>
       <el-table-column
           align="center"
           label="创建时间"
-          width="234">
+          min-width="150">
         <template slot-scope="scope">{{ scope.row.date }}</template>
       </el-table-column>
       <el-table-column
           align="center"
           fixed="right"
           label="操作"
-          width="234">
+          min-width="150">
         <template slot-scope="scope"  align="center">
           <el-button @click="xiugai(scope.row)" type="text" size="small" icon="el-icon-edit">修改</el-button>
           <el-button @click="shanchu(scope.row)" type="text" size="small" icon="el-icon-delete">删除</el-button>

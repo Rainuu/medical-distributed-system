@@ -50,73 +50,73 @@
         @selection-change="handleSelectionChange">
       <el-table-column
           type="selection"
-          width="55">
+          min-width="55">
       </el-table-column>
       <el-table-column
           align="center"
           prop="ksid"
           label="日志ID"
-          width="125">
+          min-width="85">
       </el-table-column>
       <el-table-column
           align="center"
           prop="ksmc"
           label="用户姓名"
-          width="125">
+          min-width="85">
       </el-table-column>
       <el-table-column
           align="center"
           prop="zt1"
           label="登陆账号"
-          width="125">
+          min-width="85">
       </el-table-column>
       <el-table-column
           align="center"
           prop="zt2"
           label="IP"
-          width="125">
+          min-width="85">
       </el-table-column>
       <el-table-column
           align="center"
           prop="fbz"
           label="登陆地址"
-          width="125">
+          min-width="85">
       </el-table-column>
       <el-table-column
           align="center"
           prop="fbz"
           label="浏览器"
-          width="125">
+          min-width="85">
       </el-table-column>
       <el-table-column
           align="center"
           prop="fbz"
           label="操作系统"
-          width="125">
+          min-width="85">
       </el-table-column>
       <el-table-column
           align="center"
           prop="fbz"
           label="登陆状态"
-          width="125">
+          min-width="85">
       </el-table-column>
       <el-table-column
           align="center"
           prop="fbz"
           label="用户类型"
-          width="125">
+          min-width="85">
       </el-table-column>
       <el-table-column
           align="center"
           label="登陆时间"
-          width="150">
+          min-width="130">
         <template slot-scope="scope">{{ scope.row.date }}</template>
       </el-table-column>
       <el-table-column
           align="center"
           fixed="right"
           label="操作"
-          width="125">
+          min-width="130">
         <template slot-scope="scope"  align="center">
           <el-button @click="shanchu(scope.row)" type="text" size="small" icon="el-icon-delete">删除</el-button>
         </template>
@@ -127,8 +127,8 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage4"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
+          :page-sizes="[85, 200, 300, 400]"
+          :page-size="85"
           layout="total, sizes, prev, pager, next, jumper"
           :total="400">
       </el-pagination>

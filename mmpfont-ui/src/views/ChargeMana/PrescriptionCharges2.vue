@@ -80,6 +80,7 @@
         ref="multipleTable"
         :data="tableData3"
         tooltip-effect="dark"
+
         border
         style="width: 100%;clear: both"
         @selection-change="handleSelectionChange">
@@ -97,38 +98,38 @@
           align="center"
           prop="xmmc"
           label="项目名称"
-          width="230">
+          min-width="175">
       </el-table-column>
       <el-table-column
           align="center"
           prop="sl"
           label="数量"
-          width="230">
+          min-width="175">
       </el-table-column>
       <el-table-column
           align="center"
           prop="dj"
           label="单价(元)"
-          width="230">
+          min-width="175">
       </el-table-column>
       <el-table-column
           align="center"
           prop="je"
           label="金额(元)"
-          width="230">
+          min-width="175">
       </el-table-column>
       <el-table-column
           align="center"
           prop="bz"
           label="备注"
-          width="230">
+          min-width="175">
       </el-table-column>
       <el-table-column
           align="center"
           prop="zt"
           fixed="right"
           label="状态"
-          width="200">
+          min-width="180">
       </el-table-column>
 
     </el-table>

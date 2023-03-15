@@ -19,7 +19,7 @@
           <el-option label="区域二" value="beijing"></el-option>
         </el-select>
       </el-form-item>&nbsp;
-      <el-form-item style="float:left">
+      <el-form-item style="clear: both">
         <el-button type="primary" @click="onSubmit"  icon="el-icon-search">查询</el-button>
         <el-button type="primary" @click="resetForm('ruleForm')" icon="el-icon-refresh">重置</el-button>
       </el-form-item>
@@ -44,61 +44,61 @@
           align="center"
           prop="ksid"
           label="检查项目ID"
-          width="140">
+          min-width="100">
       </el-table-column>
       <el-table-column
           align="center"
           prop="ksmc"
           label="检查项目名称"
-          width="140">
+          min-width="100">
       </el-table-column>
       <el-table-column
           align="center"
           prop="zt1"
           label="关键字"
-          width="140">
+          min-width="100">
       </el-table-column>
       <el-table-column
           align="center"
           prop="zt2"
           label="项目单价"
-          width="140">
+          min-width="100">
       </el-table-column>
       <el-table-column
           align="center"
           prop="fbz"
           label="项目成本"
-          width="140">
+          min-width="100">
       </el-table-column>
       <el-table-column
           align="center"
           prop="fbz"
           label="单位"
-          width="140">
+          min-width="100">
       </el-table-column>
       <el-table-column
           align="center"
           prop="fbz"
           label="项目类型"
-          width="140">
+          min-width="100">
       </el-table-column>
       <el-table-column
           align="center"
           prop="fbz"
           label="状态"
-          width="140">
+          min-width="100">
       </el-table-column>
       <el-table-column
           align="center"
           label="创建时间"
-          width="150">
+          min-width="100">
         <template slot-scope="scope">{{ scope.row.date }}</template>
       </el-table-column>
       <el-table-column
           align="center"
           fixed="right"
           label="操作"
-          width="140">
+          min-width="150">
         <template slot-scope="scope"  align="center">
           <el-button @click="shanchu(scope.row)" type="text" size="small" icon="el-icon-delete">删除</el-button>
         </template>

@@ -43,49 +43,49 @@
         @selection-change="handleSelectionChange">
       <el-table-column
           type="selection"
-          width="55">
+          min-width="55">
       </el-table-column>
       <el-table-column
           align="center"
           prop="ksid"
           label="字典编号"
-          width="197">
+          min-width="150">
       </el-table-column>
       <el-table-column
           align="center"
           prop="ksmc"
           label="字典名称"
-          width="197">
+          min-width="150">
       </el-table-column>
       <el-table-column
           align="center"
           prop="zt1"
           label="字典类型"
-          width="197">
+          min-width="150">
       </el-table-column>
       <el-table-column
           align="center"
           prop="zt2"
           label="状态"
-          width="197">
+          min-width="150">
       </el-table-column>
       <el-table-column
           align="center"
           prop="fbz"
           label="备注"
-          width="197">
+          min-width="150">
       </el-table-column>
       <el-table-column
           align="center"
           label="创建时间"
-          width="197">
+          min-width="150">
         <template slot-scope="scope">{{ scope.row.date }}</template>
       </el-table-column>
       <el-table-column
           align="center"
           fixed="right"
           label="操作"
-          width="197">
+          min-width="150">
         <template slot-scope="scope"  align="center">
           <el-button @click="shanchu(scope.row)" type="text" size="small" icon="el-icon-delete">修改</el-button>
           <el-button @click="shanchu(scope.row)" type="text" size="small" icon="el-icon-delete">删除</el-button>

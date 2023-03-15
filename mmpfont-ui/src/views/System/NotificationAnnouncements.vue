@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form :inline="true" :model="formInline" class="demo-form-inline" style="float: left">
-      <el-form-item label="公告标题">
+      <el-form-item label="公告标题" label-width="100px">
         <el-input v-model="formInline.user" placeholder="请输入通知公告标题"></el-input>
       </el-form-item>
       <el-form-item label="发布者">
@@ -44,43 +44,43 @@
           align="center"
           prop="ksid"
           label="科室ID"
-          width="197">
+          min-width="150">
       </el-table-column>
       <el-table-column
           align="center"
           prop="ksmc"
           label="科室名称"
-          width="197">
+          min-width="150">
       </el-table-column>
       <el-table-column
           align="center"
           prop="zt1"
           label="状态"
-          width="197">
+          min-width="150">
       </el-table-column>
       <el-table-column
           align="center"
           prop="zt2"
           label="状态"
-          width="197">
+          min-width="150">
       </el-table-column>
       <el-table-column
           align="center"
           prop="fbz"
           label="发布者"
-          width="197">
+          min-width="150">
       </el-table-column>
       <el-table-column
           align="center"
           label="创建时间"
-          width="197">
+          min-width="150">
         <template slot-scope="scope">{{ scope.row.date }}</template>
       </el-table-column>
       <el-table-column
           align="center"
           fixed="right"
           label="操作"
-          width="197">
+          min-width="180">
         <template slot-scope="scope"  align="center">
           <el-button @click="xiugai(scope.row)" type="text" size="small" icon="el-icon-edit">修改</el-button>
           <el-button @click="shanchu(scope.row)" type="text" size="small" icon="el-icon-delete">删除</el-button>
