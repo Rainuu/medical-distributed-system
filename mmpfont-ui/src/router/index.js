@@ -70,6 +70,11 @@ const routes = [
             component: () => import('../views/ChargeMana/PrescriptionCharges2.vue')
         },
         {
+            path: '/ChargeInquiry',
+            name: 'ChargeInquiry',
+            component: () => import('../views/ChargeMana/ChargeInquiry.vue')
+        },
+        {
             path: '/ManufacturerMaintenance',
             name: 'ManufacturerMaintenance',
             component: () => import('../views/psasod/ManufacturerMaintenance.vue')
