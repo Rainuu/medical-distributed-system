@@ -25,9 +25,9 @@ const routes = [
             component: () => import('../views/psasod/InboundAudit.vue')
         },
         {
-            path: '/InventoryLnquiry',
-            name: 'InventoryLnquiry',
-            component: () => import('../views/psasod/InventoryLnquiry.vue')
+            path: '/InventoryInquiry',
+            name: 'InventoryInquiry',
+            component: () => import('../views/psasod/InventoryInquiry.vue')
         },
         {
             path: '/na',
@@ -83,7 +83,8 @@ const routes = [
             path: '/DrugLnformationMaintenance',
             name: 'DrugLnformationMaintenance',
             component: () => import('../views/psasod/DrugLnformationMaintenance.vue')
-        }
+        },
+
     ]
   },
   {

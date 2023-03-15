@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div style="margin-right: 400px">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
+    <div style="float: left">
+      <el-form :inline="true" :model="formInline" class="demo-form-inline" >
         <el-form-item label="厂家名称">
           <el-input v-model="formInline.user" placeholder="请输入厂家名称"></el-input>
         </el-form-item>
@@ -17,18 +17,20 @@
             <el-option label="区域二" value="beijing"></el-option>
           </el-select>
         </el-form-item>
-        <div class="block" style="float: left">
-          <span>创建时间</span>
+        <el-form-item label="创建时间">
           <el-date-picker
-              v-model="value1"
+              v-model="value3"
               type="datetimerange"
+              range-separator="-"
               start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :default-time="['12:00:00']">
+              end-placeholder="结束日期">
           </el-date-picker>
-        </div>
-        <el-button type="primary "  icon="el-icon-search" plain style="float: left">搜索</el-button>
-        <el-button type="primary "  icon="el-icon-refresh" plain style="float: left">重置</el-button>
+        </el-form-item>
+        <el-form-item style="clear: both">
+          <el-button type="primary "  icon="el-icon-search" plain style="float: left">搜索</el-button>
+          <el-button type="primary "  icon="el-icon-refresh" plain style="float: left">重置</el-button>
+        </el-form-item>
+
       </el-form>
     </div>
 
@@ -40,17 +42,17 @@
     <div>
     <el-table ref="multipleTable"  :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" border>
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="ID" label="厂家ID" width="150" align="center"></el-table-column>
-      <el-table-column prop="name" label="厂家名称" width="180" align="center"></el-table-column>
-      <el-table-column prop="name" label="厂家编码" width="150" align="center"></el-table-column>
-      <el-table-column prop="name" label="联系人" width="150" align="center"></el-table-column>
-      <el-table-column prop="name" label="电话" width="180" align="center"></el-table-column>
-      <el-table-column prop="name" label="关键字" width="150" align="center"></el-table-column>
-      <el-table-column prop="status" label="状态" width="150" align="center"></el-table-column>
-      <el-table-column prop="name" label="创建时间" width="180" align="center"></el-table-column>
+      <el-table-column prop="ID" label="厂家ID" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="name" label="厂家名称" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="name" label="厂家编码" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="name" label="联系人" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="name" label="电话" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="name" label="关键字" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="status" label="状态" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="name" label="创建时间" min-width="75" align="center"></el-table-column>
 <!--      <el-table-column label="日期" width="120">-->
 <!--        <template slot-scope="scope">{{ scope.row.date }}</template></el-table-column>-->
-      <el-table-column fixed="right" label="操作" width="100">
+      <el-table-column fixed="right" label="操作" min-width="100" align="center">
         <template slot-scope="scope">
           <el-button @click="del(scope.row)" type="text" size="small" icon="el-icon-edit">删除</el-button>
           <el-button @click="upd(scope.row)" type="text" size="small " icon="el-icon-delete" >修改</el-button>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="margin-right:350px">
+    <div >
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="药品名称">
           <el-input v-model="formInline.user" placeholder="请输入药品名称"></el-input>
@@ -20,22 +20,22 @@
             <el-option label="区域二" value="beijing"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="处方类型 " style="float: left">
+        <el-form-item label="处方类型 " >
           <el-select v-model="formInline.region" placeholder="处方类型">
             <el-option label="区域一" value="shanghai"></el-option>
             <el-option label="区域二" value="beijing"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="状态" style="float: left">
+        <el-form-item label="状态" >
           <el-select v-model="formInline.region" placeholder="状态">
             <el-option label="区域一" value="shanghai"></el-option>
             <el-option label="区域二" value="beijing"></el-option>
           </el-select>
         </el-form-item>
-
-
-        <el-button type="primary "  icon="el-icon-search" plain style="float: left">搜索</el-button>
-        <el-button type="primary "  icon="el-icon-refresh" plain style="float: left"  >重置</el-button>
+        <el-form-item style="clear: both">
+          <el-button type="primary "  icon="el-icon-search" plain style="float: left">搜索</el-button>
+          <el-button type="primary "  icon="el-icon-refresh" plain style="float: left">重置</el-button>
+        </el-form-item>
       </el-form>
     </div>
 
@@ -58,16 +58,16 @@
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="药品ID" prop="id"></el-table-column>
-        <el-table-column label="药品名称" prop="name"></el-table-column>
-        <el-table-column label="药品编号" prop="name"></el-table-column>
-        <el-table-column label="生产厂家" prop="name"></el-table-column>
-        <el-table-column label="药品类型" prop="name"></el-table-column>
-        <el-table-column label="处方类型" prop="name"></el-table-column>
-        <el-table-column label="关键字" prop="name"></el-table-column>
-        <el-table-column label="处方价格" prop="name"></el-table-column>
-        <el-table-column label="状态" prop="name"></el-table-column>
-              <el-table-column fixed="right" label="操作" width="100">
+        <el-table-column label="药品ID" prop="id" min-width="100" align="center"></el-table-column>
+        <el-table-column label="药品名称" prop="name" min-width="100" align="center"></el-table-column>
+        <el-table-column label="药品编号" prop="name" min-width="100" align="center"></el-table-column>
+        <el-table-column label="生产厂家" prop="name" min-width="100" align="center"></el-table-column>
+        <el-table-column label="药品类型" prop="name" min-width="100" align="center"></el-table-column>
+        <el-table-column label="处方类型" prop="name" min-width="100" align="center"></el-table-column>
+        <el-table-column label="关键字" prop="name" min-width="100" align="center"></el-table-column>
+        <el-table-column label="处方价格" prop="name" min-width="100" align="center"></el-table-column>
+        <el-table-column label="状态" prop="name" min-width="90" align="center"></el-table-column>
+              <el-table-column fixed="right" label="操作" min-width="130" align="center">
                 <template slot-scope="scope">
                   <el-button @click="del(scope.row)" type="text" size="small" icon="el-icon-edit">删除</el-button>
                   <el-button @click="upd(scope.row)" type="text" size="small " icon="el-icon-delete" >修改</el-button>
@@ -148,7 +148,7 @@ export default {
       tableData: [
         {
           id: '12987126',
-          name: '好滋好味鸡蛋仔',
+          name: '好滋好',
           category: '江浙小吃、小吃零食',
           desc: '荷兰优质淡奶，奶香浓而不腻',
           address: '上海市普陀区真北路',
@@ -157,7 +157,7 @@ export default {
         },
     {
       id: '12987126',
-          name: '好滋好味鸡蛋仔',
+          name: '好滋好',
         category: '江浙小吃、小吃零食',
         desc: '荷兰优质淡奶，奶香浓而不腻',
         address: '上海市普陀区真北路',

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div style="margin-right: 150px">
+    <div style="float: left">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="供应商名称">
-          <el-input v-model="formInline.user" placeholder="请输入供应商名称"></el-input>
+          <el-input v-model="formInline.user" placeholder="请输入供应商名称" ></el-input>
         </el-form-item>
         <el-form-item label="联系人">
           <el-input v-model="formInline.user" placeholder="请输入联系人"></el-input>
@@ -16,9 +16,11 @@
             <el-option label="区域一" value="shanghai"></el-option>
             <el-option label="区域二" value="beijing"></el-option>
           </el-select>
+        </el-form-item >
+        <el-form-item style="padding-left: 60px;">
+          <el-button type="primary "  icon="el-icon-search" plain >搜索</el-button>
+          <el-button type="primary "  icon="el-icon-refresh" plain >重置</el-button>
         </el-form-item>
-        <el-button type="primary "  icon="el-icon-search" plain>搜索</el-button>
-        <el-button type="primary "  icon="el-icon-refresh" plain>重置</el-button>
       </el-form>
     </div>
 
@@ -30,17 +32,17 @@
     <div>
     <el-table ref="multipleTable"  :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" border>
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="ID" label="供应商ID" width="150" align="center"></el-table-column>
-      <el-table-column prop="name" label="供应商名称" width="180" align="center"></el-table-column>
-      <el-table-column prop="name" label="联系人手机" width="150" align="center"></el-table-column>
-      <el-table-column prop="name" label="联系人电话" width="150" align="center"></el-table-column>
-      <el-table-column prop="name" label="银行账号" width="180" align="center"></el-table-column>
-      <el-table-column prop="name" label="供销商地址" width="150" align="center"></el-table-column>
-      <el-table-column prop="status" label="状态" width="150" align="center"></el-table-column>
-      <el-table-column prop="name" label="创建时间" width="180" align="center"></el-table-column>
+      <el-table-column prop="ID" label="供应商ID" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="name" label="供应商名称" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="name" label="联系人手机" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="name" label="联系人电话" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="name" label="银行账号" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="name" label="供销商地址" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="status" label="状态" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="name" label="创建时间" min-width="70" align="center"></el-table-column>
 <!--      <el-table-column label="日期" width="120">-->
 <!--        <template slot-scope="scope">{{ scope.row.date }}</template></el-table-column>-->
-      <el-table-column fixed="right" label="操作" width="100">
+      <el-table-column fixed="right" label="操作" min-width="80" align="center">
         <template slot-scope="scope">
           <el-button @click="del(scope.row)" type="text" size="small" icon="el-icon-edit">删除</el-button>
           <el-button @click="upd(scope.row)" type="text" size="small " icon="el-icon-delete" >修改</el-button>

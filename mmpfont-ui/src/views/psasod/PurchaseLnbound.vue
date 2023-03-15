@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="margin-right: 450px">
+    <div style="float: left">
       <el-form :inline="true" :model="formInline" class="demo-form-inline" style="float: left">
         <el-form-item label="供应商名称">
           <el-select v-model="formInline.region" placeholder="请选择供应商名称">
@@ -31,15 +31,15 @@
     <div>
     <el-table ref="multipleTable"  :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" border>
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="ID" label="单据ID" width="150" align="center"></el-table-column>
-      <el-table-column prop="name" label="供应商" width="180" align="center"></el-table-column>
-      <el-table-column prop="name" label="采购批发总额" width="150" align="center"></el-table-column>
-      <el-table-column prop="name" label="状态" width="150" align="center"></el-table-column>
-      <el-table-column prop="name" label="申请人" width="180" align="center"></el-table-column>
-      <el-table-column prop="name" label="入库操作人" width="150" align="center"></el-table-column>
-      <el-table-column prop="status" label="入库时间" width="150" align="center"></el-table-column>
-      <el-table-column prop="name" label="审核信息" width="180" align="center"></el-table-column>
-      <el-table-column prop="name" label="创建时间" width="180" align="center"></el-table-column>
+      <el-table-column prop="ID" label="单据ID" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="name" label="供应商" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="name" label="采购批发总额" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="name" label="状态" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="name" label="申请人" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="name" label="入库操作人" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="status" label="入库时间" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="name" label="审核信息" min-width="75" align="center"></el-table-column>
+      <el-table-column prop="name" label="创建时间" min-width="75" align="center"></el-table-column>
     </el-table>
     </div>
     <div class="block" style="float: left">
