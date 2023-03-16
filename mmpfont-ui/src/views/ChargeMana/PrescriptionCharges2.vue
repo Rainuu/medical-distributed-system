@@ -66,13 +66,13 @@
 
 
       </el-descriptions>
-    <div style="float: left;clear: both">
+    <div style="float: left;clear: both;margin-top:20px">
       <el-button type="success" icon="el-icon-finished">全选</el-button>
       <el-button type="success" icon="el-icon-finished">取消全选</el-button>
       <el-button type="danger" icon="el-icon-bank-card">现金支付</el-button>
       <el-button type="danger" icon="el-icon-bank-card">支付宝支付</el-button>
     </div>
-    <div style="float: left;clear: both" :data="tableData3">
+    <div style="float: left;clear: both;margin-top:20px" :data="tableData3">
       【检查处方】【】【处方总额】【250】
     </div>
 
@@ -80,6 +80,7 @@
         ref="multipleTable"
         :data="tableData3"
         tooltip-effect="dark"
+
 
         border
         style="width: 100%;clear: both"

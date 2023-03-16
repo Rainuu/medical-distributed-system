@@ -84,7 +84,16 @@ const routes = [
             name: 'DrugLnformationMaintenance',
             component: () => import('../views/psasod/DrugLnformationMaintenance.vue')
         },
-
+        {
+            path: '/ri',
+            name: 'ri',
+            component: () => import('../views/ChargeMana/RefundInquiry.vue')
+        },
+        {
+            path: '/or',
+            name: 'or',
+            component: () => import('../views/SeeAdoctor/OutpatientRegistration.vue')
+        }
     ]
   },
   {

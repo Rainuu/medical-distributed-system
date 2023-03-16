@@ -75,6 +75,10 @@
               <i class="el-icon-s-data"></i>
               <span slot="title">处方收费</span>
             </el-menu-item>
+            <el-menu-item index="demo-ri" @click="$router.push({ name: 'ri' })">
+              <i class="el-icon-s-data"></i>
+              <span slot="title">退费查询</span>
+            </el-menu-item>
           </el-submenu>
 
           <el-submenu index="药品进销存">
@@ -106,6 +110,17 @@
               <i class="el-icon-document"></i>
               <span slot="title">库存查询</span>
             </el-menu-item>
+          </el-submenu>
+          <el-submenu index="kbjz">
+            <template slot="title">
+              <i class="el-icon-star-off"></i>
+              <span>看病就诊</span>
+            </template>
+            <el-menu-item index="demo-or" @click="$router.push({ name: 'or' })">
+              <i class="el-icon-s-data"></i>
+              <span slot="title">门诊挂号</span>
+            </el-menu-item>
+
           </el-submenu>
         </el-menu>
       </el-scrollbar>
