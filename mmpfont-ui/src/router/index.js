@@ -85,6 +85,17 @@ const routes = [
             component: () => import('../views/psasod/DrugLnformationMaintenance.vue')
         },
         {
+            path: '/PrescriptionDispensing',
+            name: 'PrescriptionDispensing',
+            component: () => import('../views/ChargeMana/PrescriptionDispensing.vue')
+        },
+        {
+            path: '/NewVisits',
+            name: 'NewVisits',
+            component: () => import('../views/SeeAdoctor/NewVisits.vue')
+        },
+
+        {
             path: '/ri',
             name: 'ri',
             component: () => import('../views/ChargeMana/RefundInquiry.vue')

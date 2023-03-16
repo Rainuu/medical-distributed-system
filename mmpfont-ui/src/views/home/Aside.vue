@@ -79,6 +79,20 @@
               <i class="el-icon-s-data"></i>
               <span slot="title">退费查询</span>
             </el-menu-item>
+            <el-menu-item index="demo-pc" @click="$router.push({ name: 'PrescriptionDispensing' })">
+              <i class="el-icon-s-data"></i>
+              <span slot="title">处方发药</span>
+            </el-menu-item>
+          </el-submenu>
+          <el-submenu index="看病就诊">
+            <template slot="title">
+              <i class="el-icon-star-off"></i>
+              <span>看病就诊</span>
+            </template>
+            <el-menu-item index="demo-pc" @click="$router.push({ name: 'NewVisits' })">
+              <i class="el-icon-s-data"></i>
+              <span slot="title">新开就诊</span>
+            </el-menu-item>
           </el-submenu>
 
           <el-submenu index="药品进销存">
