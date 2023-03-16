@@ -208,6 +208,16 @@ const routes = [
             path: '/or',
             name: 'or',
             component: () => import('../views/SeeAdoctor/OutpatientRegistration.vue')
+        },
+        {
+            path: '/MyShiftSchedule',
+            name: 'MyShiftSchedule',
+            component: () => import('../views/SeeAdoctor/MyShiftSchedule.vue')
+        },
+        {
+            path: '/DoctorScheduling',
+            name: 'DoctorScheduling',
+            component: () => import('../views/SeeAdoctor/DoctorScheduling.vue')
         }
     ]
   },
