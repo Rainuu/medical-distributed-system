@@ -1,0 +1,184 @@
+<template>
+  <div>
+    <el-form :inline="true" :model="formInline" class="demo-form-inline" style="float: left">
+      <el-form-item label="科室名称" label-width="100px">
+        <el-input v-model="formInline.user" placeholder="请输入科室名称"></el-input>
+      </el-form-item>
+
+      <el-form-item label="状态">
+        <el-select v-model="formInline.region" placeholder="可用状态">
+          <el-option label="区域一" value="shanghai"></el-option>
+          <el-option label="区域二" value="beijing"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="挂号时间">
+        <div class="block">
+          <el-date-picker
+              v-model="value3"
+              type="datetime"
+              placeholder="选择日期时间"
+              default-time="12:00:00">
+          </el-date-picker>
+        </div>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit"  icon="el-icon-search">查询</el-button>
+        <el-button type="primary" @click="resetForm('ruleForm')" icon="el-icon-refresh">重置</el-button>
+      </el-form-item>
+    </el-form>
+    <div style="float: left">
+      <el-button type="primary" icon="el-icon-plus">新增</el-button>
+      <el-button type="success" icon="el-icon-edit">修改</el-button>
+      <el-button type="danger" icon="el-icon-delete">删除</el-button>
+    </div>
+    <el-table
+        ref="multipleTable"
+        :data="tableData3"
+        tooltip-effect="dark"
+        border
+        style="width: 100%"
+        @selection-change="handleSelectionChange">
+      <el-table-column
+          type="selection"
+          width="55">
+      </el-table-column>
+      <el-table-column
+          align="center"
+          prop="ksid"
+          label="科室ID"
+          min-width="150">
+      </el-table-column>
+      <el-table-column
+          align="center"
+          prop="ksmc"
+          label="科室名称"
+          min-width="150">
+      </el-table-column>
+      <el-table-column
+          align="center"
+          prop="zt1"
+          label="科室编码"
+          min-width="150">
+      </el-table-column>
+      <el-table-column
+          align="center"
+          prop="fbz"
+          label="当前挂号量"
+          min-width="150">
+      </el-table-column>
+      <el-table-column
+          align="center"
+          prop="fbz"
+          label="排序码"
+          min-width="150">
+      </el-table-column>
+      <el-table-column
+          align="center"
+          prop="fbz"
+          label="负责人"
+          min-width="150">
+      </el-table-column>
+      <el-table-column
+          align="center"
+          prop="fbz"
+          label="电话"
+          min-width="150">
+      </el-table-column>
+      <el-table-column
+          align="center"
+          prop="zt2"
+          label="状态"
+          min-width="150">
+      </el-table-column>
+      <el-table-column
+          align="center"
+          label="创建时间"
+          min-width="150">
+        <template slot-scope="scope">{{ scope.row.date }}</template>
+      </el-table-column>
+      <el-table-column
+          align="center"
+          fixed="right"
+          label="操作"
+          min-width="180">
+        <template slot-scope="scope"  align="center">
+          <el-button @click="xiugai(scope.row)" type="text" size="small" icon="el-icon-edit">修改</el-button>
+          <el-button @click="shanchu(scope.row)" type="text" size="small" icon="el-icon-delete">删除</el-button>
+          <el-button @click="chakan(scope.row)" type="text" size="small" icon="el-icon-view">查看</el-button>
+
+        </template>
+      </el-table-column>
+    </el-table>
+    <div class="block" style="float: left">
+      <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage4"
+          :page-sizes="[100, 200, 300, 400]"
+          :page-size="100"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="400">
+      </el-pagination>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  methods: {
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    onSubmit() {
+      console.log('submit!');
+    },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    }
+  },
+  data() {
+    return {
+      tableData3: [{
+        date: '2016-05-03',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-04',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-01',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-08',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-06',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-07',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }],
+      multipleSelection: [],
+      formInline: {
+        user: '',
+        region: ''
+      },
+      currentPage4: 4
+    }
+  }
+
+
+}
+</script>
