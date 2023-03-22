@@ -2,6 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>mmp-common</module>
+        <module>mmp-gateway</module>
+        <module>mmp-services</module>
+        <module>mmp-sso</module>
+    </modules>
     <!-- 微服务项目的父项目，所有服务模块放到这里 -->
 
     <parent>
@@ -24,16 +30,20 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <!--SpringCloud的版本-->
+        <!--SpringCloud的版本，SpringCloud和alibaba、SpringBoot的版本要符合要求-->
         <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
         <!--SpringCloud阿里巴巴的版本-->
         <spring-cloud-alibaba.version>2.2.3.RELEASE</spring-cloud-alibaba.version>
-        <!-- SpringCloud和alibaba、SpringBoot的版本要符合要求 -->
+        <!-- mybatis-plus 持久层 -->
+        <mybatis-plus.version>3.3.1</mybatis-plus.version>
+        <!-- fastjson -->
+        <fastjson.version>1.2.29</fastjson.version>
     </properties>
 
-    <!--dependencyManagement:他只负责jar的管理，不负责jar的下载。子模块在引用时无需再指定版本号-->
+    <!--dependencyManagement锁定依赖的版本，管理但不负责jar的下载。子模块在引用时无需再指定版本号-->
     <dependencyManagement>
         <dependencies>
+            <!-- spring-cloud -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -41,7 +51,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
+            <!-- spring-cloud-alibaba -->
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
@@ -49,10 +59,52 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!--mybatis-plus 持久层-->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <!-- fastjson，用于对JSON格式的数据进行解析和打包 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
+    <!--引入公共依赖-->
+    <dependencies>
+        <!-- nacos配置中心 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+        <!--nacos服务中心-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+            <version>3.1.5</version>
+        </dependency>
+    </dependencies>
+
     <build>
+        <!-- 项目打包时会将java目录中的*.xml文件也进行打包 -->
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
