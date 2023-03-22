@@ -100,17 +100,17 @@ const routes = [
         {
             path:'/CheckResultQuery',
             name: 'CheckResultQuery',
-            component: () =>import('../views/statistics/CheckResultQuery')
+            component: () =>import('../views/InspectionMana/CheckResultQuery')
         },
         {
             path:'/CheckResultEntry',
             name: 'CheckResultEntry',
-            component: () =>import('../views/statistics/CheckResultEntry')
+            component: () =>import('../views/InspectionMana/CheckResultEntry')
         },
         {
             path:'/NewOpenInspection',
             name: 'NewOpenInspection',
-            component: () =>import('../views/statistics/NewOpenInspection')
+            component: () =>import('../views/InspectionMana/NewOpenInspection')
         },
         {path: '/PatientLib',
         name:'PatientLib',
