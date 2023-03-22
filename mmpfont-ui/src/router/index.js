@@ -206,6 +206,11 @@ const routes = [
             name: 'NewVisits',
             component: () => import('../views/SeeAdoctor/NewVisits.vue')
         },
+        {
+            path: '/NewlyOpenedClinic',
+            name: 'NewlyOpenedClinic',
+            component: () =>import('../views/statistics/NewlyOpenedClinic')
+        },
 
         {
             path: '/ri',

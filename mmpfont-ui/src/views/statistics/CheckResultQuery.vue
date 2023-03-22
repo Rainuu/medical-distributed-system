@@ -1,3 +1,4 @@
+<!--检查结果查询-->
 <template>
   <div>
     <!--    弹窗-->
@@ -20,38 +21,34 @@
 						<el-input v-model="form.address"></el-input>
 					</el-form-item>
 
-
 					<el-button type="primary" @click="onSubmit">立即创建</el-button>
 					<el-button>取消</el-button>
-
 				</el-form>
 			</span>
     </el-dialog>
 
 
+    <!--多选框-->
+    <el-form ref="form" :model="form" label-width="80px" style="text-align-last: justify;padding-left: 10px">
+      <el-form-item label="检查项目" >
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" >全选</el-checkbox>
+        <div style="margin: 15px 0;"></div>
+        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+          <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
+    </el-form>
 
+    <!--搜索框-->
     <div style="display: flex;">
       <span style="float: contour;line-height: 40px;margin: 20px 10px">挂号单号</span>
-    <el-input  placeholder="请输入挂号单号" v-model="input1" style="width: 400px;float: contour;margin: 20px 10px"/>
+      <el-input  placeholder="请输入挂号单号" v-model="input1" style="width: 400px;float: contour;margin: 20px 10px"/>
       <sapn style="float: contour;line-height: 40px;margin: 20px 10px">患者姓名</sapn>
-    <el-input  placeholder="请输入患者姓名" v-model="input2" style="width: 400px;float: contour;margin: 20px 10px" />
+      <el-input  placeholder="请输入患者姓名" v-model="input2" style="width: 400px;float: contour;margin: 20px 10px" />
       <el-button type="primary"  icon="el-icon-search" @click="resetForm" style="margin: 20px 10px">搜索</el-button>
       <el-button type="primary"  icon="el-icon-refresh" @click="resetForm" style="margin: 20px 10px">重置</el-button>
 
     </div>
-
-    <div style="height: 50px;line-height: 50px">
-      <span style="float: contour;float: left;margin: 0px 10px">检查项目</span>
-      <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"
-                   style="float: left">全选
-      </el-checkbox>
-      <div style="height: 50px;padding-left: 20px;display: flex">
-        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange" >
-          <el-checkbox v-for="city in cities" :label="city" :key="city">{{ city }}</el-checkbox>
-        </el-checkbox-group>
-      </div>
-
-      </div>
 
 
 
