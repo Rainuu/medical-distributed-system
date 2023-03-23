@@ -13,10 +13,10 @@
     <packaging>pom</packaging>
     <modules>
         <module>mmp-services-system</module>
-        <module>mmp-services-chargemana</module>
-        <module>mmp-services-inspectionmana</module>
-        <module>mmp-services-seeadoctor</module>
-        <module>mmp-services-psasod</module>
+        <module>mmp-services-charge</module>
+        <module>mmp-services-check</module>
+        <module>mmp-services-doctor</module>
+        <module>mmp-services-stock</module>
         <module>mmp-services-statistics</module>
     </modules>
 
