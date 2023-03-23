@@ -6,12 +6,17 @@ Vue.use(VueRouter)
 const routes = [
     // 公共模块 (common)
     {
+        path: '/',
+        name: 'login',
+        redirect: "/login"
+    },
+    {
         path: '/login',
         name: 'login',
         component: ()=>import('../views/common/Login')
     },
     {
-    path: '/',
+    path: '/index',
     name: 'index',
     component:()=>import('../views/Index'),
     children: [
