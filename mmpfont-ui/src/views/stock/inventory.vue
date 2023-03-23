@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div>
     <el-tabs v-model="activeName" @tab-click="handleClick" stretch="false">
       <el-tab-pane label="药品总库存" name="first"  :cell-style="rowStyle" >

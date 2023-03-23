@@ -4,22 +4,18 @@ import HomeView from '../views/HomeView.vue'
 Vue.use(VueRouter)
 
 const routes = [
+    // 公共模块 (common)
+    {
+        path: '/login',
+        name: 'login',
+        component: ()=>import('../views/common/Login')
+    },
     {
     path: '/',
     name: 'index',
     component:()=>import('../views/Index'),
     children: [
-        // 公共模块 (common)
-        {
-            path: '/login',
-            name: 'login',
-            component: ()=>import('../views/common/Login')
-        },
-        {
-            path: '/about',
-            name: 'about',
-            component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-        },
+
         // 系统管理(System)——(10)——梁梦磊
         {
             path: '/na',
@@ -56,36 +52,36 @@ const routes = [
             name: 'lotlm',
             component: () => import('../views/System/LogOnToLogManagement.vue')
         },
-        // 药品进销存 (Purchase、Stock and Sales of Drugs | psasod)——(6)——何泽明
-        {
-            path: '/SupplierMaintenance',
-            name: 'SupplierMaintenance',
-            component: () => import('../views/psasod/SupplierMaintenance.vue'),
+        // 药品进销存 (stock)——(6)——何泽明
+        {   // 生产厂家维护
+            path: '/stock/producter',
+            name: 'producter',
+            component: () => import('../views/stock/producter.vue')
         },
-        {
-            path: '/PurchaseLnbound',
-            name: 'PurchaseLnbound',
-            component: () => import('../views/psasod/PurchaseLnbound.vue')
+        {   // 药品信息维护
+            path: '/stock/medicinal',
+            name: 'medicinal',
+            component: () => import('../views/stock/medicinal.vue')
         },
-        {
-            path: '/InboundAudit',
-            name: 'InboundAudit',
-            component: () => import('../views/psasod/InboundAudit.vue')
+        {   // 供应商维护
+            path: '/stock/provider',
+            name: 'provider',
+            component: () => import('../views/stock/provider.vue'),
         },
-        {
-            path: '/InventoryLnquiry',
-            name: 'InventoryLnquiry',
-            component: () => import('../views/psasod/InventoryInquiry')
+        {   // 采购入库
+            path: '/purchase',
+            name: 'purchase',
+            component: () => import('../views/stock/purchase.vue')
         },
-        {
-            path: '/ManufacturerMaintenance',
-            name: 'ManufacturerMaintenance',
-            component: () => import('../views/psasod/ManufacturerMaintenance.vue')
+        {   // 入库审核
+            path: '/examine',
+            name: 'examine',
+            component: () => import('../views/stock/examine.vue')
         },
-        {
-            path: '/DrugLnformationMaintenance',
-            name: 'DrugLnformationMaintenance',
-            component: () => import('../views/psasod/DrugLnformationMaintenance.vue')
+        {   // 库存查询
+            path: '/inventory',
+            name: 'inventory',
+            component: () => import('../views/stock/inventory')
         },
         // 收费管理(Charge Management | ChargeMana)——(5)——方号
         {
@@ -169,18 +165,13 @@ const routes = [
     ]
   },
   {
-    path: '/login',
-    name: 'login',
-    component: ()=>import('../views/common/Login')
-  },
-  {
     path: '/about',
     name: 'about',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  },
+  }
 ]
 
 const router = new VueRouter({
