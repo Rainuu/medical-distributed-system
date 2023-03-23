@@ -1,31 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<!--pom文件的根元素  是标签:根标签,表示对当前工程进行配置、管理-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!--代表当前pom.xml 所采用对标签结构，从Maven 2 开始固定为4.0.0-->
     <modelVersion>4.0.0</modelVersion>
-    <modules>
+    <!-- 微服务项目的父项目，所有服务模块放到这里 -->
+    <modules> <!--定义子模块-->
         <module>mmp-common</module>
         <module>mmp-gateway</module>
         <module>mmp-services</module>
         <module>mmp-sso</module>
     </modules>
-    <!-- 微服务项目的父项目，所有服务模块放到这里 -->
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.12.RELEASE</version>
+        <version>2.3.12.RELEASE</version>  <!-- version项目版本号 -->
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    <!-- groupId描述项目组织的唯一标识，通常使用域名或组织名称 -->
     <groupId>com.aaa</groupId>
+    <!-- artifactId项目唯一标识，通常使用项目或模块名 -->
     <artifactId>MedicalManagementPlatform</artifactId>
+    <!-- 0.0.1-SNAPSHOT；SNAPSHOT是快照的意思，表示不稳定的版本 -->
     <version>0.0.1-SNAPSHOT</version>
     <!--该工程为父工程打包方式就是pom模式-->
     <packaging>pom</packaging>
+    <!-- 项目名称 -->
     <name>MedicalManagementPlatform</name>
+    <!-- 项目详情 -->
     <description>MedicalManagementPlatform</description>
 
-    <!--定义版本号-->
+    <!--properties:定义版本号,对项目的一些属性进行定义,可自定义属性\标签名，就是属性名称，标签值就是属性值,可以通过${标签名}的方式引用其所对应的值-->
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -38,6 +46,8 @@
         <mybatis-plus.version>3.3.1</mybatis-plus.version>
         <!-- fastjson -->
         <fastjson.version>1.2.29</fastjson.version>
+        <!-- spring-boot的web支持 -->
+        <spring-boot-starter-web.version>2.3.12.RELEASE</spring-boot-starter-web.version>
     </properties>
 
     <!--dependencyManagement锁定依赖的版本，管理但不负责jar的下载。子模块在引用时无需再指定版本号-->
@@ -71,6 +81,12 @@
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
             </dependency>
+            <!--提供web场景启动器以支持web开发,提供嵌入Servlet容器以及SpringMVC大量自动配置，适用于大多数web开发场景-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring-boot-starter-web.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -81,11 +97,12 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
-        <!--nacos服务中心-->
+        <!--nacos服务中心,接入Nacos作为注册中心，实现服务的注册与发现-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
+        <!-- 对bootstrap.properties/bootstrap.yaml配置文件的支持，需要导入如下的依赖 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bootstrap</artifactId>

@@ -9,6 +9,7 @@ const routes = [
     name: 'index',
     component:()=>import('../views/Index'),
     children: [
+        // 公共模块 (common)
         {
             path: '/login',
             name: 'login',
@@ -19,13 +20,47 @@ const routes = [
             name: 'about',
             component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
         },
+        // 系统管理(System)——(10)——梁梦磊
+        {
+            path: '/na',
+            name: 'na',
+            component: () => import('../views/System/NotificationAnnouncements.vue')
+        },
+        {
+            path: '/olm',
+            name: 'olm',
+            component: () => import('../views/System/OperationalLogManagement.vue')
+        },
+        {
+            path: '/cem',
+            name: 'cem',
+            component: () => import('../views/System/CheckExpenseManagement.vue')
+        },
+        {
+            path: '/rfs',
+            name: 'rfs',
+            component: () => import('../views/System/RegisteredFeeSettings.vue')
+        },
+        {
+            path: '/dm',
+            name: 'dm',
+            component: () => import('../views/System/DictionaryManagement.vue')
+        },
+        {
+            path: '/DepartmentManagement',
+            name: 'DepartmentManagement',
+            component:()=>import('../views/System/DepartmentManagement')
+        },
+        {
+            path: '/lotlm',
+            name: 'lotlm',
+            component: () => import('../views/System/LogOnToLogManagement.vue')
+        },
+        // 药品进销存 (Purchase、Stock and Sales of Drugs | psasod)——(6)——何泽明
         {
             path: '/SupplierMaintenance',
             name: 'SupplierMaintenance',
             component: () => import('../views/psasod/SupplierMaintenance.vue'),
-            meta: {
-                title: "供应商维护"
-            }
         },
         {
             path: '/PurchaseLnbound',
@@ -43,35 +78,16 @@ const routes = [
             component: () => import('../views/psasod/InventoryInquiry')
         },
         {
-            path: '/na',
-            name: 'na',
-            component: () => import('../views/System/NotificationAnnouncements.vue')
+            path: '/ManufacturerMaintenance',
+            name: 'ManufacturerMaintenance',
+            component: () => import('../views/psasod/ManufacturerMaintenance.vue')
         },
         {
-            path: '/olm',
-            name: 'olm',
-            component: () => import('../views/System/OperationalLogManagement.vue')
+            path: '/DrugLnformationMaintenance',
+            name: 'DrugLnformationMaintenance',
+            component: () => import('../views/psasod/DrugLnformationMaintenance.vue')
         },
-        {
-            path: '/lotlm',
-            name: 'lotlm',
-            component: () => import('../views/System/LogOnToLogManagement.vue')
-        },
-        {
-            path: '/cem',
-            name: 'cem',
-            component: () => import('../views/System/CheckExpenseManagement.vue')
-        },
-        {
-            path: '/rfs',
-            name: 'rfs',
-            component: () => import('../views/System/RegisteredFeeSettings.vue')
-        },
-        {
-            path: '/dm',
-            name: 'dm',
-            component: () => import('../views/System/DictionaryManagement.vue')
-        },
+        // 收费管理(Charge Management | ChargeMana)——(5)——方号
         {
             path: '/pc',
             name: 'pc',
@@ -88,15 +104,16 @@ const routes = [
             component: () => import('../views/ChargeMana/PrescriptionRefund.vue')
         },
         {
-            path: '/ManufacturerMaintenance',
-            name: 'ManufacturerMaintenance',
-            component: () => import('../views/psasod/ManufacturerMaintenance.vue')
+            path: '/ri',
+            name: 'ri',
+            component: () => import('../views/ChargeMana/RefundInquiry.vue')
         },
         {
-            path: '/DrugLnformationMaintenance',
-            name: 'DrugLnformationMaintenance',
-            component: () => import('../views/psasod/DrugLnformationMaintenance.vue')
+            path: '/PrescriptionDispensing',
+            name: 'PrescriptionDispensing',
+            component: () => import('../views/ChargeMana/PrescriptionDispensing.vue')
         },
+        // 检查管理(Inspection Management | InspectionMana)——(3)——牛牧原
         {
             path:'/CheckResultQuery',
             name: 'CheckResultQuery',
@@ -112,8 +129,10 @@ const routes = [
             name: 'NewOpenInspection',
             component: () =>import('../views/InspectionMana/NewOpenInspection')
         },
-        {path: '/PatientLib',
-        name:'PatientLib',
+        // 看病就诊(See a doctor | SeeAdoctor)——(6)——刘鸿飞
+        {
+            path: '/PatientLib',
+            name:'PatientLib',
             component:() =>import('../views/SeeAdoctor/Patientlib')
         },
         {
@@ -122,100 +141,9 @@ const routes = [
             component:()=>import('../views/SeeAdoctor/register')
         },
         {
-            path: '/DepartmentManagement',
-            name: 'DepartmentManagement',
-            component:()=>import('../views/System/DepartmentManagement')
-        },
-        {
-            path: '/SupplierMaintenance',
-            name: 'SupplierMaintenance',
-            component: () => import('../views/psasod/SupplierMaintenance.vue')
-        },
-        {
-            path: '/PurchaseLnbound',
-            name: 'PurchaseLnbound',
-            component: () => import('../views/psasod/PurchaseLnbound.vue')
-        },
-        {
-            path: '/InboundAudit',
-            name: 'InboundAudit',
-            component: () => import('../views/psasod/InboundAudit.vue')
-        },
-        {
-            path: '/InventoryLnquiry',
-            name: 'InventoryLnquiry',
-            component: () => import('../views/psasod/InventoryInquiry')
-        },
-        {
-            path: '/na',
-            name: 'na',
-            component: () => import('../views/System/NotificationAnnouncements.vue')
-        },
-        {
-            path: '/olm',
-            name: 'olm',
-            component: () => import('../views/System/OperationalLogManagement.vue')
-        },
-        {
-            path: '/lotlm',
-            name: 'lotlm',
-            component: () => import('../views/System/LogOnToLogManagement.vue')
-        },
-        {
-            path: '/cem',
-            name: 'cem',
-            component: () => import('../views/System/CheckExpenseManagement.vue')
-        },
-        {
-            path: '/rfs',
-            name: 'rfs',
-            component: () => import('../views/System/RegisteredFeeSettings.vue')
-        },
-        {
-            path: '/dm',
-            name: 'dm',
-            component: () => import('../views/System/DictionaryManagement.vue')
-        },
-        {
-            path: '/pc',
-            name: 'pc',
-            component: () => import('../views/ChargeMana/PrescriptionCharges.vue')
-        },
-        {
-            path: '/pc2',
-            name: 'pc2',
-            component: () => import('../views/ChargeMana/PrescriptionCharges2.vue')
-        },
-        {
-            path: '/ManufacturerMaintenance',
-            name: 'ManufacturerMaintenance',
-            component: () => import('../views/psasod/ManufacturerMaintenance.vue')
-        },
-        {
-            path: '/DrugLnformationMaintenance',
-            name: 'DrugLnformationMaintenance',
-            component: () => import('../views/psasod/DrugLnformationMaintenance.vue')
-        },
-        {
-            path: '/PrescriptionDispensing',
-            name: 'PrescriptionDispensing',
-            component: () => import('../views/ChargeMana/PrescriptionDispensing.vue')
-        },
-        {
             path: '/NewVisits',
             name: 'NewVisits',
             component: () => import('../views/SeeAdoctor/NewVisits.vue')
-        },
-        {
-            path: '/NewlyOpenedClinic',
-            name: 'NewlyOpenedClinic',
-            component: () =>import('../views/statistics/NewlyOpenedClinic')
-        },
-
-        {
-            path: '/ri',
-            name: 'ri',
-            component: () => import('../views/ChargeMana/RefundInquiry.vue')
         },
         {
             path: '/or',
@@ -231,10 +159,15 @@ const routes = [
             path: '/DoctorScheduling',
             name: 'DoctorScheduling',
             component: () => import('../views/SeeAdoctor/DoctorScheduling.vue')
-        }
+        },
+        // 数据统计(statistics)——(4)——王喜龙
+        {
+            path: '/NewlyOpenedClinic',
+            name: 'NewlyOpenedClinic',
+            component: () =>import('../views/statistics/NewlyOpenedClinic')
+        },
     ]
   },
-
   {
     path: '/login',
     name: 'login',
@@ -248,7 +181,6 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
-
 ]
 
 const router = new VueRouter({
