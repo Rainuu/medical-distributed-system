@@ -28,6 +28,11 @@ const routes = [
             component: () => import('../views/System/NotificationAnnouncements')
         },
         {
+            path: '/system/user',
+            name: 'user',
+            component:()=> import('../views/System/User')
+        },
+        {
             path: '/olm',
             name: 'olm',
             component: () => import('../views/System/OperationalLogManagement')

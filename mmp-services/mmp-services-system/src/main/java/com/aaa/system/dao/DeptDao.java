@@ -1,8 +1,8 @@
 package com.aaa.system.dao;
 
 
-import com.aaa.core.entity.User;
+import com.aaa.core.entity.Dept;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-public interface UserDao extends BaseMapper<User> {
+public interface DeptDao extends BaseMapper<Dept> {
 }

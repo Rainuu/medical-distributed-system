@@ -43,7 +43,7 @@
         <!--SpringCloud阿里巴巴的版本-->
         <spring-cloud-alibaba.version>2.2.3.RELEASE</spring-cloud-alibaba.version>
         <!-- mybatis-plus 持久层 -->
-        <mybatis-plus.version>3.3.1</mybatis-plus.version>
+        <mybatis-plus.version>3.5.2</mybatis-plus.version>
         <!-- fastjson -->
         <fastjson.version>1.2.29</fastjson.version>
         <!-- spring-boot的web支持 -->

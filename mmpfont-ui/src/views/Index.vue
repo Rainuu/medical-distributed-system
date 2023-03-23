@@ -16,11 +16,11 @@
             :default-active="$route.path"
             :collapse="this.isCollaps"
             class="el-menu-vertical-demo"
-            collapse-transition="false"
+            :collapse-transition="false"
 
         >
           <!-- 一级菜单 -->
-          <el-submenu :index="first.path" v-for="first in leftMenu">
+          <el-submenu :index="first.path" v-for="(first,index) in leftMenu" :key="index">
             <!-- 一级菜单模板 -->
             <template slot="title" >
               <!-- 图标 -->
@@ -30,7 +30,7 @@
               <span style="margin-left: 15px" >{{first.menuName}}</span>
             </template>
             <!-- 二级子菜单 -->
-            <el-menu-item :index="second.path" v-for="second in first.children">
+            <el-menu-item :index="second.path" v-for="(second,sindex) in first.children" :key="sindex">
               <!-- 二级菜单模板 -->
               <template slot="title">
                 <!-- 图标 -->
@@ -108,7 +108,7 @@
               editableTabs: [{
                   title: '首页',
                   name: '1',
-                  url: '/'
+                  url: '/index'
                   //content: 'Tab 1 content'
               }],
           }
