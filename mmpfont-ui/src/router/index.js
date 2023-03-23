@@ -141,9 +141,6 @@ const routes = [
             name: 'newcare',
             component: () => import('../views/doctor/newcare')
         },
-        {   // 就诊列表
-
-        },
         {   // 我的排班
             path: '/doctor/myscheduling',
             name: 'myscheduling',

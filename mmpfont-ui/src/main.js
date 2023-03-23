@@ -12,7 +12,7 @@ Vue.use(ElementUI);
 // Axios
 import ax from "axios";
 const axios = ax.create({
-  baseURL:"http://localhost:8888"
+  baseURL:"http://localhost:8090"
 });
 Vue.prototype.$axios=axios;
 
