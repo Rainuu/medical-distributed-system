@@ -20,47 +20,47 @@ const routes = [
     name: 'index',
     component:()=>import('../views/Index'),
     children: [
-
         // 系统管理(System)——(10)——梁梦磊
-        {
-            path: '/na',
-            name: 'na',
-            component: () => import('../views/System/NotificationAnnouncements')
+        {   //科室管理
+            path: '/system/dept',
+            name: 'dept',
+            component:()=>import('../views/system/dept')
         },
-        {
+        {   // 用户管理
             path: '/system/user',
             name: 'user',
-            component:()=> import('../views/System/User')
+            component:()=> import('../views/system/User')
         },
-        {
-            path: '/olm',
-            name: 'olm',
-            component: () => import('../views/System/OperationalLogManagement')
+            // 角色管理 & 菜单管理
+        {   //字典管理
+            path: '/system/dict',
+            name: 'dict',
+            component: () => import('../views/system/dict')
         },
-        {
-            path: '/cem',
-            name: 'cem',
-            component: () => import('../views/System/CheckExpenseManagement')
+        {   // 通知公告
+            path: '/system/notice',
+            name: 'notice',
+            component: () => import('../views/system/notice')
         },
-        {
-            path: '/rfs',
-            name: 'rfs',
-            component: () => import('../views/System/RegisteredFeeSettings')
+        {   // 登录日志管理
+            path: '/system/log_login',
+            name: 'logLogin',
+            component: () => import('../views/system/logLogin')
         },
-        {
-            path: '/dm',
-            name: 'dm',
-            component: () => import('../views/System/DictionaryManagement')
+        {   // 操作日志管理
+            path: '/system/log_opt',
+            name: 'logOpt',
+            component: () => import('../views/system/logOpt')
         },
-        {
-            path: '/DepartmentManagement',
-            name: 'DepartmentManagement',
-            component:()=>import('../views/System/DepartmentManagement')
+        {   // 检查费用管理
+            path: '/system/ins_fee',
+            name: 'insFee',
+            component: () => import('../views/system/insFee')
         },
-        {
-            path: '/lotlm',
-            name: 'lotlm',
-            component: () => import('../views/System/LogOnToLogManagement')
+        {   // 挂号费用设置
+            path: '/system/reg_fee',
+            name: 'regFee',
+            component: () => import('../views/system/regFee')
         },
         // 药品进销存 (stock)——(6)——何泽明
         {   // 生产厂家维护
