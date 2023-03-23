@@ -16,10 +16,7 @@
 <script>
 export default {
   methods: {
-    cx(){
-      this.$router.push({name:'pc2'})
 
-    }
   },
   data() {
     return {

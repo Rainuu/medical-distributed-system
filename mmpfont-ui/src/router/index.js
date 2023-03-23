@@ -20,27 +20,27 @@ const routes = [
         {
             path: '/na',
             name: 'na',
-            component: () => import('../views/System/NotificationAnnouncements.vue')
+            component: () => import('../views/System/NotificationAnnouncements')
         },
         {
             path: '/olm',
             name: 'olm',
-            component: () => import('../views/System/OperationalLogManagement.vue')
+            component: () => import('../views/System/OperationalLogManagement')
         },
         {
             path: '/cem',
             name: 'cem',
-            component: () => import('../views/System/CheckExpenseManagement.vue')
+            component: () => import('../views/System/CheckExpenseManagement')
         },
         {
             path: '/rfs',
             name: 'rfs',
-            component: () => import('../views/System/RegisteredFeeSettings.vue')
+            component: () => import('../views/System/RegisteredFeeSettings')
         },
         {
             path: '/dm',
             name: 'dm',
-            component: () => import('../views/System/DictionaryManagement.vue')
+            component: () => import('../views/System/DictionaryManagement')
         },
         {
             path: '/DepartmentManagement',
@@ -50,115 +50,118 @@ const routes = [
         {
             path: '/lotlm',
             name: 'lotlm',
-            component: () => import('../views/System/LogOnToLogManagement.vue')
+            component: () => import('../views/System/LogOnToLogManagement')
         },
         // 药品进销存 (stock)——(6)——何泽明
         {   // 生产厂家维护
             path: '/stock/producter',
             name: 'producter',
-            component: () => import('../views/stock/producter.vue')
+            component: () => import('../views/stock/producter')
         },
         {   // 药品信息维护
             path: '/stock/medicinal',
             name: 'medicinal',
-            component: () => import('../views/stock/medicinal.vue')
+            component: () => import('../views/stock/medicinal')
         },
         {   // 供应商维护
             path: '/stock/provider',
             name: 'provider',
-            component: () => import('../views/stock/provider.vue'),
+            component: () => import('../views/stock/provider'),
         },
         {   // 采购入库
-            path: '/purchase',
+            path: '/stock/purchase',
             name: 'purchase',
-            component: () => import('../views/stock/purchase.vue')
+            component: () => import('../views/stock/purchase')
         },
         {   // 入库审核
-            path: '/examine',
+            path: '/stock/examine',
             name: 'examine',
-            component: () => import('../views/stock/examine.vue')
+            component: () => import('../views/stock/examine')
         },
         {   // 库存查询
-            path: '/inventory',
+            path: '/stock/inventory',
             name: 'inventory',
             component: () => import('../views/stock/inventory')
         },
-        // 收费管理(Charge Management | ChargeMana)——(5)——方号
-        {
-            path: '/pc',
-            name: 'pc',
-            component: () => import('../views/ChargeMana/PrescriptionCharges.vue')
+        // 收费管理(charge)——(5)——方号
+        {   // 处方收费
+            path: '/charge/docharge',
+            name: 'docharge',
+            component: () => import('../views/charge/docharge')
         },
-        {
-            path: '/pc2',
-            name: 'pc2',
-            component: () => import('../views/ChargeMana/PrescriptionCharges2.vue')
+        {   // 收费查询(收费列表)
+            path: '/charge/chargelist',
+            name: 'chargelist',
+            component: () => import('../views/charge/chargelist')
         },
-        {
-            path: '/PrescriptionRefund',
-            name: '/PrescriptionRefund',
-            component: () => import('../views/ChargeMana/PrescriptionRefund.vue')
+        {   // 处方退费
+            path: '/charge/backfee',
+            name: '/backfee',
+            component: () => import('../views/charge/backfee')
         },
-        {
-            path: '/ri',
-            name: 'ri',
-            component: () => import('../views/ChargeMana/RefundInquiry.vue')
+        {   // 退费查询
+            path: '/charge/backfeelist',
+            name: 'backfeelist',
+            component: () => import('../views/charge/backfeelist')
         },
-        {
-            path: '/PrescriptionDispensing',
-            name: 'PrescriptionDispensing',
-            component: () => import('../views/ChargeMana/PrescriptionDispensing.vue')
+        {   // 处方发药
+            path: '/charge/dispensing',
+            name: 'dispensing',
+            component: () => import('../views/charge/dispensing')
         },
-        // 检查管理(Inspection Management | InspectionMana)——(3)——牛牧原
-        {
-            path:'/CheckResultQuery',
-            name: 'CheckResultQuery',
-            component: () =>import('../views/InspectionMana/CheckResultQuery')
+        // 检查管理(check)——(3)——牛牧原
+        {   // 新开检查
+            path:'/check/docheck',
+            name: 'docheck',
+            component: () =>import('../views/check/docheck')
         },
-        {
-            path:'/CheckResultEntry',
-            name: 'CheckResultEntry',
-            component: () =>import('../views/InspectionMana/CheckResultEntry')
+        {   // 检查结果录入
+            path:'/check/checkresult',
+            name: 'checkresult',
+            component: () =>import('../views/check/checkresult')
         },
-        {
-            path:'/NewOpenInspection',
-            name: 'NewOpenInspection',
-            component: () =>import('../views/InspectionMana/NewOpenInspection')
+        {   // 检查结果查询
+            path:'/check/checklist',
+            name: 'checklist',
+            component: () =>import('../views/check/checklist')
         },
-        // 看病就诊(See a doctor | SeeAdoctor)——(6)——刘鸿飞
-        {
-            path: '/PatientLib',
-            name:'PatientLib',
-            component:() =>import('../views/SeeAdoctor/Patientlib')
+        // 看病就诊(doctor)——(6)——刘鸿飞
+        {   // 门诊挂号
+            path: '/doctor/registered',
+            name: 'registered',
+            component: () => import('../views/doctor/registered')
         },
-        {
-            path: '/register',
-            name: 'register',
-            component:()=>import('../views/SeeAdoctor/register')
+        {   // 挂号列表
+            path: '/doctor/registeredlist',
+            name: 'registeredlist',
+            component:()=>import('../views/doctor/registeredlist')
         },
-        {
-            path: '/NewVisits',
-            name: 'NewVisits',
-            component: () => import('../views/SeeAdoctor/NewVisits.vue')
+        {   // 新开就诊
+            path: '/doctor/newcare',
+            name: 'newcare',
+            component: () => import('../views/doctor/newcare')
         },
-        {
-            path: '/or',
-            name: 'or',
-            component: () => import('../views/SeeAdoctor/OutpatientRegistration.vue')
+        {   // 就诊列表
+
         },
-        {
-            path: '/MyShiftSchedule',
-            name: 'MyShiftSchedule',
-            component: () => import('../views/SeeAdoctor/MyShiftSchedule.vue')
+        {   // 我的排班
+            path: '/doctor/myscheduling',
+            name: 'myscheduling',
+            component: () => import('../views/doctor/myscheduling')
         },
-        {
-            path: '/DoctorScheduling',
-            name: 'DoctorScheduling',
-            component: () => import('../views/SeeAdoctor/DoctorScheduling.vue')
+        {   // 医生排班
+            path: '/doctor/scheduling',
+            name: 'scheduling',
+            component: () => import('../views/doctor/scheduling')
+        },
+        {   // 患者库
+            path: '/doctor/patient',
+            name:'patient',
+            component:() =>import('../views/doctor/patient')
         },
         // 数据统计(statistics)——(4)——王喜龙
-        {
-            path: '/NewlyOpenedClinic',
+        {   //
+            path: '/statistics/NewlyOpenedClinic',
             name: 'NewlyOpenedClinic',
             component: () =>import('../views/statistics/NewlyOpenedClinic')
         },
