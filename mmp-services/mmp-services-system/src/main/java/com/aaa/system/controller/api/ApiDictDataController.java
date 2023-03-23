@@ -22,4 +22,6 @@ public class ApiDictDataController {
     public Result<List<DictData>> list(@PathVariable String type){
         return service.findByType(type);
     }
+    @GetMapping("getall")
+    public Result<List<DictData>> getAll(){return service.getall();};
 }

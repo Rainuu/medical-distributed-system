@@ -21,4 +21,10 @@ public class DictDataServiceimpl implements DictDataService {
         List<DictData> list =dictDataDao.selectList(wrapper);
         return new Result<>(2000,"查询成功",list);
     }
+
+    @Override
+    public Result<List<DictData>> getall() {
+
+        return new Result<List<DictData>>(200,"",dictDataDao.selectList(null) );
+    }
 }

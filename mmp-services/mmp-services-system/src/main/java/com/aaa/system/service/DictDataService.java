@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface DictDataService {
     Result<List<DictData>> findByType(String type);
+
+    Result<List<DictData>> getall();
 }

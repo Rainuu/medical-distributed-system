@@ -13,7 +13,7 @@ const axios = ax.create({
   baseURL:"http://localhost:8090"
 });
 Vue.prototype.$axios=axios;
-Vue.prototype.formatDict=formatDict
+Vue.prototype.formatDict=formatDict;
 //设置axios请求的拦截器
 axios.interceptors.request.use(config=>{
   //从localStorage获取令牌信息

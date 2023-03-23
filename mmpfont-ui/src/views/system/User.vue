@@ -11,7 +11,7 @@
             style="width:240px"
         >
           <el-option
-              v-for="dict in deptOptions"
+              v-for="dict in deptInfo"
               :key="dict.deptId"
               :label="dict.deptName"
               :value="dict.deptId"
@@ -89,14 +89,14 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="用户ID" align="center" prop="userId" />
       <el-table-column label="用户姓名" align="center" prop="userName" />
-      <el-table-column label="部门" align="center" prop="deptId"/>
+      <el-table-column label="部门" align="center" prop="deptId" :formatter="deptFormat"/>
       <el-table-column label="手机号码【登陆身份】" width="180" align="center" prop="phone" />
-      <el-table-column label="性别" align="center" prop="sex" />
+      <el-table-column label="性别" align="center" prop="sex" :formatter="(row)=>dictFormat(row,row.sex,'sys_user_sex')" />
       <el-table-column label="年龄" align="center" prop="age" />
-      <el-table-column label="是否排班" align="center" prop="schedulingFlag"  />
-      <el-table-column label="级别" prop="userRank" align="center"  />
-      <el-table-column label="背景" prop="background" align="center" />
-      <el-table-column label="状态" prop="status" align="center"/>
+      <el-table-column label="是否排班" align="center" prop="schedulingFlag" :formatter="(row)=>dictFormat(row,row.schedulingFlag,'his_subsection_type')" />
+      <el-table-column label="级别" prop="userRank" align="center"  :formatter="(row)=>dictFormat(row,row.userRank,'sys_user_level')"/>
+      <el-table-column label="背景" prop="background" align="center" :formatter="(row)=>dictFormat(row,row.background,'sys_user_background')"/>
+      <el-table-column label="状态" prop="status" align="center" :formatter="(row)=>dictFormat(row,row.status,'sys_normal_disable')"/>
       <el-table-column label="创建时间" align="center" prop="createTime" width="200" />
       <el-table-column label="操作" align="center" width="250">
         <template slot-scope="scope">
@@ -162,10 +162,11 @@ export default {
       userRoles:[],
       queryParams:{},
       //所有的部门信息
-      deptOptions:[],
+      deptInfo:[],
       //所有员工的信息
       tableData:[],
-
+      //所有字典项
+      dictList:[],
       //总条数
       total: 0,
       pageSize: 5,
@@ -180,7 +181,7 @@ export default {
     this.initDept();
     //加载员工信息
     this.initUser();
-
+    this.getDict();
 
   },
   methods:{
@@ -204,9 +205,9 @@ export default {
       this.dialogVisible=true;
       //查询所有角色
       //当前用户具有的角色
-      await this.$axios.get("system/api/role/getByUserId/"+row.userId).then(result=>{
-        this.roleTableList=result.data.data.roles;
-        this.userRoles=result.data.data.userRoles;
+      await this.$axios.get("system/api/role/getByuserId/"+row.userId).then(result=>{
+        this.roleTableList=result.data.t.roles;
+        this.userRoles=result.data.t.userRoles;
       });
       //创建一个空数组用来存放默认数据
       let list = []
@@ -232,9 +233,27 @@ export default {
     handleSelectionChange(v){
       this.multipleSelection=v;
     },
+    //字典解析
+    dictFormat(row,column,dictType){
+      let r='';
+      for (let i = 0; i < this.dictList.length; i++) {
+        if (this.dictList[i].dictType===dictType){
+          if (this.dictList[i].dictValue === column) {
+            r= this.dictList[i].dictLabel;
+            break;
+          }
+        }
+      }
+      return r;
+    },
+    //初始化字典
+    getDict(){
+      this.$axios.get('/system/api/dict/data/getall').then(res=> {
+            this.dictList = res.data.t })
+    },
     initDept(){
       this.$axios.get("/system/api/dept/list").then(result=>{
-        this.deptOptions=result.data.data;
+        this.deptInfo=result.data.t;
       })
     },
     initUser(){
@@ -242,6 +261,17 @@ export default {
         this.tableData=result.data.t.records
         this.total=result.data.t.total
       })
+    },
+    //部门
+    deptFormat(row){
+      let v=row.deptId;
+      let r=''
+      for(let i=0;i<this.deptInfo.length;i++){
+        if(this.deptInfo[i].deptId===v){
+          r= this.deptInfo[i].deptName;
+        }
+      }
+      return r;
     },
     // 分页pageSize变化时触发
     handleSizeChange(val) {
