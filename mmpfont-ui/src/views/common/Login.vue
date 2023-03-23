@@ -5,7 +5,7 @@
         <h2 class="login-main-title">管理员登录</h2>
         <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
           <el-form-item prop="userName">
-            <el-input v-model="dataForm.userName" placeholder="帐号"></el-input>
+            <el-input v-model="dataForm.username" placeholder="帐号"></el-input>
           </el-form-item>
           <el-form-item prop="password">
             <el-input v-model="dataForm.password" type="password" placeholder="密码"></el-input>
@@ -19,12 +19,13 @@
   </div>
 </template>
 <script>
+import qs from 'qs'
 export default {
   data() {
     return {
       dataForm: {
-        userName: '',
-        password: ''
+        username: '13888001001',
+        password: '123456'
       },
       dataRule: {
         userName: [{
@@ -43,9 +44,11 @@ export default {
   methods: {
     // 提交表单
     dataFormSubmit() {
-      // TODO：登录代码逻辑待完善
-      alert("登录代码逻辑未完善")
-      this.$router.replace({name: 'Home'})
+      this.$axios.post("/login",qs.stringify(this.dataForm)).then(res=>{
+        sessionStorage.setItem("token",res.data.t);
+        alert("登陆成功")
+        this.$router.push("/index")
+      })
     }
   }
 }

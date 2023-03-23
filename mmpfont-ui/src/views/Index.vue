@@ -20,34 +20,23 @@
 
         >
           <!-- 一级菜单 -->
-          <el-submenu index="1">
+          <el-submenu :index="first.path" v-for="first in leftMenu">
             <!-- 一级菜单模板 -->
-            <template slot="title">
+            <template slot="title" >
               <!-- 图标 -->
-              <svg-icon icon-file-name="lock"/>
+<!--              <el-icon :is="first.icon"></el-icon>-->
+              <el-icon :name="first.icon"></el-icon>
               <!-- 文本 -->
-              <span style="margin-left: 15px">导航一</span>
+              <span style="margin-left: 15px" >{{first.menuName}}</span>
             </template>
             <!-- 二级子菜单 -->
-
-            <!-- 二级子菜单 -->
-            <el-menu-item index="/about">
+            <el-menu-item :index="second.path" v-for="second in first.children">
               <!-- 二级菜单模板 -->
               <template slot="title">
                 <!-- 图标 -->
-                <svg-icon icon-file-name="list"/>
+                <el-icon :name="second.icon"></el-icon>
                 <!-- 文本 -->
-                <span style="margin-left: 15px" @click="showContent('/about','关于我们')">关于我们</span>
-              </template>
-            </el-menu-item>
-            <!-- 二级子菜单 -->
-            <el-menu-item index="/student">
-              <!-- 二级菜单模板 -->
-              <template slot="title">
-                <!-- 图标 -->
-                <svg-icon icon-file-name="zip"/>
-                <!-- 文本 -->
-                <span style="margin-left: 15px" @click="showContent('/student','学生管理')">学生管理</span>
+                <span style="margin-left: 15px" @click="showContent(second.path,second.menuName)">{{second.menuName}}</span>
               </template>
             </el-menu-item>
           </el-submenu>
@@ -64,8 +53,8 @@
               </div>
             </div>
             <el-dropdown :hide-on-click="false">
-              <el-avatar  src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-              <span style="font-weight: bolder;color: white;">闫克起</span>
+              <el-avatar  :src="this.userinfo.picture"></el-avatar>
+              <span style="font-weight: bolder;color: white;">{{userinfo.userName}}</span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>
                   <svg-icon icon-file-name="user"/>
@@ -126,8 +115,22 @@
         },
         created() {
             console.log(this)
+          this.info()
+          this.initLiftMenu()
         },
         methods:{
+          initLiftMenu(){
+            this.$axios.get("/system/api/menu/leftMenu").then(res=>{
+              this.leftMenu=res.data.t
+            })
+          },
+          info(){
+            this.$axios.get("system/api/user/getInfo").then(res => {
+              alert(res.data.data)
+              this.userinfo=res.data.t
+
+            })
+          },
             changeTab(tab){
                 this.$router.push(tab.$attrs.url)
             },
