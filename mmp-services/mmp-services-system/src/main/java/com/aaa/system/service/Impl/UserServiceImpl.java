@@ -14,11 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
 
 @Service
-public class UserServiceImpl implements UserSercvice {
+public class UserServiceImpl implements UserSercvice{
     @Autowired
     private UserDao dao;
     @Override
@@ -63,5 +64,36 @@ public class UserServiceImpl implements UserSercvice {
         IPage<User> page1 = dao.selectPage(page,wrapper);
 
         return new Result<IPage<User>>(200,"查询用户成功",page1);
+    }
+
+    @Override
+    public boolean deleById(Long id) {
+        int i = dao.deleteById(id);
+        if (i>0){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean saveAndUp(User user) {
+        int i=-1;
+
+        if (user.getCreateTime()==null){
+            user.setCreateTime(new Date());
+            user.setUpdateTime(new Date());
+        }else {
+            user.setUpdateTime(new Date());
+        }
+        if (user.getUserId()==null){
+             i = dao.insert(user);
+        }else {
+             i = dao.updateById(user);
+        }
+
+        if (i>0){
+            return true;
+        }
+        return false;
     }
 }

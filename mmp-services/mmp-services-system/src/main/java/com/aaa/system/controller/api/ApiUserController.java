@@ -26,4 +26,20 @@ public class ApiUserController {
     ){
         return userSercvice.findByCoodtion(curr,size,userVo);
     }
+    @DeleteMapping("{id}")
+    public Result deleById(@PathVariable Long id){
+        if (userSercvice.deleById(id)){
+            return new Result(200,"删除成功",true);
+        }else {
+            return new Result(500,"删除失败",false);
+        }
+    }
+    @PostMapping("saveandsupdate")
+    public Result saveAndUpdate(User user){
+        if (userSercvice.saveAndUp(user)){
+            return new Result(200,"删除成功",true);
+        }else {
+            return new Result(500,"删除失败",false);
+        }
+    }
 }

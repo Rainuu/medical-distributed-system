@@ -6,7 +6,7 @@ import com.aaa.core.vo.Result;
 import java.util.List;
 
 public interface DictDataService {
-    Result<List<DictData>> findByType(String type);
+    List<DictData> findByType(String type);
 
-    Result<List<DictData>> getall();
+    List<DictData> getall();
 }

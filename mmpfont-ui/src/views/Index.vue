@@ -24,8 +24,8 @@
             <!-- 一级菜单模板 -->
             <template slot="title" >
               <!-- 图标 -->
-<!--              <el-icon :is="first.icon"></el-icon>-->
-              <el-icon :name="first.icon"></el-icon>
+              <svg-icon :icon-file-name="first.icon"/>
+
               <!-- 文本 -->
               <span style="margin-left: 15px" >{{first.menuName}}</span>
             </template>
@@ -34,7 +34,7 @@
               <!-- 二级菜单模板 -->
               <template slot="title">
                 <!-- 图标 -->
-                <el-icon :name="second.icon"></el-icon>
+                <svg-icon :icon-file-name="second.icon"/>
                 <!-- 文本 -->
                 <span style="margin-left: 15px" @click="showContent(second.path,second.menuName)">{{second.menuName}}</span>
               </template>

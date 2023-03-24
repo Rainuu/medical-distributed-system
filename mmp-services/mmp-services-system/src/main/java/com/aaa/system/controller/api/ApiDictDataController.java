@@ -20,8 +20,8 @@ public class ApiDictDataController {
     public DictDataService service;
     @GetMapping("findByType/{type}")
     public Result<List<DictData>> list(@PathVariable String type){
-        return service.findByType(type);
+        return new Result<List<DictData>>(200,"",service.findByType(type));
     }
     @GetMapping("getall")
-    public Result<List<DictData>> getAll(){return service.getall();};
+    public Result<List<DictData>> getAll(){return new Result<List<DictData>>(200,"",service.getall());};
 }

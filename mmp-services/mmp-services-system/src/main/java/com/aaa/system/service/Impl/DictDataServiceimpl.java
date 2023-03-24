@@ -15,16 +15,16 @@ public class DictDataServiceimpl implements DictDataService {
     @Autowired
     private DictDataDao dictDataDao;
     @Override
-    public Result<List<DictData>> findByType(String type) {
+    public List<DictData> findByType(String type) {
         QueryWrapper<DictData> wrapper = new QueryWrapper<>();
         wrapper.eq("dict_type",type);
         List<DictData> list =dictDataDao.selectList(wrapper);
-        return new Result<>(2000,"查询成功",list);
+        return list;
     }
 
     @Override
-    public Result<List<DictData>> getall() {
+    public List<DictData> getall() {
 
-        return new Result<List<DictData>>(200,"",dictDataDao.selectList(null) );
+        return dictDataDao.selectList(null);
     }
 }

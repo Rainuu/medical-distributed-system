@@ -12,4 +12,7 @@ public interface UserSercvice {
     public Result<User> getByPhoneInfo();
 
     Result<IPage<User>> findByCoodtion(Integer curr, Integer size, com.aaa.system.vo.UserVo userVo);
+
+    public boolean deleById(Long id);
+    public boolean saveAndUp(User user);
 }
