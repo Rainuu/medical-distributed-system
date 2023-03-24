@@ -2,6 +2,7 @@ package com.aaa.stock.dao;
 
 import com.aaa.core.entity.Producer;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -12,11 +13,7 @@ import java.util.List;
  * @USER: HZM
  * @DATE: 2023/3/24 9:40
  */
+@Mapper
 public interface ProducterDao extends BaseMapper<Producer> {
-
-    // 根据ID查询厂家信息
-    List<Producer> getAll();
-
-    //
 
 }

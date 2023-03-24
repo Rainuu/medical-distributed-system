@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
  * @USER: HZM
  * @DATE: 2023/3/22 13:27
  */
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class}) // 声明此类是SpringBoot的核心启动类
+@SpringBootApplication // 声明此类是SpringBoot的核心启动类
 @MapperScan("com.aaa.stock.dao") // Mybatis: 配置扫描地址所有接口生成实现类
 public class StockApp {
     public static void main(String[] args) {

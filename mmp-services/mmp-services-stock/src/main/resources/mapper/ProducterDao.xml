@@ -3,9 +3,4 @@
 <!--namespace 写的就是你要实现的那个接口的路径-->
 <mapper namespace="com.aaa.stock.dao.ProducterDao">
 
-    <!-- 根据ID查询厂家信息 -->
-    <select id="getAll" resultType="com.aaa.core.entity.Producer">
-        select * from stock_producer
-    </select>
-
 </mapper>

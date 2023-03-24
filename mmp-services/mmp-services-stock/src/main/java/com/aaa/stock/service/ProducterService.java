@@ -2,6 +2,8 @@ package com.aaa.stock.service;
 
 import com.aaa.core.entity.Producer;
 import com.aaa.core.vo.Result;
+import com.aaa.stock.vo.ProducterVo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 
 import java.util.List;
 
@@ -13,8 +15,5 @@ import java.util.List;
  */
 public interface ProducterService {
 
-    // 根据ID查询厂家信息
-    Result<List<Producer>> getAll();
-
-
+    Result<IPage<Producer>> getAll(Integer current, Integer size, ProducterVo producterVo);
 }
