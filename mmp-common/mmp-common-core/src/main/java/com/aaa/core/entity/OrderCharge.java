@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -25,7 +26,7 @@ public class OrderCharge implements Serializable {
     /**
      * 总费用
      */
-    private Long orderAmount;
+    private BigDecimal orderAmount;
 
     /**
      * 病历ID
