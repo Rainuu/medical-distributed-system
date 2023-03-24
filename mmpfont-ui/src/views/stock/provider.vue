@@ -67,9 +67,17 @@
 <script>
 export default {
   methods: {
+    // 查询表格数据————初始化表格
+    // initTable(){
+    //   this.$axios.post().then(result=>{
+    //
+    //   })
+    // },
+    // 分页pageSize变化时触发
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
+    // 点击上一页  下一页，跳转到哪一页面时触发
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     },
@@ -89,13 +97,12 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+    },
+
+    // 用于挂载，在vue实例创建完成后被立即调用
+    created() {
+
     }
-
-
-
-    // handleClick(row) {
-    //   console.log(row);
-    // }
   },
 
   data() {
