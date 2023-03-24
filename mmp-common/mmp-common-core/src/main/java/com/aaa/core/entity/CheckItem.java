@@ -31,6 +31,7 @@ public class CheckItem implements Serializable {
 
     /**
      * 关键字【查询用】
+     *
      */
     private String keywords;
 
