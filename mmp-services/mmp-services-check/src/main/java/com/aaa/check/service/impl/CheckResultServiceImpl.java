@@ -29,29 +29,40 @@ public class CheckResultServiceImpl implements CheckResultService {
    private CheckResultDao checkResultDao;
 
    @Override
-   public Result<IPage<CheckResult>> getByPage(Integer current, Integer size, CheckItemVo checkItemVo) {
+   public Result<IPage<CheckResult>> getByPageStatus(Integer current, Integer size, CheckItemVo checkItemVo) {
       IPage<CheckResult> page = new Page<>(current,size);
-      QueryWrapper<CheckResult> wrapper = new QueryWrapper<>();
+      QueryWrapper<CheckResult> queryWrapper = new QueryWrapper<>();
       String[] checkItemIds = checkItemVo.getCheckItemIds();
+      if (StringUtils.hasText(checkItemVo.getStatus())){
+         queryWrapper.eq("result_status",checkItemVo.getStatus());
+      }
       if (StringUtils.hasText(checkItemVo.getRegId())){
-         wrapper.eq("reg_id",checkItemVo.getRegId());
+         queryWrapper.eq("reg_id",checkItemVo.getRegId());
       }
       if (StringUtils.hasText(checkItemVo.getPatientName())){
-         wrapper.like("patient_name",checkItemVo.getPatientName());
+         queryWrapper.like("patient_name",checkItemVo.getPatientName());
       }
-      for (int i = 0; i < checkItemIds.length-1; i++) {
-         if (StringUtils.hasText(checkItemIds[i])){
-            wrapper.eq("check_item_id",checkItemIds[i]).or();
-         }
+      if (checkItemIds.length==4){
+         queryWrapper.and(wrapper -> wrapper.eq("check_item_id",checkItemIds[0]).or().eq("check_item_id",checkItemIds[1]).or().
+                 eq("check_item_id",checkItemIds[2]).or().eq("check_item_id",checkItemIds[3])
+         );
+      }else if (checkItemIds.length==3){
+         queryWrapper.and(wrapper -> wrapper.eq("check_item_id",checkItemIds[0]).or().eq("check_item_id",checkItemIds[1]).or().
+                 eq("check_item_id",checkItemIds[2])
+         );
+      }else if (checkItemIds.length==2){
+         queryWrapper.and(wrapper -> wrapper.eq("check_item_id",checkItemIds[0]).or().eq("check_item_id",checkItemIds[1])
+         );
+      }else if (checkItemIds.length==1){
+         queryWrapper.eq("check_item_id",checkItemIds[0]);
       }
-      if (checkItemIds.length!=0){
-         if (StringUtils.hasText(checkItemIds[checkItemIds.length-1])){
-            wrapper.eq("check_item_id",checkItemIds[checkItemIds.length-1]);
-         }
-      }
-
-
-      IPage<CheckResult> checkResultIPage = checkResultDao.selectPage(page, wrapper);
+      IPage<CheckResult> checkResultIPage = checkResultDao.selectPage(page, queryWrapper);
       return new Result<>(200,"检查结果查询",checkResultIPage);
+   }
+
+   @Override
+   public Result addMsg(String cocId, String textarea) {
+      Boolean aBoolean = checkResultDao.addMsg(cocId, textarea);
+      return new Result(200,"录入结果成功",aBoolean);
    }
 }

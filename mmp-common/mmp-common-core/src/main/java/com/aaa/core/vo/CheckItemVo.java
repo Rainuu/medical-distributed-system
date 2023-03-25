@@ -7,5 +7,6 @@ public class CheckItemVo {
     private String[] checkItemIds;
     private String regId;
     private String patientName;
+    private String status;
 
 }

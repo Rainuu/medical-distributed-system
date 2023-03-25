@@ -40,6 +40,8 @@
         </el-form-item>
       </el-form>
     </el-card>
+    <!--    查询条件结束-->
+    <!--    数据表格开始-->
 <div>
     <el-table
         :data="tableData"
@@ -47,7 +49,7 @@
         style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-form label-position="left" inline class="demo-table-expand">
+          <el-form label-position="left" inline class="demo-table-expand" style="margin-left: 80px">
             <el-form-item label="价格"><span>{{ props.row.price }}</span></el-form-item>
             <el-form-item label="创建时间"><span>{{ props.row.createTime}}</span></el-form-item>
             <el-form-item label="检查结果描述"><span>{{ props.row.resultMsg}}</span></el-form-item>
@@ -57,11 +59,13 @@
       <el-table-column
           prop="cocId"
           label="检查单位"
+          min-width="100px"
       >
       </el-table-column>
       <el-table-column
           prop="regId"
           label="挂号单号"
+          min-width="100px"
       >
       </el-table-column>
       <el-table-column
@@ -77,6 +81,7 @@
       <el-table-column
           prop="resultStatus"
           label="检查状态"
+          :formatter="statusFormat"
       >
       </el-table-column>
       <el-table-column
@@ -94,12 +99,13 @@
                    @size-change="handleSizeChange"
                    @current-change="handleCurrentChange"
                    :current-page="page.current"
-                   :page-sizes="[10, 20, 30, 40]"
+                   :page-sizes="[5, 10, 15, 20]"
                    :page-size="page.size"
                    layout="total, sizes, prev, pager, next, jumper"
                    :total="page.total">
     </el-pagination>
-    <!-- 录入检查结果弹层开始 -->
+    <!--    分页结束-->
+    <!-- 查看检查结果弹层开始 -->
     <el-dialog
         :title="title"
         :visible.sync="open"
@@ -119,21 +125,21 @@
         <el-button @click="cancel">取 消</el-button>
       </span>
     </el-dialog>
-    <!-- 录入检查结果弹层结束 -->
+    <!-- 查看检查结果弹层结束 -->
   </div>
 
 </template>
 
 <script>
 
-const cityOptions = ['乙肝五项', '血常规', 'CT', 'X光'];
+const cityOptions = [];
 export default {
 
   methods: {
     // 全选
     handleCheckAllChange(val) {
       this.queryParams.checkItemIds = val ? this.checkItemOptions.map(item => item.checkItemId) : []
-      this.isIndeterminate = true
+      this.isIndeterminate = false
     },
     // 选择某一个项目
     handleCheckedItemChange(value) {
@@ -142,29 +148,30 @@ export default {
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.checkItemOptions.length
       this.queryAllCheckResultForPage()
     },
+    // 分页pageSize变化时触发
     handleSizeChange(val) {
       this.page.size = val;
+      // 重新查询
       this.queryData();
     },
+    // 点击上一页  下一页，跳转到哪一页面时触发
     handleCurrentChange(val) {
       this.page.current = val;
+      // 重新查询
       this.queryData();
-    },
-    Check(row) {
-      this.dialogVisible = true;
-      this.form = {};
-      console.log(row);
     },
     //查询
     queryData(){
-      this.$axios.post("/check/api/checkResult/list/"+this.page.current+"/"+this.page.size,this.queryParams).then(r=>{
+      this.$axios.post("/check/api/checkResult/listStatus/"+this.page.current+"/"+this.page.size,this.queryParams).then(r=>{
         this.tableData=r.data.t.records;
-        this.page.total=r.data.t.total
+
+        this.page.total=r.data.t.total;
+
       })
     },
     // 查看结果
     handleViewResult(row) {
-      // 打开录入结果的弹出层
+      // 打开查看结果的弹出层
       this.open = true
       this.title = '查看【' + row.patientName + '】的检查结果'
       // 记录当前选中的详情ID
@@ -178,7 +185,8 @@ export default {
       this.open = false
       this.currentResult = {
         resultMsg: undefined,
-        resultImg: [1,2,3,4]
+        resultImg: [],
+        status:''
       }
     },
     //查询
@@ -191,10 +199,25 @@ export default {
         this.checkItemOptions = r.data.t
         this.queryParams.checkItemIds = this.checkItemOptions.map(item => item.checkItemId)
       })
-    }
+    },
+    //状态字典的解析
+    initStatus(){
+      this.$axios.get("/system/api/dict/data/findByType/his_check_result_status").then(result=>{
+        this.statusOptions=result.data.t;
+      })
+    },
+    //status
+    statusFormat(row){
+      let v=row.resultStatus;
+      return this.formatDict3(this.statusOptions,v);
+    },
   },
   created() {
+    //加载系统状态
+    this.initStatus();
+    //加载状态的字典数据
     this.selectAllCheckItem()
+    //展示页面
     this.queryData()
   },
 
@@ -206,21 +229,22 @@ export default {
         patientName: undefined,
         checkItemIds: [],
       },
-      dialogVisible: false,
-      input1: '',
-      input2: '',
-      checkAll: false,
+      //是否为全选状态
+      checkAll: true,
+      //检查项目数据
       checkItemOptions: [],
       cities: cityOptions,
-      isIndeterminate: true,
+      //是否为半选状态
+      isIndeterminate: false,
       //分页
       page: {
         total: 10,
-        size: 10,
+        size: 5,
         current: 1
       },
+      //表格数据
       tableData: [],
-      // 是否打开录入结果的弹出层
+      // 是否打开查看结果的弹出层
       open: false,
       // 弹出层的标题
       title: '',
@@ -228,7 +252,9 @@ export default {
       currentResult: {
         resultMsg: undefined,
         resultImg: []
-      }
+      },
+      //系统状态
+      statusOptions:[],
     }
   }
 

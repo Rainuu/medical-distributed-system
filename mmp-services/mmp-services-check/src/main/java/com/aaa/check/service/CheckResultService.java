@@ -15,5 +15,7 @@ import java.util.List;
  * @since 2023-03-24 09:37:25
  */
 public interface CheckResultService {
-    Result<IPage<CheckResult>> getByPage(Integer current, Integer size, CheckItemVo checkItemVo);
+    Result<IPage<CheckResult>> getByPageStatus(Integer current, Integer size, CheckItemVo checkItemVo);
+
+    Result addMsg(String cocId, String textarea);
 }

@@ -18,4 +18,5 @@
         <result property="createBy" column="create_by" />
         <result property="updateBy" column="update_by" />
     </resultMap>
+
 </mapper>

@@ -10,7 +10,6 @@
         width="50%"
         center
         :before-close="handleClose">
-
       <!--form表单开始-->
       <span>
       <el-form ref="form" :model="form" label-width="80px">
@@ -32,35 +31,52 @@
         <!--form表单结束-->
       </span>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="addMsg">确 定</el-button>
         <el-button @click="dialogVisible = false" style="">取 消</el-button>
 
       </span>
     </el-dialog>
     <!--弹出层结束-->
 
-    <!--form表单-->
-    <!--多选框-->
-    <el-form ref="form" :model="form" label-width="80px" style="text-align-last: justify;padding-left: 10px">
-      <el-form-item label="检查项目" >
-        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" >全选</el-checkbox>
-        <div style="margin: 15px 0;"></div>
-        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-          <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
-        </el-checkbox-group>
-      </el-form-item>
-    </el-form>
-
-    <!--搜索框-->
-    <div style="display: flex;">
-      <span style="float: contour;line-height: 40px;margin: 20px 10px">挂号单号</span>
-      <el-input  placeholder="请输入挂号单号" v-model="input1" style="width: 400px;float: contour;margin: 20px 10px"/>
-      <sapn style="float: contour;line-height: 40px;margin: 20px 10px">患者姓名</sapn>
-      <el-input  placeholder="请输入患者姓名" v-model="input2" style="width: 400px;float: contour;margin: 20px 10px" />
-      <el-button type="primary"  icon="el-icon-search" @click="resetForm" style="margin: 20px 10px">搜索</el-button>
-      <el-button type="primary"  icon="el-icon-refresh" @click="resetForm" style="margin: 20px 10px">重置</el-button>
-
-    </div>
+    <!-- 查询条件开始 -->
+    <el-card style="margin-bottom:3px">
+      <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
+        <el-form-item label="检查项目" prop="checkItemIds" style="float: left">
+          <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange" style="float: left">全选</el-checkbox>
+          <div style="clear: both"/>
+          <el-checkbox-group v-model="queryParams.checkItemIds" @change="handleCheckedItemChange">
+            <el-checkbox
+                v-for="d in checkItemOptions"
+                :key="d.checkItemId"
+                :label="d.checkItemId"
+                :value="d.checkItemId"
+            >{{ d.checkItemName }}</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="挂号单号" prop="regId">
+          <el-input
+              v-model="queryParams.regId"
+              placeholder="请输入挂号单号"
+              clearable
+              size="small"
+              style="width:380px"
+          />
+        </el-form-item>
+        <el-form-item label="患者姓名" prop="patientName" style="clear:both;float: left">
+          <el-input
+              v-model="queryParams.patientName"
+              placeholder="请输入患者姓名"
+              clearable
+              size="small"
+              style="width:380px"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" size="mini" @click="query">搜索</el-button>
+          <el-button type="primary" icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
 
     <!--table表格-->
     <el-table
@@ -69,39 +85,39 @@
         style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="单位"><span>{{ props.row.name }}</span></el-form-item>
-            <el-form-item label="换算量"><span>{{ props.row.shop }}</span></el-form-item>
-            <el-form-item label="库存"><span>{{ props.row.id }}</span></el-form-item>
-            <el-form-item label="预警值"><span>{{ props.row.shopId }}</span></el-form-item>
+          <el-form label-position="left" inline class="demo-table-expand" style="margin-left: 80px">
+            <el-form-item label="价格"><span>{{ props.row.price }}</span></el-form-item>
+            <el-form-item label="创建时间"><span>{{ props.row.createTime}}</span></el-form-item>
+            <el-form-item label="检查结果描述"><span>{{ props.row.resultMsg}}</span></el-form-item>
           </el-form>
         </template>
       </el-table-column>
-
-
       <el-table-column
-          prop="name"
+          prop="cocId"
           label="检查单位"
+          min-width="100px"
       >
       </el-table-column>
       <el-table-column
-          prop="province"
+          prop="regId"
           label="挂号单号"
+          min-width="100px"
       >
       </el-table-column>
       <el-table-column
-          prop="city"
+          prop="checkItemName"
           label="项目名称"
       >
       </el-table-column>
       <el-table-column
-          prop="address"
+          prop="patientName"
           label="患者姓名"
       >
       </el-table-column>
       <el-table-column
-          prop="zip"
+          prop="resultStatus"
           label="检查状态"
+          :formatter="statusFormat"
       >
       </el-table-column>
       <el-table-column
@@ -114,14 +130,14 @@
       </el-table-column>
     </el-table>
     <!--分页-->
-    <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="pageCurrent"
-        :page-sizes="[2, 4, 6, 8]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total">
+    <el-pagination align="left"
+                   @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="page.current"
+                   :page-sizes="[10, 20, 30, 40]"
+                   :page-size="page.size"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="page.total">
     </el-pagination>
 
   </div>
@@ -129,26 +145,32 @@
 </template>
 
 <script>
-const cityOptions = ['乙肝五项', '血常规', 'CT', 'X光'];
+const cityOptions = [];
 export default {
-  name: "InspectionResults",
-
   data() {
     return {
+      //查询参数
+      queryParams: {
+        regId: undefined,
+        patientName: undefined,
+        checkItemIds: [],
+        status:0
+      },
+      //是否为全选状态
       checkAll: true,
-      checkedCities: ['乙肝五项', '血常规'],
+      //检查项目数据
+      checkItemOptions: [],
       cities: cityOptions,
-      isIndeterminate: true,
-
-      pageCurrent: 1,
-      pageSize: 10,
-      total: 1,
-
+      //是否为半选状态
+      isIndeterminate: false,
+      //分页
+      page: {
+        total: 10,
+        size: 10,
+        current: 1
+      },
       textarea: '',
-
       dialogVisible: false,
-
-
       formInline: {
         user: '',
         region: ''
@@ -157,48 +179,21 @@ export default {
         type: []
       },
       patientName:'',
-
-      tableData: [{
-        id:'1232323',
-        date: '2016-05-02',
-        name: 'ITEM03940394304292',
-        province: 'GH239839232032320',
-        city: '血常规',
-        address: '王小虎',
-        zip: '检测完成',
-        shop:'叽里呱啦',
-        shopId:'2323'
-      }, {
-        id:'1232323',
-        date: '2016-05-02',
-        name: 'ITEM03940394304292',
-        province: 'GH239839232032320',
-        city: '血常规',
-        address: '王小虎',
-        zip: '检测完成',
-        shop:'叽里呱啦',
-        shopId:'2323'
-      }, {
-        id:'1232323',
-        date: '2016-05-02',
-        name: 'ITEM03940394304292',
-        province: 'GH239839232032320',
-        city: '血常规',
-        address: '王小虎',
-        zip: '检测完成',
-        shop:'叽里呱啦',
-        shopId:'2323'
-      }, {
-        id:'1232323',
-        date: '2016-05-02',
-        name: 'ITEM03940394304292',
-        province: 'GH239839232032320',
-        city: '血常规',
-        address: '王小虎',
-        zip: '检测完成',
-        shop:'叽里呱啦',
-        shopId:'2323'
-      }],
+      //表格数据
+      tableData: [],
+      // 是否打开录入结果的弹出层
+      open: false,
+      // 弹出层的标题
+      title: '',
+      // 当前查看的数据
+      currentResult: {
+        resultMsg: undefined,
+        resultImg: []
+      },
+      //系统状态
+      statusOptions:[],
+      //处方检查项ID
+      cocId:''
     }
   },
   methods: {
@@ -208,30 +203,78 @@ export default {
     /*查看弹出层*/
     handleClick(row) {
       this.dialogVisible = true;
-      this.patientName=row.name;
+      this.patientName=row.patientName;
+      this.cocId=row.cocId;
       this.form= row;
       console.log(row);
       console.log(this.patientName);
     },
-    /*全选*/
+    // 全选
     handleCheckAllChange(val) {
-      this.checkedCities = val ? cityOptions : [];
-      this.isIndeterminate = false;
+      this.queryParams.checkItemIds = val ? this.checkItemOptions.map(item => item.checkItemId) : []
+      this.isIndeterminate = false
     },
-    /*单选*/
-    handleCheckedCitiesChange(value) {
-      let checkedCount = value.length;
-      this.checkAll = checkedCount === this.cities.length;
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+    // 选择某一个项目
+    handleCheckedItemChange(value) {
+      const checkedCount = value.length
+      this.checkAll = checkedCount === this.checkItemOptions.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.checkItemOptions.length
+      this.queryAllCheckResultForPage()
     },
-    /*分页*/
+    // 分页pageSize变化时触发
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.page.size = val;
+      // 重新查询
+      this.queryData();
     },
+    // 点击上一页  下一页，跳转到哪一页面时触发
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.page.current = val;
+      // 重新查询
+      this.queryData();
     },
-
+    //查询
+    queryData(){
+        this.$axios.post("/check/api/checkResult/listStatus/"+this.page.current+"/"+this.page.size,this.queryParams).then(r=>{
+        this.tableData=r.data.t.records;
+        this.page.total=r.data.t.total
+      })
+    },
+    //查询
+    query(){
+      this.queryData()
+    },
+    // 加载所有可用的检查项目
+    selectAllCheckItem(){
+      this.$axios.get("/check/api/checkItem/selectAllCheckItem").then(r=>{
+        this.checkItemOptions = r.data.t
+        this.queryParams.checkItemIds = this.checkItemOptions.map(item => item.checkItemId)
+      })
+    },
+    //状态字典的解析
+    initStatus(){
+      this.$axios.get("/system/api/dict/data/findByType/his_check_result_status").then(result=>{
+        this.statusOptions=result.data.t;
+      })
+    },
+    //status
+    statusFormat(row){
+      let v=row.resultStatus;
+      return this.formatDict3(this.statusOptions,v);
+    },
+    //录入检查结果
+    addMsg(){
+      this.$axios.post("/check/api/checkResult/addMsg/"+this.cocId+"/"+this.textarea).then(r=>{
+        this.$message({
+          showClose: true,
+          message: r.data.msg,
+          type: 'success'
+        });
+        this.dialogVisible=false;
+        // 刷新数据
+        this.queryData();
+      })
+    },
     /*上传文件*/
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -254,10 +297,29 @@ export default {
           .catch(_ => {
           });
     }
-  }
+  },
+  created() {
+    //加载系统状态
+    this.initStatus();
+    //加载状态的字典数据
+    this.selectAllCheckItem()
+    //展示页面
+    this.queryData()
+  },
 }
 </script>
 
 <style scoped>
-
+.demo-table-expand {
+  font-size: 0;
+}
+.demo-table-expand label {
+  width: 90px;
+  color: #99a9bf;
+}
+.demo-table-expand .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+  width: 50%;
+}
 </style>

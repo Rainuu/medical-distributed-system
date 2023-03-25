@@ -26,13 +26,18 @@ public class CheckResultController {
     @Autowired
     private CheckResultService checkResultService;
 
-    @PostMapping("list/{current}/{size}")
-    public Result<IPage<CheckResult>> list(
+    @PostMapping("listStatus/{current}/{size}")
+    public Result<IPage<CheckResult>> listStatus(
             @PathVariable Integer current,
             @PathVariable Integer size,
             @RequestBody CheckItemVo checkItemVo
     ){
-        return checkResultService.getByPage(current,size,checkItemVo);
+        return checkResultService.getByPageStatus(current,size,checkItemVo);
+    }
+
+    @PostMapping("addMsg/{cocId}/{textarea}")
+    public Result addMsg(@PathVariable String cocId,@PathVariable String textarea){
+        return checkResultService.addMsg(cocId,textarea);
     }
 
 }
