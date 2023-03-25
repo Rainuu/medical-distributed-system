@@ -1,9 +1,7 @@
 package com.aaa.core.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -109,6 +107,7 @@ public class Medicines implements Serializable {
     /**
      * 删除状态0正常0删除 要有重新导入功能
      */
+    @TableLogic   //@TableLogic代表此字段用于逻辑删除
     private String delFlag;
 
     @TableField(exist = false)

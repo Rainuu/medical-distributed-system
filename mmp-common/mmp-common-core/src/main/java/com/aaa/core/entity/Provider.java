@@ -1,9 +1,7 @@
 package com.aaa.core.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -61,6 +59,7 @@ public class Provider implements Serializable {
     /**
      * 删除标志（0正常 1删除）
      */
+    @TableLogic   //@TableLogic代表此字段用于逻辑删除
     private String delFlag;
 
     /**

@@ -15,8 +15,10 @@ import java.util.List;
 public class DictController {
     @Autowired
     private DictDataService service;
+
     @GetMapping("getAll")
     public List<DictData> getAll(){
+        System.out.println("---------------------");
         return service.getall();
-    }
+    } //处理字典
 }

@@ -1,17 +1,22 @@
 package com.aaa.stock.service.impl;
 
+import com.aaa.core.entity.DictData;
 import com.aaa.core.entity.Producer;
+import com.aaa.core.entity.User;
 import com.aaa.core.vo.Result;
 import com.aaa.stock.dao.ProducterDao;
+import com.aaa.stock.feign.ProducterFeign;
 import com.aaa.stock.service.ProducterService;
 import com.aaa.stock.vo.ProducterVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,10 +27,17 @@ import java.util.Objects;
  * @DATE: 2023/3/24 10:55
  */
 @Service
-public class ProducterServiceImpl implements ProducterService {
+public class ProducterServiceImpl extends ServiceImpl<ProducterDao,Producer> implements ProducterService {
 
     @Autowired
     private ProducterDao producterDao;
+
+    @Autowired
+    private ProducterService producterService;
+
+    //驻日feign
+    @Autowired
+    private ProducterFeign producterFeign;
 
     // 根据查询厂家信息
     @Override
@@ -36,7 +48,7 @@ public class ProducterServiceImpl implements ProducterService {
         QueryWrapper<Producer> wrapper = new QueryWrapper();
         //模糊查询————厂家名称
         if (StringUtils.hasText(producterVo.getProducerName())){
-            wrapper.like("producer_id",producterVo.getProducerName());
+            wrapper.like("producer_name",producterVo.getProducerName());
         }
         //模糊查询————关键字
         if (StringUtils.hasText(producterVo.getKeywords())){
@@ -57,5 +69,45 @@ public class ProducterServiceImpl implements ProducterService {
         IPage<Producer> page1 = producterDao.selectPage(page, wrapper);
 //        System.out.println(page1.getTotal());  //测试有无拿到页码
         return new Result(200, "查询查询厂家信息", page1);
+    }
+
+    // 删除
+    @Override
+    public boolean delById(Long id) {
+        int i = producterDao.deleteById(id);
+        if (i > 0){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean saveAndUpdate(Producer producer) {
+        int i=-1;
+
+        if (producer.getCreateTime()==null){
+            producer.setCreateTime(new Date());
+            producer.setUpdateTime(new Date());
+        }else {
+            producer.setUpdateTime(new Date());
+        }
+
+        if (producer.getProducerId()==null){
+            i = producterDao.insert(producer);
+        }else {
+            i = producterDao.updateById(producer);
+        }
+
+        if (i>0){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Result<List<DictData>> getaaa() {
+        List<DictData> all = producterFeign.getAll();//处理字典 调用system注入的方法
+        System.out.println(all.toString());
+        return new Result(200, "成功", all);
     }
 }
