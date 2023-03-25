@@ -114,7 +114,6 @@
           }
         },
         created() {
-            console.log(this)
           this.info()
           this.initLiftMenu()
         },
@@ -126,7 +125,6 @@
           },
           info(){
             this.$axios.get("system/api/user/getInfo").then(res => {
-              alert(res.data.data)
               this.userinfo=res.data.t
 
             })
@@ -160,7 +158,6 @@
             },
             //显示当前连接的内容
             showContent(url,menuName){
-                //alert(url+","+menuName);
                 //直接调用添加页签页
                 this.addTab(menuName,url);
             },

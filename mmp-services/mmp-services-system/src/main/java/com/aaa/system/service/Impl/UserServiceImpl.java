@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -22,6 +23,8 @@ import java.util.Objects;
 public class UserServiceImpl implements UserSercvice{
     @Autowired
     private UserDao dao;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Override
     public User findByUsername(String username) {
         QueryWrapper<User> wrapper =new QueryWrapper<>();
@@ -81,6 +84,7 @@ public class UserServiceImpl implements UserSercvice{
 
         if (user.getCreateTime()==null){
             user.setCreateTime(new Date());
+            user.setPassword(passwordEncoder.encode("123456"));
             user.setUpdateTime(new Date());
         }else {
             user.setUpdateTime(new Date());

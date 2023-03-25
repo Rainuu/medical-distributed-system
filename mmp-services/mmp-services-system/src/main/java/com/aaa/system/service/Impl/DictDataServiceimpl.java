@@ -1,7 +1,6 @@
 package com.aaa.system.service.Impl;
 
 import com.aaa.core.entity.DictData;
-import com.aaa.core.vo.Result;
 import com.aaa.system.dao.DictDataDao;
 import com.aaa.system.service.DictDataService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

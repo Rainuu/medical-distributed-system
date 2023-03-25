@@ -63,7 +63,7 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="initUser" >搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="mohu" >搜索</el-button>
         <el-button type="primary" icon="el-icon-refresh" size="mini" >重置</el-button>
       </el-form-item>
     </el-form>
@@ -74,7 +74,7 @@
         <el-button type="primary" icon="el-icon-plus" size="mini" @click="adduserVisible=true">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" >删除</el-button>
+        <el-button type="danger" icon="el-icon-delete" size="mini" @click="piliangdel">批量删除</el-button>
       </el-col>
     </el-row>
     <!-- 表格工具按钮结束 -->
@@ -99,7 +99,7 @@
       <el-table-column label="创建时间" align="center" prop="createTime" width="200" />
       <el-table-column label="操作" align="center" width="250">
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-edit" size="mini">修改</el-button>
+          <el-button type="text" icon="el-icon-edit" size="mini" @click="update(scope.row)">修改</el-button>
           <el-button  type="text" icon="el-icon-delete" size="mini" @click="deleuser(scope.row.userId)" >删除</el-button>
           <el-button  type="text" icon="el-icon-thumb" size="mini" @click="fenRole(scope.row)">分配角色</el-button>
         </template>
@@ -182,7 +182,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="年龄">
-            <el-input-number v-model="userForm.age" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>
+            <el-input-number v-model="userForm.age"  :min="1" :max="10" label="描述文字"></el-input-number>
           </el-form-item>
           <el-form-item label="背景" prop="background">
             <el-select v-model="userForm.background" placeholder="请选择活动区域">
@@ -195,14 +195,14 @@
             </el-select>
           </el-form-item>
           <el-form-item label="性别">
-            <el-radio v-model="userForm.sex" label="1">男</el-radio>
-            <el-radio v-model="userForm.sex" label="2">女</el-radio>
-            <el-radio v-model="userForm.sex" label="3">未知</el-radio>
+            <el-radio v-model="userForm.sex" label="0">男</el-radio>
+            <el-radio v-model="userForm.sex" label="1">女</el-radio>
+            <el-radio v-model="userForm.sex" label="2">未知</el-radio>
           </el-form-item>
 
           <el-form-item label="状态">
-            <el-radio v-model="userForm.status" label="1">正常</el-radio>
-            <el-radio v-model="userForm.status" label="2">停用</el-radio>
+            <el-radio v-model="userForm.status" label="0">正常</el-radio>
+            <el-radio v-model="userForm.status" label="1">停用</el-radio>
           </el-form-item>
 
           <el-form-item label="是否参与排班">
@@ -324,6 +324,7 @@ export default {
               this.$message.success("添加成功")
               this.adduserVisible=false;
               this.userForm={};
+              this.initUser()
             }else {
               this.$message.error("添加失败")
             }
@@ -333,9 +334,6 @@ export default {
           return false;
         }
       });
-    },
-    handleChange(value) {
-      console.log(value);
     },
     //确认分配角色
     confirmRole() {
@@ -383,6 +381,11 @@ export default {
         });
       });
     },
+    //模糊查询
+    mohu(){
+      this.currentPage=1
+      this.initUser()
+    },
     //分配角色弹出
     async fenRole(row) {
       this.userId = row.userId;
@@ -418,9 +421,15 @@ export default {
     handleSelectionChange(v) {
       this.multipleSelection = v;
     },
+    piliangdel(){
+      for(let i=0;i<this.multipleSelection.length;i++){
+        this.deleuser(this.multipleSelection[i].deptId)
+      }
+    },
     handleClose(done) {
       this.$confirm('确认关闭？')
           .then(_ => {
+            this.userForm={}
             done();
           })
           .catch(_ => {
@@ -430,7 +439,6 @@ export default {
     this.$axios.get("/system/api/dict/data/findByType/sys_normal_disable").then(result=>{
       this.statusOptions=result.data.t;
     })
-    alert(JSON.stringify(this.statusOptions))
   },
   //字典解析
     dictFormat(row, column, dictType){
