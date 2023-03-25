@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.charge.dao.HisOrderBackfeeMapper">
+
+<select id="selectAll" resultType="com.aaa.core.entity.OrderBackfeeItem">
+    select item_id,co_id,item_name,item_price,item_num,item_amount,back_id,item_type,status
+    from his_order_backfee_item where back_id=#{backId}
+</select>
+</mapper>

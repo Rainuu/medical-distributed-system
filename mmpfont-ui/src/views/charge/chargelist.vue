@@ -18,19 +18,19 @@
     <br>
     <!-- 页面表格 -->
     <div>
-      <el-table :data="tableData" border style="width: 100%" max-height="350px">
+      <el-table :data="tableData" border style="width: 100%" max-height="330px">
         <el-table-column fixed prop="orderId" label="订单号"  min-width="50px" align="center"></el-table-column>
         <el-table-column prop="regId" label="挂号单号"  min-width="50px" align="center"></el-table-column>
         <el-table-column prop="patientName" label="患者姓名"  width="100px" align="center"></el-table-column>
         <el-table-column prop="orderAmount" label="总金额"  width="100px" align="center"></el-table-column>
-        <el-table-column prop="payType" label="支付类型"  width="60px" align="center"></el-table-column>
-        <el-table-column prop="orderStatus" label="订单状态"  width="60px" align="center"></el-table-column>
+        <el-table-column prop="payType" label="支付类型"  width="100px" align="center" :formatter="(row)=>this.dictFormat(row,row.payType,'his_pay_type_status')"></el-table-column>
+        <el-table-column prop="orderStatus" label="订单状态"  width="100px" align="center" :formatter="(row)=>this.dictFormat(row,row.orderStatus,'his_order_charge_status')"></el-table-column>
         <el-table-column prop="createTime" label="创建时间"  min-width="50px" align="center"></el-table-column>
         <el-table-column fixed="right" label="操作" min-width="60px" align="center">
           <template slot-scope="scope">
             <el-button @click="initdetail(scope.row)" type="text" size="small" icon="el-icon-view">查看详情</el-button>
-            <el-button  type="text" size="small" icon="el-icon-bank-card" disabled>现金收费</el-button>
-            <el-button  type="text" size="small" icon="el-icon-bank-card" disabled>支付宝收费</el-button>
+            <el-button  type="text" size="small" :disabled="scope.row.orderStatus==='1'" icon="el-icon-bank-card" @click="handlePayWithCash(scope.row)">现金收费</el-button>
+            <el-button  type="text" size="small" :disabled="scope.row.orderStatus==='1'" icon="el-icon-bank-card" >支付宝收费</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -38,16 +38,20 @@
     </div>
 <!--    查看详情-->
     <div>
-      <el-dialog :title="title" :visible.sync="dialogVisible" width="40%">
-      <el-table :data="tableDetail" border style="width: 100%" max-height="350px">
-        <el-table-column fixed prop="itemId" label="详情ID"  min-width="50px" align="center"></el-table-column>
-        <el-table-column prop="coId" label="处方ID"  min-width="50px" align="center"></el-table-column>
-        <el-table-column prop="itemName" label="名称"  width="100px" align="center"></el-table-column>
-        <el-table-column prop="itemPrice" label="价格"  width="100px" align="center"></el-table-column>
+      <el-dialog :title="title" :visible.sync="dialogVisible" width="60%">
+      <el-table :data="tableDetail" border style="width: 100%" >
+        <el-table-column fixed prop="itemId" label="详情ID"  min-width="150px" align="center"></el-table-column>
+        <el-table-column prop="coId" label="处方ID"  min-width="150px" align="center"></el-table-column>
+        <el-table-column prop="itemName" label="名称"  width="80px" align="center"></el-table-column>
+        <el-table-column prop="itemPrice" label="价格"  width="80px" align="center"></el-table-column>
         <el-table-column prop="itemNum" label="数量"  width="60px" align="center"></el-table-column>
         <el-table-column prop="itemAmount" label="小计"  width="60px" align="center"></el-table-column>
-        <el-table-column prop="itemType" label="类型"  min-width="50px" align="center"></el-table-column>
-        <el-table-column prop="status" label="状态"  min-width="50px" align="center"></el-table-column>
+        <el-table-column label="类型" align="center" prop="itemType" width="60px" >
+          <template slot-scope="scope">
+            {{ scope.row.itemType==='0'?'药品':'检查' }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="status" label="状态"  min-width="50px" align="center" :formatter="(row)=>this.dictFormat(row,row.status,'his_order_details_status')"></el-table-column>
       </el-table>
         <el-button @click="stop">关闭</el-button>
       </el-dialog>
@@ -83,9 +87,41 @@ export default {
       tableDetail:[],
       dialogVisible:false,
       title:"",
+      statusOptions:[],
+      dictList:[]
     }
   },
   methods: {
+    // 现金收费
+    handlePayWithCash(row) {
+      this.$confirm('是否确定现金支付?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.get("charge/api/hisOrderCharge/update/"+row.orderId).then(r => {
+          this.$message({
+            type: 'success',
+            message: '现金支付成功!'
+          });
+          this.initUser()// 刷新列表
+        })
+      }).catch(() => {
+        this.$message({
+          type:"info",
+          message:'现金支付取消'
+        })
+      })
+    },
+    //字典解析
+    dictFormat(row, column, dictType){
+      return this.formatDict( this.dictList,column, dictType)
+    },
+    getDict() {
+      this.$axios.get('charge/api/hisOrderCharge/dictionary').then(res => {
+        this.dictList = res.data.t
+      })
+    },
     stop(){
       this.dialogVisible=false
     },
@@ -128,8 +164,8 @@ export default {
   created() {
     //加载表格数据
     this.initUser();
+    this.getDict();
   }
-
   }
 </script>
 <style>

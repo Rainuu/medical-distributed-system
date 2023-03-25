@@ -2,6 +2,7 @@ package com.aaa.charge.service;
 
 
 import com.aaa.charge.vo.OrderChargeVo;
+import com.aaa.core.entity.DictData;
 import com.aaa.core.entity.OrderCharge;
 import com.aaa.core.entity.OrderChargeItem;
 import com.aaa.core.vo.Result;
@@ -21,4 +22,8 @@ public interface HisOrderChargeService {
     Result<IPage<OrderCharge>> findAll(Integer curr, Integer size, OrderChargeVo chargeVo);
 
     Result<List<OrderChargeItem>> finddetail(String orderId);
+
+    Result<List<DictData>> CharFeign();
+
+    Result updByStatusType(String orderId);
 }

@@ -2,5 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aaa.charge.dao.HisOrderChargeMapper">
 
-
+<update id="updByStatusType">
+    update his_order_charge oc,his_order_charge_item oci set oc.pay_type="0",oc.order_status="1",oci.status="1" where oc.order_id=#{orderId}
+                                                                                                                  and oci.order_id=#{orderId}
+</update>
 </mapper>

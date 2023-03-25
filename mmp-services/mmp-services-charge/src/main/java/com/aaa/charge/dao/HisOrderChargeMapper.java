@@ -21,5 +21,5 @@ import java.util.List;
 public interface HisOrderChargeMapper extends BaseMapper<OrderCharge> {
 
 
-
+    boolean updByStatusType(String orderId);
 }

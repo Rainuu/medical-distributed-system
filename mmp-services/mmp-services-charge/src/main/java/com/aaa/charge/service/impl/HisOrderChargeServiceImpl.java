@@ -2,8 +2,10 @@ package com.aaa.charge.service.impl;
 
 import com.aaa.charge.dao.HisOrderChargeItemMapper;
 import com.aaa.charge.dao.HisOrderChargeMapper;
+import com.aaa.charge.fegin.OrderCharFeign;
 import com.aaa.charge.service.HisOrderChargeService;
 import com.aaa.charge.vo.OrderChargeVo;
+import com.aaa.core.entity.DictData;
 import com.aaa.core.entity.OrderCharge;
 import com.aaa.core.entity.OrderChargeItem;
 import com.aaa.core.vo.Result;
@@ -28,6 +30,8 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
    private HisOrderChargeMapper hisOrderChargeMapper;
    @Autowired
    private HisOrderChargeItemMapper hisOrderChargeItemMapper;
+   @Autowired
+   private OrderCharFeign orderCharFeign;
    @Override
    public Result<IPage<OrderCharge>> findAll(Integer curr, Integer size, OrderChargeVo chargeVo) {
       IPage<OrderCharge> page = new Page(curr,size);
@@ -47,4 +51,17 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
       List<OrderChargeItem> orderChargeItems = hisOrderChargeItemMapper.selectListAll(orderId);
       return new Result<>(200,"查询成功",orderChargeItems);
    }
+
+   @Override
+   public Result<List<DictData>> CharFeign() {
+      Result<List<DictData>> all = new Result<>(200,null,orderCharFeign.getAll());
+      return all;
+   }
+
+   @Override
+   public Result updByStatusType(String orderId) {
+      boolean upd = hisOrderChargeMapper.updByStatusType(orderId);
+      return new Result(200,"修改成功",upd);
+   }
+
 }
