@@ -94,11 +94,13 @@ export default {
     dictFormat(row, column, dictType){
       return this.formatDict( this.dictList,column, dictType)
     },
+    //调用字典方法
     getDict() {
       this.$axios.get('charge/api/hisOrderBackfee/dictionary').then(res => {
         this.dictList = res.data.t
       })
     },
+    //关闭弹出框功能
     stop(){
       this.dialogVisible=false
     },
@@ -110,10 +112,12 @@ export default {
         this.tableDetail=result.data.t;
       })
     },
+    //重置方法
     empty(){
       this.formInline={},
       this.initUser();
     },
+    //分页查询所有数据
     initUser(){
       this.$axios.post("charge/api/hisOrderBackfee/list/"+this.curr+"/"+this.size,this.formInline).then(result=>{
         this.tableData=result.data.t.records;
@@ -137,7 +141,9 @@ export default {
     },
   },
   created() {
+    //在页面初始化加载表格数据
     this.initUser();
+    //在页面初始化加载字典
     this.getDict();
   }
 }

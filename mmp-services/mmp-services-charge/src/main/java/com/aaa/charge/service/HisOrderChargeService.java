@@ -19,11 +19,12 @@ import java.util.List;
  */
 
 public interface HisOrderChargeService {
+    ////分页模糊
     Result<IPage<OrderCharge>> findAll(Integer curr, Integer size, OrderChargeVo chargeVo);
-
+    //查询所有数据根据id返回一条数据
     Result<List<OrderChargeItem>> finddetail(String orderId);
-
+    //字典所有属性
     Result<List<DictData>> CharFeign();
-
+    //现金支付
     Result updByStatusType(String orderId);
 }

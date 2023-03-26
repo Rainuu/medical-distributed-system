@@ -117,14 +117,17 @@ export default {
     dictFormat(row, column, dictType){
       return this.formatDict( this.dictList,column, dictType)
     },
+    //调用字典方法
     getDict() {
       this.$axios.get('charge/api/hisOrderCharge/dictionary').then(res => {
         this.dictList = res.data.t
       })
     },
+    //关闭弹出框功能
     stop(){
       this.dialogVisible=false
     },
+    //打开弹出框并调用根据id的查询数据方法
     initdetail(row){
       //打开弹出框
       this.dialogVisible=true;
@@ -133,10 +136,12 @@ export default {
         this.tableDetail=result.data.t;
       })
     },
+    //重置方法
     empty(){
       this.formInline={},
           this.initUser()
     },
+    //分页查询所有数据
     initUser(){
       this.$axios.post("charge/api/hisOrderCharge/list/"+this.curr+"/"+this.size,this.formInline).then(result=>{
         this.tableData=result.data.t.records;
@@ -162,8 +167,9 @@ export default {
     },
   },
   created() {
-    //加载表格数据
+    //在页面初始化加载表格数据
     this.initUser();
+    //在页面初始化加载字典
     this.getDict();
   }
   }

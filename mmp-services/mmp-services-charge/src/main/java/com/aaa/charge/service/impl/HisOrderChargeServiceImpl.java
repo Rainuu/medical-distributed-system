@@ -33,6 +33,7 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
    @Autowired
    private OrderCharFeign orderCharFeign;
    @Override
+   //分页模糊查询所有数据
    public Result<IPage<OrderCharge>> findAll(Integer curr, Integer size, OrderChargeVo chargeVo) {
       IPage<OrderCharge> page = new Page(curr,size);
       QueryWrapper<OrderCharge> wrapper = new QueryWrapper<>();
@@ -47,12 +48,14 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
    }
 
    @Override
+   //分页模糊查询所有数据
    public Result<List<OrderChargeItem>> finddetail(String orderId) {
       List<OrderChargeItem> orderChargeItems = hisOrderChargeItemMapper.selectListAll(orderId);
       return new Result<>(200,"查询成功",orderChargeItems);
    }
 
    @Override
+   //调用系统模块完成字典查询
    public Result<List<DictData>> CharFeign() {
       Result<List<DictData>> all = new Result<>(200,null,orderCharFeign.getAll());
       return all;

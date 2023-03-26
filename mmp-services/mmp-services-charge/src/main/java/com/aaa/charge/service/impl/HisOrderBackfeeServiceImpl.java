@@ -33,6 +33,7 @@ public class HisOrderBackfeeServiceImpl implements HisOrderBackfeeService {
    private OrderCharFeign orderCharFeign;
 
    @Override
+   //分页模糊查询所有数据
    public Result<IPage<OrderBackfee>> findAll(Integer curr, Integer size, OrderBackfeeVo backfeeVo) {
       IPage<OrderBackfee> page = new Page<>(curr,size);
       QueryWrapper<OrderBackfee> wrapper = new QueryWrapper<>();
@@ -47,6 +48,7 @@ public class HisOrderBackfeeServiceImpl implements HisOrderBackfeeService {
    }
 
    @Override
+   //查询所有数据根据id返回一条数据
    public Result<List<OrderBackfeeItem>> selectAll(String backId) {
       List<OrderBackfeeItem> select =hisOrderBackfeeDao.selectAll(backId);
       System.out.println("nadioghaiodhfeaiohaeioghiodbguigadbuiodhb"+select);
@@ -54,6 +56,7 @@ public class HisOrderBackfeeServiceImpl implements HisOrderBackfeeService {
    }
 
    @Override
+   //调用系统模块完成字典查询
    public Result<List<DictData>> selectdictionary() {
       Result<List<DictData>> findall= new Result<>(200,"字典查询成功",orderCharFeign.getAll());
       return findall;

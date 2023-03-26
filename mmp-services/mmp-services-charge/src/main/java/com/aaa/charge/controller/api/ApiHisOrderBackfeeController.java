@@ -38,14 +38,16 @@ public class ApiHisOrderBackfeeController {
     ){
         return  service.findAll(curr,size,backfeeVo);
     }
-
+    //分页获取所有数据
     @GetMapping("detail/{backId}")
     public Result<List<OrderBackfeeItem>> detail(@PathVariable String backId){
         return service.selectAll(backId);
     }
-
+    //调用fen接口实现字典功能
     @GetMapping("/dictionary")
     public Result dictionary(){
         return service.selectdictionary();
     }
+
+
 }

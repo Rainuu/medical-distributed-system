@@ -18,9 +18,10 @@ import java.util.List;
  * @since 2023-03-25 11:09:21
  */
 public interface HisOrderBackfeeService {
+    //分页模糊
     Result<IPage<OrderBackfee>> findAll(Integer curr, Integer size, OrderBackfeeVo backfeeVo);
-
+    //查询所有数据根据id返回一条数据
     Result<List<OrderBackfeeItem>> selectAll(String backId);
-
+    //字典所有属性
     Result<List<DictData>> selectdictionary();
 }

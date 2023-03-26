@@ -20,6 +20,6 @@ import java.util.List;
 
 public interface HisOrderChargeMapper extends BaseMapper<OrderCharge> {
 
-
+    //现金支付
     boolean updByStatusType(String orderId);
 }
