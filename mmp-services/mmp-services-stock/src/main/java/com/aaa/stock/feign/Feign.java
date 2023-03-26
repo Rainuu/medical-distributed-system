@@ -13,7 +13,7 @@ import java.util.List;
  * @DATE: 2023/3/25 15:53
  */
 @FeignClient(value = "mmp-services-system") //获取system的nacos服务名，注册feign服务
-public interface ProducterFeign {
+public interface Feign {
 
     @GetMapping("/system/dict/getAll")
     List<DictData> getAll();

@@ -1,32 +1,36 @@
 <template>
   <div>
-    <!-- 工具栏1 -->
-    <div style="height: 120px; padding-top: 20px; background-color: whitesmoke">
+    <!-- 工具栏1——用于模糊查询 -->
+    <div style="height: 120px; padding-top: 20px; background-color: whitesmoke;">
       <el-form :inline="true" :model="searchForm" class="demo-form-inline" >
-        <el-form-item label="厂家名称">
-          <el-input v-model="searchForm.producerName" placeholder="请输入厂家名称" style="width: 180px"></el-input>
-        </el-form-item> &nbsp;&nbsp;&nbsp;&nbsp;
-        <el-form-item label="关键字">
-          <el-input v-model="searchForm.keywords" placeholder="请输入关键字" style="width: 180px"></el-input>
-        </el-form-item> &nbsp;&nbsp;&nbsp;&nbsp;
-        <el-form-item label="厂家电话">
-          <el-input v-model="searchForm.producerTel" placeholder="请输入厂家电话" style="width: 180px"></el-input>
-        </el-form-item> &nbsp;&nbsp;&nbsp;&nbsp;
-        <el-form-item label="状态">
-          <el-select v-model="searchForm.status" placeholder="可用状态" style="width: 180px">
+        <div style="float: left;clear: both;padding-left: 30px">
+          <el-form-item label="厂家名称" prop="producerName">
+            <el-input v-model="searchForm.producerName" clearable placeholder="请输入厂家名称" style="width: 240px"></el-input>
+          </el-form-item> &nbsp;&nbsp;
+          <el-form-item label="关键字" prop="keywords">
+            <el-input v-model="searchForm.keywords" clearable placeholder="请输入关键字" style="width: 200px"></el-input>
+          </el-form-item> &nbsp;&nbsp;
+          <el-form-item label="厂家电话" prop="producerTel">
+            <el-input v-model="searchForm.producerTel" clearable placeholder="请输入厂家电话" style="width: 200px"></el-input>
+          </el-form-item> &nbsp;&nbsp;
+          <el-form-item label="状态" prop="status">
+            <el-select v-model="searchForm.status" clearable placeholder="可用状态" style="width: 160px">
               <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='sys_normal_disable'})"
-                  :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="创建时间">
-          <el-date-picker v-model="searchForm.createTime" style="width:280px"
-                          value-format="yyyy-MM-dd" type="daterange" range-separator="——"
-                          start-placeholde="开始日期" end-placeholde="结束日期"/>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" icon="el-icon-search" plain @click="search">搜索</el-button>
-          <el-button type="primary" icon="el-icon-refresh" plain @click="resert">重置</el-button>
-        </el-form-item>
+                         :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
+            </el-select>
+          </el-form-item>
+        </div>
+        <div style="float: left;clear: both;padding-left: 30px">
+          <el-form-item label="创建时间" prop="createTime">
+            <el-date-picker type="daterange" v-model="searchForm.dateRange"
+                            style="width:240px" value-format="yyyy-MM-dd" clearable
+                            start-placeholder="开始日期" range-separator="-" end-placeholder="结束日期"/>
+          </el-form-item> &nbsp;&nbsp;&nbsp;&nbsp;
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" plain @click="search">搜索</el-button>&nbsp;&nbsp;
+            <el-button type="primary" icon="el-icon-refresh" plain @click="resert">重置</el-button>
+          </el-form-item>
+        </div>
       </el-form>
     </div>
 
@@ -39,7 +43,7 @@
     <!-- 点击添加按钮弹出的表单,在data内设置弹出层:visible.sync="dialogVisible" -->
     <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
         <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-          <el-form-item label="厂家ID" prop="producerId" hidden="true" size="mini">
+          <el-form-item hidden label="厂家ID" prop="producerId" size="mini">
             <el-input v-model="form.producerId"></el-input>
           </el-form-item>
           <el-form-item label="厂家名称" prop="producerName">
@@ -152,7 +156,6 @@
       addUser(){
         this.dialogVisible=true; // 点击显示表单
         this.form={};  //清空已经填写过的form表单
-
       },
       // 删除操作
       delPro(obj){
@@ -187,7 +190,7 @@
       initTable(){
         this.$axios.post("stock/api/producter/getAll"+"/"+this.current+"/"+this.size,this.searchForm).then(result=>{
           this.tableData=result.data.t.records; // 将后台获取到的数据赋值给tableData变量
-          this.current=1;
+          // this.current=1;
           this.total=result.data.t.total; // 更改分页后页面的总条数
         })
       },
@@ -236,6 +239,8 @@
         size: 5,
         //字典
         dictList: [],
+        // 状态
+        statusOptions: [],
       }
     },
     // 用于挂载，在vue实例创建完成后被立即调用

@@ -7,6 +7,7 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 供应商信息表
@@ -54,24 +55,26 @@ public class Provider implements Serializable {
     /**
      * 状态（0正常 1停用）sys_normal_disable
      */
+    @TableLogic   //@TableLogic代表此字段用于逻辑删除
     private String status;
 
     /**
      * 删除标志（0正常 1删除）
      */
-    @TableLogic   //@TableLogic代表此字段用于逻辑删除
     private String delFlag;
 
     /**
      * 创建时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
 
     /**
      * 更新时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updateTime;
 
     /**

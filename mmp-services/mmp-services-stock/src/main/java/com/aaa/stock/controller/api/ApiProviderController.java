@@ -2,10 +2,10 @@ package com.aaa.stock.controller.api;
 
 import com.aaa.core.entity.DictData;
 import com.aaa.core.entity.Producer;
-import com.aaa.core.entity.User;
+import com.aaa.core.entity.Provider;
 import com.aaa.core.vo.Result;
-import com.aaa.stock.service.ProducterService;
-import com.aaa.stock.vo.ProducterVo;
+import com.aaa.stock.service.ProviderService;
+import com.aaa.stock.vo.ProviderVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,29 +17,30 @@ import java.util.List;
  * @PROJECT_NAME: MedicalManagementPlatform
  * @DESCRIPTION:
  * @USER: HZM
- * @DATE: 2023/3/24 11:06
+ * @DATE: 2023/3/26 16:09
  */
 @RestController
-@RequestMapping("stock/api/producter") //给前端提供的路径
-public class ApiProducterController {
+@RequestMapping("stock/api/provider") //给前端提供的路径
+public class ApiProviderController {
 
+    // 装配注入service
     @Autowired
-    private ProducterService producterService;
+    private ProviderService providerService;
 
-    //查询&分页
+    // 查询&分页
     @PostMapping("getAll/{current}/{size}")
-    public Result<IPage<Producer>> getAll(
+    public Result<IPage<Provider>> getAll(
             @PathVariable Integer current,
             @PathVariable Integer size,
-            @RequestBody ProducterVo producterVo  //把JSON转Java对象
-            ){
-        return producterService.getAll(current,size,producterVo);
+            @RequestBody ProviderVo providerVo  //传递前端用于查询的参数
+    ){
+        return providerService.getAll(current,size,providerVo);
     }
 
-    // 删除
+    // 单个删除
     @DeleteMapping("delById/{id}")
     public Result delById(@PathVariable Long id){
-        if (producterService.delById(id)){
+        if (providerService.delById(id)){
             return new Result(200,"删除成功",true);
         }else {
             return new Result(500,"删除失败",false);
@@ -49,8 +50,8 @@ public class ApiProducterController {
     // 修改或添加
     @PostMapping("saveAndUpdate")
     @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
-    public Result saveAndUpdate(Producer producer){
-        if (producterService.saveAndUpdate(producer)){
+    public Result saveAndUpdate(Provider provider){
+        if (providerService.saveAndUpdate(provider)){
             return new Result(200,"操作成功",true);
         }else {
             return new Result(500,"操作失败",false);
@@ -60,6 +61,6 @@ public class ApiProducterController {
     //处理字典
     @GetMapping("status")
     public Result<List<DictData>> status(){
-        return producterService.getOpenFeign();
+        return providerService.getOpenFeign();
     }
 }
