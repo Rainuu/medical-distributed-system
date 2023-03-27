@@ -18,4 +18,8 @@ public interface RoleDao extends BaseMapper<Role> {
     void deleteByuserId(Long userId);
 
     void batchInsert(@Param("userId") Long userId,@Param("roleIds") Long[] roleIds);
+    @Select("select user_id from sys_role_user where role_id=#{id} ")
+    List<Integer> selectUserByRole(@Param("id") Long id);
+    @Select("select menu_id from sys_role_menu where role_id=#{id}")
+    List<Integer> selectMenuByRole(@Param("id") Long id);
 }

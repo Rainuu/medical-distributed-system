@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace 写的就是你要实现的那个接口的路径-->
+<mapper namespace="com.aaa.system.dao.MenuDao" >
+    <!--查询使用的标签是select -->
+    <!--id 是dao接口中方法名  resultType是 返回类型的泛型  列如 List<Map<>>  写的是Map -->
+    <!--int 如果是一个int类型resultType里卖弄就写的是返回值的类型int-->
+
+
+    <insert id="batchMenus">
+          insert into sys_role_menu values
+         <foreach collection="menuIds" item="menuId" separator=",">
+              (#{roleId},#{menuId})
+         </foreach>
+    </insert>
+</mapper>

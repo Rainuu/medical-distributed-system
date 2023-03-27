@@ -62,6 +62,16 @@ const routes = [
             name: 'regFee',
             component: () => import('../views/system/regFee')
         },
+        {
+          path:'/system/role',
+            name: 'role',
+            component: ()=>import('../views/system/Role')
+        },
+        {
+            path: '/system/menu',
+            name:'menu',
+            component: () => import('../views/system/Menu')
+        },
         // 药品进销存 (stock)——(6)——何泽明
         {   // 生产厂家维护
             path: '/stock/producter',
