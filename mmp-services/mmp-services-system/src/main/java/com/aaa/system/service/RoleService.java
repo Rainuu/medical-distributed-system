@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface RoleService {
 
-     Result<List<Role>> getAll();
+    Result<List<Role>> getAll();
 
     Result<Map<String,Object>> findByuserId(Long userId);
 

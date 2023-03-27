@@ -48,8 +48,7 @@ public class ApiProducterController {
 
     // 修改或添加
     @PostMapping("saveAndUpdate")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
-    public Result saveAndUpdate(Producer producer){
+    public Result saveAndUpdate(Producer producer){  //Result返回值是数据库后端，Producer producer参数是前端用的
         if (producterService.saveAndUpdate(producer)){
             return new Result(200,"操作成功",true);
         }else {

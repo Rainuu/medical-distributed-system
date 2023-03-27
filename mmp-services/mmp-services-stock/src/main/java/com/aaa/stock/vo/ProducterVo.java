@@ -34,7 +34,6 @@ public class ProducterVo {
      * 状态标志（0正常 1停用）sys_normal_disable
      * 前端需要的是数字，所以使用Integer或Long都可
      */
-    @TableLogic
     private Integer status;
 
     /**

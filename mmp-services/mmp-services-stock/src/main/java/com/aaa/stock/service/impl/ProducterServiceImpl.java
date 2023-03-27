@@ -91,8 +91,10 @@ public class ProducterServiceImpl extends ServiceImpl<ProducterDao,Producer> imp
 
         if (producer.getProducerId()==null){
             i = producterDao.insert(producer);
+            System.out.println("==================="+producer.getStatus());
         }else {
-            i = producterDao.updateById(producer);
+            i = producterDao.updById(producer);
+            System.out.println("==================="+producer.getStatus());
         }
 
         if (i>0){

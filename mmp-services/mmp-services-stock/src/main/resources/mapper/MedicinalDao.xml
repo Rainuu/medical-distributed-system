@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace 写的就是你要实现的那个接口的路径-->
+<mapper namespace="com.aaa.stock.dao.MedicinalDao">
+<!--WHERE m.medicines_id = #{medicinalVo.medicinesId}-->
+    <select id="getMedById" resultType="com.aaa.core.entity.Medicines">
+        SELECT m.*,p.producer_name FROM stock_medicines m JOIN stock_producer p
+        ON m.producter_id = p.producer_id WHERE m.medicines_id != 0
+            <if test="medicinalVo.medicinesName != null &amp; medicinalVo.medicinesName != ''">
+                and p.medicines_name = #{medicinalVo.medicinesName}
+            </if>
+            <if test="medicinalVo.keywords != null &amp; medicinalVo.keywords != ''">
+                and m.keywords = #{medicinalVo.keywords}
+            </if>
+            <if test="medicinalVo.medicinesType != null &amp; medicinalVo.medicinesType != ''">
+                and m.medicines_type = #{medicinalVo.medicinesType}
+            </if>
+            <if test="medicinalVo.producerName != null &amp; medicinalVo.producerName != ''">
+                and m.producer_name = #{medicinalVo.producerName}
+            </if>
+            <if test="medicinalVo.prescriptionType != null &amp; medicinalVo.prescriptionType != ''">
+                and m.prescription_type = #{medicinalVo.prescriptionType}
+            </if>
+            <if test="medicinalVo.status != null &amp; medicinalVo.status != ''">
+                and m.status = #{medicinalVo.status}
+            </if>
+    </select>
+
+</mapper>

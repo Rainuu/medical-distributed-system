@@ -2,12 +2,8 @@ package com.aaa.stock.dao;
 
 import com.aaa.core.entity.Producer;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
-
-import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
@@ -18,4 +14,7 @@ import java.util.List;
 @Mapper
 public interface ProducterDao extends BaseMapper<Producer> {
 
+    //插入数据
+    // @Param("producter") 定义别名
+    int updById(@Param("producer") Producer producer);
 }

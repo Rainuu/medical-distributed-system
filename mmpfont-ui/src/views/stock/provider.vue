@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- 工具栏1 -->
+    <!-- 工具栏1——用于模糊查询 -->
     <div style="height: 70px; padding-top: 30px; background-color: whitesmoke">
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
         <el-form-item label="供应商名称" prop="providerName">
@@ -13,7 +13,7 @@
           <el-input v-model="searchForm.contactTel" placeholder="请输入供销商电话" clearable style="width: 160px"></el-input>
         </el-form-item>&nbsp;
         <el-form-item label="状态" prop="status">
-          <el-select v-model="searchForm.status" placeholder="可用状态" style="width: 150px">
+          <el-select v-model="searchForm.status" placeholder="可用状态" clearable style="width: 150px">
             <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='sys_normal_disable'})"
                        :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue" clearable/>
           </el-select>
@@ -55,9 +55,10 @@
         <el-form-item label="供销商地址" prop="providerAddress">
           <el-input v-model="form.providerAddress"></el-input>
         </el-form-item>
+        <!-- Data too long for column 'status' at row 1 因为label和value -->
         <el-form-item label="状态" prop="status">
-          <el-radio v-model="form.status" label="正常" value="0"/>
-          <el-radio v-model="form.status" label="停用" value="1"/>
+          <el-radio v-model="form.status" label="0">正常</el-radio>
+          <el-radio v-model="form.status" label="1">停用</el-radio>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
@@ -77,12 +78,12 @@
         <el-table-column prop="contactTel" label="联系人电话" align="center" width="110px"/>
         <el-table-column prop="bankAccount" label="银行账号" align="center" width="170px"/>
         <el-table-column prop="providerAddress" label="供销商地址" align="center" width="100px"/>
-        <el-table-column prop="status" label="状态" align="center" width="60px" :formatter="statusFormatter" />
+        <el-table-column prop="status" label="状态" align="center" width="60px" :formatter="(row)=>this.dictFormat(row,row.status,'sys_normal_disable')"/>
         <el-table-column prop="createTime" label="创建时间" align="center" width="120px"/>
         <el-table-column fixed="right" label="操作" align="center" width="120px">
           <template slot-scope="scope">
             <el-button @click="updPro(scope.row)" type="text" size="small" icon="el-icon-delete">修改</el-button>
-            <el-button @click="delPro(scope.row)" type="text" size="small" icon="el-icon-edit">删除</el-button>
+            <el-button @click="delPro(scope.row.providerId)" type="text" size="small" icon="el-icon-edit">删除</el-button>
           </template>
         </el-table-column>
       </el-table><br><br>

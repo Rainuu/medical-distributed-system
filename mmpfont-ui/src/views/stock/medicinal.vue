@@ -1,172 +1,208 @@
 <template>
   <div>
-    <div >
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="药品名称">
-          <el-input v-model="formInline.user" placeholder="请输入药品名称"></el-input>
-        </el-form-item>
-        <el-form-item label="关键字">
-          <el-input v-model="formInline.user" placeholder="请输入关键字"></el-input>
-        </el-form-item>
-        <el-form-item label="药品类型">
-          <el-select v-model="formInline.region" placeholder="药品类型">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="生产厂家">
-          <el-select v-model="formInline.region" placeholder="生产厂家">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="处方类型 " >
-          <el-select v-model="formInline.region" placeholder="处方类型">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="状态" >
-          <el-select v-model="formInline.region" placeholder="状态">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item style="clear: both">
-          <el-button type="primary "  icon="el-icon-search" plain style="float: left">搜索</el-button>
-          <el-button type="primary "  icon="el-icon-refresh" plain style="float: left">重置</el-button>
-        </el-form-item>
+    <!-- 工具栏1——用于模糊查询 -->
+    <div style="height: 120px; padding-top: 20px; background-color: whitesmoke;">
+      <el-form :inline="true" :model="searchForm" class="demo-form-inline" >
+        <div style="float: left;clear: both;padding-left: 30px">
+          <el-form-item label="药品名称" prop="medicinesName">
+            <el-input v-model="searchForm.medicinesName" clearable placeholder="请输入药品名称" style="width: 200px"></el-input>
+          </el-form-item> &nbsp;&nbsp;
+          <el-form-item label="关键字" prop="keywords">
+            <el-input v-model="searchForm.keywords" clearable placeholder="请输入关键字" style="width: 200px"></el-input>
+          </el-form-item> &nbsp;&nbsp;
+          <el-form-item label="药品类型" prop="medicinesType">
+            <el-select v-model="searchForm.medicinesType" clearable placeholder="药品类型" style="width: 160px">
+
+            </el-select>
+          </el-form-item> &nbsp;&nbsp;
+          <el-form-item label="生产厂家" prop="producerName">
+            <el-select v-model="searchForm.producerName" clearable placeholder="生产厂家" style="width: 160px">
+
+            </el-select>
+          </el-form-item> &nbsp;&nbsp;
+        </div>
+        <div style="float: left;clear: both;padding-left: 30px">
+          <el-form-item label="处方类型" prop="prescriptionType">
+            <el-select v-model="searchForm.prescriptionType" clearable placeholder="处方类型" style="width: 200px">
+
+            </el-select>
+          </el-form-item> &nbsp;&nbsp;
+          <el-form-item label="状态值" prop="status">
+            <el-select v-model="searchForm.status" clearable placeholder="可用状态" style="width: 200px">
+
+            </el-select>
+          </el-form-item> &nbsp;&nbsp;
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" plain @click="search">搜索</el-button>&nbsp;&nbsp;
+            <el-button type="primary" icon="el-icon-refresh" plain @click="resert">重置</el-button>
+          </el-form-item>
+        </div>
       </el-form>
     </div>
 
-    <div style="float: left;clear: both;padding-bottom:10px; ">
-    <el-button type="primary "  icon="el-icon-plus"  plain >新增</el-button>
-    <el-button type="success"   icon="el-icon-edit" plain >修改</el-button>
-    <el-button type="danger"    icon="el-icon-delete"  plain >删除</el-button>
+    <!-- 工具栏2 -->
+    <div style="float: left;clear: both;padding:15px;">
+      <el-button type="primary" icon="el-icon-plus" plain @click="addUser">新增</el-button>
+      <el-button type="danger" icon="el-icon-delete" plain>删除</el-button>
     </div>
-    <div>
-      <el-table :data="tableData" style="width: 100%" border>
-        <el-table-column type="selection" width="55">
-        </el-table-column>
+
+    <!-- 点击添加按钮弹出的表单,在data内设置弹出层:visible.sync="dialogVisible" -->
+
+
+    <!-- 表格 -->
+    <div style="min-height: auto">
+      <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" border max-height="330px">
+        <el-table-column type="selection" width="55" align="center"></el-table-column>
         <el-table-column type="expand">
           <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="单位"><span>{{ props.row.name }}</span></el-form-item>
-              <el-form-item label="换算量"><span>{{ props.row.shop }}</span></el-form-item>
-              <el-form-item label="库存"><span>{{ props.row.id }}</span></el-form-item>
-              <el-form-item label="预警值"><span>{{ props.row.shopId }}</span></el-form-item>
+            <el-form label-position="left" style="padding-left: 120px" inline class="demo-table-expand">
+              <el-form-item label="单位">
+                <span>{{ props.row.unit }}</span>
+              </el-form-item>
+              <el-form-item label="换算量">
+                <span>{{ props.row.conversion }}</span>
+              </el-form-item>
+              <el-form-item label="库存量">
+                <span>{{ props.row.medicinesStockNum }}</span>
+              </el-form-item>
+              <el-form-item label="预警值">
+                <span>{{ props.row.medicinesStockDangerNum }}</span>
+              </el-form-item>
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="药品ID" prop="id" min-width="100" align="center"></el-table-column>
-        <el-table-column label="药品名称" prop="name" min-width="100" align="center"></el-table-column>
-        <el-table-column label="药品编号" prop="name" min-width="100" align="center"></el-table-column>
-        <el-table-column label="生产厂家" prop="name" min-width="100" align="center"></el-table-column>
-        <el-table-column label="药品类型" prop="name" min-width="100" align="center"></el-table-column>
-        <el-table-column label="处方类型" prop="name" min-width="100" align="center"></el-table-column>
-        <el-table-column label="关键字" prop="name" min-width="100" align="center"></el-table-column>
-        <el-table-column label="处方价格" prop="name" min-width="100" align="center"></el-table-column>
-        <el-table-column label="状态" prop="name" min-width="90" align="center"></el-table-column>
-              <el-table-column fixed="right" label="操作" min-width="130" align="center">
-                <template slot-scope="scope">
-                  <el-button @click="del(scope.row)" type="text" size="small" icon="el-icon-edit">删除</el-button>
-                  <el-button @click="upd(scope.row)" type="text" size="small " icon="el-icon-delete" >修改</el-button>
-                </template>
-              </el-table-column>
-      </el-table>
-
-    </div>
-    <div class="block" style="float: left">
-      <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage4"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="400">
+        <el-table-column prop="medicinesId" label="药品ID" width="80px" align="center"/>
+        <el-table-column prop="medicinesName" label="药品名称" width="80px" align="center"/>
+        <el-table-column prop="medicinesNumber" label="药品编号" width="80px" align="center"/>
+        <el-table-column prop="producerName" label="生产厂家" align="center"/>
+        <el-table-column prop="medicinesType" label="药品类型" width="80px" align="center"/>
+        <el-table-column prop="prescriptionType" label="处方类型" width="80px" align="center"/>
+        <el-table-column prop="keywords" label="关键字" width="80px" align="center"/>
+        <el-table-column prop="prescriptionPrice" label="处方价格" width="80px" align="center"/>
+        <el-table-column prop="status" label="状态" width="60px" align="center"/>
+        <el-table-column label="操作" width="130px" align="center">
+          <template slot-scope="scope"> <!-- 需要绑定行数据 -->
+            <el-button @click="updPro(scope.row)" type="text" size="small" icon="el-icon-delete">修改</el-button>
+            <el-button @click="delPro(scope.row.producerId)" type="text" size="small" icon="el-icon-edit">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table><br>
+      <!-- 分页插件 -->
+      <el-pagination :current-page="current" :page-size="size" :total="total"
+                     :page-sizes="[5, 10, 15, 20]" layout="total, sizes, prev, pager, next, jumper"
+                     @size-change="handleSizeChange" @current-change="handleCurrentChange">
       </el-pagination>
     </div>
   </div>
 </template>
 
-<style>
-.demo-table-expand {
-  font-size: 0;
-}
-.demo-table-expand label {
-  width: 90px;
-  color: #99a9bf;
-}
-.demo-table-expand .el-form-item {
-  margin-right: 0;
-  margin-bottom: 0;
-  width: 50%;
-}
-</style>
-
 <script>
-export default {
-  methods: {
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+  import qs from 'qs';
+  export default {
+    methods: {
+      // 重置模糊
+      resert(){
+        this.searchForm = {};
+        this.initTable();
+      },
+      // 添加操作
+      addUser(){
+        this.dialogVisible=true; // 点击显示表单
+        this.form={};  //清空已经填写过的form表单
+      },
+      // 模糊查询
+      search(){
+        this.initTable();
+      },
+      // 查询表格数据————初始化表格 (用axios发出请求去获取后端的值)
+      initTable(){
+        this.$axios.post("/stock/api/medicinal/getAll"+"/"+this.current+"/"+this.size,this.searchForm).then(result=>{
+          this.tableData=result.data.t.records; // 将后台获取到的数据赋值给tableData变量
+          // this.current=1;
+          this.total=result.data.t.total; // 更改分页后页面的总条数
+        })
+      },
+      //分页的事件，显示几条数据，pageSize变化时触发
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+        this.size = val;
+        this.initTable();  // 重新查询
+      },
+      // 点击上一页  下一页，跳转到哪一页面时触发
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.current = val;
+        this.initTable();  // 重新查询
+      },
     },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-    },
-
-    onSubmit() {
-      console.log('submit!');
-    },
-
-    toggleSelection(rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
-      } else {
-        this.$refs.multipleTable.clearSelection();
+    data() {
+      return {
+        // 模糊查询信息
+        searchForm: {},
+        // 所有的厂商信息
+        tableData: [],
+        //设置添加弹出层的弹出表单，默认不显示，当点击时显示
+        dialogVisible: false,
+        //弹出层表单
+        form: {
+          medicinesId: '',
+          medicinesNumber: '',
+          medicinesName: '',
+          medicinesType: '',
+          prescriptionType: '',
+          prescriptionPrice: '',
+          unit: '',
+          conversion: '',
+          keywords: '',
+          producterId: '',
+          status: '',
+          medicinesStockNum: '',
+          medicinesStockDangerNum: '',
+          createTime: '',
+          updateTime: '',
+          createBy: '',
+          updateBy: '',
+          delFlag: ''
+        },
+        //校验规则
+        rules: {
+          userName: [
+            {required: true, message: '请输入活动名称', trigger: 'blur'},
+            {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
+          ],
+        },
+        // 分页参数
+        total: 0,
+        current: 1,
+        size: 5,
+        //字典
+        dictList: [],
+        // 状态
+        statusOptions: [],
       }
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-    }
-
-
-
-    // handleClick(row) {
-    //   console.log(row);
-    // }
-  },
-
-  data() {
-    return {
-      formInline: {
-        user: '',
-        region: ''
-      },
-      tableData: [
-        {
-          id: '12987126',
-          name: '好滋好',
-          category: '江浙小吃、小吃零食',
-          desc: '荷兰优质淡奶，奶香浓而不腻',
-          address: '上海市普陀区真北路',
-          shop: '王小虎夫妻店',
-          shopId: '10333'
-        },
-    {
-      id: '12987126',
-          name: '好滋好',
-        category: '江浙小吃、小吃零食',
-        desc: '荷兰优质淡奶，奶香浓而不腻',
-        address: '上海市普陀区真北路',
-        shop: '王小虎夫妻店',
-        shopId: '10333'
-    }
-
-      ]
-    }
+    // 用于挂载，在vue实例创建完成后被立即调用
+    created() {
+      this.initTable();
+    },
   }
-}
 </script>
+
+<style>
+  *{
+    margin: 0;
+    padding: 0;
+  }
+   .demo-table-expand {
+     font-size: 0;
+   }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
+</style>

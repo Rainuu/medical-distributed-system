@@ -1,7 +1,6 @@
 package com.aaa.stock.controller.api;
 
 import com.aaa.core.entity.DictData;
-import com.aaa.core.entity.Producer;
 import com.aaa.core.entity.Provider;
 import com.aaa.core.vo.Result;
 import com.aaa.stock.service.ProviderService;

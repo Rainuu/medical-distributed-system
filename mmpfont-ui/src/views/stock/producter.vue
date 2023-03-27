@@ -65,8 +65,8 @@
             <el-input v-model="form.keywords"></el-input>
           </el-form-item>
           <el-form-item label="状态" prop="status">
-            <el-radio v-model="form.status" label="正常" value="0"/>
-            <el-radio v-model="form.status" label="停用" value="1"/>
+            <el-radio v-model="form.status" label="0">正常</el-radio>
+            <el-radio v-model="form.status" label="1">停用</el-radio>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
@@ -78,15 +78,15 @@
     <!-- 表格 -->
     <div style="min-height: auto">
       <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" border max-height="330px">
-        <el-table-column type="selection" width="55" align="center"></el-table-column>
-        <el-table-column prop="producerId" label="厂家ID" width="80px" align="center"></el-table-column>
-        <el-table-column prop="producerName" label="厂家名称" align="center"></el-table-column>
-        <el-table-column prop="producerCode" label="厂家编码" width="120px" align="center"></el-table-column>
-        <el-table-column prop="producerPerson" label="联系人" width="100px" align="center"></el-table-column>
-        <el-table-column prop="producerTel" label="电话" width="130px" align="center"></el-table-column>
-        <el-table-column prop="keywords" label="关键字" width="80px" align="center"></el-table-column>
-        <el-table-column prop="status" label="状态" width="60px" align="center" :formatter="(row)=>this.dictFormat(row,row.status,'sys_normal_disable')"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间" width="160px" align="center"></el-table-column>
+        <el-table-column type="selection" width="55" align="center"/>
+        <el-table-column prop="producerId" label="厂家ID" width="80px" align="center"/>
+        <el-table-column prop="producerName" label="厂家名称" align="center"/>
+        <el-table-column prop="producerCode" label="厂家编码" width="120px" align="center"/>
+        <el-table-column prop="producerPerson" label="联系人" width="100px" align="center"/>
+        <el-table-column prop="producerTel" label="电话" width="130px" align="center"/>
+        <el-table-column prop="keywords" label="关键字" width="80px" align="center"/>
+        <el-table-column prop="status" label="状态" width="60px" align="center" :formatter="(row)=>this.dictFormat(row,row.status,'sys_normal_disable')"/>
+        <el-table-column prop="createTime" label="创建时间" width="160px" align="center"/>
         <el-table-column label="操作" width="130px" align="center">
           <template slot-scope="scope"> <!-- 需要绑定行数据 -->
             <el-button @click="updPro(scope.row)" type="text" size="small" icon="el-icon-delete">修改</el-button>
@@ -97,8 +97,7 @@
       <!-- 分页插件 -->
       <el-pagination :current-page="current" :page-size="size" :total="total"
                      :page-sizes="[5, 10, 15, 20]" layout="total, sizes, prev, pager, next, jumper"
-                     @size-change="handleSizeChange" @current-change="handleCurrentChange">
-      </el-pagination>
+                     @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
     </div>
   </div>
 </template>
@@ -107,14 +106,15 @@
   import qs from 'qs';
   export default {
     methods: {
-      //字典解析
-      dictFormat(row, column, dictType){
+      // 字典解析模糊查询遍历字典获取值，放入dictList
+      dictFormat(row, column, dictType){  //row是数据，column是行数据，dictType是引用的字典表
         return this.formatDict( this.dictList,column, dictType)
+        // 调用全局的字典处理脚本去处理定义的字典列表dictList，获取column行数据，dictType是引用的字典表
       },
-      //初始化字典
+      //初始化字典，发出请求调用后端方法跨域，处理字典数据
       getDict() {
         this.$axios.get('/stock/api/producter/status').then(res => {
-          this.dictList = res.data.t
+          this.dictList = res.data.t;  //将字典处理后的值付给字典列表
         })
       },
       // 重置模糊
@@ -131,7 +131,7 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             // 获取表单内的所有内容,发出axios请求，将表单内的数据发送到后端
-            this.$axios.post("stock/api/producter/saveAndUpdate",qs.stringify(this.form)).then(result=>{
+            this.$axios.post("/stock/api/producter/saveAndUpdate",qs.stringify(this.form)).then(result=>{
               if (result.data.t){
                 this.$message.success("添加成功")
                 this.dialogVisible=false; //当执行完弹出层操作隐藏弹出层
