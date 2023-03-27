@@ -228,6 +228,7 @@ export default {
         regId: undefined,
         patientName: undefined,
         checkItemIds: [],
+        status:1
       },
       //是否为全选状态
       checkAll: true,

@@ -19,4 +19,19 @@
         <result property="updateBy" column="update_by" />
     </resultMap>
 
+    <select id="selectAll" resultMap="HisCheckResultMap">
+        SELECT * FROM his_check_result where result_status=#{param2.status}
+            <if test="checkItemVo.checkItemIds != null and checkItemVo.checkItemIds.size > 0">
+                 and check_item_id in
+                <foreach collection="checkItemVo.checkItemIds" item="checkItemId" open="(" separator="," close=")">
+                    #{checkItemId}
+                </foreach>
+            </if>
+            <if test="checkItemVo.regId !='' and checkItemVo.regId!=null">
+                and reg_id=#{param2.regId,jdbcType=VARCHAR}
+            </if>
+            <if test="checkItemVo.patientName !='' and checkItemVo.patientName!=null">
+                and patient_name like concat('%',#{param2.patientName,jdbcType=VARCHAR},'%')
+            </if>
+    </select>
 </mapper>

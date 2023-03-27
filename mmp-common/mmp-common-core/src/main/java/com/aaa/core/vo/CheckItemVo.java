@@ -2,11 +2,13 @@ package com.aaa.core.vo;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class CheckItemVo {
-    private String[] checkItemIds;
+    private List checkItemIds;
     private String regId;
     private String patientName;
-    private String status;
+    private Integer status;
 
 }

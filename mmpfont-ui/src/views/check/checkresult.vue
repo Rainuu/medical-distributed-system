@@ -88,7 +88,6 @@
           <el-form label-position="left" inline class="demo-table-expand" style="margin-left: 80px">
             <el-form-item label="价格"><span>{{ props.row.price }}</span></el-form-item>
             <el-form-item label="创建时间"><span>{{ props.row.createTime}}</span></el-form-item>
-            <el-form-item label="检查结果描述"><span>{{ props.row.resultMsg}}</span></el-form-item>
           </el-form>
         </template>
       </el-table-column>
