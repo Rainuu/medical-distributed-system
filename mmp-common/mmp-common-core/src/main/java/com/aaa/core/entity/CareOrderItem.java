@@ -68,6 +68,8 @@ public class CareOrderItem implements Serializable {
      */
     private String status;
 
+
+
     /**
      * 创建时间
      */
