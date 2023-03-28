@@ -51,8 +51,8 @@
       <el-card style="margin-bottom: 5px">
         <el-button type="success" icon="el-icon-finished" @click="handleSelectAll">全选</el-button>
         <el-button type="success" icon="el-icon-finished" @click="handleUnSelectAll">取消全选</el-button>
-        <el-button type="danger" icon="el-icon-bank-card" >现金支付</el-button>
-        <el-button type="danger" icon="el-icon-bank-card" >支付宝支付</el-button>
+        <el-button type="danger" icon="el-icon-bank-card" @click="handlePayWithCash">现金支付</el-button>
+        <el-button type="danger" icon="el-icon-bank-card" @click="handlePayWithZfb">支付宝支付</el-button>
         <span style="margin-left:20px">订单总额:<span style="color:red;margin-left:20px">￥:{{ allAmount }}</span></span>
       </el-card>
       <!-- 工具结束开始 -->
@@ -86,6 +86,8 @@
 </template>
 
 <script>
+import qs from "qs";
+
 export default {
   name: "docharge",
   data(){
@@ -148,6 +150,7 @@ export default {
     },
     // 监听多个表格的checkbox的选中事件
     handleCareOrderItemSelectionChange(selection, coId) {
+
       if (this.itemObjs.length === 0) {
         this.itemObjs = selection
       } else {
@@ -161,6 +164,7 @@ export default {
         // 最后再来添加
         selection.filter(newItem => {
           this.itemObjs.push(newItem)
+
         })
       }
       //调用计算选中的总额
@@ -189,6 +193,78 @@ export default {
         t.clearSelection()
       })
     },
+    // 现金支付
+    handlePayWithCash() {
+      if (!this.careHistory.regId) {
+        this.$message.warning('请输入挂号单ID查询')
+        return
+      } else if (this.itemObjs.length === 0) {
+        this.$message.warning('请选择要支付的项目')
+        return
+      } else {
+        // 组装数据
+        const postObj = {
+          orderChargeDto: {
+            orderAmount: this.allAmount,
+            chId: this.careHistory.chId,
+            regId: this.careHistory.regId,
+            patientName: this.careHistory.patientName
+          },
+          orderChargeItemDtoList: []
+        }
+        this.itemObjs.filter(item => {
+          const obj = {
+            itemId: item.itemId,
+            coId: item.coId,
+            itemName: item.itemName,
+            itemPrice: item.price,
+            itemNum: item.num,
+            itemType: item.itemType,
+            itemAmount: item.amount
+          }
+          postObj.orderChargeItemDtoList.push(obj)
+        })
+        // 发送请求
+        this.loading = true
+        this.loadingText = '订单创建并现金支付中'
+        this.$confirm('是否确定创建订单并使用现金支付?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          createOrderChargeWithCash(postObj).then(res => {
+            this.$message.success('订单创建并现金支付成功')
+            this.resetCurrentParams()
+            this.loading = false
+          }).catch(() => {
+            this.$message.error('创建订单失败')
+            this.loading = false
+          })
+        }).catch(() => {
+          this.$message.warning('创建已取消')
+          this.loading = false
+        })
+      }
+    },
+
+    // 支付宝支付
+    handlePayWithZfb() {
+      //
+      if (!this.careHistory.regId) {
+        this.$message.warning('请输入挂号单ID查询')
+        return
+      } else if (this.itemObjs.length === 0) {
+        this.$message.warning('请选择要支付的项目')
+        return
+      } else {
+        alert(this.allAmount)
+        alert(JSON.stringify(this.itemObjs))
+        this.$axios.post("http://localhost:8090/alipay/pay?traceNo="+this.itemObjs[0].itemId+"&subject="+this.itemObjs[0].itemName+"&totalAmount="+this.allAmount,).then(res => {
+
+        })
+        }
+      },
+
     //初始化字典
    dictFormat(row,colum,dictType){
     return  this.formatDict(this.dictList,colum,dictType)
