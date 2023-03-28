@@ -18,15 +18,26 @@
               type="textarea" :rows="2" placeholder="请输入内容" v-model="textarea">
           </el-input>
         </el-form-item>
+        <!-- 文件上传开始 -->
         <el-form-item label="结果上传">
           <el-upload
-              class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
-              :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3"
-              :on-exceed="handleExceed" :file-list="fileList">
+              class="upload-demo"
+              :action="objData.host"
+              :before-upload="ossPolicy"
+              :on-remove="handleRemove"
+              :file-list="fileList"
+              :data="objData"
+              accept="image/*"
+              name="file"
+              :on-success="handleUploadSuccess"
+              :on-error="handleUploadError"
+              list-type="picture"
+          >
             <el-button size="small" type="primary">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </el-upload>
         </el-form-item>
+        <!-- 文件上传结束 -->
       </el-form>
         <!--form表单结束-->
       </span>
@@ -192,7 +203,16 @@ export default {
       //系统状态
       statusOptions:[],
       //处方检查项ID
-      cocId:''
+      cocId:'',
+      //阿里云文件上传
+      objData:{
+        OSSAccessKeyId:'',
+        policy:'',
+        Signature:'',
+        key:'',
+        host:'',
+        dir:''
+      }
     }
   },
   methods: {
@@ -274,28 +294,47 @@ export default {
         this.queryData();
       })
     },
-    /*上传文件*/
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    ossPolicy(file){
+      //上传前进行服务器签名
+      return new Promise((resolve,reject) => {
+        //请求后端
+        this.$axios.get(`http://localhost:8082/oss/policy`).then(r=>{
+          this.objData.OSSAccessKeyId=r.data.accessId;
+          this.objData.policy=r.data.policy;
+          this.objData.Signature=r.data.signature;
+          this.objData.dir=r.data.dir;
+          this.objData.host=r.data.host;//直传oss的服务器地址
+          this.objData.key=r.data.dir+"${filename}";
+          resolve(true);//继续上传
+        })
+        .catch(function (error){
+          console.log(error);
+          reject(false)//停止上传
+        });
+      });
     },
-    handlePreview(file) {
-      console.log(file);
-    },
-    handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-    },
-    beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`);
-    },
-    /*弹出层关闭*/
-    handleClose(done) {
-      this.$confirm('确认关闭？')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {
-          });
-    }
+    // /*上传文件*/
+    // handleRemove(file, fileList) {
+    //   console.log(file, fileList);
+    // },
+    // handlePreview(file) {
+    //   console.log(file);
+    // },
+    // handleExceed(files, fileList) {
+    //   this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+    // },
+    // beforeRemove(file, fileList) {
+    //   return this.$confirm(`确定移除 ${file.name}？`);
+    // },
+    // /*弹出层关闭*/
+    // handleClose(done) {
+    //   this.$confirm('确认关闭？')
+    //       .then(_ => {
+    //         done();
+    //       })
+    //       .catch(_ => {
+    //       });
+    // }
   },
   created() {
     //加载系统状态

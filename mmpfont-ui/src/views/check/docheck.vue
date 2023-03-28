@@ -16,7 +16,7 @@
             >{{ d.checkItemName }}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
-        <el-form-item label="挂号单号" prop="regId">
+        <el-form-item label="挂号单号" prop="regId" style="clear:both;float: left">
           <el-input
               v-model="queryParams.regId"
               placeholder="请输入挂号单号"
@@ -25,7 +25,7 @@
               style="width:380px"
           />
         </el-form-item>
-        <el-form-item>
+        <el-form-item style="float: left">
           <el-button type="primary" icon="el-icon-search" size="mini" @click="query">搜索</el-button>
           <el-button type="primary" icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
         </el-form-item>
@@ -69,7 +69,9 @@
       </el-table-column>
       <el-table-column
           prop="status"
-          label="状态">
+          label="状态"
+          :formatter="statusFormat"
+      >
       </el-table-column>
     </el-table>
 
@@ -150,7 +152,7 @@ export default {
     },
     //status
     statusFormat(row){
-      let v=row.resultStatus;
+      let v=row.status;
       return this.formatDict3(this.statusOptions,v);
     },
   },
