@@ -3,4 +3,9 @@
 <!--namespace 写的就是你要实现的那个接口的路径-->
 <mapper namespace="com.aaa.stock.dao.ProviderDao">
 
+    <update id="updById">
+        UPDATE stock_provider SET provider_name=#{provider.providerName}, contact_name=#{provider.contactName}, contact_mobile=#{provider.contactMobile}, contact_tel=#{provider.contactTel}, bank_account=#{provider.bankAccount}, provider_address=#{provider.providerAddress}, status=#{provider.status}, del_flag=#{provider.delFlag}, create_time=#{provider.createTime}, update_time=#{provider.updateTime}, create_by=#{provider.createBy}, update_by=#{provider.updateBy}
+        WHERE provider_id=#{provider.providerId};
+    </update>
+
 </mapper>

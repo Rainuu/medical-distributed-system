@@ -30,9 +30,6 @@ public class ProviderServiceImpl extends ServiceImpl<ProviderDao, Provider> impl
     //装配注入Dao层接口
     @Autowired
     private ProviderDao providerDao;
-    //注入feign
-    @Autowired
-    private Feign feign;
 
     //查询页面所有数据，并实现分页
     @Override
@@ -81,7 +78,7 @@ public class ProviderServiceImpl extends ServiceImpl<ProviderDao, Provider> impl
         if (provider.getProviderId()==null){
             i = providerDao.insert(provider);
         }else {
-            i = providerDao.updateById(provider);
+            i = providerDao.updById(provider);
         }
 
         if (i>0){

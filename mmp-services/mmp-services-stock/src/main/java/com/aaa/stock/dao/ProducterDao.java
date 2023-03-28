@@ -15,6 +15,5 @@ import org.apache.ibatis.annotations.Param;
 public interface ProducterDao extends BaseMapper<Producer> {
 
     //插入数据
-    // @Param("producter") 定义别名
-    int updById(@Param("producer") Producer producer);
+    int updById(@Param("producer") Producer producer);  //@Param("producter") 定义别名 默认param1
 }

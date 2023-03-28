@@ -8,6 +8,7 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 药品信息表
@@ -70,6 +71,7 @@ public class Medicines implements Serializable {
     /**
      * 药品状态0正常0停用 sys_dict_data表 sys_normal_disable
      */
+    @TableLogic
     private String status;
 
     /**
@@ -86,12 +88,14 @@ public class Medicines implements Serializable {
      * 创建时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
 
     /**
      * 更新时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updateTime;
 
     /**
@@ -107,7 +111,6 @@ public class Medicines implements Serializable {
     /**
      * 删除状态0正常0删除 要有重新导入功能
      */
-    @TableLogic   //@TableLogic代表此字段用于逻辑删除
     private String delFlag;
 
     @TableField  //不存在的字段

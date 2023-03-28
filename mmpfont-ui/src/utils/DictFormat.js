@@ -1,9 +1,9 @@
 export  function formatDict(dictList,column,dictType){
-    let r='';
-    for (let i = 0; i < dictList.length; i++) {
-        if (dictList[i].dictType===dictType){
-            if (dictList[i].dictValue === column) {
-                r= dictList[i].dictLabel;
+    let r='';  //初始化返回值
+    for (let i = 0; i < dictList.length; i++) {  //循环前端的列表字段
+        if (dictList[i].dictType===dictType){  //根据字典字段类型对前端字段处理转类型
+            if (dictList[i].dictValue === column) {  //根据字典字段值比对前端
+                r= dictList[i].dictLabel;  //赋值并返回
                 break;
             }
         }

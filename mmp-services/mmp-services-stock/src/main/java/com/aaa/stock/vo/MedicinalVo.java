@@ -36,5 +36,6 @@ public class MedicinalVo {
      */
     private Integer status;
 
+    private Integer producerId;
 
 }

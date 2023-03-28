@@ -117,13 +117,13 @@
           this.dictList = res.data.t;  //将字典处理后的值付给字典列表
         })
       },
+      // 模糊查询
+      search(){
+        this.initTable();
+      },
       // 重置模糊
       resert(){
         this.searchForm = {};
-        this.initTable();
-      },
-      // 模糊查询
-      search(){
         this.initTable();
       },
       // 弹出层提交表单出发的提交事件

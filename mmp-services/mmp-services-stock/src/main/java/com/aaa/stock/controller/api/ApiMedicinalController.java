@@ -1,13 +1,10 @@
 package com.aaa.stock.controller.api;
 
-import com.aaa.core.entity.DictData;
 import com.aaa.core.entity.Medicines;
 import com.aaa.core.entity.Producer;
 import com.aaa.core.vo.Result;
-import com.aaa.stock.feign.Feign;
 import com.aaa.stock.service.MedicinalService;
 import com.aaa.stock.vo.MedicinalVo;
-import com.aaa.stock.vo.ProducterVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,4 +33,18 @@ public class ApiMedicinalController {
         return medicinalService.getMedById(current,size,medicinalVo);
     }
 
+    @PostMapping("getProducerName")
+    public Result<String> getProducerName(){
+        return medicinalService.getProducerName();
+    }
+
+    // 删除
+    @DeleteMapping("delById/{medicinesId}")
+    public Result delById(@PathVariable Long medicinesId){
+        if (medicinalService.delById(medicinesId)){
+            return new Result(200,"删除成功",true);
+        }else {
+            return new Result(500,"删除失败",false);
+        }
+    }
 }
