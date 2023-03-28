@@ -103,11 +103,4 @@ public class ProducterServiceImpl extends ServiceImpl<ProducterDao,Producer> imp
         return false;
     }
 
-    //处理字典 调用system注入的方法
-    @Override
-    public Result<List<DictData>> getOpenFeign() {
-        List<DictData> all = feign.getAll();
-//        System.out.println(all.toString());
-        return new Result(200, "成功", all);
-    }
 }

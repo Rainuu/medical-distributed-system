@@ -36,10 +36,4 @@ public class ApiMedicinalController {
         return medicinalService.getMedById(current,size,medicinalVo);
     }
 
-    //处理字典
-    @GetMapping("status")
-    public Result<List<DictData>> status(){
-        return medicinalService.getOpenFeign();
-    }
-
 }

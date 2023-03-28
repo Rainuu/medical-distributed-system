@@ -57,9 +57,4 @@ public class ApiProviderController {
         }
     }
 
-    //处理字典
-    @GetMapping("status")
-    public Result<List<DictData>> status(){
-        return providerService.getOpenFeign();
-    }
 }

@@ -37,10 +37,4 @@ public class MedicinalServiceImpl extends ServiceImpl<MedicinalDao, Medicines> i
         return new Result(200, "查询查询厂家信息", medById);
     }
 
-    //处理字典 调用system注入的方法
-    @Override
-    public Result<List<DictData>> getOpenFeign() {
-        List<DictData> all = feign.getAll();
-        return new Result(200, "成功", all);
-    }
 }

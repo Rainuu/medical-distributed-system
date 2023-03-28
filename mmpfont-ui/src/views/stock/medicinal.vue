@@ -100,6 +100,16 @@
   import qs from 'qs';
   export default {
     methods: {
+      //字典解析
+      dictFormat(row, column, dictType){
+        return this.formatDict( this.dictList,column, dictType)
+      },
+      //初始化字典
+      getDict() {
+        this.$axios.get('/stock/api/feign/status').then(res => {
+          this.dictList = res.data.t
+        })
+      },
       // 重置模糊
       resert(){
         this.searchForm = {};

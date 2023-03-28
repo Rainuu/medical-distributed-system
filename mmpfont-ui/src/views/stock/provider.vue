@@ -144,7 +144,7 @@ export default {
     },
     //初始化字典
     getDict() {
-      this.$axios.get('/stock/api/provider/status').then(res => {
+      this.$axios.get('/stock/api/feign/status').then(res => {
         this.dictList = res.data.t
       })
     },

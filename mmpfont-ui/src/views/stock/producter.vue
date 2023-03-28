@@ -113,7 +113,7 @@
       },
       //初始化字典，发出请求调用后端方法跨域，处理字典数据
       getDict() {
-        this.$axios.get('/stock/api/producter/status').then(res => {
+        this.$axios.get('/stock/api/feign/status').then(res => {
           this.dictList = res.data.t;  //将字典处理后的值付给字典列表
         })
       },

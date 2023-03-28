@@ -24,6 +24,4 @@ public interface ProducterService extends IService<Producer> {
 
     boolean saveAndUpdate(Producer producer);
 
-    Result<List<DictData>> getOpenFeign(); //处理字典
-
 }

@@ -23,5 +23,4 @@ public interface ProviderService extends IService<Provider> {
 
     boolean saveAndUpdate(Provider provider);
 
-    Result<List<DictData>> getOpenFeign(); //处理字典
 }

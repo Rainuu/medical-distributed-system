@@ -90,12 +90,4 @@ public class ProviderServiceImpl extends ServiceImpl<ProviderDao, Provider> impl
         return false;
     }
 
-    @Override
-    public Result<List<DictData>> getOpenFeign() {
-        List<DictData> all = feign.getAll();
-//        System.out.println(all.toString());
-        return new Result(200, "成功", all);
-    }
-
-
 }

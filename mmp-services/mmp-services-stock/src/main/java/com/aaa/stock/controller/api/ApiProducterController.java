@@ -56,9 +56,4 @@ public class ApiProducterController {
         }
     }
 
-    //处理字典
-    @GetMapping("status")
-    public Result<List<DictData>> status(){
-        return producterService.getOpenFeign();
-    }
 }

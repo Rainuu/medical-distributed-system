@@ -20,5 +20,4 @@ public interface MedicinalService extends IService<Medicines> {
 
     Result<IPage<Medicines>> getMedById(Integer current, Integer size, MedicinalVo medicinalVo);
 
-    Result<List<DictData>> getOpenFeign(); //处理字典
 }
