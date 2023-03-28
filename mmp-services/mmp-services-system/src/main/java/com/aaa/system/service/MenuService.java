@@ -18,4 +18,6 @@ public interface MenuService {
     Result<String> confirmMenu(Long roleId, Long[] menuIds);
 
     int addMenu(Menu menu);
+
+    int delMenu(Long id);
 }

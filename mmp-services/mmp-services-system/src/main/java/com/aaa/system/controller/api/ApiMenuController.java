@@ -46,4 +46,13 @@ public class ApiMenuController {
         }
         return new Result(200,"添加失败",false);
     }
+
+    @DeleteMapping("{id}")
+    public Result delMenu(@PathVariable Long id){
+        int i = Sercvice.delMenu(id);
+        if (i>0){
+            return new Result(200,"成功",true);
+        }
+        return new Result(200,"失败",false);
+    }
 }

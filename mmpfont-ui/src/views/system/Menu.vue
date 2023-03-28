@@ -78,6 +78,9 @@
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
+          <el-form-item label="ID" prop="menuId" hidden="true">
+            <el-input v-model="form.menuId" clearable size="small" />
+          </el-form-item>
           <el-col :span="24">
             <el-form-item label="上级菜单" prop="parentName">
               <treeselect
@@ -233,11 +236,11 @@ export default {
     handleUpdate(row) {
       this.reset()
       this.getTreeselect()
-      getMenuById(row.menuId).then(res => {
-        this.form = res.data
+      alert(JSON.stringify(row))
+        this.form = JSON.parse(JSON.stringify(row))
         this.open = true
         this.title = '修改菜单权限'
-      })
+
     },
     // 查询菜单下拉树的数据
     getTreeselect() {
@@ -262,9 +265,12 @@ export default {
         if (valid) {
           // 做添加
           this.loading = true
+          if (this.form.menuType==='M'){
+            this.form.parentId=0
+          }
           if (this.form.menuId === undefined) {
             this.$axios.post('system/api/menu/add',qs.stringify(this.form)).then(res => {
-              this.msgSuccess('保存成功')
+              this.$message.success('保存成功')
               this.loading = false
               this.getMenuList()// 列表重新查询
               this.form={}
@@ -273,8 +279,8 @@ export default {
               this.loading = false
             })
           } else { // 做修改
-            updateMenu(this.form).then(res => {
-              this.msgSuccess('修改成功')
+            this.$axios.post('system/api/menu/add',qs.stringify(this.form)).then(res => {
+              this.$message.success('修改成功')
               this.loading = false
               this.getMenuList()// 列表重新查询
               this.open = false// 关闭弹出层
@@ -310,15 +316,15 @@ export default {
         type: 'warning'
       }).then(() => {
         this.loading = true
-        deleteMenuById(menuId).then(res => {
+        this.$axios.delete("/system/api/menu/"+menuId).then(res => {
           this.loading = false
-          this.msgSuccess('删除成功')
+          this.$message.success('删除成功')
           this.getMenuList()// 全查询
         }).catch(() => {
           this.loading = false
         })
       }).catch(() => {
-        this.msgError('删除已取消')
+        this.$message.error('删除已取消')
         this.loading = false
       })
     },

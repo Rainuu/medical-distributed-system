@@ -37,27 +37,33 @@ public class MenuServiceImpl implements MenuService {
             m.setChildren(getChildren(m.getMenuId(),phone));
         }
 
-        return new Result<List<Menu>>(200,"查询菜单成功",collect);
+            return new Result<List<Menu>>(200,"查询菜单成功",collect);
+
     }
 
     @Override
     public Result<List<Menu>> getAll(String menuName,Long status) {
         List<Menu> list=null;
-        if (status!=null&&menuName!=null){
-            QueryWrapper queryWrapper=new QueryWrapper<>();
-            queryWrapper.like("menu_name",menuName);
+        QueryWrapper queryWrapper=new QueryWrapper<>();
+        if (status!=null){
             queryWrapper.eq("status",status);
-            list = dao.selectList(queryWrapper);
-        }else {
-           list= dao.selectList(null);
         }
+        if(menuName!=null){
+            queryWrapper.like("menu_name",menuName);
+        }
+        list = dao.selectList(queryWrapper);
+
         List<Menu> collect = list.stream().filter(item -> item.getParentId() == 0).collect(Collectors.toList());
         for (Menu m:collect
         ) {
             m.setChildren(getChildren(m.getMenuId(),list));
         }
 
-        return new Result<List<Menu>>(200,"查询菜单成功",collect);
+        if (collect.size()==0){
+            return new Result<List<Menu>>(200,"查询菜单成功",list);
+        }else {
+            return new Result<List<Menu>>(200,"查询菜单成功",collect);
+        }
     }
 
     @Override
@@ -77,15 +83,29 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public int addMenu(Menu menu) {
-        menu.setParentIds(String.valueOf(menu.getParentId()));
         String token = WebUtil.getRequest().getHeader("token");
         Map<String, Object> tokenChaim = JwtUtil.getTokenChaim(token);
-        menu.setCreateBy((String) tokenChaim.get("username"));
-        menu.setCreateTime(new Date());
-        menu.setUpdateBy((String) tokenChaim.get("username"));
-        menu.setUpdateTime(new Date());
-        int insert = dao.insert(menu);
-        return insert;
+
+        if(menu.getMenuId()==null){
+            menu.setParentIds(String.valueOf(menu.getParentId()));
+            menu.setCreateBy((String) tokenChaim.get("username"));
+            menu.setCreateTime(new Date());
+            menu.setUpdateBy((String) tokenChaim.get("username"));
+            menu.setUpdateTime(new Date());
+            int insert = dao.insert(menu);
+            return insert;
+        }else {
+            menu.setUpdateBy((String) tokenChaim.get("username"));
+            menu.setUpdateTime(new Date());
+            int i = dao.updateById(menu);
+            return i;
+        }
+
+    }
+
+    @Override
+    public int delMenu(Long id) {
+        return dao.deleteById(id);
     }
 
     private List<Menu> getChildren(Long parentId,List<Menu> menu){
