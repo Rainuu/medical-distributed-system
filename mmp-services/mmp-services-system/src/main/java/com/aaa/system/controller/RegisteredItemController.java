@@ -6,15 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("system/registeredItem")
 public class RegisteredItemController {
     @Autowired
     private RegisteredItemDao dao;
-    @GetMapping("getAll")
+    @GetMapping("/getAll")
     public List<RegisteredItem> getAll(){
         return dao.selectList(null);
     }

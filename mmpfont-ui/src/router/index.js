@@ -35,7 +35,12 @@ const routes = [
         {   //字典管理
             path: '/system/dict',
             name: 'dict',
-            component: () => import('../views/system/dict')
+            component: () => import('../views/system/type'),
+        },
+        {
+            path:"/dict/data/:dictId",
+            name:'dictData',
+            component:()=>import('../views/system/data')
         },
         {   // 通知公告
             path: '/system/notice',
