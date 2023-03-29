@@ -61,15 +61,15 @@ public class Producer implements Serializable {
     /**
      * 创建时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
      * 更新时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")  //添加删除使用（前端）
-    @DateTimeFormat(pattern = "yyyy-MM-dd") //请求时格式处理（后端）
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")  //添加删除使用（前端）
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") //请求时格式处理（后端）
     private Date updateTime;
 
     /**

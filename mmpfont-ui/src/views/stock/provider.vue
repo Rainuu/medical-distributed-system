@@ -152,9 +152,11 @@ export default {
     resert(){
       this.searchForm = {};
       this.initTable();
+      this.current=1;
     },
     // 模糊查询
     search(){
+      this.current=1;
       this.initTable();
     },
     // 弹出层提交表单出发的提交事件

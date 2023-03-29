@@ -68,7 +68,7 @@
         <el-table-column prop="purchaseId" label="单据ID" align="center"/>
         <el-table-column prop="providerId" label="供应商" align="center" width="80px"/>
         <el-table-column prop="purchaseTradeTotalAmount" label="采购批发总额" width="110px" align="center"/>
-        <el-table-column prop="status" label="状态" align="center" width="60px" :formatter="(row)=>this.dictFormat(row,row.status,'sys_normal_disable')"/>
+        <el-table-column prop="status" label="状态" align="center" width="80px" :formatter="(row)=>this.dictFormat(row,row.status,'his_order_status')"/>
         <el-table-column prop="applyUserName" label="申请人" align="center" width="80px"/>
         <el-table-column prop="storageOptUser" label="入库操作人" align="center" width="100px"/>
         <el-table-column prop="storageOptTime" label="入库时间" align="center"/>

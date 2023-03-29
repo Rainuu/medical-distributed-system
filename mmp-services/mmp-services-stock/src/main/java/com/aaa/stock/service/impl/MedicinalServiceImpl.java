@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,6 +43,30 @@ public class MedicinalServiceImpl extends ServiceImpl<MedicinalDao, Medicines> i
     public Result<String> getProducerName() {
         List producerName = medicinalDao.getProducerName();
         return new Result(200, "查询查询厂家信息", producerName);
+    }
+
+    @Override
+    public boolean saveAndUpdate(Medicines medicines) {
+        int i = -1;
+        if (medicines.getCreateTime()==null){
+            medicines.setCreateTime(new Date());
+            medicines.setUpdateTime(new Date());
+        }else {
+            medicines.setUpdateTime(new Date());
+        }
+
+        if (medicines.getMedicinesId()==null){
+            i = medicinalDao.insert(medicines);
+            //System.out.println("==================="+medicines.getStatus());
+        }else {
+            i = medicinalDao.updById(medicines);
+            //System.out.println("==================="+medicines.getStatus());
+        }
+
+        if (i>0){
+            return true;
+        }
+        return false;
     }
 
     @Override

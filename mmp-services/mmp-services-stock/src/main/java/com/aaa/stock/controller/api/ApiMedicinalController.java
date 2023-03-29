@@ -1,15 +1,12 @@
 package com.aaa.stock.controller.api;
 
 import com.aaa.core.entity.Medicines;
-import com.aaa.core.entity.Producer;
 import com.aaa.core.vo.Result;
 import com.aaa.stock.service.MedicinalService;
 import com.aaa.stock.vo.MedicinalVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
@@ -35,7 +32,18 @@ public class ApiMedicinalController {
 
     @PostMapping("getProducerName")
     public Result<String> getProducerName(){
+        //为了获取producerName
         return medicinalService.getProducerName();
+    }
+
+    // 修改或添加
+    @PostMapping("saveAndUpdate")
+    public Result saveAndUpdate(Medicines medicines){
+        if (medicinalService.saveAndUpdate(medicines)){
+            return new Result(200,"操作成功",true);
+        }else {
+            return new Result(500,"操作失败",false);
+        }
     }
 
     // 删除

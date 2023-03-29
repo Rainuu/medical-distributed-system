@@ -149,12 +149,14 @@
       },
       // 模糊查询
       search(){
+        this.current=1;
         this.initTable();
       },
       // 重置模糊
       resert(){
         this.searchForm = {};
         this.initTable();
+        this.current=1;
       },
       // 提交按钮
       onSubmit(formName){

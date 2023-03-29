@@ -24,6 +24,8 @@ public interface MedicinalService extends IService<Medicines> {
     //模糊生产厂家数据
     Result<String> getProducerName();
 
+    boolean saveAndUpdate(Medicines medicines);
+
     boolean delById(Long medicinesId);
 
 

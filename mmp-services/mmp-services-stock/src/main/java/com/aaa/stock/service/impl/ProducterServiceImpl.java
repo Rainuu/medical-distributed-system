@@ -27,49 +27,35 @@ import java.util.Objects;
  */
 @Service
 public class ProducterServiceImpl extends ServiceImpl<ProducterDao,Producer> implements ProducterService {
-
+    // 注入dao层方法
     @Autowired
     private ProducterDao producterDao;
-
-    //注入feign
-    @Autowired
-    private Feign feign;
-
-    // 根据查询厂家信息
+    // 查询 & 分页 & 模糊查询（厂家名称、关键字、厂家电话、状态、创建时间）
     @Override
     public Result<IPage<Producer>> getAll(Integer current, Integer size, ProducterVo producterVo) {
-        IPage<Producer> page = new Page(current,size);  //分页
-        //模糊查询，调用数据库的字段
+        IPage<Producer> page = new Page(current,size);
         QueryWrapper<Producer> wrapper = new QueryWrapper();
-        //模糊查询————厂家名称
         if (StringUtils.hasText(producterVo.getProducerName())){
             wrapper.like("producer_name",producterVo.getProducerName());
         }
-        //模糊查询————关键字
         if (StringUtils.hasText(producterVo.getKeywords())){
             wrapper.like("keywords",producterVo.getKeywords());
         }
-        //模糊查询————厂家电话
         if (StringUtils.hasText(producterVo.getProducerTel())){
             wrapper.like("producer_tel",producterVo.getProducerTel());
         }
-        //模糊查询————状态
         if (Objects.nonNull(producterVo.getStatus())){
             wrapper.like("status",producterVo.getStatus());
         }
-        //模糊查询————创建时间
         if (Objects.nonNull(producterVo.getDateRange())&&producterVo.getDateRange().length==2){
             wrapper.between("create_time",producterVo.getDateRange()[0],producterVo.getDateRange()[1]);
         }
         IPage<Producer> page1 = producterDao.selectPage(page, wrapper);
-//        System.out.println(page1.getTotal());  //测试有无拿到页码
         return new Result(200, "查询查询厂家信息", page1);
     }
-
-    // 删除
+    // 删除————根据id查询
     @Override
     public boolean delById(Long id) {
-        // 如果执行方法返回true
         int i = producterDao.deleteById(id);
         if (i > 0){
             return true;
@@ -77,24 +63,23 @@ public class ProducterServiceImpl extends ServiceImpl<ProducterDao,Producer> imp
             return false;
         }
     }
-
     //修改/插入
     @Override
     public boolean saveAndUpdate(Producer producer) {
-        int i=-1;
+        // 初始化id
+        int i = -1;
+        // 获取更新和创建时间
         if (producer.getCreateTime()==null){
             producer.setCreateTime(new Date());
             producer.setUpdateTime(new Date());
         }else {
             producer.setUpdateTime(new Date());
         }
-
+        // 根据有无id分别执行新增\修改
         if (producer.getProducerId()==null){
             i = producterDao.insert(producer);
-            System.out.println("==================="+producer.getStatus());
         }else {
             i = producterDao.updById(producer);
-            System.out.println("==================="+producer.getStatus());
         }
 
         if (i>0){
