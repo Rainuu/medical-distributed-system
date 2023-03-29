@@ -11,6 +11,19 @@ export  function formatDict(dictList,column,dictType){
     return r;
 }
 
+//格式化数据字典2   刘鸿飞写的
+export  function formatDict2(datas,value){
+    for (let i=0;i<datas.length;i++){
+        if (datas[i].dictValue==value){
+            return datas[i].dictLabel;
+        }
+    }
+    return "";
+}
+
+
+
+
 //格式化数据字典
 export function formatDict3(datas,value){
     for(let i=0;i<datas.length;i++){

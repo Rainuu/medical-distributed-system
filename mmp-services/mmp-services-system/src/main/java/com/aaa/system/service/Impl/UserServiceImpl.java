@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserSercvice{
         if (Objects.nonNull(map.get("deptId"))){
             wrapper.eq("dept_Id",map.get("deptId"));
         }
-        wrapper.eq("scheduling_flag",'Y');
+        wrapper.eq("scheduling_flag",'0');
         wrapper.eq("status",0);
         List<User> userList = dao.selectList(wrapper);
         return userList;

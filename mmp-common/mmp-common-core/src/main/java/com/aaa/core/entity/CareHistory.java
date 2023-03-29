@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -99,6 +100,13 @@ public class CareHistory implements Serializable {
      */
     private String remark;
 
+
+    /*
+    * 加的属性
+    * */
+    @TableField(exist = false)
+    private List<CareOrder> CareOrderList;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
@@ -181,4 +189,5 @@ public class CareHistory implements Serializable {
         sb.append("]");
         return sb.toString();
     }
+
 }

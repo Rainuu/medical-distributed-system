@@ -114,6 +114,7 @@
           }
         },
         created() {
+            console.log(this)
           this.info()
           this.initLiftMenu()
         },
@@ -158,6 +159,7 @@
             },
             //显示当前连接的内容
             showContent(url,menuName){
+                //alert(url+","+menuName);
                 //直接调用添加页签页
                 this.addTab(menuName,url);
             },

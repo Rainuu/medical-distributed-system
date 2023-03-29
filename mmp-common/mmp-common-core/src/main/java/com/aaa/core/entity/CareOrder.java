@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -75,6 +76,13 @@ public class CareOrder implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateTime;
 
+    /*
+     * 加的属性
+     * */
+    @TableField(exist = false)
+    private List<CareOrderItem> CareOrderItemList;
+
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
@@ -142,4 +150,6 @@ public class CareOrder implements Serializable {
         sb.append("]");
         return sb.toString();
     }
+
+
 }

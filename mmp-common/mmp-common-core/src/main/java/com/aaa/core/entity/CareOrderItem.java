@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -67,8 +68,6 @@ public class CareOrderItem implements Serializable {
      * 状态，0未支付，1已支付，2，已退费  3，已完成 字典表his_order_details_status
      */
     private String status;
-
-
 
     /**
      * 创建时间

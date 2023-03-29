@@ -18,12 +18,12 @@ public class Scheduling implements Serializable {
     /**
      * 医生ID
      */
-    private Integer userId;
+    private Long userId;
 
     /**
      * 科室ID
      */
-    private Integer deptId;
+    private Long deptId;
 
     /**
      * 值班日期

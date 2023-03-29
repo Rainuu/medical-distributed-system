@@ -4,7 +4,7 @@ import router from './router'
 import './plugins/element.js'
 import './assets/icons/index'
 import './assets/css/global.css'
-import{formatDict,formatDict3} from './utils/DictFormat'
+import{formatDict,formatDict3,formatDict2} from './utils/DictFormat'
 Vue.config.productionTip = false
 
 // Axios
@@ -14,6 +14,11 @@ const axios = ax.create({
 });
 Vue.prototype.$axios=axios;
 Vue.prototype.formatDict=formatDict;
+
+// 刘鸿飞
+Vue.prototype.formatDict2=formatDict2;
+
+
 
 //牛牧原
 Vue.prototype.formatDict3=formatDict3;

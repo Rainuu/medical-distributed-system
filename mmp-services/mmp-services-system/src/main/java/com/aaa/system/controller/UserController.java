@@ -18,7 +18,7 @@ public class UserController {
         return userSercvice.findByUsername(username);
     }
 
-    @GetMapping("/queryUsersNeedScheduling")
+    @PostMapping("/queryUsersNeedScheduling")
     public List<User> queryUsersNeedScheduling(@RequestBody Map<String,Object> map){
         return userSercvice.queryUserScheduling(map);
     };

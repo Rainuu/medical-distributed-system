@@ -47,6 +47,9 @@ public class Patient implements Serializable {
      */
     private String idCard;
 
+    @TableField(exist = false)
+    private Integer age;
+
     /**
      * 地址信息
      */
