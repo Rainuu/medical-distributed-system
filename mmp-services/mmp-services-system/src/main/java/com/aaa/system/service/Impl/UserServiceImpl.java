@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -99,5 +100,20 @@ public class UserServiceImpl implements UserSercvice{
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<User> queryUserScheduling(Map<String, Object> map) {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        if (Objects.nonNull(map.get("userId"))){
+            wrapper.eq("user_Id",map.get("userId"));
+        }
+        if (Objects.nonNull(map.get("deptId"))){
+            wrapper.eq("dept_Id",map.get("deptId"));
+        }
+        wrapper.eq("scheduling_flag",'Y');
+        wrapper.eq("status",0);
+        List<User> userList = dao.selectList(wrapper);
+        return userList;
     }
 }

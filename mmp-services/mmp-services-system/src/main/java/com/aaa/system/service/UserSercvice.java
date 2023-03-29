@@ -7,6 +7,9 @@ import com.aaa.system.vo.UserVo;
 import com.aaa.system.vo.UserVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
+import java.util.List;
+import java.util.Map;
+
 public interface UserSercvice {
     public User findByUsername(String username);
     public Result<User> getByPhoneInfo();
@@ -15,4 +18,7 @@ public interface UserSercvice {
 
     public boolean deleById(Long id);
     public boolean saveAndUp(User user);
+
+
+    List<User> queryUserScheduling(Map<String, Object> map);
 }

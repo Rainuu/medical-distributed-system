@@ -3,10 +3,10 @@ package com.aaa.system.controller;
 import com.aaa.core.entity.User;
 import com.aaa.system.service.UserSercvice;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/system/user")
@@ -17,4 +17,9 @@ public class UserController {
     public User getByUsername(@PathVariable String username){
         return userSercvice.findByUsername(username);
     }
+
+    @GetMapping("/queryUsersNeedScheduling")
+    public List<User> queryUsersNeedScheduling(@RequestBody Map<String,Object> map){
+        return userSercvice.queryUserScheduling(map);
+    };
 }
