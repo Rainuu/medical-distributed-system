@@ -162,11 +162,13 @@ export default {
     },
     //查询
     queryData(){
+      this.queryAll();
+      this.page.current=1;
+    },
+    queryAll(){
       this.$axios.post("/check/api/checkResult/listStatus/"+this.page.current+"/"+this.page.size,this.queryParams).then(r=>{
         this.tableData=r.data.t.records;
-
         this.page.total=r.data.t.total;
-
       })
     },
     // 查看结果
@@ -191,6 +193,9 @@ export default {
     },
     //查询
     query(){
+      if (this.queryParams.checkItemIds.length==0){
+        this.queryParams.checkItemIds.push(0)
+      }
       this.queryData()
     },
     // 加载所有可用的检查项目
