@@ -1,65 +1,67 @@
 package com.aaa.charge.util;
 
-
+import com.aaa.charge.config.AlipayConfig;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
-import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.response.AlipayTradePagePayResponse;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-
-@Component
+/**
+ * @ClassName MyAlipayUtil
+ * @Description TODO
+ * @Author yangdaxian
+ * @DATE 2022/3/5 07:33:37
+ * @Version 1.0
+ */
 public class MyAlipayUtil {
-
-    @Value("${alipay.appid}")
-    private String appid;
-    @Value("${alipay.url}")
-    private String url;
-    @Value("${alipay.privateKey:DefaultValue}")
-    private String privateKey;
-    @Value("${alipay.publicKey:DefaultValue}")
-    private String publicKey;
-    @Value("${alipay.notifyUrl}")
-    private String notifyUrl;
-    @Value("${alipay.returnUrl}")
-    private String returnUrl;
-
-
-
-    public String pay(String  itemId, String itemName, String allAmount){
-        AlipayClient alipayClient = new DefaultAlipayClient(url,appid,privateKey,"json","UTF-8",publicKey,"RSA2");
+    /**
+     * @description
+     * @author Benjamin Yang @date 2022/3/6 19:29:01
+     * @param out_trade_no: 订单编号 唯一
+     * @param total_amount: 商品/支付 价格
+     * @param subject: 主题
+     * @return {@link ：java.lang.String}
+     * @Throws
+     */
+    public static String createOrderForm(String out_trade_no, String total_amount, String subject) throws AlipayApiException {
+        DefaultAlipayClient alipayClient = new DefaultAlipayClient(
+                AlipayConfig.gatewayUrl, AlipayConfig.app_id, AlipayConfig.merchant_private_key,
+                "json", AlipayConfig.charset, AlipayConfig.alipay_public_key, AlipayConfig.sign_type);
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
-//异步接收地址，仅支持http/https，公网可访问
-        request.setNotifyUrl(notifyUrl);
-//同步跳转地址，仅支持http/https
-        request.setReturnUrl(returnUrl);
-/******必传参数******/
+        request.setNotifyUrl(AlipayConfig.notify_url);
+        request.setReturnUrl(AlipayConfig.return_url);
         JSONObject bizContent = new JSONObject();
-//商户订单号，商家自定义，保持唯一性
-        bizContent.put("out_trade_no", itemId);
-//支付金额，最小值0.01元
-        bizContent.put("total_amount", allAmount);
-//订单标题，不可使用特殊符号
-        bizContent.put("subject", itemName);
-//电脑网站支付场景固定传值FAST_INSTANT_TRADE_PAY
+        bizContent.put("out_trade_no", out_trade_no);
+        bizContent.put("total_amount", total_amount);
+        bizContent.put("subject", subject);
         bizContent.put("product_code", "FAST_INSTANT_TRADE_PAY");
-        request.setBizContent(bizContent.toString());
-        AlipayTradePagePayResponse response = null;
-        String form=null;
-        try {
-            response = alipayClient.pageExecute(request);
-            form=response.getBody();
-        } catch (AlipayApiException e) {
-            e.printStackTrace();
-        }
-        if(response.isSuccess()){
-            System.out.println("调用成功");
-        } else {
-            System.out.println("调用失败");
-        }
-        return form;
+        request.setBizContent(bizContent.toJSONString());
+        AlipayTradePagePayResponse response = alipayClient.pageExecute(request);
+        String body = response.getBody();
+        return body;
     }
-    }
+
+//    public static void main(String[] args) throws AlipayApiException {
+//        DefaultAlipayClient alipayClient = new DefaultAlipayClient(
+//                AlipayConfig.gatewayUrl, AlipayConfig.app_id, AlipayConfig.merchant_private_key,
+//                "json", AlipayConfig.charset, AlipayConfig.alipay_public_key, AlipayConfig.sign_type);
+//        AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
+//        request.setNotifyUrl(AlipayConfig.notify_url);
+//        request.setReturnUrl(AlipayConfig.return_url);
+//        JSONObject bizContent = new JSONObject();
+//        bizContent.put("out_trade_no", 1);
+//        bizContent.put("total_amount", 0.01);
+//        bizContent.put("subject", "测试商品");
+//        bizContent.put("product_code", "FAST_INSTANT_TRADE_PAY");
+//        request.setBizContent(bizContent.toJSONString());
+//        AlipayTradePagePayResponse response = alipayClient.pageExecute(request);
+//        String body = response.getBody();
+//        System.out.println(body);
+//        if (response.isSuccess()) {
+//            System.out.println("调用成功");
+//        } else {
+//            System.out.println("调用失败");
+//        }
+//    }
+
+}

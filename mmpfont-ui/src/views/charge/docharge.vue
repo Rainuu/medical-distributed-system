@@ -60,14 +60,14 @@
       <el-card style="margin-bottom: 5px">
         <el-collapse v-if="careOrderItem.length>0" v-model="activeNames">
           <el-collapse-item v-for="(item,index) in careOrderItem" :key="index" :name="index">
-<!--            <template slot="title">-->
-<!--              【{{ item.coType==='0'?'药用处方':'检查处方' }}】【{{ index+1 }}】【处方总额】:￥{{allAmount }}-->
-<!--            </template>-->
+            <template slot="title">
+              【{{ item.coType==='0'?'药用处方':'检查处方' }}】【{{ index+1 }}】【处方总额】:￥{{ allAmount  }}
+            </template>
             <el-table ref="refTable" v-loading="loading" border :data="careOrderItem" :row-class-name="tableRowClassName"
                 @selection-change="handleCareOrderItemSelectionChange($event,item.coId)">
               <el-table-column type="selection" width="55" align="center" prop="itemId"/>
               <el-table-column label="序号" align="center" type="index" width="50"  />
-<!--              <el-table-column :label="coType==='0'?'药品名称':'项目名称'" align="center" prop="itemName" />-->
+              <el-table-column :label="item.coType==='0'?'药品名称':'项目名称'" align="center" prop="itemName" />
               <el-table-column label="数量" align="center" prop="num" />
               <el-table-column label="单价(元)" align="center" prop="price" />
               <el-table-column label="金额(元)" align="center" prop="amount" />
@@ -127,7 +127,7 @@ export default {
       this.loadingText = '数据查询中，请稍后...'
       this.$axios.get("charge/api/hisCareHistory/list/"+this.regId).then(result=>{
           this.careHistory = result.data.t.careHistory
-          this.careOrderItem = result.data.t.careOrderItem
+          this.careOrderItem = result.data.t.careOrderItem[0]
         this.loading = false
         this.loadingText = ''
         this.careOrderItem.filter((c, index) => {
@@ -249,7 +249,6 @@ export default {
 
     // 支付宝支付
     handlePayWithZfb() {
-      //
       if (!this.careHistory.regId) {
         this.$message.warning('请输入挂号单ID查询')
         return
@@ -257,11 +256,43 @@ export default {
         this.$message.warning('请选择要支付的项目')
         return
       } else {
-        alert(this.allAmount)
-        alert(JSON.stringify(this.itemObjs))
-        this.$axios.post("http://localhost:8090/alipay/pay?traceNo="+this.itemObjs[0].itemId+"&subject="+this.itemObjs[0].itemName+"&totalAmount="+this.allAmount,).then(res => {
-
+        this.$confirm('是否使用支付宝支付', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$axios.post("alipay/pay?outTradeNo="+this.itemObjs[0].itemId+"&subject="+this.itemObjs[0].itemName+"&totalAmount="+this.allAmount).then(res => {
+            //添加之前删除一下，单页面，页面不刷新，添加进去的内容会一直保存在页面中，二次调用form表单会出错
+            const divForm = document.getElementsByTagName('divForm')
+            if(divForm.length){
+              document.body.removeChild(divForm[0])
+            }
+            const div = document.createElement('divForm')
+            div.innerHTML = resp.data()//data返回接口的form表单字符
+            document.body.appendChild(div)
+            document.forms[0].setAttribute('target','_blank')//新窗口跳转
+            document.forms[0].submit()
+          }).catch(() => {
+            this.$message.error('创建订单失败')
+            this.loading = false
+          })
+        }).catch(() => {
+          this.$message.warning('创建已取消')
+          this.loading = false
         })
+
+        // this.$axios.post("http://localhost:8090/alipay/pay?traceNo="+this.itemObjs[0].itemId+"&subject="+this.itemObjs[0].itemName+"&totalAmount="+this.allAmount,).then(res => {
+        //       //添加之前删除一下，单页面，页面不刷新，添加进去的内容会一直保存在页面中，二次调用form表单会出错
+        //   const divForm = document.getElementsByTagName('divForm')
+        //   if(divForm.length){
+        //     document.body.removeChild(divForm[0])
+        //   }
+        //   const div = document.createElement('divForm')
+        //   div.innerHTML = resp.data()//data返回接口的form表单字符
+        //   document.body.appendChild(div)
+        //   document.forms[0].setAttribute('target','_blank')//新窗口跳转
+        //   document.forms[0].submit()
+        // })
         }
       },
 

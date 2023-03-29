@@ -4,6 +4,7 @@ import com.aaa.charge.dao.HisOrderChargeItemMapper;
 import com.aaa.charge.dao.HisOrderChargeMapper;
 import com.aaa.charge.fegin.OrderCharFeign;
 import com.aaa.charge.service.HisOrderChargeService;
+import com.aaa.charge.util.MyAlipayUtil;
 import com.aaa.charge.vo.OrderChargeVo;
 import com.aaa.core.entity.DictData;
 import com.aaa.core.entity.OrderCharge;
@@ -66,5 +67,7 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
       boolean upd = hisOrderChargeMapper.updByStatusType(orderId);
       return new Result(200,"修改成功",upd);
    }
+
+
 
 }

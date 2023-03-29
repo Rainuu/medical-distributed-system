@@ -2,11 +2,13 @@ package com.aaa.charge.controller.api;
 
 import com.aaa.charge.fegin.OrderCharFeign;
 import com.aaa.charge.service.HisOrderChargeService;
+import com.aaa.charge.util.MyAlipayUtil;
 import com.aaa.charge.vo.OrderChargeVo;
 import com.aaa.core.entity.DictData;
 import com.aaa.core.entity.OrderCharge;
 import com.aaa.core.entity.OrderChargeItem;
 import com.aaa.core.vo.Result;
+import com.alipay.api.AlipayApiException;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -57,7 +59,11 @@ public class ApiHisOrderChargeController {
     public Result<List<OrderCharge>> upd(@PathVariable String orderId){
         return service.updByStatusType(orderId);
     }
+    @PostMapping("pay")
+    public Result payForIt(@RequestBody OrderCharge orderCharge) throws AlipayApiException {
+        String orderForm = MyAlipayUtil.createOrderForm(orderCharge.getOrderId(), orderCharge.getOrderAmount().toString(), orderCharge.getPatientName());
+        return new Result(200, "支付成功", orderForm);
 
-
+    }
 
 }

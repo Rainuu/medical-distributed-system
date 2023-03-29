@@ -10,22 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("alipay")
 public class AlipayController {
 
-    @Autowired
-    private MyAlipayUtil myAlipayUtil;
-
-    @Autowired
-    public void setMyAlipayUtil(MyAlipayUtil myAlipayUtil){
-        this.myAlipayUtil=myAlipayUtil;
-    }
-
-    @PostMapping("pay/{itemId}/{itemName}/{allAmount}")
-    public String payForIt(@RequestBody String itemId,@RequestBody String itemName,@RequestBody String allAmount, Model model) throws AlipayApiException {
-        String pay=myAlipayUtil.pay(itemId,itemName,allAmount);
-        model.addAttribute("form",pay);
-        return "pay";
-    }
 }

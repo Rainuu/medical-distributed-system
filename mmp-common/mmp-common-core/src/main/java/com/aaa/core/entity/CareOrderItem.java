@@ -68,6 +68,9 @@ public class CareOrderItem implements Serializable {
      */
     private String status;
 
+    @TableField(exist = false)
+    private String coType;
+
 
 
     /**
