@@ -1,4 +1,5 @@
 <template>
+<!-- 未完成的任务：批量删除 -->
   <div>
     <!-- 工具栏————模糊查询 -->
     <div style="height: 120px; padding-top: 20px; background-color: whitesmoke;">
@@ -15,7 +16,7 @@
           </el-form-item> &nbsp;&nbsp;
           <el-form-item label="状态" prop="status">
             <el-select v-model="searchForm.status" clearable placeholder="可用状态" style="width: 200px">
-              <el-option v-for="dict in this.statusDict.filter((n)=>{ return n.dictType==='sys_normal_disable'})"
+              <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='sys_normal_disable'})"
                          :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
             </el-select>
           </el-form-item>
@@ -35,7 +36,7 @@
     <!-- 工具栏————新增 & 删除 -->
     <div style="float: left;clear: both;padding:15px;">
       <el-button type="primary" icon="el-icon-plus" plain @click="addUser">新增</el-button>
-      <el-button type="danger" icon="el-icon-delete" plain>删除</el-button>
+      <el-button type="danger" icon="el-icon-delete" plain>批量删除</el-button>
     </div>
     <!-- 弹出层表单 -->
     <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
@@ -71,7 +72,7 @@
           </el-form-item>
         </el-form>
     </el-dialog>
-    <!-- 页面——数据表 & 修改 & 删除（绑定行数据） -->
+    <!-- 页面——数据表 & 分页 & 修改 & 删除（绑定行数据） -->
     <div style="min-height: auto">
       <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" border max-height="330px">
         <el-table-column type="selection" width="55" align="center"/>
@@ -102,15 +103,15 @@
   import qs from 'qs';
   export default {
     methods: {
-      // 使用字典转换数据————调用formatDict脚本对传入参数（行数据、对应行、字典列）处理，并返回
-      dictFormat(row, column, dictType){
-        return this.formatDict( this.statusDict,column, dictType)
-      },
-      // 处理字典，发出请求给后端————后端调用接口、跨域并获取字典表数据传给前端处理数据，把数据赋给statusDict空数组
+      // 获取字典表数据————发请求给后端，由后端调用接口、跨域并获取字典表数据传给前端处理数据
       getDict() {
         this.$axios.get('/stock/api/feign/status').then(res => {
-          this.statusDict = res.data.t;
+          this.dictList = res.data.t;
         })
+      },
+      // 使用字典表转换数据————调用formatDict脚本对传入参数（行数据、对应行、字典列）处理，并返回
+      dictFormat(row, column, dictType){
+        return this.formatDict( this.dictList,column, dictType)
       },
       // 模糊查询
       search(){
@@ -204,8 +205,8 @@
     },
     data() {
       return {
-        // 状态字典
-        statusDict: [],
+        // 字典数组——接收字典表数据
+        dictList: [],
         // 模糊查询信息
         searchForm: {},
         // 查询的页面信息
