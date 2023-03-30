@@ -18,4 +18,6 @@ public interface CheckResultService {
     Result<IPage<CheckResult>> getByPageStatus(Integer current, Integer size, CheckItemVo checkItemVo);
 
     Result addMsg(String cocId, String textarea);
+
+    Result addAll(CheckResult checkResult);
 }

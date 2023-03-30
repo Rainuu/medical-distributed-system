@@ -2,6 +2,7 @@ package com.aaa.check.dao;
 
 import com.aaa.core.entity.CheckResult;
 import com.aaa.core.vo.CheckItemVo;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.ibatis.annotations.Select;

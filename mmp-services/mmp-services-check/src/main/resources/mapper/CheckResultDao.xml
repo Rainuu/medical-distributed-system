@@ -34,4 +34,8 @@
                 and patient_name like concat('%',#{param2.patientName,jdbcType=VARCHAR},'%')
             </if>
     </select>
+
+    <select id="selectLCocId" resultType="java.util.List">
+        select coc_id from his_check_result
+    </select>
 </mapper>
