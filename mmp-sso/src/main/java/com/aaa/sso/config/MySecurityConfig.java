@@ -3,6 +3,8 @@ package com.aaa.sso.config;
 
 import com.aaa.core.util.JwtUtil;
 import com.aaa.core.vo.Result;
+import com.aaa.sso.aop.annotation.LoginLog;
+import com.aaa.sso.feign.UserFeign;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -43,7 +45,10 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     private StringRedisTemplate redisTemplate;
     @Autowired
     private UserDetailsService userDetailsService;
+    @Autowired
+    private UserFeign userFeign;
     @Override
+    @LoginLog
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService ).passwordEncoder(passwordEncoder());
     }
@@ -94,8 +99,10 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 String username = principal.getUsername();//拿到用户名
                 Collection<GrantedAuthority> authorities = principal.getAuthorities();//获取当前用户的权限
                 List<String> collect = authorities.stream().map(item -> item.getAuthority()).collect(Collectors.toList());
+                com.aaa.core.entity.User byUsername = userFeign.getByUsername(username);
                 //把用户权限和权限防撞到map对象中，为了token使用
                 Map<String, Object> map = new HashMap<>();
+                map.put("username2",byUsername.getUserName());
                 map.put("username",username);  //用户名
                 map.put("authorities",collect);  //权限集合
 

@@ -8,7 +8,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 系统访问记录
@@ -16,6 +18,8 @@ import lombok.Data;
  */
 @TableName(value ="sys_login_info")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class LoginInfo implements Serializable {
     /**
      * 访问ID

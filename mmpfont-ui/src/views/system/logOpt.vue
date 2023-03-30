@@ -1,238 +1,308 @@
 <template>
-  <div>
-    <el-form :inline="true" :model="formInline" class="demo-form-inline" style="float:left">
-      <el-form-item label="系统模块" style="float:left">
-        <el-input v-model="formInline.user" placeholder="请输入系统模块"></el-input>
-      </el-form-item>&nbsp&nbsp
-      <el-form-item label="操作人员" style="float:left">
-        <el-input v-model="formInline.user" placeholder="请输入操作人员"></el-input>
-      </el-form-item>&nbsp&nbsp
-      <el-form-item label="操作类型" style="float:left">
-        <el-input v-model="formInline.user" placeholder="请输入操作类型"></el-input>
-      </el-form-item>&nbsp&nbsp
-      <el-form-item label="操作状态" style="float:left;clear: both">
-        <el-select v-model="formInline.region" placeholder="请选择操作状态">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
+  <div class="app-container">
+    <!-- 查询条件开始 -->
+    <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
+      <el-form-item label="系统模块" prop="title">
+        <el-input
+          v-model="queryParams.title"
+          placeholder="请输入系统模块"
+          clearable
+          size="small"
+          style="width:200px"
+        />
+      </el-form-item>
+      <el-form-item label="操作人员" prop="operName">
+        <el-input
+          v-model="queryParams.operName"
+          placeholder="请输入操作人员"
+          clearable
+          size="small"
+          style="width:200px"
+        />
+      </el-form-item>
+      <el-form-item label="操作类型" prop="businessType">
+        <el-select
+          v-model="queryParams.businessType"
+          placeholder="请选择类型"
+          clearable
+          size="small"
+          style="width:200px"
+        >
+          <el-option
+            v-for="dict in dictList.filter((n)=>{return n.dictType==='sys_oper_type'})"
+            :key="dict.dictValue"
+            :label="dict.dictLabel"
+            :value="dict.dictValue"
+          />
         </el-select>
       </el-form-item>
-      <el-form-item label="创建时间" style="float:left">
-        <el-date-picker
-            v-model="value3"
-            type="datetimerange"
-            range-separator="-"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期">
-        </el-date-picker>
+      <el-form-item label="状态" prop="status">
+        <el-select
+          v-model="queryParams.status"
+          placeholder="请选择状态"
+          clearable
+          size="small"
+          style="width:200px"
+        >
+          <el-option
+            v-for="dict in dictList.filter((n)=>{return n.dictType==='sys_normal_disable'})"
+            :key="dict.dictValue"
+            :label="dict.dictLabel"
+            :value="dict.dictValue"
+          />
+        </el-select>
       </el-form-item>
-
-      <el-form-item style="float:left">
-        <el-button type="primary" @click="onSubmit"  icon="el-icon-search">查询</el-button>
-        <el-button type="primary" @click="resetForm('ruleForm')" icon="el-icon-refresh">重置</el-button>
+      <el-form-item label="创建时间">
+        <el-date-picker
+          v-model="this.queryParams.dateRange"
+          size="small"
+          style="width:240px"
+          value-format="yyyy-MM-dd"
+          type="daterange"
+          range-separator="-"
+          start-placeholde="开始日期"
+          end-placeholde="结束日期"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button type="normal" icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-    <div style="float: left;clear: both">
-      <el-button type="danger" icon="el-icon-delete">删除</el-button>
-      <el-button type="warning" icon="el-icon-error">清空</el-button>
-    </div>
-    <el-table
-        ref="multipleTable"
-        :data="tableData3"
-        tooltip-effect="dark"
-        border
-        style="width: 100%"
-        @selection-change="handleSelectionChange">
-      <el-table-column
-          type="selection"
-          width="55">
-      </el-table-column>
+    <!-- 查询条件结束 -->
+    <!-- 表头按钮开始 -->
+    <el-row :gutter="10" style="margin-bottom: 8px;">
+      <el-col :span="1.5">
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="pilDelete">删除</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button type="warning" icon="el-icon-thumb" size="mini" @click="handleClearInfo">清空</el-button>
+      </el-col>
+    </el-row>
+    <!-- 表头按钮结束 -->
+    <!-- 数据表格开始 -->
+    <el-table v-loading="loading" border :data="operLogTableList" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" align="center" />
       <el-table-column type="expand">
-          <template slot-scope="props">
-            <el-form  inline class="demo-table-expand">
-              <el-form-item label="操作模块">
-                <span>{{ props.row.name }}</span>
-              </el-form-item>
-              <el-form-item label="登录信息">
-                <span>{{ props.row.shop }}</span>
-              </el-form-item>
-              <el-form-item label="请求地址">
-                <span>{{ props.row.id }}</span>
-              </el-form-item>
-              <el-form-item label="操作方法">
-                <span>{{ props.row.shopId }}</span>
-              </el-form-item>
-              <el-form-item label="请求参数">
-                <span>{{ props.row.category }}</span>
-              </el-form-item>
-              <el-form-item label="返回参数">
-                <span>{{ props.row.address }}</span>
-              </el-form-item>
-              <el-form-item label="操作状态">
-                <span>{{ props.row.desc }}</span>
-              </el-form-item>
-              <el-form-item label="操作时间">
-                <span>{{ props.row.time}}</span>
-              </el-form-item>
-              <el-form-item label="异常信息">
-                <span>{{ props.row.ycxx }}</span>
-              </el-form-item>
-            </el-form>
-          </template>
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="demo-table-expand">
+            <el-form-item label="操作模块">
+              <span>{{ props.row.title }}</span>
+            </el-form-item>
+            <el-form-item label="登陆信息">
+              <span>{{ props.row.operName }} // {{ props.row.operIp }} // {{ props.row.operLocation }}</span>
+            </el-form-item>
+            <el-form-item label="请求地址">
+              <span>{{ props.row.operUrl }}</span>
+            </el-form-item>
+            <el-form-item label="操作方法">
+              <span>{{ props.row.requestMethod }}</span>
+            </el-form-item>
+            <el-form-item label="请求参数">
+              <span>{{ props.row.operParam }}</span>
+            </el-form-item>
+            <el-form-item label="返回参数">
+              <span>{{ props.row.jsonResult }}</span>
+            </el-form-item>
+            <el-form-item label="操作状态">
+              <span>{{ props.row.status==0?'成功':'失败' }}</span>
+            </el-form-item>
+            <el-form-item label="操作时间">
+              <span>{{ props.row.operTime }}</span>
+            </el-form-item>
+            <el-form-item label="异常信息">
+              <span>{{ props.row.errorMsg }}</span>
+            </el-form-item>
+          </el-form>
+        </template>
       </el-table-column>
-      <el-table-column
-          align="center"
-          prop="ksid"
-          label="日志ID"
-          min-width="100">
-      </el-table-column>
-      <el-table-column
-          align="center"
-          prop="ksmc"
-          label="系统模块"
-          min-width="100">
-      </el-table-column>
-      <el-table-column
-          align="center"
-          prop="zt1"
-          label="操作类型"
-          min-width="100">
-      </el-table-column>
-      <el-table-column
-          align="center"
-          prop="zt2"
-          label="请求方式"
-          min-width="100">
-      </el-table-column>
-      <el-table-column
-          align="center"
-          prop="fbz"
-          label="操作人员"
-          min-width="100">
-      </el-table-column>
-      <el-table-column
-          align="center"
-          prop="fbz"
-          label="主机"
-          min-width="100">
-      </el-table-column>
-      <el-table-column
-          align="center"
-          prop="fbz"
-          label="操作地点"
-          min-width="100">
-      </el-table-column>
-      <el-table-column
-          align="center"
-          prop="fbz"
-          label="操作状态"
-          min-width="100">
-      </el-table-column>
-      <el-table-column
-          align="center"
-          label="操作时间"
-          min-width="150">
-        <template slot-scope="scope">{{ scope.row.date }}</template>
-      </el-table-column>
-      <el-table-column
-          align="center"
-          fixed="right"
-          label="操作"
-          min-width="100">
-        <template slot-scope="scope"  align="center">
-          <el-button @click="shanchu(scope.row)" type="text" size="small" icon="el-icon-delete">删除</el-button>
+      <el-table-column label="日志ID" align="center" prop="operId" />
+      <el-table-column label="系统模块" align="center" prop="title" />
+      <el-table-column label="操作类型" align="center" prop="businessType" :formatter="(row)=>dictFormat(row,row.businessType,'sys_oper_type')" />
+      <el-table-column label="请求方式" width="180" align="center" prop="requestMethod" />
+      <el-table-column label="操作人员" align="center" prop="operName" />
+      <el-table-column label="主机" align="center" prop="operIp" />
+      <el-table-column label="操作地点" align="center" prop="operLocation" />
+      <el-table-column label="操作状态" prop="status" align="center" :formatter="(row)=>dictFormat(row,row.status,'sys_common_status')" />
+      <el-table-column label="操作时间" align="center" prop="operTime" width="200" />
+      <el-table-column label="操作" align="center" width="100">
+        <template slot-scope="scope">
+          <el-button type="text" icon="el-icon-delete" size="mini" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <div class="block" style="float: left">
-      <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage4"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="4"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="400">
-      </el-pagination>
-    </div>
+    <!-- 数据表格结束 -->
+
+    <!-- 分页控件开始 -->
+    <el-pagination
+      v-show="this.queryParams.total>0"
+      :current-page="queryParams.current"
+      :page-sizes="[5,10,20,30]"
+      :page-size="queryParams.size"
+      layout="total,sizes,prev,pager,next,jumper"
+      :total="queryParams.total"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
+    <!-- 分页控件结束 -->
   </div>
 </template>
-<style>
-.demo-table-expand {
-  font-size: 0;
-}
-.demo-table-expand label {
-  width: 250px;
-  color: #99a9bf;
-}
-.demo-table-expand .el-form-item  {
-  margin-right: 0;
-  margin-bottom: 0;
-  width: 50%;
-}
-</style>
-
 <script>
+import qs from 'qs'
 export default {
-  methods: {
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-    },
-    onSubmit() {
-      console.log('submit!');
-    },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-    }
-  },
+  // 声明数据
   data() {
     return {
-      tableData3: [{
-        id: '12987122',
-        name: '好滋好味鸡蛋仔',
-        category: '江浙小吃、小吃零食',
-        desc: '荷兰优质淡奶，奶香浓而不腻',
-        address: '上海市普陀区真北路',
-        shop: '王小虎夫妻店',
-        shopId: '10333'
-      }, {
-        id: '12987123',
-        name: '好滋好味鸡蛋仔',
-        category: '江浙小吃、小吃零食',
-        desc: '荷兰优质淡奶，奶香浓而不腻',
-        address: '上海市普陀区真北路',
-        shop: '王小虎夫妻店',
-        shopId: '10333'
-      }, {
-        id: '12987125',
-        name: '好滋好味鸡蛋仔',
-        category: '江浙小吃、小吃零食',
-        desc: '荷兰优质淡奶，奶香浓而不腻',
-        address: '上海市普陀区真北路',
-        shop: '王小虎夫妻店',
-        shopId: '10333'
-      }, {
-        id: '12987126',
-        name: '好滋好味鸡蛋仔',
-        category: '江浙小吃、小吃零食',
-        desc: '荷兰优质淡奶，奶香浓而不腻',
-        address: '上海市普陀区真北路',
-        shop: '王小虎夫妻店',
-        shopId: '10333'
-      }],
-      multipleSelection: [],
-      formInline: {
-        user: '',
-        region: ''
-      },
-      currentPage4: 4,
-      value3: [],
-
+      // 遮罩层
+      loading: false,
+      // 选中多条
+      multiple: true,
+      // 选中数组
+      ids: [],
+      // 用户数据数据
+      operLogTableList: [],
+      // 状态数据字典
+      statusOptions: [],
+      // 登陆类型数据字典
+      businessTypeOptions: [],
+      dictList:[],
+      // 查询参数
+      queryParams: {
+        current:1,
+        size:5,
+        total:0,
+        title: undefined,
+        operName: undefined,
+        status: undefined,
+        businessType: undefined,
+        // 时间
+        dateRange: [],
+      }
     }
+  },
+  // 初始化
+  created() {
+    this.getDict()
+    // 做查询
+    this.getOperLogList()
+  },
+  // 自定义方法
+  methods: {
+    // 查询操作日志
+    getOperLogList() {
+      this.loading = true
+      this.$axios.post("system/api/operLog/getAll",qs.stringify(this.queryParams)).then(res => {
+        this.operLogTableList = res.data.t.records
+        this.queryParams.total = res.data.t.total
+        this.loading = false
+      })
+    },
+    // 条件查询
+    handleQuery() {
+      this.getOperLogList()
+    },
+    // 重置查询条件
+    resetQuery() {
+      this.resetForm('queryForm')
+      this.getOperLogList()
+    },
+    // 数据表格的多选择框选择时触发
+    handleSelectionChange(selection) {
+      this.ids = selection.map(item => item.operId)
+      this.multiple = !selection.length
+    },
+    // 分页pageSize变化时触发
+    handleSizeChange(val) {
+      this.queryParams.size = val
+      // 重新查询
+      this.getOperLogList()
+    },
+    // 点击上一页  下一页，跳转到哪一页面时触发
+    handleCurrentChange(val) {
+      this.queryParams.current = val
+      // 重新查询
+      this.getOperLogList()
+    },
+    // 删除
+    pilDelete() {
+      const operIds = this.ids
+      this.$confirm('此操作将永久删除操作日志数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        for(var i=0;i<operIds.length;i++){
+          this.$axios.delete('system/api/operLog/'+operIds[i]).then(res => {
+          })
+        }
+        this.getOperLogList()// 全查询
+      }).catch(() => {
+        this.$message.error('删除已取消')
+        this.loading = false
+      })
+    },
+    // 删除
+    handleDelete(row) {
+      const operIds = row.operId
+      this.$confirm('此操作将永久删除操作日志数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.loading = true
+        this.$axios.delete('system/api/operLog/'+operIds).then(res => {
+          this.loading = false
+          this.$message.success('删除成功')
+          this.getOperLogList()// 全查询
+        })
+      }).catch(() => {
+        this.$message.error('删除已取消')
+        this.loading = false
+      })
+    },
+    // 清空
+    handleClearInfo() {
+      this.$confirm('此操作将永久清空操作日志数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.loading = true
+       this.$axios.get('system/api/operLog/clean').then(res => {
+          this.loading = false
+          this.$message.success('清空成功')
+          this.getOperLogList()// 全查询
+        })
+      }).catch(() => {
+        this.$message.error('清空已取消')
+        this.loading = false
+      })
+    },
+    //字典解析
+    dictFormat(row, column, dictType){
+      return this.formatDict( this.dictList,column, dictType)
+    },
+
+    //初始化字典
+    getDict() {
+      this.$axios.get('/system/api/dict/data/getall').then(res => {
+        this.dictList = res.data.t
+      })
+    },
   }
-
-
 }
 </script>
+<style scoped>
+  .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
+</style>

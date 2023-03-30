@@ -1,164 +1,400 @@
 <template>
-  <div>
-    <el-form :inline="true" :model="formInline" class="demo-form-inline" style="float: left">
-      <el-form-item label="公告标题" label-width="100px">
-        <el-input v-model="formInline.user" placeholder="请输入通知公告标题"></el-input>
+  <div class="app-container">
+    <!-- 查询条件开始 -->
+    <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="88px">
+      <el-form-item label="公告标题" prop="noticeTitle">
+        <el-input
+          v-model="queryParams.noticeTitle"
+          placeholder="请输入通知公告标题"
+          clearable
+          size="small"
+          style="width:240px"
+        />
       </el-form-item>
-      <el-form-item label="发布者">
-        <el-input v-model="formInline.user" placeholder="请输入发布者"></el-input>
+      <el-form-item label="发布者" prop="createBy">
+        <el-input
+          v-model="queryParams.createBy"
+          placeholder="请输入发布者"
+          clearable
+          size="small"
+          style="width:240px"
+        />
       </el-form-item>
-      <el-form-item label="类型">
-        <el-select v-model="formInline.region" placeholder="类型">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
+      <el-form-item label="类型" prop="noticeType">
+        <el-select
+          v-model="queryParams.noticeType"
+          placeholder="类型"
+          clearable
+          size="small"
+          style="width:240px"
+        >
+          <el-option
+            v-for="dict in dictList.filter((n)=>{return n.dictType==='sys_notice_type'})"
+            :key="dict.dictValue"
+            :label="dict.dictLabel"
+            :value="dict.dictValue"
+          />
         </el-select>
       </el-form-item>
-      <el-form-item label="状态">
-        <el-select v-model="formInline.region" placeholder="可用状态">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
+      <el-form-item label="状态" prop="status">
+        <el-select
+          v-model="queryParams.status"
+          placeholder="可用状态"
+          clearable
+          size="small"
+          style="width:240px"
+        >
+          <el-option
+            v-for="dict in dictList.filter((n)=>{return n.dictType==='sys_normal_disable'})"
+            :key="dict.dictValue"
+            :label="dict.dictLabel"
+            :value="dict.dictValue"
+          />
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit"  icon="el-icon-search">查询</el-button>
-        <el-button type="primary" @click="resetForm('ruleForm')" icon="el-icon-refresh">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button type="primary" icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-    <div style="float: left">
-    <el-button type="primary" icon="el-icon-plus">新增</el-button>
-    <el-button type="success" icon="el-icon-edit">修改</el-button>
-    <el-button type="danger" icon="el-icon-delete">删除</el-button>
-    </div>
-    <el-table
-        ref="multipleTable"
-        :data="tableData3"
-        tooltip-effect="dark"
-        border
-        style="width: 100%"
-        @selection-change="handleSelectionChange">
-      <el-table-column
-          type="selection"
-          width="55">
-      </el-table-column>
-      <el-table-column
-          align="center"
-          prop="ksid"
-          label="科室ID"
-          min-width="150">
-      </el-table-column>
-      <el-table-column
-          align="center"
-          prop="ksmc"
-          label="科室名称"
-          min-width="150">
-      </el-table-column>
-      <el-table-column
-          align="center"
-          prop="zt1"
-          label="状态"
-          min-width="150">
-      </el-table-column>
-      <el-table-column
-          align="center"
-          prop="zt2"
-          label="状态"
-          min-width="150">
-      </el-table-column>
-      <el-table-column
-          align="center"
-          prop="fbz"
-          label="发布者"
-          min-width="150">
-      </el-table-column>
-      <el-table-column
-          align="center"
-          label="创建时间"
-          min-width="150">
-        <template slot-scope="scope">{{ scope.row.date }}</template>
-      </el-table-column>
-      <el-table-column
-          align="center"
-          fixed="right"
-          label="操作"
-          min-width="180">
-        <template slot-scope="scope"  align="center">
-          <el-button @click="xiugai(scope.row)" type="text" size="small" icon="el-icon-edit">修改</el-button>
-          <el-button @click="shanchu(scope.row)" type="text" size="small" icon="el-icon-delete">删除</el-button>
-          <el-button @click="chakan(scope.row)" type="text" size="small" icon="el-icon-view">查看</el-button>
+    <!-- 查询条件结束 -->
 
+    <!-- 表格工具按钮开始 -->
+    <el-row :gutter="10" style="margin-bottom: 8px;">
+      <el-col :span="1.5">
+        <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd">新增</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate">修改</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete">删除</el-button>
+      </el-col>
+    </el-row>
+    <!-- 表格工具按钮结束 -->
+
+    <!-- 数据表格开始 -->
+    <el-table v-loading="loading" border :data="noticeTableList" @selection-change="handleSelectionChnage">
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="ID" align="center" prop="noticeId" />
+      <el-table-column label="名称" align="center" prop="noticeTitle" />
+      <el-table-column label="公告类型" prop="noticeType" align="center" :formatter="(row)=>dictFormat(row,row.status,'sys_notice_type')" />
+      <el-table-column label="状态" prop="status" align="center" :formatter="(row)=>dictFormat(row,row.status,'sys_normal_disable')" />
+      <el-table-column label="发布者" align="center" prop="createBy" />
+      <el-table-column label="创建时间" align="center" prop="createTime" />
+      <el-table-column label="操作" align="center">
+        <template slot-scope="scope">
+          <el-button type="text" icon="el-icon-edit" size="mini" @click="handleUpdate(scope.row)">修改</el-button>
+          <el-button type="text" icon="el-icon-delete" size="mini" @click="handleDelete(scope.row)">删除</el-button>
+          <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row)">查看</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <div class="block" style="float: left">
-      <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage4"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="400">
-      </el-pagination>
-    </div>
+    <!-- 数据表格结束 -->
+    <!-- 分页控件开始 -->
+    <el-pagination
+      v-show="queryParams.total>0"
+      :current-page="queryParams.current"
+      :page-sizes="[5, 10, 20, 30]"
+      :page-size="queryParams.size"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="queryParams.total"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
+    <!-- 分页控件结束 -->
+
+    <!-- 添加修改弹出层开始 -->
+    <el-dialog
+      :title="title"
+      :visible.sync="open"
+      width="800px"
+      center
+      append-to-body
+    >
+      <el-form ref="form" :model="this.form" :rules="rules" label-width="100px">
+        <el-row>
+          <el-form-item label="ID" prop="noticeId" hidden="true">
+            <el-input v-model="form.noticeId" placeholder="请输入通知公告标题" clearable size="small" />
+          </el-form-item>
+          <el-col :span="24">
+            <el-form-item label="标题" prop="noticeTitle">
+              <el-input v-model="form.noticeTitle" placeholder="请输入通知公告标题" clearable size="small" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="状态" prop="status">
+              <el-radio-group v-model="form.status">
+                <el-radio
+                  v-for="dict in dictList.filter((n)=>{return n.dictType==='sys_normal_disable'})"
+                  :key="dict.dictValue"
+                  :label="dict.dictValue"
+                  :value="dict.dictValue"
+                >{{ dict.dictLabel }}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="类型" prop="noticeType">
+              <el-radio-group v-model="form.noticeType">
+                <el-radio
+                  v-for="dict in dictList.filter((n)=>{return n.dictType==='sys_notice_type'})"
+                  :key="dict.dictValue"
+                  :label="dict.dictValue"
+                  :value="dict.dictValue"
+                >{{ dict.dictLabel }}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="公告内容">
+              <mavon-editor
+                ref="noticeContent"
+                v-model="form.noticeContent"
+                height="300px"
+                :options="{hideModeSwitch:true,previewStyle:'tab'}"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="form.remark" placeholder="请输入备注" clearable size="small" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleSubmit">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </span>
+    </el-dialog>
+    <!-- 添加修改弹出层结束 -->
+
+    <!--公告内容 弹出层开始 -->
+    <el-dialog
+      :title="title"
+      :visible.sync="noticeContentOpen"
+      width="800px"
+      center
+      append-to-body
+    >
+      <mavon-editor ref="noticeContent" v-model="noticeContent" :aria-disabled="true" :options="{hideModeSwitch:true,previewStyle:'tab'}" />
+    </el-dialog>
+    <!-- 公告内容弹出层结束 -->
+
   </div>
 </template>
-
 <script>
+
+import qs from'qs'
 export default {
-  methods: {
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-    },
-    onSubmit() {
-      console.log('submit!');
-    },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-    }
-  },
+  // 定义页面数据
   data() {
     return {
-      tableData3: [{
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-08',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-06',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-07',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }],
-      multipleSelection: [],
-      formInline: {
-        user: '',
-        region: ''
+      // 是否启用遮罩层
+      loading: false,
+      // 选中数组
+      ids: [],
+      // 非单个禁用
+      single: true,
+      // 非多个禁用
+      multiple: true,
+      // 分页数据总条数
+      total: 0,
+      // 字典表格数据
+      noticeTableList: [],
+      // 弹出层标题
+      title: '',
+      // 是否显示弹出层
+      open: false,
+
+      // 状态数据字典
+      statusOptions: [],
+      // 公告类型
+      noticeTypeOptions: [],
+      dictList:[],
+      // 查询参数
+      queryParams: {
+        current:1,
+        size:5,
+        total:0,
+        noticeTitle: undefined,
+        createBy: undefined,
+        noticeType: undefined,
+        status: undefined,
+        // 日期范围
+        dateRange: [],
       },
-      currentPage4: 4
+      // 表单数据
+      form: {
+        noticeId: '',
+        noticeTitle: '',
+        noticeContent: '',
+        noticeType: '0',
+        status: '0',
+        remark: ''
+      },
+      // 表单校验
+      rules: {
+        noticeTitle: [
+          { required: true, message: '通知公告标题不能为空', trigger: 'blur' }
+        ]
+      },
+      // 查看内容的弹出层
+      noticeContentOpen: false,
+      // 查看内容
+      noticeContent: undefined
     }
+  },
+  // 勾子
+  created() {
+    this.getDict()
+    // 查询表格数据
+    this.getNoticeList()
+  },
+  // 方法
+  methods: {
+    // 查询表格数据
+    getNoticeList() {
+      this.loading = true // 打开遮罩
+     this.$axios.post('/system/api/notice/getAll',qs.stringify(this.queryParams)).then(res => {
+        this.noticeTableList = res.data.t.records
+        this.queryParams.total = res.data.t.total
+        this.loading = false// 关闭遮罩
+      })
+    },
+    // 条件查询
+    handleQuery() {
+      this.getNoticeList()
+    },
+    // 重置查询条件
+    resetQuery() {
+      this.resetForm('queryForm')
+      this.dateRange = []
+      this.getNoticeList()
+    },
+    // 数据表格的多选择框选择时触发
+    handleSelectionChnage(selection) {
+      this.ids = selection.map(item => item.noticeId)
+      this.single = selection.length !== 1
+      this.multiple = !selection.length
+    },
+    // 分页pageSize变化时触发
+    handleSizeChange(val) {
+      this.queryParams.pageSize = val
+      // 重新查询
+      this.getNoticeList()
+    },
+    // 点击上一页  下一页，跳转到哪一页面时触发
+    handleCurrentChange(val) {
+      this.queryParams.pageNum = val
+      // 重新查询
+      this.getNoticeList()
+    },
+
+
+    // 打开添加的弹出层
+    handleAdd() {
+      this.open = true
+      this.reset()
+      this.title = '添加通知公告信息'
+    },
+    // 打开修改的弹出层
+    handleUpdate(row) {
+      this.title = '修改通知公告信息'
+      this.form=JSON.parse(JSON.stringify(row))
+      this.open = true
+
+    },
+    // 执行删除
+    handleDelete(row) {
+      const noticeIds = row.noticeId || this.ids
+      this.$confirm('此操作将永久删除该通知公告数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.loading = true
+        this.$axios.delete("system/api/notice/"+noticeIds).then(res => {
+          this.loading = false
+          this.$message.success('删除成功')
+          this.getNoticeList()// 全查询
+        }).catch(() => {
+          this.$message.error('删除失败')
+          this.loading = false
+        })
+      }).catch(() => {
+        this.$message.success('删除已取消')
+        this.loading = false
+      })
+    },
+    // 保存
+    handleSubmit() {
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          // 做添加
+          this.loading = true
+          if (this.form.noticeId === undefined) {
+            this.$axios.post("system/api/notice/saveAndUp",qs.stringify(this.form)).then(res => {
+              this.$message.success('保存成功')
+              this.loading = false
+              this.getNoticeList()// 列表重新查询
+              this.open = false// 关闭弹出层
+            }).catch(() => {
+              this.loading = false
+            })
+          } else { // 做修改
+            this.$axios.post("system/api/notice/saveAndUp",qs.stringify(this.form)).then(res => {
+              this.$message.success('修改成功')
+              this.loading = false
+              this.getNoticeList()// 列表重新查询
+              this.open = false// 关闭弹出层
+            }).catch(() => {
+              this.loading = false
+            })
+          }
+        }
+      })
+    },
+    // 取消
+    cancel() {
+      this.open = false
+      this.title = ''
+    },
+    // 重置表单
+    reset() {
+      this.form = {
+        noticeId: undefined,
+        noticeTitle: undefined,
+        noticeContent: undefined,
+        noticeType: '0',
+        status: '0',
+        remark: undefined
+      }
+    },
+    // 打开修改的弹出层
+    handleView(row) {
+      this.title = row.noticeTitle
+      this.noticeContentOpen = true
+      this.noticeContent = row.noticeContent
+    },
+    //字典解析
+    dictFormat(row, column, dictType){
+      return this.formatDict( this.dictList,column, dictType)
+    },
+
+    //初始化字典
+    getDict() {
+      this.$axios.get('/system/api/dict/data/getall').then(res => {
+        this.dictList = res.data.t
+      })
+    },
   }
-
-
 }
 </script>

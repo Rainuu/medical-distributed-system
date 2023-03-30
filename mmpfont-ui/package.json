@@ -13,6 +13,7 @@
     "core-js": "^3.8.3",
     "element-ui": "^2.15.13",
     "js-cookie": "^3.0.1",
+    "mavon-editor": "^2.10.4",
     "moment": "^2.29.4",
     "qs": "^6.11.1",
     "settings": "^0.1.1",

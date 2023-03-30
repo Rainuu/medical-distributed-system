@@ -22,4 +22,5 @@ public class UserController {
     public List<User> queryUsersNeedScheduling(@RequestBody Map<String,Object> map){
         return userSercvice.queryUserScheduling(map);
     };
+
 }

@@ -8,7 +8,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 操作日志记录
@@ -16,6 +18,8 @@ import lombok.Data;
  */
 @TableName(value ="sys_oper_log")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class OperLog implements Serializable {
     /**
      * 日志主键
