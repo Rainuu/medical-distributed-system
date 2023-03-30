@@ -22,4 +22,6 @@ public interface HisOrderChargeMapper extends BaseMapper<OrderCharge> {
 
     //现金支付
     boolean updByStatusType(String orderId);
+
+    void insertAll(String regId, String patientName, Double orderAmount, OrderCharge orderCharge);
 }

@@ -58,12 +58,12 @@
       <!-- 工具结束开始 -->
       <!-- 未支付的处方信息开始 -->
       <el-card style="margin-bottom: 5px">
-        <el-collapse v-if="careOrderItem.length>0" v-model="activeNames">
-          <el-collapse-item v-for="(item,index) in careOrderItem" :key="index" :name="index">
+        <el-collapse v-if="careOrders.length>0" v-model="activeNames">
+          <el-collapse-item v-for="(item,index) in careOrders" :key="index" :name="index">
             <template slot="title">
               【{{ item.coType==='0'?'药用处方':'检查处方' }}】【{{ index+1 }}】【处方总额】:￥{{ allAmount  }}
             </template>
-            <el-table ref="refTable" v-loading="loading" border :data="careOrderItem" :row-class-name="tableRowClassName"
+            <el-table ref="refTable" v-loading="loading" border :data="item.careOrderItem" :row-class-name="tableRowClassName"
                 @selection-change="handleCareOrderItemSelectionChange($event,item.coId)">
               <el-table-column type="selection" width="55" align="center" prop="itemId"/>
               <el-table-column label="序号" align="center" type="index" width="50"  />
@@ -101,7 +101,7 @@ export default {
       // 病例对象
       careHistory: [],
       // 处方信息
-      careOrderItem: [],
+      careOrders: [],
       // 当前选中的订单总额
       allAmount: 0.00,
       // 当前选中的所有项目集合
@@ -109,7 +109,8 @@ export default {
       // 展开的折叠面板的名字
       activeNames: [],
       //字典
-      dictList:[]
+      dictList:[],
+      careOrderItem:[]
     }
   },
 
@@ -121,16 +122,16 @@ export default {
         return
       }
       this.careHistory = {}
-      this.careOrderItem = []
+      this.careOrders = []
       this.itemObjs = []
       this.loading = true
       this.loadingText = '数据查询中，请稍后...'
       this.$axios.get("charge/api/hisCareHistory/list/"+this.regId).then(result=>{
           this.careHistory = result.data.t.careHistory
-          this.careOrderItem = result.data.t.careOrderItem[0]
+        this.careOrders = result.data.t.careOrders
         this.loading = false
         this.loadingText = ''
-        this.careOrderItem.filter((c, index) => {
+        this.careOrders.filter((c, index) => {
           this.activeNames.push(index)
         })
       }).catch(() => {
@@ -139,10 +140,10 @@ export default {
         this.loadingText = ''
       })
     },
-    // 清空careHistory和careOrderItem
+    // 清空careHistory和careOrders
     resetCurrentParams() {
       this.careHistory = {}
-      this.careOrderItem = []
+      this.careOrders = []
     },
     tableRowClassName({ row, rowIndex }) {
       //第几行数据
@@ -193,6 +194,7 @@ export default {
         t.clearSelection()
       })
     },
+
     // 现金支付
     handlePayWithCash() {
       if (!this.careHistory.regId) {
@@ -224,6 +226,7 @@ export default {
           }
           postObj.orderChargeItemDtoList.push(obj)
         })
+
         // 发送请求
         this.loading = true
         this.loadingText = '订单创建并现金支付中'
@@ -232,7 +235,9 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          createOrderChargeWithCash(postObj).then(res => {
+          // console.log(JSON.stringify(postObj))
+          // var data={...postObj.orderChargeItemDtoList,...postObj.orderChargeDto}
+          this.$axios.post("charge/api/hisCareHistory/updateBystatus",postObj).then(res => {
             this.$message.success('订单创建并现金支付成功')
             this.resetCurrentParams()
             this.loading = false
