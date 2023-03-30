@@ -1,16 +1,21 @@
 package com.aaa.doctor.service.impl;
 
 import com.aaa.core.entity.Registration;
+import com.aaa.core.entity.Scheduling;
 import com.aaa.core.vo.Result;
 import com.aaa.doctor.dao.RegistredListDao;
+import com.aaa.doctor.dao.SchedulingDao;
 import com.aaa.doctor.service.RegistredListService;
 import com.aaa.doctor.vo.RegisteredListVo;
+import com.aaa.doctor.vo.SchedulingVoo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -24,6 +29,9 @@ public class RegistredListServiceImpl implements RegistredListService {
 
     @Autowired
     private RegistredListDao registredListDao;
+
+    @Autowired
+    private SchedulingDao schedulingDao;
 
     @Override
     public Result<IPage<Registration>> getAllList(Integer currentPage, Integer pageSize,RegisteredListVo registeredListVo) {
@@ -59,7 +67,7 @@ public class RegistredListServiceImpl implements RegistredListService {
 
 
     /*
-    * 修改挂号列表状态
+    * 修改挂号列表状态  收费、退号、作废
     * */
     @Override
     public Result<Integer> handleSuccess(String registrationId) {
@@ -77,6 +85,35 @@ public class RegistredListServiceImpl implements RegistredListService {
     public Result<Integer> handleFalse(String registrationId) {
         Integer integerResult = registredListDao.handleFalse(registrationId);
         return new Result<Integer>(2000,"作废成功",integerResult);
+    }
+
+
+    /**
+     * 查询医生排班表
+     * @param
+     * @return
+     */
+    @Override
+    public Result findDoctocList(SchedulingVoo schedulingVoo) {
+        QueryWrapper<Scheduling> wrapper = new QueryWrapper<>();
+        // 部门编号
+        if (Objects.nonNull(schedulingVoo.getDeptId())) {
+            wrapper.eq("dept_id",schedulingVoo.getDeptId());
+        }
+        // 挂号类型
+        if (Objects.nonNull(schedulingVoo.getSchedulingType())) {
+            wrapper.eq("scheduling_type",schedulingVoo.getSchedulingType());
+        }
+        // 挂号时段
+        if (StringUtils.hasText(schedulingVoo.getSubsectionType())) {
+            wrapper.eq("subsection_type",schedulingVoo.getSubsectionType());
+        }
+        // 挂号时间（值班日期）
+        if (Objects.nonNull(schedulingVoo.getSchedulingDay())) {
+            wrapper.eq("scheduling_day",schedulingVoo.getSchedulingDay());
+        }
+        List<Scheduling> schedulings = schedulingDao.selectList(wrapper);
+        return new Result<>(2000,"查询医生排班成功",schedulings);
     }
 
 

@@ -4,8 +4,8 @@ import com.aaa.core.entity.Registration;
 import com.aaa.core.vo.Result;
 import com.aaa.doctor.service.RegistredListService;
 import com.aaa.doctor.vo.RegisteredListVo;
+import com.aaa.doctor.vo.SchedulingVoo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.mysql.cj.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +36,7 @@ public class RegisteredListController {
     }
 
     /*
-    * 修改挂号状态
+    * 修改挂号状态  收费、退号、作废
     * */
     @PostMapping("/handleSuccess/{registrationId}")
     public Result<Integer> handleSuccess (@PathVariable String registrationId) {
@@ -54,6 +54,14 @@ public class RegisteredListController {
     public Result<Integer> handleFalse (@PathVariable String registrationId) {
         return registredListService.handleFalse(registrationId);
 
+    }
+
+    /**
+     * 查询医生排班
+     */
+    @PostMapping("findDoctocList")
+    public Result findDoctocList(@RequestBody SchedulingVoo schedulingVoo) {
+        return registredListService.findDoctocList(schedulingVoo);
     }
 
 }

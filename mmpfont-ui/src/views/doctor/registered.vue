@@ -8,11 +8,11 @@
             <el-input style="width: 800px;" v-model="patientParams.idCard" placeholder="请输身份证号" clearable></el-input>
           </el-form-item>
           <el-form-item style="margin-left: 100px;">
-            <el-button size="mini" type="primary" icon="el-icon-search" @click="queryfrom('queryform')">
+            <el-button size="mini" type="primary" icon="el-icon-search" @click="handleIdCardQuery('queryform')">
               加载身份证信息</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button size="mini" type="warning" @click="queryfrom('queryform')">加载患者信息</el-button>
+            <el-button size="mini" type="warning" @click="handleIdCardQuery('queryform')">加载患者信息</el-button>
           </el-form-item>
         </el-tabs>
       </el-form>
@@ -48,7 +48,7 @@
                 style="width:200px"
             />
           </el-form-item>
-          <el-form-item label="性别" prop="sex">
+          <el-form-item label="性别" prop="sex" :formatter="sexFormat" >
             <el-radio-group v-model="patientParams.sex">
               <el-radio
                   v-for="d in sexOptions"
@@ -118,7 +118,7 @@
     </div>
     <div style="margin-top: 20px;">
       <el-form ref="queryDeptForm" :model="queryDeptParams" :inline="true" label-width="68px">
-        <el-form-item label="所属科室" prop="deptId" :formatter="deptFormatter">
+        <el-form-item label="所属科室" prop="deptId" >
           <el-select
               v-model="queryDeptParams.deptId"
               placeholder="请选择所属科室"
@@ -176,28 +176,18 @@
           />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="queryfrom('Patientform')">搜索
-          </el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button icon="el-icon-refresh" @click="clearfrom('Patientform')">重置</el-button>
-        </el-form-item>
-        <el-table :data="tableData" height="250" border>
-          <el-table-column prop="date" label="日期">
-          </el-table-column>
-          <el-table-column prop="name" label="姓名">
-          </el-table-column>
-          <el-table-column prop="address" label="地址">
-          </el-table-column>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleDeptQuery">搜索</el-button>
+        <el-button type="primary" icon="el-icon-refresh" size="mini" @click="resetDeptQuery">重置</el-button>
+      </el-form-item>
+        <!-- 部门数据表格开始 -->
+        <el-table border :data="deptTableList" highlight-current-row @selection-change="handleSelectionChange">
+          <el-table-column type="selection" width="55" align="center" />
+          <el-table-column label="科室ID" align="center" prop="deptId" />
+          <el-table-column label="科室名称" align="center" prop="deptName" :formatter="deptFormatter"/>
+          <el-table-column label="当前号数" align="center" prop="regNumber" />
         </el-table>
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                       :current-page="currentPage" :page-sizes="[5, 10, 15, 20]" :page-size="this.pageSize"
-                       layout="total, sizes, prev, pager, next, jumper" :total="this.total">
-        </el-pagination>
 
       </el-form>
-
-
     </div>
   </div>
 </template>
@@ -206,8 +196,10 @@
 export default {
   data() {
     return {
-      // 遮罩层
-      loading: false,
+      // 选中部门Ids
+      ids: [],
+      // 部门数据表格显示
+      deptTableList:[],
       patientform: {},
       patientParams:{},
       tableData:[],
@@ -217,10 +209,10 @@ export default {
       queryDeptParams: {
         deptId: undefined,
         schedulingType: '1',
-        subsectionType: undefined,
+        subsectionType: '1',
         schedulingDay: new Date(),
         regItemId: 1,
-        regItemAmount: undefined
+        regItemAmount: '6'
 
       },
       //挂号的四个按钮
@@ -231,14 +223,6 @@ export default {
       registrationType:[],
       //挂号的时段下拉列表
       registrationPeriod:[],
-      button1:false,
-      button2:true,
-      button3:true,
-      button4:true,
-      //分页的数据
-      currentPage: 1,
-      pageSize: 5,
-      total: 0,
       // 表单校验
       rules: {
         name: [
@@ -270,26 +254,75 @@ export default {
     this.initSex();
     //加载挂号的四个按钮 门诊急诊等按钮
     this.queryButton();
-    //查询所有部门
+    //查询所有部门数据
     this.queryDept();
     //查询查询挂号列表的挂号时段字典信息
     this.queryRegistrationType();
-    //查询查询挂号列表的挂号类型字典信息
+    //查询挂号列表的挂号类型字典信息
     this.queryRegistrationPeriod();
+    // 搜索医生排班
+    this.queryDoctor();
   },
   methods: {
+    // 重置
+    resetDeptQuery() {
+      // this.resetForm('queryDeptForm');
+      this.queryDeptParams={};
+      this.queryDept();
+    },
+    // 搜索
+    handleDeptQuery() {
+      // this.queryDoctor();
+      this.$axios.post("doctor/registered/findDoctocList", this.queryDeptParams).then(result => {
+        // alert(JSON.stringify(result.data))
+        this.deptTableList = result.data.t;
+      });
+      // this.queryDept();
+    },
+    //加载排班数据
+    // queryDoctor() {
+    //
+    //   this.$axios.post("doctor/registered/findDoctocList", this.queryDeptParams).then(result => {
+    //     // alert(JSON.stringify(result.data))
+    //     this.deptTableList = result.data.t;
+    //   });
+    // },
     //查询门诊急诊等四个按钮
-    queryButton(){
+    queryButton() {
       this.$axios.get("/doctor/patient/registeredItem").then(result => {
         this.regItemOptions = result.data.t;
       })
     },
-    //查询所有部门
-    queryDept(){
-      this.$axios.get("/system/api/dept/list").then(result=> {
-        this.deptOptions = result.data.t;
+    //查询表格按钮的方法
+    handleIdCardQuery(formName) {
+      this.$axios.post("/doctor/patient/patientAll/" + this.patientParams.idCard,).then(result => {
+        this.patientParams = result.data.t;
+        this.patientParams.age = this.getAge(this.patientParams.birthday);
+        this.total = result.data.t.total;
       })
+      // 根据输入的身份证号加载患者数据
+      if (this.patientParams.idCard === undefined) {
+        this.msgError('请输入要查询的身份证号')
+        return
+      }
+      this.loading = true
+      getPatientByIdCard(this.patientParams.idCard).then(res => {
+        console.log(res.data)
+        this.patientParams = res.data
+        this.patientParams.age = this.getAge(res.data.birthday.substring(0, 10))
+        this.loading = false
+      }).catch(() => {
+        this.loading = false
+        this.patientParams = {sex: '2'}
+      })
+
     },
+    // 查询所有部门
+     queryDept(){
+    this.$axios.get("/system/api/dept/list").then(result => {
+      this.deptOptions = result.data.t;
+    })
+  },
     // 部门的解析   翻译科室
     deptFormatter(row) {
       let v=row.deptId;
@@ -338,29 +371,12 @@ export default {
         return calculationAge - 1
       }
     },
-    //查询表格按钮的方法
-    queryfrom(formName) {
-      this.$axios.post("/doctor/patient/patientAll/"+this.patientParams.idCard,).then(result => {
-        this.patientParams = result.data.t;
-        this.patientParams.age = this.getAge(this.patientParams.birthday);
-        this.total = result.data.t.total;
-      })
-      // 根据输入的身份证号加载患者数据
-      if (this.patientParams.idCard === undefined) {
-        this.msgError('请输入要查询的身份证号')
-        return
-      }
-      this.loading = true
-      getPatientByIdCard(this.patientParams.idCard).then(res => {
-        console.log(res.data)
-        this.patientParams = res.data
-        this.patientParams.age = this.getAge(res.data.birthday.substring(0, 10))
-        this.loading = false
-      }).catch(() => {
-        this.loading = false
-        this.patientParams = { sex: '2' }
-      })
+    // 表格选择中行事件
+    handleSelectionChange(selection) {
 
+
+      this.ids = selection.map(item => item.deptId)
+      this.single = selection.length !== 1
     },
     //初始化性别
     initSex(){
@@ -371,7 +387,7 @@ export default {
     //把性别的0/1换成男女等
     sexFormat(row){
       let v=row.sex;
-      return this.formatDict(this.sexOptions,v);
+      return this.formatDict2(this.sexOptions,v);
     },
     // 更新挂号项目类型事件
     registeredItemChange(id) {
@@ -390,25 +406,64 @@ export default {
       // 重新查询有号的部门
       this.queryDeptParams()
     },
+    // 挂号收费
+    handleRegistration() {
+      const tx = this
+      tx.$refs['form'].validate(vaid => {
+        console.log(vaid)
+        if (vaid) {
+          tx.$confirm('是否确认给【' + this.patientParams.name + '】进行挂号?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            closeOnClickModal: false,
+            type: 'waring',
+            center: true
+          }).then(() => {
+            // 取出要挂号的部门
+            const deptId = tx.ids[0]
+            // 组装要提交到后台的挂号数据
+            const data = { 'patientDto': tx.patientParams, 'registrationDto': {
+                deptId: deptId,
+                regItemId: tx.queryDeptParams.regItemId,
+                regItemAmount: tx.queryDeptParams.regItemAmount,
+                visitDate: this.moment(tx.queryDeptParams.schedulingDay).format('YYYY-MM-DD'),
+                schedulingType: tx.queryDeptParams.schedulingType,
+                subsectionType: tx.queryDeptParams.subsectionType
+              }}
+            // 提交数据到后台
+            addRegistration(data).then(res => {
+              const regId = res.data
+              tx.msgSuccess('挂号成功 挂号单号为【' + regId + '】')
+              // 清空页面上的数据
+              tx.resetDeptQuery()
+              tx.patientParams = { sex: '2' }
 
-
-
-
-
-
-
-    //每页显示几条
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-      // this.page.size = val;
-      // this.querDate();
-    },
-    //当前页数
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-      // this.page.current = val;
-      // this.querDate();
-    },
+              tx.$confirm('是否确认给挂号ID为【' + regId + '】的挂号收费?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                closeOnClickModal: false,
+                type: 'waring',
+                center: true
+              }).then(() => {
+                // 重新查询挂号列表
+                collectFee(regId).then(r => {
+                  tx.msgSuccess('收费成功')
+                  tx.getDeptForScheduling()
+                }).catch(() => {
+                  tx.msgError('收费失败')
+                })
+              }).catch(() => {
+                tx.msgError('收费取消')
+              })
+            }).catch(() => {
+              tx.msgError('挂号失败')
+            })
+          }).catch(() => {
+            tx.msgError('挂号已取消')
+          })
+        }
+      })
+    }
 
   }
 }

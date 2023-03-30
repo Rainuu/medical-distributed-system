@@ -13,6 +13,7 @@ import com.aaa.doctor.service.SchedulingService;
 import com.aaa.doctor.vo.SchedulingDto;
 import com.aaa.doctor.vo.SchedulingVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -45,24 +46,6 @@ public class SchedulingServiceImpl implements SchedulingService {
 
         return querySchedulingByCondition(schedulingVo, users);
     }
-
-    /**
-     * 我的排班
-     * @param schedulingVo
-     * @return
-     */
-    @Override
-    public Result MyqueryScheduling(SchedulingVo schedulingVo) {
-        String token = WebUtil.getRequest().getHeader("token");
-        Map<String, Object> info = JwtUtil.getTokenChaim(token);
-        String phone= (String) info.get("username");
-        User byUsername = userFeign.getByUsername(phone);
-        Map<String, Object> map = new HashMap<>();
-        map.put("userId", byUsername.getUserId());
-        List<User> users = userFeign.queryUsersNeedScheduling(map);
-        return querySchedulingByCondition(schedulingVo, users);
-    }
-
 
 
 
@@ -210,6 +193,143 @@ public class SchedulingServiceImpl implements SchedulingService {
         }
         return schedulingDao.selectList(wrapper);
 
+    }
+
+
+
+    /**
+     * 我的排班
+     * @param schedulingVo
+     * @return
+     */
+    @Override
+    public Result MyqueryScheduling(SchedulingVo schedulingVo) {
+        String token = WebUtil.getRequest().getHeader("token");
+        Map<String, Object> info = JwtUtil.getTokenChaim(token);
+        String phone= (String) info.get("username");
+        User byUsername = userFeign.getByUsername(phone);
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", byUsername.getUserId());
+        List<User> users = userFeign.queryUsersNeedScheduling(map);
+        return querySchedulingByCondition(schedulingVo, users);
+    }
+
+    /**
+     * 更改医生排班
+     */
+    @Override
+    public Boolean upScheduling(String beginDate, List<SchedulingDto> data) {
+        String token = WebUtil.getRequest().getHeader("token");
+        Map<String, Object> tokenData = JwtUtil.getTokenChaim(token);
+        String phone = (String) tokenData.get("username");
+        User user = userFeign.getByUsername(phone);//获取当前登录的人的信息
+
+        int del=1;
+        int update=1;
+        DateTime dateTime = DateUtil.parse(beginDate, "yyyy-MM-dd");
+        Map<String, String> map = initMap(dateTime);
+        Set<String> keys = map.keySet();
+
+        for (SchedulingDto schedulingDto : data) {
+            Collection<String> schedulingType = schedulingDto.getSchedulingType();//获取排班
+            Iterator<String> scheduling = schedulingType.iterator();//排班 1门诊  2急诊
+            Iterator<String> key = keys.iterator();//获取当前的日期
+            for (int i = 0; i < keys.size(); i++) {
+                String next = scheduling.next();
+                String next1 = key.next();
+                if (next.equals("")){
+                    QueryWrapper<Scheduling> wrapper2 = new QueryWrapper<>();
+                    if (Objects.nonNull(schedulingDto.getUserId())){
+                        //查询用户id 当前的医生
+                        wrapper2.eq("user_id",schedulingDto.getUserId());
+                    }
+                    if (Objects.nonNull(schedulingDto.getDeptId())){
+                        //查询部门id
+                        wrapper2.eq("dept_id",schedulingDto.getDeptId());
+                    }
+                    if (StringUtils.hasText(beginDate)){
+                        //查询当前时间
+                        wrapper2.eq("scheduling_day",next1);
+                    }
+                    if (Objects.nonNull(schedulingDto.getSubsectionType())){
+                        //查询时段
+                        wrapper2.eq("subsection_type",schedulingDto.getSubsectionType());
+                    }
+                    del = schedulingDao.delete(wrapper2);
+                }else {
+                    QueryWrapper<Scheduling> wrapper = new QueryWrapper<>();
+                    if (Objects.nonNull(schedulingDto.getUserId())){
+                        //查询用户id 当前的医生
+                        wrapper.eq("user_id",schedulingDto.getUserId());
+                    }
+                    if (Objects.nonNull(schedulingDto.getDeptId())){
+                        //查询部门id
+                        wrapper.eq("dept_id",schedulingDto.getDeptId());
+                    }
+                    if (StringUtils.hasText(beginDate)){
+                        //查询当前时间
+                        wrapper.eq("scheduling_day",next1);
+                    }
+                    if (Objects.nonNull(schedulingDto.getSubsectionType())){
+                        //查询时段
+                        wrapper.eq("subsection_type",schedulingDto.getSubsectionType());
+                    }
+                    Long count = schedulingDao.selectCount(wrapper);
+                    if (count>0?true:false){
+                        UpdateWrapper<Scheduling> wrapper1 = new UpdateWrapper<>();
+                        if (Objects.nonNull(schedulingDto.getUserId())){
+                            //查询用户id 当前的医生
+                            wrapper1.eq("user_id",schedulingDto.getUserId());
+                        }
+                        if (Objects.nonNull(schedulingDto.getDeptId())){
+                            //查询部门id
+                            wrapper1.eq("dept_id",schedulingDto.getDeptId());
+                        }
+                        if (StringUtils.hasText(beginDate)){
+                            //查询当前时间
+                            wrapper1.eq("scheduling_day",next1);
+                        }
+                        if (Objects.nonNull(schedulingDto.getSubsectionType())){
+                            //查询时段
+                            wrapper1.eq("subsection_type",schedulingDto.getSubsectionType());
+                        }
+                        if (!next.equals("")){
+                            //修改""
+                            wrapper1.set("scheduling_type",next);
+                            DateTime date = DateUtil.date();
+                            Scheduling scheduling1 = new Scheduling();
+                            scheduling1.setUserId(schedulingDto.getUserId());//用户的id 相当于医生的id
+                            scheduling1.setDeptId(schedulingDto.getDeptId());//部门id  相当于科室id
+                            scheduling1.setSchedulingDay(next1); //值班的日期
+                            scheduling1.setSubsectionType(schedulingDto.getSubsectionType());//值班的时段
+                            scheduling1.setSchedulingType(next);//值班的类型 门诊 还是 急诊
+                            scheduling1.setCreateTime(date);
+                            scheduling1.setCreateBy(user.getUserName());
+                            update = schedulingDao.update(scheduling1, wrapper1);
+
+                        }
+                    }else {
+                        DateTime date = DateUtil.date();//获取当前时间
+                        Scheduling scheduling1 = new Scheduling();
+                        scheduling1.setUserId(schedulingDto.getUserId());//用户的id 相当于医生的id
+                        scheduling1.setDeptId(schedulingDto.getDeptId());//部门id  相当于科室id
+                        scheduling1.setSchedulingDay(next1); //值班的日期
+                        scheduling1.setSubsectionType(schedulingDto.getSubsectionType());//值班的时段
+                        scheduling1.setSchedulingType(next);//值班的类型 门诊 还是 急诊
+                        scheduling1.setCreateTime(date);
+                        scheduling1.setCreateBy(user.getUserName());
+                        update = schedulingDao.insert(scheduling1);
+
+                    }
+
+                }
+            }
+
+        }
+        Boolean aboolen=true;
+        Boolean delete=del>0?true:false;
+        aboolen=update>0?true:false;
+        return aboolen;
     }
 
 }

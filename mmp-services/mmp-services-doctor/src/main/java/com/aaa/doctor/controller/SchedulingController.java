@@ -3,12 +3,10 @@ package com.aaa.doctor.controller;
 import com.aaa.core.entity.User;
 import com.aaa.core.vo.Result;
 import com.aaa.doctor.service.SchedulingService;
+import com.aaa.doctor.vo.SchedulingDto;
 import com.aaa.doctor.vo.SchedulingVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -50,6 +48,16 @@ public class SchedulingController {
     public Result queryUserName (){
         List<User> users = schedulingService.queryUserName();
         return new Result(2000,"查询所有的医生成功",users);
+    }
+
+
+    /**
+     * 更改医生排班
+     */
+    @PostMapping("upScheduling/{beginDate}")
+    public Result upScheduling(@PathVariable String beginDate, @RequestBody List<SchedulingDto> data) {
+        Boolean aBoolean = schedulingService.upScheduling(beginDate,data);
+        return new Result<>(2000,"医生的排班更改成功",aBoolean);
     }
 
 }

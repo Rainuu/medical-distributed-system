@@ -3,10 +3,12 @@ package com.aaa.doctor.controller;
 import com.aaa.core.entity.CareHistory;
 import com.aaa.core.entity.CareOrder;
 import com.aaa.core.entity.CareOrderItem;
+import com.aaa.core.entity.Registration;
 import com.aaa.core.vo.Result;
 import com.aaa.doctor.service.CareHistoryService;
 import com.aaa.doctor.service.CareItemService;
 import com.aaa.doctor.service.CareOrderService;
+import com.aaa.doctor.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +36,9 @@ public class CarPatientController {
     @Autowired
     private CareOrderService careOrderService;
 
+    @Autowired
+    private RegistrationService registrationService;
+
 
 
     /*
@@ -57,6 +62,18 @@ public class CarPatientController {
             }
         }
         return new Result<List<CareHistory>>(2000,"查询患者病例所有数据成功",careHistoryId);
+    }
+
+
+    /**
+     * 查询新开就诊中的就诊列表状态
+     * @param status
+     * @return
+     */
+    @GetMapping("queryRegistrationStatus1")
+    public Result queryRegistrationStatus1(@PathVariable String status) {
+        List<Registration> registrations = registrationService.queryRegistrationStatus1(status);
+        return new Result<>(2000,"查询成功",status);
     }
 
 }

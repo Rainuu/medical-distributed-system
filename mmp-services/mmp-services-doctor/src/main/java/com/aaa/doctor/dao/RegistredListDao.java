@@ -1,8 +1,13 @@
 package com.aaa.doctor.dao;
 
 import com.aaa.core.entity.Registration;
+import com.aaa.core.entity.Scheduling;
 import com.aaa.core.vo.Result;
+import com.aaa.doctor.vo.SchedulingVoo;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import java.util.List;
 
 /**
  * @author 刘鸿飞
@@ -18,4 +23,11 @@ public interface RegistredListDao extends BaseMapper<Registration> {
     Integer handleReturn(String registrationId);
 
     Integer handleFalse(String registrationId);
+
+
+
+    /**
+     * 查询医生排班
+     */
+
 }

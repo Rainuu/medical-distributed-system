@@ -27,8 +27,6 @@ public class CareItemController {
     @GetMapping("FindByItem/{patientId}/{chId}")
     public Result<List<CareOrderItem>> FindByItem(@PathVariable String patientId,@PathVariable String chId) {
 
-        System.out.println("========="+patientId);
-        System.out.println("========="+chId);
         return careItemService.FindByItem(patientId,chId);
 
 

@@ -2,6 +2,7 @@ package com.aaa.doctor.service;
 
 import com.aaa.core.entity.User;
 import com.aaa.core.vo.Result;
+import com.aaa.doctor.vo.SchedulingDto;
 import com.aaa.doctor.vo.SchedulingVo;
 
 import java.util.List;
@@ -20,4 +21,9 @@ public interface SchedulingService {
 
     // 我的排班
     Result MyqueryScheduling(SchedulingVo schedulingVo);
+
+    /**
+     * 更改医生排班
+     */
+    Boolean upScheduling(String beginDate, List<SchedulingDto> data);
 }

@@ -20,8 +20,6 @@ public interface PatienFeign {
     @GetMapping("system/registeredItem/getAll")
     public List<RegisteredItem> getAll();
 
-//
-//    @GetMapping("/system/user/queryUsersNeedScheduling")
-//    public List<User> queryUsersNeedScheduling(@RequestBody Map<String,Object> map);
+
 }
 

@@ -1,8 +1,10 @@
 package com.aaa.doctor.service;
 
 import com.aaa.core.entity.Registration;
+import com.aaa.core.entity.Scheduling;
 import com.aaa.core.vo.Result;
 import com.aaa.doctor.vo.RegisteredListVo;
+import com.aaa.doctor.vo.SchedulingVoo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
 /**
@@ -21,4 +23,11 @@ public interface RegistredListService {
     Result<Integer> handleReturn(String registrationId);
 
     Result<Integer> handleFalse(String registrationId);
+
+    /**
+     * 查询医生排班表
+     * @param
+     * @return
+     */
+    Result findDoctocList(SchedulingVoo schedulingVoo);
 }

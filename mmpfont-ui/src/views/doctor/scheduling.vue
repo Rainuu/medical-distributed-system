@@ -220,6 +220,9 @@
       </span>
     </el-dialog>
     <!-- 修改的弹出层结束 -->
+
+
+
   </div>
 </template>
 <script>
@@ -397,6 +400,7 @@ export default {
     },
 
 
+
     // 合并的代码
     spanMethod(data) { // 对于表格数据进行分组合并操作，UI组件回调函数
       const {row, rowIndex, columnIndex} = data
@@ -456,9 +460,47 @@ export default {
     },
     // 保存
     handleSubmit() {
-      // const form = { beginDate: this.schedulingData.startTimeThisWeek, data: this.editData }
+      const form = { beginDate: this.schedulingData.startTimeThisWeek, data: this.editData }
+      const beginDate=this.schedulingData.startTimeThisWeek;
+      this.$confirm('是否保存更改的排班数据?', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post("/doctor/scheduling/upScheduling/"+beginDate,this.editData).then(result=>{
+          if (result.data.t){
+            this.listScheduling();
+            this.$message({
+              showClose: true,
+              message: '更改成功',
+              type: 'success'
+            });
+            // 保存关闭编辑弹框
+            this.open=false;
+          }else{
+            this.listScheduling();
+            this.$message({
+              showClose: true,
+              message: '更改失败',
+              type: 'error'
+            });
+            // 保存关闭编辑弹框
+            this.open=false;
+          }
 
-      // 保存
+        })
+      }).catch(() => {
+        this.listScheduling();
+        this.$message({
+          showClose: true,
+          type: 'info',
+          message: '已取消删除'
+        });
+        // 保存关闭编辑弹框
+        this.open=false;
+      });
+
+
     }
   }
 
