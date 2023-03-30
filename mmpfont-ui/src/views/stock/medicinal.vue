@@ -1,8 +1,4 @@
 <template>
-<!--未完成的任务：
-    1.生产厂家数值获取不到，无法进行模糊查询
-    2.逻辑删除 & 停用
--->
   <div>
     <!-- 工具栏————模糊查询 -->
     <div style="height: 120px; padding-top: 20px; background-color: whitesmoke;">
@@ -20,9 +16,10 @@
                          :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
             </el-select>
           </el-form-item> &nbsp;&nbsp;
-          <el-form-item label="生产厂家" prop="producerName"> <!-- 遍历的是item内容 -->
-            <el-select v-model="searchForm.producterNameOption" clearable placeholder="生产厂家" style="width: 230px">
-              <el-option v-for="item in producterNameOption" :key="item" :label="item" :value="item"/>
+          <el-form-item label="生产厂家" prop="producterId"> <!-- 遍历的是item内容 -->
+            <el-select v-model="searchForm.producerId" clearable placeholder="生产厂家" style="width: 230px">
+              <el-option v-for="item in producterNameOption"
+                         :key="item.producerId" :label="item.producerName" :value="item.producerId"/>
             </el-select>
           </el-form-item> &nbsp;&nbsp;
         </div>
@@ -49,7 +46,8 @@
     <!-- 工具栏————新增 & 删除 -->
     <div style="float: left;clear: both;padding:15px;">
       <el-button type="primary" icon="el-icon-plus" plain @click="addUser">新增</el-button>
-      <el-button type="danger" icon="el-icon-delete" plain>批量删除</el-button>
+      <el-button type="success" icon="el-icon-edit" :disabled="single" @click="updPro">修改</el-button>
+      <el-button type="danger" icon="el-icon-delete" :disabled="multiple" plain>批量删除</el-button>
     </div>
     <!-- 弹出层表单————修改 & 新增 -->
     <el-dialog title="提示" :visible.sync="dialogVisible1" width="30%">
@@ -64,16 +62,22 @@
           <el-input v-model="form.medicinesNumber"/>
         </el-form-item>
         <el-form-item label="生产厂家" prop="producerName">
-          <el-input v-model="form.producerName"/>
+          <el-select v-model="form.producerName" clearable placeholder="生产厂家" style="width: 285px">
+            <el-option v-for="item in producterNameOption"
+                       :key="item.producerId" :label="item.producerName" :value="item.producerId"/>
+          </el-select>
         </el-form-item>
         <el-form-item label="药品类型" prop="medicinesType">
-          <el-select v-model="searchForm.medicinesType" clearable placeholder="药品类型" style="width: 285px">
+          <el-select v-model="form.medicinesType" clearable style="width: 285px">
             <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_medicines_type'})"
-                       :key="dict.dictValue" :label="dict.dictLabel" :value="dict.medicinesType"/>
+                       :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
           </el-select>
         </el-form-item>
         <el-form-item label="处方类型" prop="prescriptionType">
-          <el-input v-model="form.prescriptionType"/>
+          <el-select v-model="form.prescriptionType" clearable style="width: 285px">
+            <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_prescription_type'})"
+                       :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
+          </el-select>
         </el-form-item>
         <el-form-item label="关键字" prop="keywords">
           <el-input v-model="form.keywords"></el-input>
@@ -86,15 +90,21 @@
           <el-radio v-model="form.status" label="1">停用</el-radio>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
+          <el-button type="primary" @click="onSubmit1('form')">立即创建</el-button>
           <el-button @click="dialogVisible1 = false">取消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
     <!-- 弹出层表单————调整库存 -->
-    <el-dialog title="提示" :visible.sync="dialogVisible2" width="30%">
+    <el-dialog title="title" :visible.sync="dialogVisible2" width="30%">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-
+        <el-form-item label="库存量" prop="medicinesStockNum">
+          <el-input v-model="form.medicinesStockNum"/>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit1('form')">立即创建</el-button>
+          <el-button @click="dialogVisible2 = false">取消</el-button>
+        </el-form-item>
       </el-form>
     </el-dialog>
     <!-- 页面——数据表 & 分页 & 调整库存 & 修改 & 删除（绑定行数据） -->
@@ -114,7 +124,7 @@
         <el-table-column prop="medicinesId" label="药品ID" width="80px" align="center"/>
         <el-table-column prop="medicinesName" label="药品名称" width="100px" align="center"/>
         <el-table-column prop="medicinesNumber" label="药品编号" width="80px" align="center"/>
-        <el-table-column prop="producerName" label="生产厂家" min-width="120px" align="center"/>
+        <el-table-column prop="producterId" label="生产厂家" min-width="120px" align="center" :formatter="ProducterNameDict"/>
         <el-table-column prop="medicinesType" label="药品类型" align="center" :formatter="(row)=>this.dictFormat(row,row.medicinesType,'his_medicines_type')"/>
         <el-table-column prop="prescriptionType" label="处方类型" width="80px" align="center" :formatter="(row)=>this.dictFormat(row,row.prescriptionType,'his_prescription_type')"/>
         <el-table-column prop="keywords" label="关键字" width="80px" align="center"/>
@@ -124,7 +134,7 @@
           <template slot-scope="scope">
             <el-button @click="updPro(scope.row)" type="text" size="small" icon="el-icon-delete">修改</el-button>
             <el-button @click="delPro(scope.row.medicinesId)" type="text" size="small" icon="el-icon-edit">删除</el-button>
-            <el-button type="text" size="small" icon="el-icon-plus">调整库存</el-button>
+            <el-button @click="handleUpdateStorage(scope.row)" type="text" size="small" icon="el-icon-plus">调整库存</el-button>
           </template>
         </el-table-column>
       </el-table><br>
@@ -139,11 +149,24 @@
   import qs from 'qs';
   export default {
     methods: {
-      // 发出请求获取对应列数据
-      PNO(){
-        this.$axios.post("/stock/api/medicinal/getProducerName").then(r=>{
+      // 获取生产厂家表字段
+      getProducterNameOption(){
+        this.$axios.get("/stock/api/producter/getAllDict").then(r=>{
           this.producterNameOption=r.data.t;
         })
+      },
+      // 循环判断，将Id转换为name
+      ProducterNameDict(row){
+        var a = '';
+        // alert(JSON.stringify(row.producterId));
+        for (let i = 0; i < this.producterNameOption.length; i++) {
+          // alert(this.producterNameOption[i].producerId)
+          if (row.producterId == this.producterNameOption[i].producerId){
+            a = this.producterNameOption[i].producerName;
+            break;
+          }
+        }
+        return a;
       },
       // 获取字典表数据————发请求给后端，由后端调用接口、跨域并获取字典表数据传给前端处理数据
       getDict() {
@@ -174,10 +197,11 @@
       // 添加————点击显示表单执行提交方法，执行后清空表单数据
       addUser(){
         this.dialogVisible1=true;
+        this.title = '添加生产药品信息'
         this.form={};
       },
       // 提交————弹出层的提交按钮，获取表单内容发出请求给后端执行，执行后关闭弹出层，清空表单，重新调用查询刷新页面
-      onSubmit(formName){
+      onSubmit1(formName){
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.$axios.post("/stock/api/medicinal/saveAndUpdate",qs.stringify(this.form)).then(result=>{
@@ -224,6 +248,25 @@
           });
         });
       },
+      // 调整库存————
+      handleUpdateStorage(row){
+        const tx = this
+        tx.$prompt('请输入要调整[' + row.medicinesName + ']的值', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /^-?\d+$/,
+          inputErrorMessage: '库存值输入不正确'
+        }).then(({ value }) => {
+          updateMedicinesStorage(row.medicinesId, value).then(res => {
+            tx.msgSuccess('调整成功')
+            tx.getMedicinesList()// 重新查询数据
+          }).catch(() => {
+            tx.msgError('调整失败')
+          })
+        }).catch(() => {
+          tx.msgError('调整取消')
+        })
+      },
       // 查询————发出axios请求获取后端值，并将后端获取到的数据赋值给表格回填，挂载到页面，更改页面条数实现分页
       initTable(){
         this.$axios.post("/stock/api/medicinal/getAll"+"/"+this.current+"/"+this.size,this.searchForm).then(result=>{
@@ -249,11 +292,13 @@
         // 字典数组——接收字典表数据
         dictList: [],
         // 模糊查询时，使用id获取name
-        producterNameOption: [],
+        producterNameOption: {},
         // 模糊查询信息
         searchForm: {},
         // 查询的页面信息
         tableData: [],
+        // 弹出层标题
+        title: '',
         // 弹出层状态
         dialogVisible1: false,
         dialogVisible2: false,
@@ -286,6 +331,10 @@
             {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
           ],
         },
+        // 非单个禁用
+        single: true,
+        // 非多个禁用
+        multiple: true,
         // 分页参数
         total: 0,
         current: 1,
@@ -296,7 +345,7 @@
     created() {
       this.initTable();
       this.getDict();
-      this.PNO();
+      this.getProducterNameOption();
     },
   }
 </script>

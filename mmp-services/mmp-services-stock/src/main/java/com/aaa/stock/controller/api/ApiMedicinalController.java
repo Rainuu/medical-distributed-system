@@ -1,12 +1,15 @@
 package com.aaa.stock.controller.api;
 
 import com.aaa.core.entity.Medicines;
+import com.aaa.core.entity.Producer;
 import com.aaa.core.vo.Result;
 import com.aaa.stock.service.MedicinalService;
 import com.aaa.stock.vo.MedicinalVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
@@ -27,13 +30,7 @@ public class ApiMedicinalController {
             @PathVariable Integer size,
             @RequestBody MedicinalVo medicinalVo  //把JSON转Java对象
     ){
-        return medicinalService.getMedById(current,size,medicinalVo);
-    }
-
-    @PostMapping("getProducerName")
-    public Result<String> getProducerName(){
-        //为了获取producerName
-        return medicinalService.getProducerName();
+        return medicinalService.getAll(current,size,medicinalVo);
     }
 
     // 修改或添加
@@ -55,4 +52,5 @@ public class ApiMedicinalController {
             return new Result(500,"删除失败",false);
         }
     }
+
 }

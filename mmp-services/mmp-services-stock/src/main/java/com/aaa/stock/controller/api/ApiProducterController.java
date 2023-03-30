@@ -11,7 +11,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.checkerframework.checker.units.qual.Prefix.one;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
@@ -43,6 +46,7 @@ public class ApiProducterController {
             return new Result(500,"删除失败",false);
         }
     }
+
     // 修改 & 新增————Result返回值类型是前端需要的类型，传递的容器包含了需要的参数
     @PostMapping("saveAndUpdate")
     public Result saveAndUpdate(Producer producer){
@@ -53,4 +57,10 @@ public class ApiProducterController {
         }
     }
 
+    @GetMapping("getAllDict")
+    public Result<List<Producer>> getAllDict(){
+        List<Producer> list = producterService.list();
+        return new Result(200,"成功",list);
+
+    }
 }

@@ -1,5 +1,4 @@
 <template>
-<!-- 未完成的任务：批量删除 -->
   <div>
     <!-- 工具栏————模糊查询 -->
     <div style="height: 120px; padding-top: 20px; background-color: whitesmoke;">
@@ -36,7 +35,8 @@
     <!-- 工具栏————新增 & 删除 -->
     <div style="float: left;clear: both;padding:15px;">
       <el-button type="primary" icon="el-icon-plus" plain @click="addUser">新增</el-button>
-      <el-button type="danger" icon="el-icon-delete" plain>批量删除</el-button>
+      <el-button type="success" icon="el-icon-edit" plain :disabled="single" @click="updPro">修改</el-button>
+      <el-button type="danger" icon="el-icon-delete"  :disabled="multiple" @click="delPro" plain>批量删除</el-button>
     </div>
     <!-- 弹出层表单 -->
     <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
@@ -74,7 +74,7 @@
     </el-dialog>
     <!-- 页面——数据表 & 分页 & 修改 & 删除（绑定行数据） -->
     <div style="min-height: auto">
-      <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" border max-height="330px">
+      <el-table ref="multipleTable" :data="tableData" v-loading="loading" tooltip-effect="dark" style="width: 100%" border max-height="330px"  @selection-change="handleSelectionChnage">
         <el-table-column type="selection" width="55" align="center"/>
         <el-table-column prop="producerId" label="厂家ID" width="80px" align="center"/>
         <el-table-column prop="producerName" label="厂家名称" align="center"/>
@@ -183,6 +183,12 @@
           });
         });
       },
+      // 数据表格的多选择框选择时触发
+      handleSelectionChnage(selection) {
+        this.ids = selection.map(item => item.producterId)
+        this.single = selection.length !== 1
+        this.multiple = !selection.length
+      },
       // 查询————发出axios请求获取后端值，并将后端获取到的数据赋值给表格回填，挂载到页面，更改页面条数实现分页
       initTable(){
         this.$axios.post("stock/api/producter/getAll"+"/"+this.current+"/"+this.size,this.searchForm).then(result=>{
@@ -231,6 +237,14 @@
             {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
           ],
         },
+        // 是否启用遮罩层
+        loading: false,
+        // 选中数组
+        ids: [],
+        // 非单个禁用
+        single: true,
+        // 非多个禁用
+        multiple: true,
         // 分页参数
         total: 0,
         current: 1,

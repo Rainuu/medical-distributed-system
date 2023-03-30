@@ -20,11 +20,6 @@ import java.util.Map;
 public interface MedicinalDao extends BaseMapper<Medicines> {
 
     // 查询和模糊查询
-    IPage<Medicines> getMedById(MedicinalVo medicinalVo, Page page);
+    // IPage<Medicines> getMedById(MedicinalVo medicinalVo, Page page);
 
-    //获取生产厂商
-    List<String> getProducerName();
-
-    //修改数据
-    int updById(@Param("medicines") Medicines medicines);
 }

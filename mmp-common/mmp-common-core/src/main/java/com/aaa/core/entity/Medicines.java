@@ -113,8 +113,6 @@ public class Medicines implements Serializable {
      */
     private String delFlag;
 
-    @TableField  //不存在的字段
-    private String producerName;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
