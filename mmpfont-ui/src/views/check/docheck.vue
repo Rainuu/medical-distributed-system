@@ -34,9 +34,13 @@
 
     <!--table表格-->
     <el-table
+        ref="refTable"
         :data="tableData"
         border
-        style="width: 100%">
+        highlight-current-row
+        style="width: 100%"
+        max-height="250"
+        @current-change="handleCurrentChange">
       <el-table-column
           type="index"
           width="50"
@@ -68,12 +72,58 @@
           label="备注">
       </el-table-column>
       <el-table-column
+          prop="registrationId"
+          label="挂号单号"
+          v-if="false">
+      </el-table-column>
+      <el-table-column
+          prop="patientName"
+          label="患者姓名"
+          v-if="false">
+      </el-table-column>
+      <el-table-column
+          prop="itemRefId"
+          label="检查项目Id"
+          v-if="false">
+      </el-table-column>
+      <el-table-column
+          prop="patientId"
+          label="patientId"
+          v-if="false">
+      </el-table-column>
+      <el-table-column
           prop="status"
           label="状态"
           :formatter="statusFormat"
       >
       </el-table-column>
     </el-table>
+    <!-- 开始检查开始 -->
+    <el-card style="margin-bottom:3px">
+      <div v-if="showBottom" v-loading="bottomLoading">
+        <el-form style="clear: both" label-position="left" label-width="120px" inline class="demo-table-expand">
+          <el-form-item label="挂号单号:">
+            <span>{{ fromData.regId }}</span>
+          </el-form-item>
+          <el-form-item label="患者姓名:">
+            <span>{{ fromData.patientName }}</span>
+          </el-form-item>
+          <el-form-item label="检查项目:">
+            <span>{{ fromData.checkItemName }}</span>
+          </el-form-item>
+          <el-form-item label="检查备注:">
+            <span>{{ fromData.remark }}</span>
+          </el-form-item>
+        </el-form>
+        <div>
+          <el-button type="primary" style="width:100%" icon="el-icon-plus" @click="handleStartCheck">开始检查</el-button>
+        </div>
+      </div>
+      <div v-else style="text-align:center">
+        暂无数据
+      </div>
+    </el-card>
+    <!-- 开始检查结束 -->
 
   </div>
 </template>
@@ -96,6 +146,8 @@ export default {
       cities: cityOptions,
       //是否为半选状态
       isIndeterminate: false,
+      // 当前选中的行
+      currentRow: undefined,
 
       formInline: {
         user: '',
@@ -108,7 +160,22 @@ export default {
       tableData: [],
       //系统状态
       statusOptions:[],
-
+      // 是否显示开始检查的card
+      showBottom: false,
+      // 下面的开始card的遮罩
+      bottomLoading: false,
+      //表单数据
+      fromData:{
+        regId:'',
+        patientName:'',
+        checkItemName:'',
+        remark:'',
+        cocId:'',
+        checkItemId:'',
+        price:'',
+        patientId:"",
+        resultStatus:0
+      }
     }
   },
   methods: {
@@ -155,6 +222,53 @@ export default {
       let v=row.status;
       return this.formatDict3(this.statusOptions,v);
     },
+    // 选中某一行之后
+    handleCurrentChange(row) {
+      this.currentRow = row
+      if (row !== null) {
+        this.bottomLoading = true;
+        this.fromData.regId=row.registrationId
+        this.fromData.patientName=row.patientName
+        this.fromData.checkItemName=row.itemName
+        this.fromData.remark=row.remark
+        this.fromData.cocId=row.itemId;
+        this.fromData.checkItemId=row.itemRefId;
+        this.fromData.price=row.price
+        this.fromData.patientId=row.patientId
+            // alert("regId:"+this.fromData.regId+"patientName:"+this.fromData.patientName+
+            //     "checkItemName:"+this.fromData.checkItemName+
+            //     "remark"+this.fromData.remark)
+        this.showBottom = true
+        this.bottomLoading = false
+      }
+    },
+    // 开始检查
+    handleStartCheck() {
+      const tx = this
+      tx.$confirm('是否确定开始检查?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // alert("regId:"+this.fromData.regId+"           patientName:"+this.fromData.patientName+
+        //     "           itemName:"+this.fromData.checkitemName+
+        //     "            remark:"+this.fromData.remark+"            cocId:"+
+        //     tx.fromData.cocId+"           checkItemId:"+
+        //     tx.fromData.checkItemId+"                   price:"+
+        //     tx.fromData.price+"               patientId:"+
+        //     tx.fromData.patientId)
+        this.$axios.get("check/api/checkResult/addAll",{params:this.fromData}).then(res => {
+          this.showBottom = false
+          this.queryData()// 重新查询
+        }).catch(() => {
+          tx.msgError('开始检查失败')
+          tx.loading = false
+        })
+      }).catch(() => {
+        tx.msgError('开始已取消')
+        tx.loading = false
+      })
+    }
   },
   created() {
     //加载系统状态

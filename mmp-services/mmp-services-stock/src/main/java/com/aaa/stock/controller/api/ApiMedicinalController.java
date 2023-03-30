@@ -30,12 +30,17 @@ public class ApiMedicinalController {
             @PathVariable Integer size,
             @RequestBody MedicinalVo medicinalVo  //把JSON转Java对象
     ){
-        return medicinalService.getMedById(current,size,medicinalVo);
+        return medicinalService.getAll(current,size,medicinalVo);
     }
 
-    @PostMapping("getProducerName")
-    public Result<String> getProducerName(){
-        return medicinalService.getProducerName();
+    // 修改或添加
+    @PostMapping("saveAndUpdate")
+    public Result saveAndUpdate(Medicines medicines){
+        if (medicinalService.saveAndUpdate(medicines)){
+            return new Result(200,"操作成功",true);
+        }else {
+            return new Result(500,"操作失败",false);
+        }
     }
 
     // 删除
@@ -47,4 +52,5 @@ public class ApiMedicinalController {
             return new Result(500,"删除失败",false);
         }
     }
+
 }

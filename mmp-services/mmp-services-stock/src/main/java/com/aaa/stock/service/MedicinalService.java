@@ -18,13 +18,13 @@ import java.util.List;
  * @DATE: 2023/3/27 15:51
  */
 public interface MedicinalService extends IService<Medicines> {
-    //全查+分页+模糊
-    Result<IPage<Medicines>> getMedById(Integer current, Integer size, MedicinalVo medicinalVo);
 
-    //模糊生产厂家数据
-    Result<String> getProducerName();
+    //全查+分页+模糊
+    Result<IPage<Medicines>> getAll(Integer current, Integer size, MedicinalVo medicinalVo);
+    // Result<IPage<Medicines>> getMedById(Integer current, Integer size, MedicinalVo medicinalVo);
+
+    boolean saveAndUpdate(Medicines medicines);
 
     boolean delById(Long medicinesId);
-
 
 }

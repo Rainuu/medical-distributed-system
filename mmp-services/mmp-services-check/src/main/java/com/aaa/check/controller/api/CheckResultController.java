@@ -40,4 +40,9 @@ public class CheckResultController {
         return checkResultService.addMsg(cocId,textarea);
     }
 
+    @GetMapping("addAll")
+    public Result addAll(CheckResult checkResult){
+        return checkResultService.addAll(checkResult);
+    }
+
 }

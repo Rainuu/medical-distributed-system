@@ -38,4 +38,5 @@ public class MedicinalVo {
 
     private Integer producerId;
 
+    private Integer producterId;
 }

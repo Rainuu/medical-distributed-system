@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,8 @@ public class HisCareHistoryServiceImpl implements HisCareHistoryService {
    private HisCareOrderItemMapper hisCareOrderItemMapper;
    @Override
    public Result<Map<String,Object>> findcareHistory(String regId) {
+      List<List<CareOrderItem>> list = new ArrayList<>();
+      List<CareOrderItem> careOrderItem = null;
       QueryWrapper<CareHistory> wrapper = new QueryWrapper<>();
       wrapper.eq("reg_id",regId);
       //new CareHistory实体获取一行数据
@@ -45,24 +48,28 @@ public class HisCareHistoryServiceImpl implements HisCareHistoryService {
       //获取ch_id关联his_care_order表，获取co_id
       String chId  = careHistory.getChId();
       QueryWrapper<CareOrder> wrapper1 = new QueryWrapper<>();
+      System.out.println("asfdkhasofasohknsd"+chId);
       wrapper1.eq("ch_id",chId);
-      CareOrder careOrder = hisCareOrderMapper.selectOne(wrapper1);
+      List<CareOrder> careOrders  = hisCareOrderMapper.selectList(wrapper1);
+      System.out.println("askfgaiohioasbkbfaeibaefbohje"+careOrders);
 
-      //根据co_id获取CareOrderItem表的数据
-      String coId = careOrder.getCoId();
-      QueryWrapper<CareOrderItem> wrapper2 = new QueryWrapper<>();
-      wrapper2.eq("co_id",coId);
-      //eq对比状态是0通过
-      wrapper2.eq("status",0);
-      List<CareOrderItem> careOrderItem = hisCareOrderItemMapper.selectList(wrapper2);
-      if (careOrderItem.size()!=0) {
-         //计算订单金额
-         Double sum = careOrderItem.stream()
-                 .map(item -> item.getNum()
-                         .multiply(item.getAmount())
-                         .doubleValue()).reduce((a, b) -> a + b).get();
+      for (int i= 0;i<careOrders.size();i++) {
+         String coId = careOrders.get(i).getCoId();
+         List<CareOrderItem> careOrderItems = hisCareOrderItemMapper.selectListtype(coId);
+         list.add(careOrderItems);
+
+         System.out.println("asfoahfioahioahf"+list);
+         System.out.println("asfoahfioahioahf"+careOrderItems);
+      }
 
 
+//      if (careOrderItem.size()!=0) {
+//         //计算订单金额
+//         Double sum = careOrderItem.stream()
+//                 .map(item -> item.getNum()
+//                         .multiply(item.getAmount())
+//                         .doubleValue()).reduce((a, b) -> a + b).get();
+         //计算金额
 //      BigDecimal num=null;
 //      for (CareOrderItem c:careOrderItem){
 //         BigDecimal num1 = c.getNum();
@@ -74,10 +81,9 @@ public class HisCareHistoryServiceImpl implements HisCareHistoryService {
          //把数据放入map返回
          HashMap<String, Object> map = new HashMap<>();
          map.put("careHistory", careHistory);
-         map.put("careOrderItem", careOrderItem);
-         map.put("sum", sum);
+         map.put("careOrderItem", list);
          return new Result<>(200, "成功", map);
-      }
-      return new Result<>(500,"失败");
+//      }
+
    }
 }

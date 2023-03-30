@@ -3,6 +3,7 @@ package com.aaa.sso.service;
 
 import com.aaa.core.entity.Menu;
 import com.aaa.core.entity.User;
+import com.aaa.sso.aop.annotation.LoginLog;
 import com.aaa.sso.feign.MenuFeign;
 import com.aaa.sso.feign.UserFeign;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class MyUserService implements UserDetailsService {
     @Autowired
     private MenuFeign menuFeign;
     @Override
+    @LoginLog
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user=userFeign.getByUsername(username);
         if (user==null){

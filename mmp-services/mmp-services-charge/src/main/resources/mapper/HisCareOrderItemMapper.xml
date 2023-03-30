@@ -2,5 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aaa.charge.dao.HisCareOrderItemMapper">
 
-
+<select id="selectListtype" resultType="com.aaa.core.entity.CareOrderItem">
+    SELECT a.item_id,a.co_id,a.item_ref_id,a.item_name,a.item_type,a.num,a.price,a.amount,a.remark,a.status,a.create_time,b.co_type FROM his_care_order_item a,(select co_id,co_type from his_care_order where co_id=#{coId}) b WHERE status = 0  AND a.co_id=b.co_id
+</select>
 </mapper>

@@ -27,4 +27,6 @@ public interface HisOrderChargeService {
     Result<List<DictData>> CharFeign();
     //现金支付
     Result updByStatusType(String orderId);
+
+
 }

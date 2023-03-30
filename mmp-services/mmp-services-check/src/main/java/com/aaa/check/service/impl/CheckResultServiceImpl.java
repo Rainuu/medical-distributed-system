@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,5 +41,12 @@ public class CheckResultServiceImpl implements CheckResultService {
    public Result addMsg(String cocId, String textarea) {
       Boolean aBoolean = checkResultDao.addMsg(cocId,textarea);
       return new Result(200,"录入结果成功",aBoolean);
+   }
+
+   @Override
+   public Result addAll(CheckResult checkResult) {
+      checkResult.setCreateTime(new Date());
+      int insert = checkResultDao.insert(checkResult);
+      return new Result(200,"开始检查成功",insert);
    }
 }

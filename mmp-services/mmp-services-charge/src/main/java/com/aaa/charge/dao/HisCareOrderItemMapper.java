@@ -1,7 +1,10 @@
 package com.aaa.charge.dao;
 import com.aaa.core.entity.CareOrderItem;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * 开诊细表(HisCareOrderItem)表数据库访问层
@@ -11,5 +14,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface HisCareOrderItemMapper extends BaseMapper<CareOrderItem> {
- 
+
+    List<CareOrderItem> selectListtype(String coId);
 }

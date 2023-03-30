@@ -10,7 +10,7 @@
           <el-input v-model="formInline.regId" placeholder="请输入挂号单号"></el-input>
         </el-form-item>
         <el-form-item style="padding-left: 60px;">
-          <el-button type="primary" @click="initUser"  icon="el-icon-search">搜索</el-button> &nbsp;&nbsp; |&nbsp;
+          <el-button type="primary" @click="initUserselect"  icon="el-icon-search">搜索</el-button> &nbsp;&nbsp; |&nbsp;
           <el-button type="primary" @click="empty" icon="el-icon-refresh">重置</el-button>
         </el-form-item>
       </el-form>
@@ -30,7 +30,7 @@
           <template slot-scope="scope">
             <el-button @click="initdetail(scope.row)" type="text" size="small" icon="el-icon-view">查看详情</el-button>
             <el-button  type="text" size="small" :disabled="scope.row.orderStatus==='1'" icon="el-icon-bank-card" @click="handlePayWithCash(scope.row)">现金收费</el-button>
-            <el-button  type="text" size="small" :disabled="scope.row.orderStatus==='1'" icon="el-icon-bank-card" >支付宝收费</el-button>
+            <el-button  type="text" size="small" :disabled="scope.row.orderStatus==='1'" icon="el-icon-bank-card" @click="handlePayWithZfb(scope.row)">支付宝收费</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -92,6 +92,7 @@ export default {
     }
   },
   methods: {
+
     // 现金收费
     handlePayWithCash(row) {
       this.$confirm('是否确定现金支付?', '提示', {
@@ -110,6 +111,32 @@ export default {
         this.$message({
           type:"info",
           message:'现金支付取消'
+        })
+      })
+    },
+    //支付宝支付
+    handlePayWithZfb(row) {
+      this.$confirm('是否确定支付宝支付?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post("charge/api/hisOrderCharge/pay",row).then(result => {
+          // 添加之前先删除一下，如果单页面，页面不刷新，添加进去的内容会一直保留在页面中，二次调用form表单会出错
+          const divForm = document.getElementsByTagName('div')
+          if (divForm.length) {
+            document.body.removeChild(divForm[0])
+          }
+          const div = document.createElement('div')
+          div.innerHTML = result.data.t // data就是接口返回的form 表单字符串
+          document.body.appendChild(div)
+          //document.forms[0].setAttribute('target', '_blank') // 新开窗口跳转
+          document.forms[0].submit()
+        })
+      }).catch(() => {
+        this.$message({
+          type:"info",
+          message:'支付宝支付取消'
         })
       })
     },
@@ -139,6 +166,10 @@ export default {
     //重置方法
     empty(){
       this.formInline={},
+          this.initUser()
+    },
+    initUserselect(){
+      this.curr=1,
           this.initUser()
     },
     //分页查询所有数据

@@ -2,38 +2,35 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--namespace 写的就是你要实现的那个接口的路径-->
 <mapper namespace="com.aaa.stock.dao.MedicinalDao">
+
     <!--WHERE m.medicines_id = #{medicinalVo.medicinesId}-->
-    <select id="getMedById" resultType="com.aaa.core.entity.Medicines">
-        SELECT m.*,p.producer_name FROM stock_medicines m JOIN stock_producer p
-        ON m.producter_id = p.producer_id WHERE m.medicines_id != 0
-            <if test="medicinalVo.medicinesName != null &amp; medicinalVo.medicinesName != ''">
-                <!--and m.medicines_name = #{medicinalVo.medicinesName}-->
-                and m.medicines_name like concat('%',#{medicinalVo.medicinesName},'%')
-            </if>
-            <if test="medicinalVo.keywords != null &amp; medicinalVo.keywords != ''">
-                <!--and m.keywords = #{medicinalVo.keywords}-->
-                and m.keywords like concat('%',#{medicinalVo.keywords},'%')
-            </if>
-            <if test="medicinalVo.medicinesType != null &amp; medicinalVo.medicinesType != ''">
-                and m.medicines_type like concat('%',#{medicinalVo.medicinesType},'%')
-            </if>
-            <if test="medicinalVo.producerName != null &amp; medicinalVo.producerName != ''">
-                and m.producer_name like concat('%',#{medicinalVo.producerName},'%')
-            </if>
-            <if test="medicinalVo.prescriptionType != null &amp; medicinalVo.prescriptionType != ''">
-                and m.prescription_type like concat('%',#{medicinalVo.prescriptionType},'%')
-            </if>
-            <if test="medicinalVo.status != null &amp; medicinalVo.status != ''">
-                and m.status like concat('%',#{medicinalVo.status},'%')
-            </if>
-    </select>
+<!--    <select id="getMedById" resultType="com.aaa.core.entity.Medicines">-->
+<!--        SELECT m.*,p.producer_name,p.producer_id-->
+<!--        FROM stock_medicines m JOIN stock_producer p-->
+<!--        ON m.producter_id = p.producer_id WHERE m.medicines_id != 0-->
+<!--            <if test="medicinalVo.medicinesName != null &amp; medicinalVo.medicinesName != ''">-->
+<!--                &lt;!&ndash;and m.medicines_name = #{medicinalVo.medicinesName}&ndash;&gt;-->
+<!--                and m.medicines_name like concat('%',#{medicinalVo.medicinesName},'%')-->
+<!--            </if>-->
+<!--            <if test="medicinalVo.keywords != null &amp; medicinalVo.keywords != ''">-->
+<!--                &lt;!&ndash;and m.keywords = #{medicinalVo.keywords}&ndash;&gt;-->
+<!--                and m.keywords like concat('%',#{medicinalVo.keywords},'%')-->
+<!--            </if>-->
+<!--            <if test="medicinalVo.medicinesType != null &amp; medicinalVo.medicinesType != ''">-->
+<!--                and m.medicines_type like concat('%',#{medicinalVo.medicinesType},'%')-->
+<!--            </if>-->
+<!--            <if test="medicinalVo.producerId != null &amp; medicinalVo.producerId != ''">-->
+<!--                and m.producter_id like concat('%',#{medicinalVo.producerId},'%')-->
+<!--            </if>-->
+<!--            <if test="medicinalVo.producerName != null &amp; medicinalVo.producerName != ''">-->
+<!--                and m.producer_name like concat('%',#{medicinalVo.producerName},'%')-->
+<!--            </if>-->
+<!--            <if test="medicinalVo.prescriptionType != null &amp; medicinalVo.prescriptionType != ''">-->
+<!--                and m.prescription_type like concat('%',#{medicinalVo.prescriptionType},'%')-->
+<!--            </if>-->
+<!--            <if test="medicinalVo.status != null &amp; medicinalVo.status != ''">-->
+<!--                and m.status like concat('%',#{medicinalVo.status},'%')-->
+<!--            </if>-->
+<!--    </select>-->
 
-    <select id="getProducerName" resultType="java.lang.String">
-        SELECT DISTINCT producer_name FROM stock_producer
-    </select>
-
-    <update id="updById">
-        UPDATE stock_producer SET producer_name=#{producer.producerName}, producer_code=#{producer.producerCode}, producer_address=#{producer.producerAddress}, producer_tel=#{producer.producerTel}, producer_person=#{producer.producerPerson}, keywords=#{producer.keywords}, status=#{producer.status}, create_time=#{producer.createTime}, update_time=#{producer.updateTime}, create_by=#{producer.createBy}, update_by=#{producer.updateBy}
-        WHERE producer_id=#{producer.producerId};
-    </update>
 </mapper>

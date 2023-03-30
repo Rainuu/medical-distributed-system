@@ -25,7 +25,6 @@
               :action="objData.host"
               :before-upload="ossPolicy"
               :on-remove="handleRemove"
-              :file-list="fileList"
               :data="objData"
               accept="image/*"
               name="file"
@@ -254,9 +253,13 @@ export default {
     },
     //查询
     queryData(){
-        this.$axios.post("/check/api/checkResult/listStatus/"+this.page.current+"/"+this.page.size,this.queryParams).then(r=>{
+      this.queryAll();
+      this.page.current=1;
+    },
+    queryAll(){
+      this.$axios.post("/check/api/checkResult/listStatus/"+this.page.current+"/"+this.page.size,this.queryParams).then(r=>{
         this.tableData=r.data.t.records;
-        this.page.total=r.data.t.total
+        this.page.total=r.data.t.total;
       })
     },
     //查询
@@ -282,7 +285,7 @@ export default {
       return this.formatDict3(this.statusOptions,v);
     },
     //录入检查结果
-    addMsg(){
+    addMsg(file){
       this.$axios.post("/check/api/checkResult/addMsg/"+this.cocId+"/"+this.textarea).then(r=>{
         this.$message({
           showClose: true,
@@ -313,16 +316,16 @@ export default {
         });
       });
     },
-    // /*上传文件*/
-    // handleRemove(file, fileList) {
-    //   console.log(file, fileList);
-    // },
-    // handlePreview(file) {
-    //   console.log(file);
-    // },
-    // handleExceed(files, fileList) {
-    //   this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-    // },
+    /*上传文件*/
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePreview(file) {
+      console.log(file);
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+    },
     // beforeRemove(file, fileList) {
     //   return this.$confirm(`确定移除 ${file.name}？`);
     // },
