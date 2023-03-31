@@ -2,10 +2,11 @@ package com.aaa.charge.service;
 
 
 import com.aaa.charge.vo.OrderBackfeeVo;
+import com.aaa.charge.vo.PostObjVo;
+import com.aaa.charge.vo.PostObjVoV;
 import com.aaa.core.entity.DictData;
 import com.aaa.core.entity.OrderBackfee;
 import com.aaa.core.entity.OrderBackfeeItem;
-import com.aaa.core.entity.OrderCharge;
 import com.aaa.core.vo.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
@@ -18,13 +19,7 @@ import java.util.Map;
  * @author makejava
  * @since 2023-03-25 11:09:21
  */
-public interface HisOrderBackfeeService {
-    //分页模糊
-    Result<IPage<OrderBackfee>> findAll(Integer curr, Integer size, OrderBackfeeVo backfeeVo);
-    //查询所有数据根据id返回一条数据
-    Result<List<OrderBackfeeItem>> selectAll(String backId);
-    //字典所有属性
-    Result<List<DictData>> selectdictionary();
+public interface HisOrderBackfeeItemService {
 
-    Result<Map<String, Object>> selectByregId(String regId);
+    Result<List<OrderBackfeeItem>> updateBystatus(PostObjVoV postObjVov);
 }

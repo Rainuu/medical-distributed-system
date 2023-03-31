@@ -5,6 +5,8 @@ import com.aaa.core.vo.Result;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -18,4 +20,6 @@ public interface HisOrderBackfeeMapper extends BaseMapper<OrderBackfee> {
 
      ////查询所有OrderBackfeeItem的数据根据id返回
      List<OrderBackfeeItem>  selectAll(String backId);
+
+    void insertAll(String backId, String regId, String patientName, BigDecimal backAmount, LocalDateTime createTime);
 }

@@ -15,6 +15,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 收费表(HisOrderCharge)表控制层
@@ -64,6 +65,12 @@ public class ApiHisOrderChargeController {
         String orderForm = MyAlipayUtil.createOrderForm(orderCharge.getOrderId(), orderCharge.getOrderAmount().toString(), orderCharge.getPatientName());
         return new Result(200, "支付成功", orderForm);
 
+    }
+
+    //处方发药
+    @GetMapping("listhand/{regId}")
+    public Result<Map<String,Object>> list(@PathVariable String regId){
+        return  service.selectupdById(regId);
     }
 
 }

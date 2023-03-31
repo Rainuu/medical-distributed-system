@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 收费表(HisOrderCharge)表服务接口
@@ -29,4 +30,5 @@ public interface HisOrderChargeService {
     Result updByStatusType(String orderId);
 
 
+    Result<Map<String, Object>> selectupdById(String regId);
 }

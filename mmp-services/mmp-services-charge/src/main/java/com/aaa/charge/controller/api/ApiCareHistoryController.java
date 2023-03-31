@@ -30,6 +30,7 @@ public class ApiCareHistoryController {
     private HisCareChargeltemService hisCareChargeltemService;
 
 
+
     @GetMapping("list/{regId}")
     public Result<Map<String,Object>> list(@PathVariable String regId){
         return  hisCareHistoryService.findcareHistory(regId);
