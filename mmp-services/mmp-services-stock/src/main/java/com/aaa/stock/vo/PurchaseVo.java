@@ -11,10 +11,17 @@ import lombok.Data;
  */
 @Data
 public class PurchaseVo {
-
-    private String providerName;
-
-    private String applyUserName;
-
+    /**
+     * 供应商ID
+     */
+    private Integer providerId;
+    /**
+     * 申请人ID
+     */
+    private Long applyUserId;
+    /**
+     * 单据状态； 1未提交2待审核 3审核通过 4审核失败 5作废 6入库成功 字典表 his_order_status
+     */
     private Integer status;
+
 }

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import editPurchase from "@/views/stock/editPurchase";
 Vue.use(VueRouter)
 
 const routes = [
@@ -212,7 +213,12 @@ const routes = [
             name: 'workload',
             component: () =>import('../views/statistics/workload/workload')
         },
-
+        // 不在侧边栏内的页面
+        {   // 药品进销存—————库存修改
+            path: '/stock/editPurchase',
+            name: 'editPurchase',
+            component: () =>import('../views/stock/editPurchase')
+        }
     ]
   },
   {
