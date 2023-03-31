@@ -256,9 +256,9 @@ export default {
     this.queryButton();
     //查询所有部门数据
     this.queryDept();
-    //查询查询挂号列表的挂号时段字典信息
+    //查询查询挂号列表的挂号类型字典信息
     this.queryRegistrationType();
-    //查询挂号列表的挂号类型字典信息
+    //查询挂号列表的挂号时段字典信息
     this.queryRegistrationPeriod();
     // 搜索医生排班
     this.queryDoctor();
@@ -378,10 +378,10 @@ export default {
       this.ids = selection.map(item => item.deptId)
       this.single = selection.length !== 1
     },
-    //初始化性别
-    initSex(){
-      this.$axios.get("/doctor/api/patient/queryDataType/sys_user_sex").then(result=>{
-        this.sexOptions=result.data.t;
+    // 初始性别字典
+    initSex() {
+      this.$axios.get("/system/api/dict/data/findByType/sys_user_sex").then(result=> {
+        this.sexOptions = result.data.t;
       })
     },
     //把性别的0/1换成男女等

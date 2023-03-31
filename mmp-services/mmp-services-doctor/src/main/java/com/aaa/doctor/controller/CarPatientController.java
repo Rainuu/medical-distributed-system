@@ -10,10 +10,7 @@ import com.aaa.doctor.service.CareItemService;
 import com.aaa.doctor.service.CareOrderService;
 import com.aaa.doctor.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -66,14 +63,14 @@ public class CarPatientController {
 
 
     /**
-     * 查询新开就诊中的就诊列表状态
+     * 查询新开就诊中的就诊列表状态 ------>  待就诊状态
      * @param status
      * @return
      */
-    @GetMapping("queryRegistrationStatus1")
+    @PostMapping("queryRegistrationStatus1/{status}")
     public Result queryRegistrationStatus1(@PathVariable String status) {
         List<Registration> registrations = registrationService.queryRegistrationStatus1(status);
-        return new Result<>(2000,"查询成功",status);
+        return new Result<>(2000,"查询成功",registrations);
     }
 
 }

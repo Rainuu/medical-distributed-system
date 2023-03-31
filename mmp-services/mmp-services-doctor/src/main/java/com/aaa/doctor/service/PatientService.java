@@ -21,4 +21,5 @@ public interface PatientService {
     Result<Patient> patientAll(String idCard);
 
 
+    Patient queryByPatient(String patientId);
 }

@@ -57,7 +57,16 @@ public class PatientServiceImpl implements PatientService {
         return new Result<>(2000,"查询身份信息成功",patient);
     }
 
-
+    // 查询新开就诊中的患者档案
+    @Override
+    public Patient queryByPatient(String patientId) {
+        QueryWrapper<Patient> wrapper = new QueryWrapper<>();
+        if (Objects.nonNull(patientId)) {
+            wrapper.eq("patient_id",patientId);
+        }
+        Patient patient = patientDao.selectOne(wrapper);
+        return patient;
+    }
 
 
 }

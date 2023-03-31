@@ -1,14 +1,13 @@
 package com.aaa.doctor.controller;
 
+import com.aaa.core.entity.CareHistory;
 import com.aaa.core.entity.CareOrderItem;
 import com.aaa.core.vo.Result;
+import com.aaa.doctor.service.CareHistoryService;
 import com.aaa.doctor.service.CareItemService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,11 +23,22 @@ public class CareItemController {
     @Autowired
     private CareItemService careItemService;
 
+    @Autowired
+    private CareHistoryService careHistoryService;
+
     @GetMapping("FindByItem/{patientId}/{chId}")
     public Result<List<CareOrderItem>> FindByItem(@PathVariable String patientId,@PathVariable String chId) {
 
         return careItemService.FindByItem(patientId,chId);
 
+    }
 
+
+    /**
+     * 保存病历
+     */
+    @PostMapping("SaveHistroy")
+    public Result<String> SaveHistroy(@RequestBody CareHistory careHistory) {
+        return careHistoryService.SaveHistroy(careHistory);
     }
 }

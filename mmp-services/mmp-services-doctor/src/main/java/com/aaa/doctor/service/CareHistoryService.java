@@ -18,4 +18,9 @@ public interface CareHistoryService {
 
     List<CareHistory> getCareHistoryId(String patientId);
 
+
+    /**
+     * 保存病历
+     */
+    Result<String> SaveHistroy(CareHistory careHistory);
 }

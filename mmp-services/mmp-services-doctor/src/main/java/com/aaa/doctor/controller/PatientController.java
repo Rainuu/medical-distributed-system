@@ -66,6 +66,14 @@ public class PatientController {
         return new Result(2000,"查询动态数组成功",registeredItems);
     }
 
+    /**
+     * 根据患者id进行查询患者病历
+     */
+    @PostMapping("queryByPatient/{patientId}")
+    public Result queryByPatient(@PathVariable String patientId) {
+        Patient patient = patientService.queryByPatient(patientId);
+        return new Result<>(2000,"根据患者id查询患者信息成功",patient);
+    }
 
 
 

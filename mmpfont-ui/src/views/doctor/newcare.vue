@@ -50,7 +50,7 @@
                   size="small"
               />
             </el-form-item>
-            <el-form-item label="性别" prop="sex">
+            <el-form-item label="性别" prop="sex" :formatter="sexFormat" >
               <el-radio-group v-model="patientAllObj.patientObj.sex">
                 <el-radio
                     v-for="d in sexOptions"
@@ -223,7 +223,7 @@
                         size="small"
                     />
                   </el-form-item>
-                  <el-form-item label="接诊类型" prop="receiveType">
+                  <el-form-item label="接诊类型" prop="receiveType" :formatter="receivetypeFormatter">
                     <el-select
                         v-model="careHistory.receiveType"
                         placeholder="接诊类型"
@@ -237,7 +237,7 @@
                       />
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="是否传染" prop="isContagious">
+                  <el-form-item label="是否传染" prop="isContagious" :formatter="contagiousFormatter">
                     <el-select
                         v-model="careHistory.isContagious"
                         placeholder="是否传染"
@@ -361,7 +361,7 @@
               <template slot-scope="scope">
                 <el-form label-position="right" inline class="demo-table-expand">
                   <el-form-item label="挂号ID">
-                    <span>{{ scope.row.regId }}</span>
+                    <span>{{ scope.row.registrationId }}</span>
                   </el-form-item>
                   <el-form-item label="患者ID">
                     <span>{{ scope.row.patientId }}</span>
@@ -376,7 +376,7 @@
               </template>
             </el-table-column>
             <el-table-column label="患者姓名" align="center" prop="patientName" />
-            <el-table-column label="流水编号" align="center" prop="regNumber" />
+            <el-table-column label="流水编号" align="center" prop="registrationNumber" />
             <el-table-column label="挂号类型" align="center" prop="schedulingType" :formatter="schedulingTypeFormatter" />
             <el-table-column label="操作" align="center">
               <template slot-scope="scope">
@@ -391,7 +391,7 @@
               <template slot-scope="scope">
                 <el-form label-position="right" inline class="demo-table-expand">
                   <el-form-item label="挂号ID">
-                    <span>{{ scope.row.regId }}</span>
+                    <span>{{ scope.row.registrationId }}</span>
                   </el-form-item>
                   <el-form-item label="患者ID">
                     <span>{{ scope.row.patientId }}</span>
@@ -406,7 +406,7 @@
               </template>
             </el-table-column>
             <el-table-column label="患者姓名" align="center" prop="patientName" />
-            <el-table-column label="流水编号" align="center" prop="regNumber" />
+            <el-table-column label="流水编号" align="center" prop="registrationNumber" />
             <el-table-column label="挂号类型" align="center" prop="schedulingType" :formatter="schedulingTypeFormatter" />
             <el-table-column label="操作" align="center">
               <template slot-scope="scope">
@@ -421,7 +421,7 @@
               <template slot-scope="scope">
                 <el-form label-position="right" inline class="demo-table-expand">
                   <el-form-item label="挂号ID">
-                    <span>{{ scope.row.regId }}</span>
+                    <span>{{ scope.row.registrationId }}</span>
                   </el-form-item>
                   <el-form-item label="患者ID">
                     <span>{{ scope.row.patientId }}</span>
@@ -436,7 +436,7 @@
               </template>
             </el-table-column>
             <el-table-column label="患者姓名" align="center" prop="patientName" />
-            <el-table-column label="流水编号" align="center" prop="regNumber" />
+            <el-table-column label="流水编号" align="center" prop="registrationNumber" />
             <el-table-column label="挂号类型" align="center" prop="schedulingType" :formatter="schedulingTypeFormatter" />
             <el-table-column label="操作" align="center">
               <template slot-scope="scope">
@@ -712,27 +712,139 @@ export default {
     }
   },
   created() {
+    //查询性别字典
+    this.initSex();
     //查询门诊急诊按钮
     this.queryRegistrationType();
+    //查询接诊类型---》初诊复诊
+    this.queryReceiveType();
+    // 查询右侧病历中---》是否传染
+    this.querycontagiousType();
     // 查询新开就诊中挂号患者的就诊列表
     this.queryRegistrationNumber1();
+    // 查询挂号患者的待就诊列表
     this.queryRegistrationNumber2();
-
+    // 查询挂号患者的就诊完成列表
     this.queryRegistrationNumber3();
   },
   methods: {
+    // 右侧保存病历
+    handleSaveCareHistory() {
+
+    },
+    // 左边患者框 接诊查询患者档案信息
+//按钮区
+//左边患者弹出层里的待接诊接诊按钮
+    handleVisit(row){
+      this.$axios.post("/doctor/patient/queryByPatient/"+row.patientId).then(result=>{
+        this.patientAllObj.patientObj=result.data.t;
+        this.careHistory.regId=row.registrationId;
+        // careHistoryObjList: []
+      })
+      //当点击按钮时已经获取到了当前行的数据需要用到里面的id
+      this.$axios.get("/doctor/patientFile/getByFileId/"+row.patientId).then(result=>{
+        this.patientAllObj.patientFileObj=result.data.t;
+        if (!this.patientAllObj.patientFile){
+          //检测一下patientFile里有没有值没有的话会报错所以得赋值
+          // 因为调用了里面的emergencyContactName
+          this.patientAllObj.patientFile={};
+        }
+      })
+      //查询患者病历里面的数据
+      //当点击按钮时已经获取到了当前行的数据需要用到里面的id
+      this.$axios.get("/doctor/patient/CareHistoryByIdAll/"+row.patientId).then(result=> {
+        this.patientAllObj.careHistoryObjList=result.data.t;
+      })
+      this.openRegistration=false;
+    },
+
+    // 载入
+    handleLoading() {
+
+    },
+    // 打开添加药用处方的弹出层
+    handelAddMedicinesOrder() {
+      if (!this.careHistory.regId) {
+        this.msgError('请选择挂号患者')
+        return
+      }
+      if (!this.careHistory.chId) {
+        this.msgError('请先保存病历')
+        return
+      }
+      this.submitCareOrder.careOrder.coType = '0'
+      this.title = '添加【药用】处方'
+      this.openAddOrderItem = true
+      this.submitCareOrder.careOrderItems = []
+    },
+    // 打开添加检查处方的弹出层
+    handelAddCheckItemOrder() {
+      if (!this.careHistory.regId) {
+        this.msgError('请选择挂号患者')
+        return
+      }
+      if (!this.careHistory.chId) {
+        this.msgError('请先保存病历')
+        return
+      }
+      this.submitCareOrder.careOrder.coType = '1'
+      this.title = '添加【检查】处方'
+      this.openAddOrderItem = true
+      this.submitCareOrder.careOrderItems = []
+    },
+    // 打开药品或者检查项目的抽屉
+    handleOpenAddOrderItemDrawer() {
+      if (this.submitCareOrder.careOrder.coType === '0') {
+        // 打开药口列表抽屉
+        this.openDrawerMedicines = true
+        this.resetItemFormQuery()
+        this.getMedicinesList()
+      } else {
+        // 打开检查项目的抽屉
+        this.openDrawerCheckItem = true
+        this.resetItemFormQuery()
+        this.getCheckItemList()
+      }
+    },
+
+    // 加载药品数据
+    getMedicinesList() {
+      this.tableItemList = []
+      this.drawerLoading = true
+      listMedicinesForPage(this.queryItemFormParams).then(res => {
+        this.tableItemList = res.data
+        this.total = res.total
+        this.drawerLoading = false
+      }).catch(() => {
+        this.drawerLoading = false
+        this.msgError('查询药品失败')
+      })
+    },
+
+
+
+
+
+    //初始化性别
+    initSex(){
+      this.$axios.get("/system/api/dict/data/findByType/sys_user_sex").then(result=>{
+        this.sexOptions=result.data.t;
+      })
+    },
+    //把性别的0/1换成男女等
+    sexFormat(row){
+      let v=row.sex;
+      return this.formatDict2(this.sexOptions,v);
+    },
     // 门诊急诊切换事件
     schedulingTypeChange(value) {
       this.schedulingType = value
     },
     // 打开选择挂号患者的弹出层
     viewRegistration() {
-      this.$axios.get("doctor/patient/queryRegistrationStatus1/",).then(result=> {
-
         this.activeName = 't1'
         this.openRegistration = true
         this.queryToBeSeenRegistration()
-      })
     },
     //查询门诊急诊按钮
     queryRegistrationType(){
@@ -740,7 +852,58 @@ export default {
         this.schedulingTypeOptions=result.data.t;
       })
     },
-    // 查询挂号患者的就诊列表
+    //接诊类型----》初诊复诊
+    queryReceiveType(){
+      this.$axios.get("/system/api/dict/data/findByType/his_receive_type").then(result=>{
+        this.receiveTypeOptions=result.data.t;
+      })
+    },
+    // 解析初诊复诊
+    receivetypeFormatter() {
+      let v=row.receiveType;
+      return this.formatDict2(this.receiveTypeOptions,v);
+    },
+    // 右侧病历中---》是否传染  是、否
+    querycontagiousType() {
+      this.$axios.get("/system/api/dict/data/findByType/his_contagious_status").then(result=>{
+        this.isContagiousOptions=result.data.t;
+      })
+    },
+    // 右侧病历中---》是否传染  是、否
+    contagiousFormatter() {
+      let v=row.isContagious;
+      return this.formatDict2(this.isContagiousOptions,v);
+    },
+    //查询门诊急诊按钮
+    queryRegistrationType(){
+      this.$axios.get("/system/api/dict/data/findByType/his_scheduling_type").then(result=>{
+        this.schedulingTypeOptions=result.data.t;
+      })
+    },
+    // 解析挂号类型
+    schedulingTypeFormatter(row) {
+      let v=row.schedulingType;
+      return this.formatDict2(this.schedulingTypeOptions,v);
+    },
+
+    // 查询挂号患者的待就诊列表
+    queryRegistrationNumber1() {
+      this.$axios.post("/doctor/patient/queryRegistrationStatus1/1/",this.schedulingType).then(result=> {
+        this.toBeSeenRegistration = result.data.t;
+      })
+    },
+    // 查询挂号患者的就诊中列表
+    queryRegistrationNumber2() {
+      this.$axios.post("/doctor/patient/queryRegistrationStatus1/2/",this.schedulingType).then(result=> {
+        this.visitingRegistration = result.data.t;
+      })
+    },
+    // 查询挂号患者的就诊完成列表
+    queryRegistrationNumber3() {
+      this.$axios.post("/doctor/patient/queryRegistrationStatus1/3/",this.schedulingType).then(result=> {
+        this.visitCompletedRegistration = result.data.t;
+      })
+    }
 
 
 
@@ -748,8 +911,7 @@ export default {
 
 
 
-
-  }
+   }
 }
 </script>
 <style scoped>
