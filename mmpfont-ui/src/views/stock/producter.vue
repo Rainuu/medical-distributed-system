@@ -36,7 +36,7 @@
     <div style="float: left;clear: both;padding:15px;">
       <el-button type="primary" icon="el-icon-plus" plain @click="addUser">新增</el-button>
       <el-button type="success" icon="el-icon-edit" plain :disabled="single" @click="updPro">修改</el-button>
-      <el-button type="danger" icon="el-icon-delete"  :disabled="multiple" @click="delPro" plain>批量删除</el-button>
+      <el-button type="danger" icon="el-icon-delete" :disabled="multiple" @click="delLists" plain>批量删除</el-button>
     </div>
     <!-- 弹出层表单 -->
     <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
@@ -74,7 +74,7 @@
     </el-dialog>
     <!-- 页面——数据表 & 分页 & 修改 & 删除（绑定行数据） -->
     <div style="min-height: auto">
-      <el-table ref="multipleTable" :data="tableData" v-loading="loading" tooltip-effect="dark" style="width: 100%" border max-height="330px"  @selection-change="handleSelectionChnage">
+      <el-table ref="multipleTable" :data="tableData" v-loading="loading" tooltip-effect="dark" style="width: 100%" border max-height="330px" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center"/>
         <el-table-column prop="producerId" label="厂家ID" width="80px" align="center"/>
         <el-table-column prop="producerName" label="厂家名称" align="center"/>
@@ -183,11 +183,33 @@
           });
         });
       },
-      // 数据表格的多选择框选择时触发
-      handleSelectionChnage(selection) {
-        this.ids = selection.map(item => item.producterId)
-        this.single = selection.length !== 1
-        this.multiple = !selection.length
+      // 批量删除
+      delLists(){
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$axios.post("stock/api/producter/delListById",this.multipleSelection).then(result=>{
+            if (result.data.t){
+              this.initTable();
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+            }else {
+              this.$message({
+                type: 'error',
+                message: '删除失败!'
+              });
+            }
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
       },
       // 查询————发出axios请求获取后端值，并将后端获取到的数据赋值给表格回填，挂载到页面，更改页面条数实现分页
       initTable(){
@@ -201,6 +223,14 @@
         console.log(`每页 ${val} 条`);
         this.size = val;
         this.initTable();
+      },
+      // 获取批量数据————数据表格的多选择框选择时触发
+      handleSelectionChange(selection) {
+        // this.ids = selection.map(item => item.medicinesId)
+        this.multipleSelection = selection;
+        this.single = selection.length !== 1;
+        this.multiple = !selection.length;
+        // alert(JSON.stringify(selection))
       },
       // 分页————改变当前页，点击页码时触发并跳转到对应页
       handleCurrentChange(val) {
@@ -249,6 +279,8 @@
         total: 0,
         current: 1,
         size: 5,
+        // 获取批量数据
+        multipleSelection: [],
       }
     },
     // 钩子函数————用于挂载，在vue页面创建后立即调用

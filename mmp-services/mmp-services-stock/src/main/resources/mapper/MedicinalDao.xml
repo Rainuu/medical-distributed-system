@@ -33,4 +33,28 @@
 <!--            </if>-->
 <!--    </select>-->
 
+    <update id="updById">
+        UPDATE
+            stock_medicines
+        SET
+            medicines_number=#{medicines.medicinesNumber},
+            medicines_name=#{medicines.medicinesName},
+            medicines_type=#{medicines.medicinesType},
+            prescription_type=#{medicines.prescriptionType},
+            prescription_price=#{medicines.prescriptionPrice},
+            unit=#{medicines.unit},
+            conversion=#{medicines.conversion},
+            keywords=#{medicines.keywords},
+            status=#{medicines.status},
+            producter_id=#{medicines.producterId},
+            medicines_stock_num=#{medicines.medicinesStockNum},
+            medicines_stock_danger_num=#{medicines.medicinesStockDangerNum},
+            create_time=#{medicines.createTime},
+            update_time=#{medicines.updateTime},
+            create_by=#{medicines.createBy},
+            update_by=#{medicines.updateBy},
+            del_flag=#{medicines.delFlag}
+        WHERE
+            medicines_id=#{medicines.medicinesId};
+    </update>
 </mapper>

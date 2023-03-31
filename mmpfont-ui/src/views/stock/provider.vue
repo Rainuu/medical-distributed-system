@@ -27,7 +27,8 @@
     <!-- 工具栏————新增 & 删除 -->
     <div style="float: left;clear: both;padding:15px;">
       <el-button type="primary" icon="el-icon-plus" plain @click="addUser">新增</el-button>
-      <el-button type="danger" icon="el-icon-delete" plain>删除</el-button>
+      <el-button type="success" icon="el-icon-edit" :disabled="single" @click="updPro">修改</el-button>
+      <el-button type="danger" icon="el-icon-delete" :disabled="multiple" @click="delLists" plain>批量删除</el-button>
     </div>
     <!-- 弹出层表单 -->
     <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
@@ -66,17 +67,17 @@
     </el-dialog>
     <!-- 页面——数据表 & 分页 & 修改 & 删除（绑定行数据） -->
     <div>
-      <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" border max-height="330px">
+      <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" border max-height="330px" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center"/>
         <el-table-column prop="providerId" label="供应商ID" align="center" width="80px"/>
         <el-table-column prop="providerName" label="供应商名称" align="center"/>
-        <el-table-column prop="contactName" label="联系人" align="center" width="80px"/>
+        <el-table-column prop="contactName" label="联系人" align="center" width="75px"/>
         <el-table-column prop="contactMobile" label="联系人手机" align="center" width="110px"/>
         <el-table-column prop="contactTel" label="联系人电话" align="center" width="110px"/>
         <el-table-column prop="bankAccount" label="银行账号" align="center" width="170px"/>
-        <el-table-column prop="providerAddress" label="供销商地址" align="center" width="100px"/>
-        <el-table-column prop="status" label="状态" align="center" width="60px" :formatter="(row)=>this.dictFormat(row,row.status,'sys_normal_disable')"/>
-        <el-table-column prop="createTime" label="创建时间" align="center" width="120px"/>
+        <el-table-column prop="providerAddress" label="供销商地址" align="center" width="95px"/>
+        <el-table-column prop="status" label="状态" align="center" width="55px" :formatter="(row)=>this.dictFormat(row,row.status,'sys_normal_disable')"/>
+        <el-table-column prop="createTime" label="创建时间" align="center" width="160px"/>
         <el-table-column fixed="right" label="操作" align="center" width="120px">
           <template slot-scope="scope">
             <el-button @click="updPro(scope.row)" type="text" size="small" icon="el-icon-delete">修改</el-button>
@@ -180,12 +181,48 @@
           });
         });
       },
+      // 批量删除
+      delLists(){
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$axios.post("stock/api/provider/delListById",this.multipleSelection).then(result=>{
+            if (result.data.t){
+              this.initTable();
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+            }else {
+              this.$message({
+                type: 'error',
+                message: '删除失败!'
+              });
+            }
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      },
       // 查询————发出axios请求获取后端值，并将后端获取到的数据赋值给表格回填，挂载到页面，更改页面条数实现分页
       initTable(){
         this.$axios.post("stock/api/provider/getAll"+"/"+this.current+"/"+this.size,this.searchForm).then(result=>{
           this.tableData=result.data.t.records;
           this.total=result.data.t.total;
         })
+      },
+      // 获取批量数据————数据表格的多选择框选择时触发
+      handleSelectionChange(selection) {
+        // this.ids = selection.map(item => item.medicinesId)
+        this.multipleSelection = selection;
+        this.single = selection.length !== 1;
+        this.multiple = !selection.length;
+        // alert(JSON.stringify(selection))
       },
       // 分页————改变每页展示的数据数量，在size变化时触发
       handleSizeChange(val) {
@@ -231,10 +268,16 @@
             {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
           ],
         },
+        // 非单个禁用
+        single: true,
+        // 非多个禁用
+        multiple: true,
         // 分页参数
         total: 0,
         current: 1,
         size: 5,
+        // 获取批量数据
+        multipleSelection: [],
       }
     },
     // 钩子函数————用于挂载，在vue页面创建后立即调用

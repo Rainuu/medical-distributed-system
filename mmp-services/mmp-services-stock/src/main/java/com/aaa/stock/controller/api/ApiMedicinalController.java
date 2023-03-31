@@ -53,4 +53,13 @@ public class ApiMedicinalController {
         }
     }
 
+    @PostMapping("delListById")
+    public Result delListById(@RequestBody List<Medicines> medicinesList){
+        medicinesList.forEach((Medicines medicines)->{
+            medicinalService.removeById(medicines.getMedicinesId());
+        });
+
+        return new Result(200,"批量删除成功",true);
+    }
+
 }

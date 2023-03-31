@@ -48,7 +48,7 @@ public class MedicinalServiceImpl extends ServiceImpl<MedicinalDao, Medicines> i
             wrapper.like("medicines_type",medicinalVo.getMedicinesType());
         }
         if (Objects.nonNull(medicinalVo.getProducerId())){
-            wrapper.like("producter_id",medicinalVo.getProducterId());
+            wrapper.eq("producter_id",medicinalVo.getProducerId());
         }
         if (Objects.nonNull(medicinalVo.getPrescriptionType())){
             wrapper.like("prescription_type",medicinalVo.getPrescriptionType());
@@ -73,7 +73,8 @@ public class MedicinalServiceImpl extends ServiceImpl<MedicinalDao, Medicines> i
         if (medicines.getMedicinesId()==null){
             i = medicinalDao.insert(medicines);
         }else {
-            i = medicinalDao.updateById(medicines);
+            System.out.println(medicines.getProducterId());
+            i = medicinalDao.updById(medicines);
         }
 
         if (i>0){

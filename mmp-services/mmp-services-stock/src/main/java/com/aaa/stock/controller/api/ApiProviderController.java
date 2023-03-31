@@ -1,6 +1,7 @@
 package com.aaa.stock.controller.api;
 
 import com.aaa.core.entity.DictData;
+import com.aaa.core.entity.Medicines;
 import com.aaa.core.entity.Provider;
 import com.aaa.core.vo.Result;
 import com.aaa.stock.service.ProviderService;
@@ -55,6 +56,14 @@ public class ApiProviderController {
         }else {
             return new Result(500,"操作失败",false);
         }
+    }
+
+    @PostMapping("delListById")
+    public Result delListById(@RequestBody List<Provider> providerList){
+        providerList.forEach((Provider provider)->{
+            providerService.removeById(provider.getProviderId());
+        });
+        return new Result(200,"批量删除成功",true);
     }
 
 }

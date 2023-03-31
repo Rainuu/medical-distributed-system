@@ -17,10 +17,13 @@ import java.util.List;
  * @DATE: 2023/3/24 10:45
  */
 public interface ProducterService extends IService<Producer> {
+
     // 查询 & 分页 & 模糊
     Result<IPage<Producer>> getAll(Integer current, Integer size, ProducterVo producterVo);
-    // 删除
-    boolean delById(Long id);
+
     // 修改 & 新增
     boolean saveAndUpdate(Producer producer);
+
+    // 删除
+    boolean delById(Long id);
 }

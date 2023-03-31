@@ -23,8 +23,10 @@ public interface MedicinalService extends IService<Medicines> {
     Result<IPage<Medicines>> getAll(Integer current, Integer size, MedicinalVo medicinalVo);
     // Result<IPage<Medicines>> getMedById(Integer current, Integer size, MedicinalVo medicinalVo);
 
+    // 修改 & 新增
     boolean saveAndUpdate(Medicines medicines);
 
+    // 删除
     boolean delById(Long medicinesId);
 
 }

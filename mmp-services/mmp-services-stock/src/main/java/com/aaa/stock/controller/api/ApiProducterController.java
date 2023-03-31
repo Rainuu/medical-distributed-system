@@ -1,6 +1,7 @@
 package com.aaa.stock.controller.api;
 
 import com.aaa.core.entity.DictData;
+import com.aaa.core.entity.Medicines;
 import com.aaa.core.entity.Producer;
 import com.aaa.core.entity.User;
 import com.aaa.core.vo.Result;
@@ -63,4 +64,13 @@ public class ApiProducterController {
         return new Result(200,"成功",list);
 
     }
+
+    @PostMapping("delListById")
+    public Result delListById(@RequestBody List<Producer> producerList){
+        producerList.forEach((Producer producer)->{
+            producterService.removeById(producer.getProducerId());
+        });
+        return new Result(200,"批量删除成功",true);
+    }
+
 }

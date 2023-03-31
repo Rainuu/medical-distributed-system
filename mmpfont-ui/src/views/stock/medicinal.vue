@@ -47,10 +47,10 @@
     <div style="float: left;clear: both;padding:15px;">
       <el-button type="primary" icon="el-icon-plus" plain @click="addUser">新增</el-button>
       <el-button type="success" icon="el-icon-edit" :disabled="single" @click="updPro">修改</el-button>
-      <el-button type="danger" icon="el-icon-delete" :disabled="multiple" plain>批量删除</el-button>
+      <el-button type="danger" icon="el-icon-delete" :disabled="multiple" @click="delLists" plain>批量删除</el-button>
     </div>
     <!-- 弹出层表单————修改 & 新增 -->
-    <el-dialog title="提示" :visible.sync="dialogVisible1" width="30%">
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item hidden label="药品ID" prop="medicinesId" size="mini">
           <el-input v-model="form.medicinesId"/>
@@ -90,26 +90,14 @@
           <el-radio v-model="form.status" label="1">停用</el-radio>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit1('form')">立即创建</el-button>
-          <el-button @click="dialogVisible1 = false">取消</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
-    <!-- 弹出层表单————调整库存 -->
-    <el-dialog title="title" :visible.sync="dialogVisible2" width="30%">
-      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="库存量" prop="medicinesStockNum">
-          <el-input v-model="form.medicinesStockNum"/>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit1('form')">立即创建</el-button>
-          <el-button @click="dialogVisible2 = false">取消</el-button>
+          <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
+          <el-button @click="dialogVisible = false">取消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
     <!-- 页面——数据表 & 分页 & 调整库存 & 修改 & 删除（绑定行数据） -->
     <div style="min-height: auto">
-      <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" border max-height="330px">
+      <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" border max-height="330px" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center"></el-table-column>
         <el-table-column type="expand">
           <template slot-scope="props">
@@ -134,7 +122,7 @@
           <template slot-scope="scope">
             <el-button @click="updPro(scope.row)" type="text" size="small" icon="el-icon-delete">修改</el-button>
             <el-button @click="delPro(scope.row.medicinesId)" type="text" size="small" icon="el-icon-edit">删除</el-button>
-            <el-button @click="handleUpdateStorage(scope.row)" type="text" size="small" icon="el-icon-plus">调整库存</el-button>
+            <el-button @click="updStorage(scope.row)" type="text" size="small" icon="el-icon-plus">调整库存</el-button>
           </template>
         </el-table-column>
       </el-table><br>
@@ -158,9 +146,7 @@
       // 循环判断，将Id转换为name
       ProducterNameDict(row){
         var a = '';
-        // alert(JSON.stringify(row.producterId));
         for (let i = 0; i < this.producterNameOption.length; i++) {
-          // alert(this.producterNameOption[i].producerId)
           if (row.producterId == this.producterNameOption[i].producerId){
             a = this.producterNameOption[i].producerName;
             break;
@@ -189,25 +175,47 @@
         this.initTable();
         this.current=1;
       },
-      // 修改————传入行数据对象，弹出表单，使用深拷贝把行数据对象先转成JSON字符串，再转为JSON对象
-      updPro(row){
-        this.dialogVisible1=true;
-        this.form = JSON.parse(JSON.stringify(row));
-      },
       // 添加————点击显示表单执行提交方法，执行后清空表单数据
       addUser(){
-        this.dialogVisible1=true;
+        this.dialogVisible=true;
         this.title = '添加生产药品信息'
         this.form={};
       },
+      // 修改————传入行数据对象，弹出表单，使用深拷贝把行数据对象先转成JSON字符串，再转为JSON对象
+      updPro(row){
+        this.dialogVisible=true;
+        this.form = JSON.parse(JSON.stringify(row));
+      },
+      // 调整库存
+      updStorage(row){
+        this.$prompt('请输入要调整[' + row.medicinesName + ']的值', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /^-?\d+$/,
+          inputErrorMessage: '库存值输入不正确'
+        }).then(({ value }) => {
+          this.form=JSON.parse(JSON.stringify(row)); // 深拷贝把请求行数据转为需要的数据赋给表单
+          this.form.medicinesStockNum=value;  //使用输入框输入的值赋值替换给表单内对应的字段
+          //重发请求
+          this.$axios.post("/stock/api/medicinal/saveAndUpdate",qs.stringify(this.form)).then(result=>{
+            if (result.data.t){
+              this.$message.success("添加成功");
+              this.form={};
+              this.initTable();
+            } else {
+              this.$message.error("添加失败");
+            }
+          })
+        })
+      },
       // 提交————弹出层的提交按钮，获取表单内容发出请求给后端执行，执行后关闭弹出层，清空表单，重新调用查询刷新页面
-      onSubmit1(formName){
+      onSubmit(formName){
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.$axios.post("/stock/api/medicinal/saveAndUpdate",qs.stringify(this.form)).then(result=>{
               if (result.data.t){
                 this.$message.success("添加成功")
-                this.dialogVisible1=false;
+                this.dialogVisible=false;
                 this.form={};
                 this.initTable();
               } else {
@@ -248,24 +256,33 @@
           });
         });
       },
-      // 调整库存————
-      handleUpdateStorage(row){
-        const tx = this
-        tx.$prompt('请输入要调整[' + row.medicinesName + ']的值', '提示', {
+      // 批量删除
+      delLists(){
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          inputPattern: /^-?\d+$/,
-          inputErrorMessage: '库存值输入不正确'
-        }).then(({ value }) => {
-          updateMedicinesStorage(row.medicinesId, value).then(res => {
-            tx.msgSuccess('调整成功')
-            tx.getMedicinesList()// 重新查询数据
-          }).catch(() => {
-            tx.msgError('调整失败')
+          type: 'warning'
+        }).then(() => {
+          this.$axios.post("stock/api/medicinal/delListById",this.multipleSelection).then(result=>{
+            if (result.data.t){
+              this.initTable();
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+            }else {
+              this.$message({
+                type: 'error',
+                message: '删除失败!'
+              });
+            }
           })
         }).catch(() => {
-          tx.msgError('调整取消')
-        })
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
       },
       // 查询————发出axios请求获取后端值，并将后端获取到的数据赋值给表格回填，挂载到页面，更改页面条数实现分页
       initTable(){
@@ -273,6 +290,14 @@
           this.tableData=result.data.t.records;
           this.total=result.data.t.total;
         })
+      },
+      // 获取批量数据————数据表格的多选择框选择时触发
+      handleSelectionChange(selection) {
+        // this.ids = selection.map(item => item.medicinesId)
+        this.multipleSelection = selection;
+        this.single = selection.length !== 1;
+        this.multiple = !selection.length;
+        // alert(JSON.stringify(selection))
       },
       // 分页————改变每页展示的数据数量，在size变化时触发
       handleSizeChange(val) {
@@ -300,8 +325,7 @@
         // 弹出层标题
         title: '',
         // 弹出层状态
-        dialogVisible1: false,
-        dialogVisible2: false,
+        dialogVisible: false,
         // 弹出层表单
         form: {
           medicinesId: '',
@@ -339,6 +363,8 @@
         total: 0,
         current: 1,
         size: 5,
+        // 获取批量数据
+        multipleSelection: [],
       }
     },
     // 钩子函数————用于挂载，在vue页面创建后立即调用
