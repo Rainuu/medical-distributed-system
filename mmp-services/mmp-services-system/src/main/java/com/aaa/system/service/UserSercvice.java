@@ -19,6 +19,7 @@ public interface UserSercvice {
     public boolean deleById(Long id);
     public boolean saveAndUp(User user);
 
+    User queryById(Long id);
 
     List<User> queryUserScheduling(Map<String, Object> map);
 

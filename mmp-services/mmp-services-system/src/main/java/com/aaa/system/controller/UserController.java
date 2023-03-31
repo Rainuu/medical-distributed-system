@@ -21,6 +21,12 @@ public class UserController {
     @PostMapping("/queryUsersNeedScheduling")
     public List<User> queryUsersNeedScheduling(@RequestBody Map<String,Object> map){
         return userSercvice.queryUserScheduling(map);
-    };
+    }
+
+    @GetMapping("{id}")
+    public User queryById(@PathVariable Long id){
+
+      return userSercvice.queryById(id);
+    }
 
 }

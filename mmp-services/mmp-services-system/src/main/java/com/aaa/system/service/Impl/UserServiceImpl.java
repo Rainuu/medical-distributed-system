@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -104,6 +103,12 @@ public class UserServiceImpl implements UserSercvice{
             return true;
         }
         return false;
+    }
+
+    @Override
+    public User queryById(Long id) {
+        User user = dao.selectById(id);
+        return user;
     }
 
     @Override
