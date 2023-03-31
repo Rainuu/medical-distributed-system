@@ -4,6 +4,7 @@ import com.aaa.check.dao.CheckResultDao;
 import com.aaa.check.service.CheckResultService;
 
 
+import com.aaa.check.vo.CheckResultVo;
 import com.aaa.check.vo.ResultImgVo;
 import com.aaa.core.entity.CheckResult;
 import com.aaa.core.entity.Role;
@@ -20,6 +21,7 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * (HisCheckResult)表服务实现类
@@ -50,5 +52,29 @@ public class CheckResultServiceImpl implements CheckResultService {
       checkResult.setCreateTime(new Date());
       int insert = checkResultDao.insert(checkResult);
       return new Result(200,"开始检查成功",insert);
+   }
+
+   @Override
+   public Result<IPage<CheckResult>> getByPage(Integer current, Integer size, CheckResultVo checkResultVo) {
+      IPage<CheckResult> page = new Page<>(current,size);
+      QueryWrapper<CheckResult> wrapper = new QueryWrapper<>();
+      if (StringUtils.hasText(checkResultVo.getCheckItemName())){
+         wrapper.like("check_item_id",checkResultVo.getCheckItemName());
+      }
+      if (StringUtils.hasText(checkResultVo.getPatientName())){
+         wrapper.like("patient_name",checkResultVo.getPatientName());
+      }
+      if(Objects.nonNull(checkResultVo.getDateRange())&&checkResultVo.getDateRange().length==2){
+         wrapper.between("create_time",checkResultVo.getDateRange()[0],checkResultVo.getDateRange()[1]);
+      }
+      IPage<CheckResult> page1 = checkResultDao.selectPage(page, wrapper);
+      return new Result<>(2000,"查询角色",page1);
+   }
+
+   @Override
+   public Result<IPage<CheckResult>> getByPageTwo(Integer current, Integer size, CheckResultVo checkResultVo) {
+      IPage page = new Page(current,size);
+      IPage<CheckResult> page1 = checkResultDao.selectAllTwo(page,checkResultVo);
+      return new Result<>(2000,"查询角色",page1);
    }
 }

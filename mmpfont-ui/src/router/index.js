@@ -192,11 +192,27 @@ const routes = [
             component:() =>import('../views/doctor/patient')
         },
         // 数据统计(statistics)——(4)——王喜龙
-        {   //
-            path: '/statistics/NewlyOpenedClinic',
-            name: 'NewlyOpenedClinic',
-            component: () =>import('../views/statistics/NewlyOpenedClinic')
+        {   //药品销售统计
+            path: '/statistics/drug/drug',
+            name: 'drugx',
+            component: () =>import('../views/statistics/drug/drug')
         },
+        {   //检查项目统计
+            path: '/statistics/check/check',
+            name: 'check',
+            component: () =>import('../views/statistics/check/check')
+        },
+        {   //收支统计
+            path: '/statistics/revenue/revenue',
+            name: 'revenue',
+            component: () =>import('../views/statistics/revenue/revenue')
+        },
+        {   //工作量统计
+            path: '/statistics/workload/workload',
+            name: 'workload',
+            component: () =>import('../views/statistics/workload/workload')
+        },
+
     ]
   },
   {

@@ -1,6 +1,7 @@
 package com.aaa.check.service;
 
 
+import com.aaa.check.vo.CheckResultVo;
 import com.aaa.check.vo.ResultImgVo;
 import com.aaa.core.entity.CheckResult;
 import com.aaa.core.vo.CheckItemVo;
@@ -22,4 +23,8 @@ public interface CheckResultService {
     Result addMsg(String cocId, String textarea,String name,String url);
 
     Result addAll(CheckResult checkResult);
+
+    Result<IPage<CheckResult>> getByPage(Integer current, Integer size, CheckResultVo checkResultVo);
+
+    Result<IPage<CheckResult>> getByPageTwo(Integer current, Integer size, CheckResultVo checkResultVo);
 }
