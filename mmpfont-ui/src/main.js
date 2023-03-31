@@ -4,12 +4,10 @@ import router from './router'
 import './plugins/element.js'
 import './assets/icons/index'
 import './assets/css/global.css'
-import{formatDict,formatDict3,formatDict2} from './utils/DictFormat'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
-import{formatDict,formatDict3} from './utils/DictFormat'
 Vue.config.productionTip = false
-
+import{formatDict,formatDict2} from './utils/DictFormat'
 // Axios
 import ax from "axios";
 const axios = ax.create({
@@ -24,8 +22,7 @@ Vue.prototype.formatDict2=formatDict2;
 
 
 Vue.use(mavonEditor)
-//牛牧原
-Vue.prototype.formatDict3=formatDict3;
+
 //设置axios请求的拦截器
 axios.interceptors.request.use(config=>{
   //从localStorage获取令牌信息

@@ -220,7 +220,7 @@ export default {
     //status
     statusFormat(row){
       let v=row.status;
-      return this.formatDict3(this.statusOptions,v);
+      return this.formatDict2(this.statusOptions,v);
     },
     // 选中某一行之后
     handleCurrentChange(row) {

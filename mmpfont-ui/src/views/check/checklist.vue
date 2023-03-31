@@ -214,7 +214,7 @@ export default {
     //status
     statusFormat(row){
       let v=row.resultStatus;
-      return this.formatDict3(this.statusOptions,v);
+      return this.formatDict2(this.statusOptions,v);
     },
   },
   created() {
