@@ -60,12 +60,12 @@ const routes = [
         {   // 检查费用管理
             path: '/system/ins_fee',
             name: 'insFee',
-            component: () => import('../views/system/insFee')
+            component: () => import('../views/system/checkItem')
         },
         {   // 挂号费用设置
             path: '/system/reg_fee',
             name: 'regFee',
-            component: () => import('../views/system/regFee')
+            component: () => import('../views/system/registeredItem')
         },
         {
           path:'/system/role',
@@ -76,6 +76,16 @@ const routes = [
             path: '/system/menu',
             name:'menu',
             component: () => import('../views/system/Menu')
+        },
+        {
+          path: '/system/updatePassword/:userName',
+          name: 'updatePassword',
+          component:() => import('../views/system/UpdatePassword')
+        },
+        {
+          path: '/system/personCenter',
+          name: 'personCenter',
+            component:()=>import('../views/system/PersonCenter')
         },
         // 药品进销存 (stock)——(6)——何泽明
         {   // 生产厂家维护

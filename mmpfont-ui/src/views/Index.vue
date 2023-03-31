@@ -57,13 +57,13 @@
               <span style="font-weight: bolder;color: white;">{{userinfo.userName}}</span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>
-                  <svg-icon icon-file-name="user"/>
+                  <svg-icon icon-file-name="user" @click="tiaoz('/system/personCenter','个人中心')"/>
                   个人中心</el-dropdown-item>
-                <el-dropdown-item>
-                  <svg-icon icon-file-name="lock"/>
+                <el-dropdown-item  >
+                  <svg-icon icon-file-name="lock" @click="tiaoz('/system/updatePassword/'+userinfo.userName,'修改密码')"/>
                   修改密码</el-dropdown-item>
                 <el-dropdown-item>
-                  <svg-icon icon-file-name="component"/>
+                  <svg-icon icon-file-name="component" @click="exit"/>
                   退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -153,7 +153,11 @@
                 this.editableTabsValue = activeName;
                 this.editableTabs = tabs.filter(tab => tab.name !== targetName);
             },
-
+            tiaoz(url,menuName){
+            this.$router.push(url)
+              //直接调用添加页签页
+              this.addTab(menuName,url);
+            },
             logout(){
                 localStorage.clear();
             },
@@ -194,6 +198,15 @@
           foldOrOpen(){
             this.isCollaps = !this.isCollaps
             this.asideWidth = !this.isCollaps ? '200px' : '64px'
+          },
+          exit(){
+            this.$axios.get('system/api/user/exit').then(res=>{
+              if (res.data.t){
+                this.$router.push('/login')
+              }else {
+                this.$message.error(res.data.msg)
+              }
+            })
           }
         },
     }

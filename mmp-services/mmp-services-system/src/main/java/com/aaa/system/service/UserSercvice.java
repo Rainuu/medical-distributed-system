@@ -21,4 +21,10 @@ public interface UserSercvice {
 
 
     List<User> queryUserScheduling(Map<String, Object> map);
+
+    Result checkPassWord(String password);
+
+    Result upPassword(String newPassword);
+
+    Result exitUser();
 }

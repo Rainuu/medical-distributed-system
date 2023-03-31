@@ -44,4 +44,18 @@ public class ApiUserController {
             return new Result(500,"失败",false);
         }
     }
+
+    @PostMapping("check/{password}")
+    public Result checkPassword(@PathVariable String password){
+        return userSercvice.checkPassWord(password);
+    }
+
+    @PostMapping("upPassword/{password}")
+    public Result upPassword(@PathVariable String password){
+        return userSercvice.upPassword(password);
+    }
+    @GetMapping("exit")
+    public Result exitUser(){
+        return userSercvice.exitUser();
+    }
 }

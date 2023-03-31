@@ -11,10 +11,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,8 @@ public class UserServiceImpl implements UserSercvice{
     private UserDao dao;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private StringRedisTemplate redisTemplate;
     @Override
     public User findByUsername(String username) {
         QueryWrapper<User> wrapper =new QueryWrapper<>();
@@ -115,5 +119,37 @@ public class UserServiceImpl implements UserSercvice{
         wrapper.eq("status",0);
         List<User> userList = dao.selectList(wrapper);
         return userList;
+    }
+
+    @Override
+    public Result checkPassWord(String password) {
+        Result<User> byPhoneInfo = getByPhoneInfo();
+        User t = byPhoneInfo.getT();
+        boolean matches = passwordEncoder.matches(password, t.getPassword());
+        return new Result(200,null,matches);
+    }
+
+    @Override
+    public Result upPassword(String newPassword) {
+        Result<User> byPhoneInfo = getByPhoneInfo();
+        User t = byPhoneInfo.getT();
+        String encode = passwordEncoder.encode(newPassword);
+        t.setPassword(encode);
+        int i = dao.updateById(t);
+        if (i>0){
+            return new Result(200,null,true);
+        }
+        return new Result(200,null,false);
+    }
+
+    @Override
+    public Result exitUser() {
+        String token = WebUtil.getRequest().getHeader("token");
+
+        Boolean token1 = redisTemplate.delete(token);
+        if (token1){
+            return new Result(200,"退出成功",true);
+        }
+        return new Result(200,"退出失败",false);
     }
 }

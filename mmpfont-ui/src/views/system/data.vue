@@ -261,7 +261,6 @@ export default {
     },
     // 打开修改的弹出层
     handleUpdate(row) {
-      alert("111111111111")
       this.open = true
       this.reset()
       const dictCode = row.dictCode

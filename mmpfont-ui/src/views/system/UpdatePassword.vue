@@ -5,7 +5,7 @@
         <span>{{ userName }}</span>
       </el-form-item>
       <el-form-item label="原密码" prop="password">
-        <el-input type="password" v-model="dataForm.password" placeholder="原密码"></el-input>
+        <el-input type="password" v-model="dataForm.password" placeholder="原密码" onblur="this.check()"></el-input>
       </el-form-item>
       <el-form-item label="新密码" prop="newPassword">
         <el-input type="password" v-model="dataForm.newPassword" placeholder="新密码"></el-input>
@@ -22,11 +22,29 @@
 </template>
 
 <script>
+import qs from 'qs'
 export default {
   data() {
+    var validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'));
+      } else if (value !== this.dataForm.newPassword) {
+        callback(new Error('两次输入密码不一致!'));
+      } else {
+        callback();
+      }
+    };
+    var checkPassWord=(rule, value, callback)=>{
+      if(!this.check()){
+        callback(new Error('密码不正确'));
+      }else {
+        callback();
+      }
+    };
     return {
-      userName: 'admin',
-      visible: false,
+      userName: '',
+      visible: true,
+      checkResult:false,
       dataForm: {
         password: '',
         newPassword: '',
@@ -37,12 +55,13 @@ export default {
           required: true,
           message: '原密码不能为空',
           trigger: 'blur'
-        }],
-        newPassword: [{
-          required: true,
-          message: '新密码不能为空',
-          trigger: 'blur'
-        }],
+        },
+          {validator:checkPassWord,trigger: 'blur'}
+        ],
+        newPassword: [
+            {required: true, message: '新密码不能为空', trigger: 'blur'},
+          { validator: validatePass2, trigger: 'blur' }
+        ],
         confirmPassword: [{
           required: true,
           message: '确认密码不能为空',
@@ -51,7 +70,17 @@ export default {
       }
     }
   },
+  created() {
+    this.userName=this.$route.params && this.$route.params.userName
+  },
   methods: {
+    //原密码校验
+   async check(){
+       await this.$axios.post('system/api/user/check/'+this.dataForm.password).then(res=>{
+        this.checkResult=res.data.t
+        return res.data.t
+      })
+    },
     // 初始化
     init() {
       this.visible = true
@@ -62,14 +91,11 @@ export default {
     },
     // 表单提交，回到登录界面
     dataFormSubmit() {
-      // TODO: 表达提交逻辑待完成
-      alert("表达提交逻辑未完成")
-      this.visible = false;
-      this.$nextTick(() => {
-        this.$router.push({
-          name: "Login"
-        })
-      })
+     this.$axios.post('system/api/user/upPassword/'+this.dataForm.confirmPassword).then(res=>{
+       if(res.data.t){
+         this.$router.push('/login')
+       }
+     })
     }
   }
 }
