@@ -1,12 +1,15 @@
 package com.aaa.core.entity;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -14,7 +17,7 @@ import lombok.Data;
  *
  * @TableName his_check_result
  */
-@TableName(value ="his_check_result")
+@TableName(value ="his_check_result",autoResultMap = true)
 @Data
 public class CheckResult implements Serializable {
     /**
@@ -51,7 +54,7 @@ public class CheckResult implements Serializable {
     /**
      * 检查结果扫描附件[json表示]
      */
-    private Object resultImg;
+    private String resultImg;
 
     /**
      * 患者ID

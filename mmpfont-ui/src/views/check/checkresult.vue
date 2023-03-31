@@ -211,6 +211,10 @@ export default {
         key:'',
         host:'',
         dir:''
+      },
+      resultImg:{
+        url:'',
+        name:''
       }
     }
   },
@@ -286,7 +290,8 @@ export default {
     },
     //录入检查结果
     addMsg(file){
-      this.$axios.post("/check/api/checkResult/addMsg/"+this.cocId+"/"+this.textarea).then(r=>{
+      this.$axios.get(`/check/api/checkResult/addMsg/?cocId=${this.cocId}&&textarea=${this.textarea}`,{params:this.resultImg
+      }).then(r=>{
         this.$message({
           showClose: true,
           message: r.data.msg,
@@ -308,6 +313,8 @@ export default {
           this.objData.dir=r.data.dir;
           this.objData.host=r.data.host;//直传oss的服务器地址
           this.objData.key=r.data.dir+"${filename}";
+          this.resultImg.url=this.objData.host+"/"+this.objData.dir+file.name
+          this.resultImg.name=file.name
           resolve(true);//继续上传
         })
         .catch(function (error){

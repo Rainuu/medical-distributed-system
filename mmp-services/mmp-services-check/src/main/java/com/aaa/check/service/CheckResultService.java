@@ -1,9 +1,11 @@
 package com.aaa.check.service;
 
 
+import com.aaa.check.vo.ResultImgVo;
 import com.aaa.core.entity.CheckResult;
 import com.aaa.core.vo.CheckItemVo;
 import com.aaa.core.vo.Result;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
 import java.util.List;
@@ -17,7 +19,7 @@ import java.util.List;
 public interface CheckResultService {
     Result<IPage<CheckResult>> getByPageStatus(Integer current, Integer size, CheckItemVo checkItemVo);
 
-    Result addMsg(String cocId, String textarea);
+    Result addMsg(String cocId, String textarea,String name,String url);
 
     Result addAll(CheckResult checkResult);
 }
