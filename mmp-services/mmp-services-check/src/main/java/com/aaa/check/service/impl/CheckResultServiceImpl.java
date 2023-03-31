@@ -4,10 +4,12 @@ import com.aaa.check.dao.CheckResultDao;
 import com.aaa.check.service.CheckResultService;
 
 
+import com.aaa.check.vo.ResultImgVo;
 import com.aaa.core.entity.CheckResult;
 import com.aaa.core.entity.Role;
 import com.aaa.core.vo.CheckItemVo;
 import com.aaa.core.vo.Result;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -38,8 +40,8 @@ public class CheckResultServiceImpl implements CheckResultService {
    }
 
    @Override
-   public Result addMsg(String cocId, String textarea) {
-      Boolean aBoolean = checkResultDao.addMsg(cocId,textarea);
+   public Result addMsg(String cocId, String textarea,String name,String url) {
+      Boolean aBoolean = checkResultDao.addMsg(cocId,textarea,url);
       return new Result(200,"录入结果成功",aBoolean);
    }
 

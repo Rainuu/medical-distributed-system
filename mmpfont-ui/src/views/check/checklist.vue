@@ -79,6 +79,12 @@
       >
       </el-table-column>
       <el-table-column
+          prop="resultMsg"
+          label="图片"
+          v-if="false"
+      >
+      </el-table-column>
+      <el-table-column
           prop="resultStatus"
           label="检查状态"
           :formatter="statusFormat"
@@ -117,8 +123,11 @@
         <el-form-item label="检查结果" prop="resultMsg">
           {{ currentResult.resultMsg }}
         </el-form-item>
-        <div v-for="(item,index) in currentResult.resultImg" :key="index">
-          <img :src="item.url">
+        <div class="demo-image__placeholder">
+          <div class="block">
+            <span class="demonstration"></span>
+            <el-image :src="this.url"></el-image>
+          </div>
         </div>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -179,7 +188,7 @@ export default {
       // 记录当前选中的详情ID
       this.currentResult.resultMsg = row.resultMsg
       if (row.resultImg !== '') {
-        this.currentResult.resultImg = JSON.parse(row.resultImg)
+        this.url = row.resultImg
       }
     },
     // 关闭
@@ -261,6 +270,8 @@ export default {
       },
       //系统状态
       statusOptions:[],
+      fits: ['fill'],
+      url: ''
     }
   }
 

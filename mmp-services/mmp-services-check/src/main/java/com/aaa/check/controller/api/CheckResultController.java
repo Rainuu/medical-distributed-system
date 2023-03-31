@@ -1,14 +1,17 @@
 package com.aaa.check.controller.api;
 
 import com.aaa.check.service.CheckResultService;
+import com.aaa.check.vo.ResultImgVo;
 import com.aaa.core.entity.CheckResult;
 import com.aaa.core.entity.Role;
 import com.aaa.core.vo.CheckItemVo;
 import com.aaa.core.vo.Result;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -35,9 +38,9 @@ public class CheckResultController {
         return checkResultService.getByPageStatus(current,size,checkItemVo);
     }
 
-    @PostMapping("addMsg/{cocId}/{textarea}")
-    public Result addMsg(@PathVariable String cocId,@PathVariable String textarea){
-        return checkResultService.addMsg(cocId,textarea);
+    @GetMapping("addMsg")
+    public Result addMsg(String cocId,String textarea,String name,String url){
+        return checkResultService.addMsg(cocId,textarea,name,url);
     }
 
     @GetMapping("addAll")

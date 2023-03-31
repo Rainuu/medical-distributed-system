@@ -124,7 +124,6 @@
       </div>
     </el-card>
     <!-- 开始检查结束 -->
-
   </div>
 </template>
 
@@ -154,7 +153,14 @@ export default {
         region: ''
       },
       form: {
-        type: []
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
       },
       //表格数据
       tableData: [],
@@ -175,7 +181,7 @@ export default {
         price:'',
         patientId:"",
         resultStatus:0
-      }
+      },
     }
   },
   methods: {
@@ -268,7 +274,7 @@ export default {
         tx.msgError('开始已取消')
         tx.loading = false
       })
-    }
+    },
   },
   created() {
     //加载系统状态

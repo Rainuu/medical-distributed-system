@@ -35,7 +35,7 @@
             </if>
     </select>
 
-    <select id="selectLCocId" resultType="java.util.List">
-        select coc_id from his_check_result
-    </select>
+    <delete id="addMsg">
+        update his_check_result set result_msg = #{param2,jdbcType=VARCHAR},result_img = #{param3},result_status = 1 where coc_id = #{param1,jdbcType=VARCHAR}
+    </delete>
 </mapper>

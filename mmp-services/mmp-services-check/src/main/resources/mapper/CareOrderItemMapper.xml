@@ -21,7 +21,7 @@
         i.item_ref_id,i.item_name,i.num,i.price,i.amount,i.remark,i.status
         from his_registration r,his_care_order o,his_care_order_item i
         where r.patient_id=o.patient_id and o.co_id=i.co_id and
-        i.item_type=1 and i.status=1
+        i.item_type=1 and i.status=1 and r.registration_status=3
         <if test="regId!='' and regId!=null">
             and r.registration_id=${param2}
         </if>
