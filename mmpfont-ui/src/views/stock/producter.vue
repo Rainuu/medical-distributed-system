@@ -39,7 +39,7 @@
       <el-button type="danger" icon="el-icon-delete" :disabled="multiple" @click="delLists" plain>批量删除</el-button>
     </div>
     <!-- 弹出层表单 -->
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="40%" center append-to-body>
         <el-form ref="form" :model="form" :rules="rules" label-width="100px">
           <el-form-item hidden label="厂家ID" prop="producerId" size="mini">
             <el-input v-model="form.producerId"></el-input>
@@ -47,11 +47,8 @@
           <el-form-item label="厂家名称" prop="producerName">
             <el-input v-model="form.producerName"></el-input>
           </el-form-item>
-          <el-form-item label="厂家编号" prop="producerCode">
+          <el-form-item label="厂家编码" prop="producerCode">
             <el-input v-model="form.producerCode"></el-input>
-          </el-form-item>
-          <el-form-item label="厂家地址" prop="producerAddress">
-            <el-input v-model="form.producerAddress"></el-input>
           </el-form-item>
           <el-form-item label="联系人" prop="producerPerson">
             <el-input v-model="form.producerPerson"></el-input>
@@ -62,11 +59,14 @@
           <el-form-item label="关键字" prop="keywords">
             <el-input v-model="form.keywords"></el-input>
           </el-form-item>
-          <el-form-item label="状态" prop="status">
+          <el-form-item label="地址" prop="producerAddress">
+            <el-input v-model="form.producerAddress"></el-input>
+          </el-form-item>
+          <el-form-item label="状态" prop="status" style="text-align: center;">
             <el-radio v-model="form.status" label="0">正常</el-radio>
             <el-radio v-model="form.status" label="1">停用</el-radio>
           </el-form-item>
-          <el-form-item>
+          <el-form-item style="text-align: center;">
             <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
             <el-button @click="dialogVisible = false">取消</el-button>
           </el-form-item>
@@ -260,12 +260,18 @@
           keywords: '',
           status: '',
         },
-        // 校验规则
+        // 表单校验
         rules: {
-          userName: [
-            {required: true, message: '请输入活动名称', trigger: 'blur'},
-            {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
+          producerName: [
+            { required: true, message: '厂家名称不能为空', trigger: 'blur' }
           ],
+          producerTel: [
+            { required: true, message: '联系电话不能为空', trigger: 'blur' },
+            { pattern: /^1[3|4|5|7|8|9][0-9]\d{8}$/, message: '请输入正确的手机号', trigger: 'blur' }
+          ],
+          keywords: [
+            { required: true, message: '查询关键字不能为空', trigger: 'blur' }
+          ]
         },
         // 是否启用遮罩层
         loading: false,

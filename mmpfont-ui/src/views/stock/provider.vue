@@ -31,7 +31,7 @@
       <el-button type="danger" icon="el-icon-delete" :disabled="multiple" @click="delLists" plain>批量删除</el-button>
     </div>
     <!-- 弹出层表单 -->
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="40%">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item hidden label="供货商ID" prop="providerId" size="mini">
           <el-input v-model="form.providerId"/>
@@ -42,16 +42,16 @@
         <el-form-item label="联系人" prop="contactName">
           <el-input v-model="form.contactName"/>
         </el-form-item>
-        <el-form-item label="联系人手机" prop="contactMobile">
+        <el-form-item label="手机" prop="contactMobile">
           <el-input v-model="form.contactMobile"/>
         </el-form-item>
-        <el-form-item label="联系人电话" prop="contactTel">
+        <el-form-item label="电话" prop="contactTel">
           <el-input v-model="form.contactTel"/>
         </el-form-item>
         <el-form-item label="银行账户" prop="bankAccount">
           <el-input v-model="form.bankAccount"/>
         </el-form-item>
-        <el-form-item label="供销商地址" prop="providerAddress">
+        <el-form-item label="地址" prop="providerAddress">
           <el-input v-model="form.providerAddress"/>
         </el-form-item>
         <!-- Data too long for column 'status' at row 1 因为label和value -->
@@ -261,12 +261,21 @@
           status: '',
           createTime: '',
         },
-        // 校验规则
+        // 表单校验
         rules: {
-          userName: [
-            {required: true, message: '请输入活动名称', trigger: 'blur'},
-            {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
+          providerName: [
+            { required: true, message: '供应商名称不能为空', trigger: 'blur' }
           ],
+          contactName: [
+            { required: true, message: '联系人不能为空', trigger: 'blur' }
+          ],
+          contactMobile: [
+            { required: true, message: '手机不能为空', trigger: 'blur' },
+            { pattern: /^1[3|4|5|7|8|9][0-9]\d{8}$/, message: '请输入正确的手机号', trigger: 'blur' }
+          ],
+          bankAccount: [
+            { required: true, message: '银行账号不能为空', trigger: 'blur' }
+          ]
         },
         // 非单个禁用
         single: true,

@@ -50,46 +50,89 @@
       <el-button type="danger" icon="el-icon-delete" :disabled="multiple" @click="delLists" plain>批量删除</el-button>
     </div>
     <!-- 弹出层表单————修改 & 新增 -->
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="65%" center append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item hidden label="药品ID" prop="medicinesId" size="mini">
           <el-input v-model="form.medicinesId"/>
         </el-form-item>
-        <el-form-item label="药品名称" prop="medicinesName">
-          <el-input v-model="form.medicinesName"/>
-        </el-form-item>
-        <el-form-item label="药品编号" prop="medicinesNumber">
-          <el-input v-model="form.medicinesNumber"/>
-        </el-form-item>
-        <el-form-item label="生产厂家" prop="producerName">
-          <el-select v-model="form.producerName" clearable placeholder="生产厂家" style="width: 285px">
-            <el-option v-for="item in producterNameOption"
-                       :key="item.producerId" :label="item.producerName" :value="item.producerId"/>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="药品类型" prop="medicinesType">
-          <el-select v-model="form.medicinesType" clearable style="width: 285px">
-            <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_medicines_type'})"
-                       :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="处方类型" prop="prescriptionType">
-          <el-select v-model="form.prescriptionType" clearable style="width: 285px">
-            <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_prescription_type'})"
-                       :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="关键字" prop="keywords">
-          <el-input v-model="form.keywords"></el-input>
-        </el-form-item>
-        <el-form-item label="处方价格" prop="prescriptionPrice">
-          <el-input v-model="form.prescriptionPrice"/>
-        </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-radio v-model="form.status" label="0">正常</el-radio>
-          <el-radio v-model="form.status" label="1">停用</el-radio>
-        </el-form-item>
-        <el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="药品名称" prop="medicinesName">
+              <el-input v-model="form.medicinesName" clearable placeholder="请输入药品名称"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="药品编号" prop="medicinesNumber">
+              <el-input v-model="form.medicinesNumber" clearable placeholder="请输入药品编码"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="关键字" prop="keywords">
+              <el-input v-model="form.keywords" clearable  placeholder="请输入关键字"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="单 位" prop="unit">
+              <el-input v-model="form.unit" clearable placeholder="请输入单位"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="换算量" prop="conversion">
+              <el-input v-model="form.conversion" clearable placeholder="请输入换算量"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="处方价格" prop="prescriptionPrice">
+              <el-input v-model="form.prescriptionPrice" clearable placeholder="请输入处方价格"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="预警值" prop="medicinesStockDangerNum">
+              <el-input-number v-model="form.medicinesStockDangerNum" style="width:340px" placeholder="请输入预警值"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="状态" prop="status">
+              <el-radio v-model="form.status" label="0">正常</el-radio>
+              <el-radio v-model="form.status" label="1">停用</el-radio>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="药品类型" prop="medicinesType">
+              <el-select v-model="form.medicinesType" clearable  style="width:340px" placeholder="请输入药品类型">
+                <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_medicines_type'})"
+                           :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="处方类型" prop="prescriptionType">
+              <el-select v-model="form.prescriptionType" clearable style="width:340px" placeholder="请输入处方类型">
+                <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_prescription_type'})"
+                           :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="生产厂家" prop="producterId">
+              <el-select v-model="form.producterId" clearable placeholder="请输入生产厂家" style="width:340px">
+                <el-option v-for="item in producterNameOption"
+                           :key="item.producerId" :label="item.producerName" :value="item.producerId"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item style="text-align: center;">
           <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
           <el-button @click="dialogVisible = false">取消</el-button>
         </el-form-item>
@@ -348,12 +391,29 @@
           updateBy: '',
           delFlag: ''
         },
-        //校验规则
+        // 表单校验
         rules: {
-          userName: [
-            {required: true, message: '请输入活动名称', trigger: 'blur'},
-            {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
+          medicinesName: [
+            { required: true, message: '药品名称不能为空', trigger: 'blur' }
           ],
+          keywords: [
+            { required: true, message: '查询关键字不能为空', trigger: 'blur' }
+          ],
+          prescriptionPrice: [
+            { required: true, message: '处方价格不能为空', trigger: 'blur' }
+          ],
+          medicinesStockDangerNum: [
+            { required: true, message: '预警值不能为空', trigger: 'blur' }
+          ],
+          medicinesType: [
+            { required: true, message: '药品类型不能为空', trigger: 'blur' }
+          ],
+          prescriptionType: [
+            { required: true, message: '处方类型不能为空', trigger: 'blur' }
+          ],
+          producterId: [
+            { required: true, message: '生产厂家不能为空', trigger: 'blur' }
+          ]
         },
         // 非单个禁用
         single: true,
