@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @MapperScan(basePackages = {"com.aaa.charge.dao"})
 @EnableFeignClients(basePackages = "com.aaa.charge.fegin")
+@EnableTransactionManagement
 public class ChargeApp {
     public static void main(String[] args) {
         SpringApplication.run(ChargeApp.class,args);

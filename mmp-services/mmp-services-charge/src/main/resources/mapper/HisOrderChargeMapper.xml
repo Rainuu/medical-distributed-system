@@ -9,6 +9,6 @@
 
 <insert id="insertAll">
     INSERT INTO his_order_charge (order_id,reg_id,patient_name,order_amount,order_status,pay_type,create_time)
-                           VALUES('123456',rgeId, patientName,orderAmount,'1','0',orderCharge)
+                           VALUES(#{param1},#{param2}, #{param3},#{param4},'1','0',#{param5})
     </insert>
 </mapper>

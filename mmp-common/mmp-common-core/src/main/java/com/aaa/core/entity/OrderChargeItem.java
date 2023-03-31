@@ -59,6 +59,14 @@ public class OrderChargeItem implements Serializable {
      * 状态，0未支付，1已支付，2，已退费  3，已完成 字典表 his_order_details_status
      */
     private String status;
+    @TableField(exist = false)
+    private String registrationId;
+
+    @TableField(exist = false)
+    private String patientName;
+
+    @TableField(exist = false)
+    private String patientId;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

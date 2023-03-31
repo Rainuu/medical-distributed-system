@@ -1,14 +1,10 @@
 package com.aaa.charge.dao;
 
 import com.aaa.core.entity.OrderCharge;
-import com.aaa.core.entity.OrderChargeItem;
-import com.aaa.core.vo.Result;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 
 /**
@@ -23,5 +19,5 @@ public interface HisOrderChargeMapper extends BaseMapper<OrderCharge> {
     //现金支付
     boolean updByStatusType(String orderId);
 
-    void insertAll(String regId, String patientName, Double orderAmount, OrderCharge orderCharge);
+    void insertAll(String orderId,String regId, String patientName, BigDecimal orderAmount, LocalDateTime createTime);
 }

@@ -7,9 +7,5 @@
 
 </update>
 
-<insert id="insertAll">
 
-    INSERT INTO his_order_charge_item (item_id,co_id,item_name,item_price,item_num,item_amount,item_type,`status`)
-                                       VALUES(ItemId,coId,itemName,itemPrice,itemNum,itemAmount,itemType,'1')
-    </insert>
 </mapper>

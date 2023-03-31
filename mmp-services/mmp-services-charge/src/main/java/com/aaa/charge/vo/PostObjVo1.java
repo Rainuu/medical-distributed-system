@@ -2,6 +2,8 @@ package com.aaa.charge.vo;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class PostObjVo1 {
     //开诊明细id
@@ -11,11 +13,11 @@ public class PostObjVo1 {
     //药品名称
     private String itemName;
     //单价
-    private String itemPrice;
+    private BigDecimal itemPrice;
     //数量
-    private String itemNum;
+    private Integer itemNum;
     //项目药品检查项
     private String itemType;
     //金额
-    private String itemAmount;
+    private Integer itemAmount;
 }

@@ -4,9 +4,11 @@ package com.aaa.charge.service.impl;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.RandomUtil;
 import com.aaa.charge.dao.HisCareOrderItemMapper;
+import com.aaa.charge.dao.HisOrderChargeItemMapper;
 import com.aaa.charge.dao.HisOrderChargeMapper;
 import com.aaa.charge.service.HisCareChargeltemService;
 import com.aaa.charge.vo.PostObjVo;
+import com.aaa.charge.vo.PostObjVo1;
 import com.aaa.core.entity.CareOrderItem;
 import com.aaa.core.entity.OrderCharge;
 import com.aaa.core.entity.OrderChargeItem;
@@ -16,7 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * 病例表(HisCareHistory)表服务接口
@@ -31,39 +37,49 @@ public class HisCareChargeltemImpl implements HisCareChargeltemService {
     private HisCareOrderItemMapper hisCareOrderItemMapper;
     @Autowired
     private HisOrderChargeMapper hisOrderChargeMapper;
+    @Autowired
+    private HisOrderChargeItemMapper hisOrderChargeItemMapper;
 
     @Override
     @Transactional//开启事务
     public Result<List<CareOrderItem>> updateBystatus(PostObjVo postObjVo) {
-        //获取itemId修改状态
-        for (int i=0;i<postObjVo.getOrderChargeItemDtoList().size();i++){
-            hisCareOrderItemMapper.updateBystatus(postObjVo.getOrderChargeItemDtoList().get(i).getItemId());
-            //详情id
-            String ItemId =postObjVo.getOrderChargeItemDtoList().get(i).getItemId();
-            //处方id
-            String coId =postObjVo.getOrderChargeItemDtoList().get(i).getCoId();
-            //项目名称
-            String itemName = postObjVo.getOrderChargeItemDtoList().get(i).getItemName();
-            //单价
-            String itemPrice = postObjVo.getOrderChargeItemDtoList().get(i).getItemPrice();
-            //数量
-            String itemNum = postObjVo.getOrderChargeItemDtoList().get(i).getItemNum();
-            //小计
-            String itemAmount = postObjVo.getOrderChargeItemDtoList().get(i).getItemAmount();
-            //类型
-            String itemType = postObjVo.getOrderChargeItemDtoList().get(i).getItemType();
-            hisCareOrderItemMapper.insertAll(ItemId,coId,itemName,itemPrice,itemNum,itemAmount,itemType);
-        }
         //获取挂号单id
         String regId = postObjVo.getOrderChargeDto().getRegId();
         //获取患者姓名
         String patientName = postObjVo.getOrderChargeDto().getPatientName();
         //获取总金额
-        Double orderAmount = postObjVo.getOrderChargeDto().getOrderAmount();
+        BigDecimal orderAmount = postObjVo.getOrderChargeDto().getOrderAmount();
         //创建时间
-        OrderCharge orderCharge = new OrderCharge();
-        orderCharge.setPayTime(new DateTime());
-        hisOrderChargeMapper.insertAll(regId,patientName,orderAmount,orderCharge);
+        LocalDateTime createTime = LocalDateTime.now();
+        //生成orderId
+        String orderId= "ODC";
+        Random random = new Random();
+        for (int i = 0; i < 10; i++) {
+            orderId += String.valueOf(random.nextInt(10));
+        }
+        hisOrderChargeMapper.insertAll(orderId,regId,patientName,orderAmount,createTime);
+
+        //获取itemId修改状态
+        List<PostObjVo1> orderChargeItemDtoList = postObjVo.getOrderChargeItemDtoList();
+        for (int i=0;i<orderChargeItemDtoList.size();i++){
+            hisCareOrderItemMapper.updateBystatus(orderChargeItemDtoList.get(i).getItemId());
+        }
+        for (int i=0;i<orderChargeItemDtoList.size();i++) {
+            OrderChargeItem orderChargeItem = new OrderChargeItem();
+            orderChargeItem.setOrderId(orderId);
+            orderChargeItem.setItemId(orderChargeItemDtoList.get(i).getItemId());
+            orderChargeItem.setItemType(orderChargeItemDtoList.get(i).getItemType());
+            orderChargeItem.setItemName(orderChargeItemDtoList.get(i).getItemName());
+            orderChargeItem.setItemNum(orderChargeItemDtoList.get(i).getItemNum());
+            orderChargeItem.setItemPrice(orderChargeItemDtoList.get(i).getItemPrice());
+            orderChargeItem.setItemAmount(orderChargeItemDtoList.get(i).getItemAmount());
+            orderChargeItem.setCoId(orderChargeItemDtoList.get(i).getCoId());
+            orderChargeItem.setStatus("1");
+            hisOrderChargeItemMapper.insert(orderChargeItem);
+        }
+
         return new Result<>(200,"支付成功");
     }
+
+
 }

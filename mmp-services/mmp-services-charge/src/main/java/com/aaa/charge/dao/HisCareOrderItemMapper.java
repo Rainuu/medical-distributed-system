@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -20,5 +21,4 @@ public interface HisCareOrderItemMapper extends BaseMapper<CareOrderItem> {
     void updateBystatus(String itemId);
 
 
-    void insertAll(String itemId, String coId, String itemName, String itemPrice, String itemNum, String itemAmount, String itemType);
 }
