@@ -53,8 +53,8 @@ public class CheckResultServiceImpl implements CheckResultService {
    @Override
    public Result<List<CheckResult>> getByPage(CheckResultVo checkResultVo) {
       QueryWrapper<CheckResult> wrapper = new QueryWrapper<>();
-      if (StringUtils.hasText(checkResultVo.getCheckItemName())){
-         wrapper.like("check_item_id",checkResultVo.getCheckItemName());
+      if (StringUtils.hasText(checkResultVo.getCheckItemId())){
+         wrapper.like("check_item_id",checkResultVo.getCheckItemId());
       }
       if (StringUtils.hasText(checkResultVo.getPatientName())){
          wrapper.like("patient_name",checkResultVo.getPatientName());
@@ -63,12 +63,14 @@ public class CheckResultServiceImpl implements CheckResultService {
          wrapper.between("create_time",checkResultVo.getDateRange()[0],checkResultVo.getDateRange()[1]);
       }
       List<CheckResult> checkResults = checkResultDao.selectList(wrapper);
-      return new Result<List<CheckResult>>(2000,"查询角色",checkResults);
+      return new Result<>(2000,"查询角色",checkResults);
    }
 
    @Override
    public Result<List<CheckResult>> getByPageTwo(CheckResultVo checkResultVo) {
-      List<CheckResult> checkResults = checkResultDao.selectAllTwo(checkResultVo);
-      return new Result<List<CheckResult>>(2000,"查询角色",checkResults);
+      String checkItemId = checkResultVo.getCheckItemId();
+      String[] dateRange = checkResultVo.getDateRange();
+      List<CheckResult> checkResults = checkResultDao.selectAllTwo(checkItemId,dateRange);
+      return new Result<>(2000,"查询角色",checkResults);
    }
 }

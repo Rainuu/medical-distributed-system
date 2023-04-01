@@ -1,12 +1,11 @@
 package com.aaa.doctor.controller.api;
 
 import com.aaa.core.entity.Registration;
+import com.aaa.core.vo.RegistrationVo;
+import com.aaa.core.vo.Result;
 import com.aaa.doctor.service.ApiRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,17 +24,17 @@ public class ApiRegistrationController {
 
     /**
      * 模糊查询信息
-     * @param registration
+     * @param
      * @return
      */
-    @GetMapping("queryByDoctor")
-    public List<Registration> queryByDoctor(Registration registration) {
-        return apiregistrationService.queryByDoctor(registration);
+    @PostMapping("queryByDoctor")
+    public Result<List<Registration>> queryByDoctor(RegistrationVo registrationVo) {
+        return apiregistrationService.queryByDoctor(registrationVo);
     }
 
-    @GetMapping("ApiRegistrationSql")
-    public List<Registration> ApiRegistrationSql(@PathVariable String userId) {
-        return apiregistrationService.ApiRegistrationSql(userId);
+    @PostMapping("queryByDoctor2")
+    public Result<List<Registration>> queryByDoctor2(RegistrationVo registrationVo) {
+        return apiregistrationService.ApiRegistrationSql(registrationVo);
     }
 
 }

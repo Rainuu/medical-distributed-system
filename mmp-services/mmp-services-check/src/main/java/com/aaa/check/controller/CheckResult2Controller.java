@@ -29,7 +29,6 @@ public class CheckResult2Controller {
     @PostMapping("selectAll")
     public Result<List<CheckResult>> selectAll(CheckResultVo checkResultVo){
         return checkResultService.getByPage(checkResultVo);
-
     }
 
     @PostMapping("selectAllTwo")

@@ -101,38 +101,12 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column
-          prop="cocId"
-          label="检查单位"
-          min-width="100px"
-      >
-      </el-table-column>
-      <el-table-column
-          prop="regId"
-          label="挂号单号"
-          min-width="100px"
-      >
-      </el-table-column>
-      <el-table-column
-          prop="checkItemName"
-          label="项目名称"
-      >
-      </el-table-column>
-      <el-table-column
-          prop="patientName"
-          label="患者姓名"
-      >
-      </el-table-column>
-      <el-table-column
-          prop="resultStatus"
-          label="检查状态"
-          :formatter="statusFormat"
-      >
-      </el-table-column>
-      <el-table-column
-          fixed="right"
-          label="操作"
-      >
+      <el-table-column prop="cocId" label="检查单位" min-width="100px"></el-table-column>
+      <el-table-column prop="regId" label="挂号单号" min-width="100px"></el-table-column>
+      <el-table-column prop="checkItemName" label="项目名称"></el-table-column>
+      <el-table-column prop="patientName" label="患者姓名"></el-table-column>
+      <el-table-column prop="resultStatus" label="检查状态" :formatter="statusFormat"></el-table-column>
+      <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
           <el-button icon="el-icon-edit" @click="handleClick(scope.row)" type="text" size="small">录入结果</el-button>
         </template>
@@ -263,6 +237,8 @@ export default {
     queryAll(){
       this.$axios.post("/check/api/checkResult/listStatus/"+this.page.current+"/"+this.page.size,this.queryParams).then(r=>{
         this.tableData=r.data.t.records;
+        // alert(r.data.t.records)
+        // alert(this.tableData.length)
         this.page.total=r.data.t.total;
       })
     },

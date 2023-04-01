@@ -38,7 +38,7 @@
           <el-table-column label="挂号ID" prop="regId" align="center" />
           <el-table-column label="医生编号" prop="userId" align="center" />
           <el-table-column label="医生姓名" prop="doctorName" align="center" />
-          <el-table-column label="挂号费用" prop="regAmount" align="center" />
+          <el-table-column label="挂号费用" prop="registrationAmount" align="center" />
           <el-table-column label="患者姓名" prop="patientName" align="center" />
           <el-table-column label="就诊时间" prop="visitDate" align="center" />
         </el-table>
@@ -79,7 +79,7 @@
         <el-table v-loading="loading" border :data="workloadStatList" show-summary>
           <el-table-column label="医生编号" prop="userId" align="center" />
           <el-table-column label="医生姓名" prop="doctorName" align="center" />
-          <el-table-column label="挂号总金额" prop="totalAmount" align="center" />
+          <el-table-column label="挂号总金额" prop="sum" align="center" />
           <el-table-column label="接诊数量" prop="count" align="center" />
         </el-table>
         <!-- 数据结束结束 -->
@@ -130,8 +130,8 @@ export default {
     // 查询工作量列表
     listWorkload() {
       this.loading = true
-      queryWorkload(this.addDateRaqueryWorkloadnge(this.queryWorkloadParams, this.dateRange)).then(res => {
-        this.workloadList = res.data
+      this.$axios.post("/doctor/api/registration/queryByDoctor",this.queryWorkloadParams,this.dateRange).then(res => {
+        this.workloadList = res.data.t
         this.loading = false
       }).catch(() => {
         this.msgError('查询失败')
@@ -151,8 +151,8 @@ export default {
     // 查询工作量列表
     listWorkloadStat() {
       this.loading = true
-      queryWorkloadStat(this.addDateRange(this.queryWorkloadStatParams, this.dateRange)).then(res => {
-        this.workloadStatList = res.data
+      this.$axios.post("/doctor/api/registration/queryByDoctor2",this.queryWorkloadParams,this.dateRange).then(res => {
+        this.workloadStatList = res.data.t
         this.loading = false
       }).catch(() => {
         this.msgError('查询失败')

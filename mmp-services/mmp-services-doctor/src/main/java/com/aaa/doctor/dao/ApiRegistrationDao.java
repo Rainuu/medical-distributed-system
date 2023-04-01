@@ -14,8 +14,7 @@ import java.util.List;
  */
 public interface ApiRegistrationDao extends BaseMapper<Registration> {
 
-    @Select("select user_id,sum(registration_amount) rea,count(patient_id)pid from his_registration GROUP BY user_id having userId=#{user_id}")
-    List<Registration> selectSum(String userId);
+
 
 
 }

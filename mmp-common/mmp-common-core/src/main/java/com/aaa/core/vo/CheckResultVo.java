@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class CheckResultVo {
-    private String checkItemName;
+    private String checkItemId;
     private String patientName;
     private String[] dateRange;
 }

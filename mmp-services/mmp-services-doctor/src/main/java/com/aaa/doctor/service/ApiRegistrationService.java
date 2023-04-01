@@ -1,6 +1,8 @@
 package com.aaa.doctor.service;
 
 import com.aaa.core.entity.Registration;
+import com.aaa.core.vo.RegistrationVo;
+import com.aaa.core.vo.Result;
 
 import java.util.List;
 
@@ -12,9 +14,6 @@ import java.util.List;
  */
 public interface ApiRegistrationService {
 
-    List<Registration> queryByDoctor(Registration registration);
-
-
-
-    List<Registration> ApiRegistrationSql(String userId);
+    Result<List<Registration>> queryByDoctor(RegistrationVo registrationVo);
+    Result<List<Registration>> ApiRegistrationSql(RegistrationVo registrationVo);
 }

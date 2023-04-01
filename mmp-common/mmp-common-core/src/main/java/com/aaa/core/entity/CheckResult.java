@@ -94,6 +94,12 @@ public class CheckResult implements Serializable {
     private String updateBy;
 
     @TableField(exist = false)
+    private BigDecimal sum;
+
+    @TableField(exist = false)
+    private Integer count;
+
+    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
     @Override

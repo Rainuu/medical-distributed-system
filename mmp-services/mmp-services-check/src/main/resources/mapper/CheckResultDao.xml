@@ -36,22 +36,23 @@
     </select>
 
     <delete id="addMsg">
-        update his_check_result set result_msg = #{param2,jdbcType=VARCHAR},result_img = #{param3},result_status = 1 where coc_id = #{param1,jdbcType=VARCHAR}
+        update his_check_result set result_msg = #{param2,jdbcType=VARCHAR},result_img = #{param3},
+                                    result_status = 1 where coc_id = #{param1,jdbcType=VARCHAR}
     </delete>
 
     <select id="selectAllTwo" resultMap="HisCheckResultMap">
-        SELECT check_item_id,check_item_name,SUM(price),COUNT(*) FROM his_check_result
-            <if test="checkResultVo.checkItemName!='' and checkResultVo.checkItemName!=null or checkResultVo.dateRange !='' and checkResultVo.dateRange > 0">
+        SELECT check_item_id,check_item_name,SUM(price) sum,COUNT(*) count FROM his_check_result
+            <if test="checkItemId!='' and checkItemId!=null or dateRange !='' and dateRange > 0">
                 where
             </if>
-            <if test="checkResultVo.checkItemName!='' and checkResultVo.checkItemName!=null">
-                check_item_name=#{param2.checkItemName}
+            <if test="checkItemId!='' and checkItemId!=null">
+                check_item_id=#{param1,jdbcType=VARCHAR}
             </if>
-            <if test="checkResultVo.checkItemName!='' and checkResultVo.checkItemName!=null and checkResultVo.dateRange !='' and checkResultVo.dateRange > 0">
+            <if test="checkItemId!='' and checkItemId!=null and dateRange !='' and dateRange > 0">
                 and
             </if>
-            <if test="checkResultVo.dateRange !='' and checkResultVo.dateRange > 0">
-                create_time between #{param2.dateRange[0]} and #{param2.dateRange[1]};
+            <if test="dateRange !='' and dateRange > 0">
+                create_time between #{dateRange[0]} and #{dateRange[1]};
             </if>
       GROUP BY check_item_id,check_item_name
     </select>

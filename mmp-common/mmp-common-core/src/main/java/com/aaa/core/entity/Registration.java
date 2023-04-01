@@ -84,6 +84,12 @@ public class Registration implements Serializable {
      */
     private String subsectionType;
 
+    @TableField(exist = false)
+    private BigDecimal sum;
+
+    @TableField(exist = false)
+    private Integer count;
+
     /**
      * 创建时间
      */

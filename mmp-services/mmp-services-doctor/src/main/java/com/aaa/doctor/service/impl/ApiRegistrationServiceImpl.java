@@ -1,7 +1,10 @@
 package com.aaa.doctor.service.impl;
 
 import com.aaa.core.entity.Registration;
+import com.aaa.core.vo.RegistrationVo;
+import com.aaa.core.vo.Result;
 import com.aaa.doctor.dao.ApiRegistrationDao;
+import com.aaa.doctor.dao.RegistrationDao;
 import com.aaa.doctor.service.ApiRegistrationService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,30 +23,31 @@ import java.util.Objects;
 @Service
 public class ApiRegistrationServiceImpl implements ApiRegistrationService {
     @Autowired
-    private ApiRegistrationDao apiRegistrationDao;
+    private RegistrationDao registrationDao;
 
     @Override
-    public List<Registration> queryByDoctor(Registration registration) {
+    public Result<List<Registration>> queryByDoctor(RegistrationVo registrationVo) {
         QueryWrapper<Registration> wrapper = new QueryWrapper<>();
-        if (StringUtils.hasText(registration.getDoctorName())) {
-            wrapper.like("doctor_name",registration.getDoctorName());
+        if (StringUtils.hasText(registrationVo.getDoctorName())) {
+            wrapper.like("doctor_name",registrationVo.getDoctorName());
         }
-        if (Objects.nonNull(registration.getCreateTime())) {
-            wrapper.eq("create_time",registration.getCreateTime());
+        if(Objects.nonNull(registrationVo.getDateRange())&&registrationVo.getDateRange().length==2){
+            wrapper.between("create_time",registrationVo.getDateRange()[0],registrationVo.getDateRange()[1]);
         }
-        List<Registration> registrations = apiRegistrationDao.selectList(wrapper);
-        return registrations;
+        List<Registration> registrations = registrationDao.selectList(wrapper);
+        return new Result<>(200,"统计查询",registrations);
     }
 
 
     /**
      * 查询每个医生的挂号总金额和每个医生的接诊数量
-     * @param userId
-     * @return
+     * @param
      */
     @Override
-    public List<Registration> ApiRegistrationSql(String userId) {
-        List<Registration> registrations = apiRegistrationDao.selectSum(userId);
-        return registrations;
+    public Result<List<Registration>> ApiRegistrationSql(RegistrationVo registrationVo) {
+        String doctorName = registrationVo.getDoctorName();
+        String[] dateRange = registrationVo.getDateRange();
+        List<Registration> registrations = registrationDao.selectSum(doctorName,dateRange);
+        return new Result<>(200,"统计查询",registrations);
     }
 }

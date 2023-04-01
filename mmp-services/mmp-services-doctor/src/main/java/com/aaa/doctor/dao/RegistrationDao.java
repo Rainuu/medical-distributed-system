@@ -3,6 +3,8 @@ package com.aaa.doctor.dao;
 import com.aaa.core.entity.Registration;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * @author 刘鸿飞
  * @version 1.0.0
@@ -10,4 +12,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @date 2023/3/30 22:48
  */
 public interface RegistrationDao extends BaseMapper<Registration> {
+
+    List<Registration> selectSum(String doctorName, String[] dateRange);
 }
