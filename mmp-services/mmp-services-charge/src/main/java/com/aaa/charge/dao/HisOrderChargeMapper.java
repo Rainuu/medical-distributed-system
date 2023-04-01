@@ -22,4 +22,6 @@ public interface HisOrderChargeMapper extends BaseMapper<OrderCharge> {
     void insertAll(String orderId,String regId, String patientName, BigDecimal orderAmount, LocalDateTime createTime);
 
     void insertAllWX(String orderId, String regId, String patientName, BigDecimal orderAmount, LocalDateTime createTime);
+
+    void updBystatus(String orderId);
 }

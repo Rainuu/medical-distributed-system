@@ -95,12 +95,12 @@
             <span>{{ payObj.orderId }}</span>
           </el-form-item>
           <el-form-item label="总金额:">
-            <span>{{ payObj.allAmount }}</span>
+            <span>{{ payObj.price }}</span>
           </el-form-item>
         </el-card>
       </el-form>
       <div style="text-align:center">
-        <vue-qr :text="payObj.payUrl" :size="200" />
+        <vue-qr :text="payObj.codeUrl" :size="200" />
         <div>请使用支付宝扫码</div>
       </div>
     </el-dialog>
@@ -111,8 +111,11 @@
 
 <script>
 import qs from "qs";
-
+import vueQr from "vue-qr"
 export default {
+  components:{
+    vueQr
+  },
   name: "docharge",
   data(){
     return{
@@ -322,15 +325,16 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          // 打开支付的弹出层
+          this.openPay = true
           this.$axios.post("charge/api/hisOrderCharge/carateNative/",postObj).then(result=>{
-            this.payObj = res.data.t
+            this.payObj = result.data.t
             this.$message.success('订单创建成功，请扫码支付')
             const tx = this
-            tx.openPay = true// 打开支付的弹出层
             // 定时轮询
             tx.intervalObj = setInterval(function() {
               // 根据ID查询订单信息
-              queryOrderChargeOrderId(tx.payObj.orderId).then(r => {
+              this.$axios.post("charge/api/hisOrderCharge/updstatus",tx.payObj.orderId).then(r => {
                 if (r.data.orderStatus === '1') { // 说明订单状态为支付成功
                   // 清空定时器
                   clearInterval(tx.intervalObj)

@@ -2,12 +2,9 @@ package com.aaa.charge.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.db.sql.Order;
-import com.aaa.charge.dao.HisCareHistoryMapper;
-import com.aaa.charge.dao.HisCareOrderItemMapper;
-import com.aaa.charge.dao.HisCareOrderMapper;
+import com.aaa.charge.dao.*;
 import com.aaa.charge.fegin.OrderCharFeign;
 import com.aaa.charge.service.HisOrderBackfeeService;
-import com.aaa.charge.dao.HisOrderBackfeeMapper;
 
 
 import com.aaa.charge.vo.OrderBackfeeVo;
@@ -35,6 +32,8 @@ import java.util.Map;
 public class HisOrderBackfeeServiceImpl implements HisOrderBackfeeService {
    @Autowired
    private HisOrderBackfeeMapper hisOrderBackfeeDao;
+   @Autowired
+   private HisOrderBackfeeItemMapper hisOrderBackfeeItemMapper;
    @Autowired
    private OrderCharFeign orderCharFeign;
    @Autowired
@@ -133,6 +132,13 @@ public class HisOrderBackfeeServiceImpl implements HisOrderBackfeeService {
       QueryWrapper<OrderBackfee> wrapper = new QueryWrapper<>();
       wrapper.between("create_time",create_time[0],create_time[1]);
       return hisOrderBackfeeDao.selectList(wrapper);
+   }
+   //统计数据  退费接口
+   @Override
+   public List<OrderBackfeeItem> listAllitem(String[] create_time) {
+      QueryWrapper<OrderBackfeeItem> wrapper = new QueryWrapper<>();
+      wrapper.between("create_time",create_time[0],create_time[1]);
+      return hisOrderBackfeeItemMapper.selectList(wrapper);
    }
 
 

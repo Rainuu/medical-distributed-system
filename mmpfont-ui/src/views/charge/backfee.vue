@@ -52,7 +52,7 @@
         <el-button type="success" icon="el-icon-finished" @click="handleSelectAll">全选</el-button>
         <el-button type="success" icon="el-icon-finished" @click="handleUnSelectAll">取消全选</el-button>
         <el-button type="danger" icon="el-icon-bank-card" @click="handleBackfeeWithCash">现金退费</el-button>
-        <el-button type="danger" icon="el-icon-bank-card" >支付宝退费</el-button>
+        <el-button type="danger" icon="el-icon-bank-card"  @click="handleBackfeeWithZfb">支付宝退费</el-button>
         <span style="margin-left:20px">订单总额:<span style="color:red;margin-left:20px">￥:{{ allAmount }}</span></span>
       </el-card>
       <!-- 工具结束开始 -->
@@ -72,7 +72,7 @@
               <el-table-column label="单价(元)" align="center" prop="price" />
               <el-table-column label="金额(元)" align="center" prop="amount" />
               <el-table-column label="备注" align="center" prop="remark" />
-              <el-table-column label="状态" align="center" prop="status" :formatter="(row)=>dictFormat(row,row.status,'his_order_details_status')"/>
+              <el-table-column label="状态" align="center" prop="status" :formatter="(row)=>dictFormat(row,row.status,' his_order_details_status')"/>
             </el-table>
           </el-collapse-item>
         </el-collapse>
@@ -232,6 +232,60 @@ export default {
             this.loading = false
           }).catch(() => {
             this.$message.error('创建订单失败')
+            this.loading = false
+          })
+        }).catch(() => {
+          this.$message.warning('创建已取消')
+          this.loading = false
+        })
+      }
+    },
+    // 支付宝退费
+    handleBackfeeWithZfb() {
+      if (!this.careHistory.regId) {
+        this.$message.error('请输入挂号单ID查询')
+        return
+      } else if (this.itemObjs.length === 0) {
+        this.$message.warning('请选择要退费的项目')
+        return
+      } else {
+        // 组装数据
+        const postObj = {
+          orderBackfeeDto: {
+            backAmount: this.allAmount,
+            chId: this.careHistory.chId,
+            regId: this.careHistory.regId,
+            patientName: this.careHistory.patientName
+          },
+          orderBackfeeItemDtoList: []
+        }
+        this.itemObjs.filter(item => {
+          const obj = {
+            itemId: item.itemId,
+            coId: item.coId,
+            itemName: item.itemName,
+            itemPrice: item.price,
+            itemNum: item.num,
+            itemType: item.itemType,
+            itemAmount: item.amount
+          }
+          postObj.orderBackfeeItemDtoList.push(obj)
+        })
+        // 发送请求
+        this.loading = true
+        this.loadingText = '订单创建并支付宝退费中'
+        this.$confirm('是否确定创建订单并使用支付宝退纲?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          // 发送支付宝退费的请求
+          this.$axios.post("charge/api/hisOrderBackfee/updBystatus",postObj).then(res => {
+            this.resetCurrentParams()
+            this.$message.success('支付宝退费成功')
+            this.loading = false
+          }).catch(() => {
+            this.$message.warning('创建已取消')
             this.loading = false
           })
         }).catch(() => {

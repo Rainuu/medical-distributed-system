@@ -37,4 +37,10 @@ public interface HisOrderChargeService {
     Result<List<CareOrderItem>> ZFB(PostObjVo postObjVo);
 
    List<OrderCharge> listAll(String[] create_time);
+
+    Result<List<OrderCharge>> updByStatus(String orderId);
+
+    Result updByDispense(String itemId);
+
+    List<OrderChargeItem> listAllItem(String[] create_time);
 }

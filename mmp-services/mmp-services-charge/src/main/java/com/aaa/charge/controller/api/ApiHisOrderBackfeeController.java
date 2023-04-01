@@ -66,6 +66,12 @@ public class ApiHisOrderBackfeeController {
     public Result<List<OrderBackfeeItem>> updateBystatus(@RequestBody PostObjVoV postObjVoV){
         return hisOrderBackfeeItemService.updateBystatus(postObjVoV);
     }
+    //处方退费: 支付宝退费
+    @PostMapping("updBystatus")
+    public Result<List<OrderBackfeeItem>> updBystatus(@RequestBody PostObjVoV postObjVoV){
+        return hisOrderBackfeeItemService.updBystatus(postObjVoV);
+    }
+
 
 
 }

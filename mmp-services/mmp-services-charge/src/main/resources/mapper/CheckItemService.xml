@@ -6,4 +6,12 @@
     SELECT item_id,co_id,item_name,item_price,item_num,item_amount,order_id,item_type,status FROM his_order_charge_item
         WHERE order_id=#{orderId}
     </select>
+
+<update id="updateBystatus">
+    UPDATE his_order_charge_item SET status=1 where order_id=#{orderId}
+    </update>
+
+<update id="updByDispense">
+    update his_order_charge_item set status=3 where item_id=#{itemId}
+    </update>
 </mapper>

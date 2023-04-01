@@ -51,9 +51,7 @@
       <el-card style="margin-bottom: 5px">
         <el-button type="success" icon="el-icon-finished" @click="handleSelectAll">全选</el-button>
         <el-button type="success" icon="el-icon-finished" @click="handleUnSelectAll">取消全选</el-button>
-        <el-button type="danger" icon="el-icon-bank-card" @click="handlePayWithCash">现金支付</el-button>
-        <el-button type="danger" icon="el-icon-bank-card" @click="handlePayWithZfb">支付宝支付</el-button>
-        <span style="margin-left:20px">订单总额:<span style="color:red;margin-left:20px">￥:{{ allAmount }}</span></span>
+        <el-button type="danger" icon="el-icon-bank-card" @click="handleDoMedicine">发药</el-button>
       </el-card>
       <!-- 工具结束开始 -->
       <!-- 未支付的处方信息开始 -->
@@ -134,10 +132,6 @@ export default {
         this.loadingText = ''
       })
     },
-    // 翻译处方详情状态
-    statusFormatter(row) {
-      return this.selectDictLabel(this.statusOptions, row.status)
-    },
     // 监听多个表格的checkbox的选中事件
     handleCareOrderItemSelectionChange(selection, coId) {
       if (this.itemObjs.length === 0) {
@@ -176,15 +170,14 @@ export default {
     },
     handleDoMedicine() {
       if (!this.careHistory.regId) {
-        this.msgError('请输入挂号单ID查询')
+        this.$message.warning('请输入挂号单ID查询')
         return
       } else if (this.itemObjs.length === 0) {
-        this.msgError('请选择要发药的药品名')
+        this.$message.warning('请选择要发药的药品名')
         return
       } else {
         // 组装数据
         const itemIds = this.itemObjs.map(item => item.itemId)
-
         // 发送请求
         this.loading = true
         this.loadingText = '发药中。。。'
@@ -193,17 +186,17 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          doMedicine(itemIds).then(res => {
-            this.msgSuccess('全部药品发放成功')
+            this.$axios.get(""+itemIds).then(res => {
+            this.$message.success('全部药品发放成功')
             // this.resetCurrentParams()
             this.handleQuery()
             this.loading = false
           }).catch(() => {
-            this.msgError('发放失败原因：看右上角')
+            this.$message.error('发放失败')
             this.loading = false
           })
         }).catch(() => {
-          this.msgError('发药已取消')
+          this.$message.info('发药已取消')
           this.loading = false
         })
       }

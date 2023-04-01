@@ -108,6 +108,7 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
             Map<String,Object>map1= BeanUtil.beanToMap(careOrder);
             QueryWrapper<CareOrderItem> wrapper2 = new QueryWrapper<>();
             wrapper2.eq("status",1);
+            wrapper2.eq("item_type",0);
             wrapper2.eq("co_id",careOrder.getCoId());
             List<CareOrderItem> careOrderItem = hisCareOrderItemMapper.selectList(wrapper2);
             //根据order表关联order_item表
@@ -165,49 +166,98 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
          client.post();
          //获取请求的相应结果
          String content = client.getContent();
+         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!1"+content);
          Map<String, String> map = WXPayUtil.xmlToMap(content);;
          if (map.get("result_code").equals("SUCCESS")){
             Map<String,Object> result=new HashMap<>();
             result.put("codeUrl",map.get("code_url"));
             result.put("price",postObjVo.getOrderChargeDto().getOrderAmount());
             result.put("orderId",orderId);
+            //创建订单
+            //获取挂号单id
+            String regId = postObjVo.getOrderChargeDto().getRegId();
+            //获取患者姓名
+            String patientName = postObjVo.getOrderChargeDto().getPatientName();
+            //获取总金额
+            BigDecimal orderAmount = postObjVo.getOrderChargeDto().getOrderAmount();
+            //创建时间
+            LocalDateTime createTime = LocalDateTime.now();
+            hisOrderChargeMapper.insertAllWX(orderId,regId,patientName,orderAmount,createTime);
+            //获取itemId修改状态
+            List<PostObjVo1> orderChargeItemDtoList = postObjVo.getOrderChargeItemDtoList();
+            for (int i=0;i<orderChargeItemDtoList.size();i++){
+               hisCareOrderItemMapper.updBystatus(orderChargeItemDtoList.get(i).getItemId());
+            }
+            for (int i=0;i<orderChargeItemDtoList.size();i++) {
+               OrderChargeItem orderChargeItem = new OrderChargeItem();
+               orderChargeItem.setOrderId(orderId);
+               orderChargeItem.setItemId(orderChargeItemDtoList.get(i).getItemId());
+               orderChargeItem.setItemType(orderChargeItemDtoList.get(i).getItemType());
+               orderChargeItem.setItemName(orderChargeItemDtoList.get(i).getItemName());
+               orderChargeItem.setItemNum(orderChargeItemDtoList.get(i).getItemNum());
+               orderChargeItem.setItemPrice(orderChargeItemDtoList.get(i).getItemPrice());
+               orderChargeItem.setItemAmount(orderChargeItemDtoList.get(i).getItemAmount());
+               orderChargeItem.setCoId(orderChargeItemDtoList.get(i).getCoId());
+               orderChargeItem.setStatus("0");
+               hisOrderChargeItemMapper.insert(orderChargeItem);
+            }
             return new Result(200,"生成二维码成功",result);
          }
 
       } catch (Exception e) {
          e.printStackTrace();
    }
-
-      //创建订单
-      //获取挂号单id
-      String regId = postObjVo.getOrderChargeDto().getRegId();
-      //获取患者姓名
-      String patientName = postObjVo.getOrderChargeDto().getPatientName();
-      //获取总金额
-      BigDecimal orderAmount = postObjVo.getOrderChargeDto().getOrderAmount();
-      //创建时间
-      LocalDateTime createTime = LocalDateTime.now();
-      hisOrderChargeMapper.insertAllWX(orderId,regId,patientName,orderAmount,createTime);
-      //获取itemId修改状态
-      List<PostObjVo1> orderChargeItemDtoList = postObjVo.getOrderChargeItemDtoList();
-      for (int i=0;i<orderChargeItemDtoList.size();i++){
-         hisCareOrderItemMapper.updBystatus(orderChargeItemDtoList.get(i).getItemId());
-      }
-      for (int i=0;i<orderChargeItemDtoList.size();i++) {
-         OrderChargeItem orderChargeItem = new OrderChargeItem();
-         orderChargeItem.setOrderId(orderId);
-         orderChargeItem.setItemId(orderChargeItemDtoList.get(i).getItemId());
-         orderChargeItem.setItemType(orderChargeItemDtoList.get(i).getItemType());
-         orderChargeItem.setItemName(orderChargeItemDtoList.get(i).getItemName());
-         orderChargeItem.setItemNum(orderChargeItemDtoList.get(i).getItemNum());
-         orderChargeItem.setItemPrice(orderChargeItemDtoList.get(i).getItemPrice());
-         orderChargeItem.setItemAmount(orderChargeItemDtoList.get(i).getItemAmount());
-         orderChargeItem.setCoId(orderChargeItemDtoList.get(i).getCoId());
-         orderChargeItem.setStatus("0");
-         hisOrderChargeItemMapper.insert(orderChargeItem);
-      }
       return new Result<>(200,"成功");
    }
+
+
+   @Override
+   @Transactional
+   public Result<List<OrderCharge>> updByStatus(String orderId) {
+      Boolean flag=false;
+      try {
+         //根据订单状态查询微信的支付的状态
+         HttpClient client = new HttpClient("https://api.mch.weixin.qq.com/pay/orderquery");
+         Map<String, String> params = new HashMap<>();
+         params.put("appid", appId);
+         params.put("mch_id", mchId);
+         params.put("out_trade_no", orderId);
+         params.put("nonce_str", WXPayUtil.generateNonceStr());
+         client.setHttps(true);
+         client.setXmlParam(WXPayUtil.generateSignedXml(params,apiKey));
+         client.post();
+         String content = client.getContent();
+         System.out.println(content);
+         Map<String, String> map = WXPayUtil.xmlToMap(content);
+         if (map.get("trade_state").equals("SUCCESS")){
+            flag=true;
+            //1修改订单状态
+            hisOrderChargeMapper.updBystatus(orderId);
+            QueryWrapper<OrderChargeItem> wrapper = new QueryWrapper<>();
+            wrapper.eq("order_id",orderId);
+            List<OrderChargeItem> orderChargeItems = hisOrderChargeItemMapper.selectList(wrapper);
+            for (int i =0;orderChargeItems.size()>i;i++){
+               hisOrderChargeItemMapper.updateBystatus(orderId);
+            }
+            return  new Result(2000,"支付成功",flag);
+         }
+      }catch (Exception e){
+
+      }
+      return new Result<>(200,"支付成功",null);
+   }
+
+   @Override
+   public Result updByDispense(String itemId) {
+      QueryWrapper<OrderChargeItem> wrapper = new QueryWrapper<>();
+      wrapper.eq("item_id",itemId);
+      hisOrderChargeItemMapper.updByDispense(itemId);
+
+      return new Result<>(200,"发药成功");
+   }
+
+
+
 
    //统计接口
    @Override
@@ -216,6 +266,14 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
       wrapper.between("create_time",create_time[0],create_time[1]);
       return hisOrderChargeMapper.selectList(wrapper);
    }
+   //统计接口
+   @Override
+   public List<OrderChargeItem> listAllItem(String[] create_time) {
+      QueryWrapper<OrderChargeItem> wrapper = new QueryWrapper<>();
+      wrapper.between("create_time",create_time[0],create_time[1]);
+      return hisOrderChargeItemMapper.selectList(wrapper);
+   }
+
 
 
 }

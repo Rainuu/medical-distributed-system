@@ -16,4 +16,8 @@
     INSERT INTO his_order_charge (order_id,reg_id,patient_name,order_amount,order_status,pay_type,create_time)
     VALUES(#{param1},#{param2}, #{param3},#{param4},'2','1',#{param5})
     </insert>
+
+<update id="updBystatus">
+    UPDATE his_order_charge set order_status=1 and pay_type=1 where order_id=#{orderId}
+    </update>
 </mapper>

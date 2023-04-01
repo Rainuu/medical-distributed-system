@@ -2,6 +2,7 @@ package com.aaa.charge.controller;
 
 import com.aaa.charge.service.HisOrderChargeService;
 import com.aaa.core.entity.OrderCharge;
+import com.aaa.core.entity.OrderChargeItem;
 import com.aaa.core.vo.Result;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,10 @@ public class HisOrderChargeController {
     public List<OrderCharge> list(@RequestBody String[] create_time){
         return hisOrderChargeService.listAll(create_time);
     }
+    @PostMapping("listAllItem")
+    public List<OrderChargeItem> listAllItem(@RequestBody String[] create_time){
+        return hisOrderChargeService.listAllItem(create_time);
+    }
+
 
 }

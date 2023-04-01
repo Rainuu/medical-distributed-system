@@ -75,11 +75,23 @@ public class ApiHisOrderChargeController {
     public Result<Map<String,Object>> list(@PathVariable String regId){
         return  service.selectupdById(regId);
     }
+    //处方发药  发药按钮实现
+    @GetMapping("updByDispense")
+    public Result updByDispense(@RequestBody String itemId){
+        return service.updByDispense(itemId);
+    }
 
     //支付宝支付
     @PostMapping("carateNative")
     public Result<List<CareOrderItem>> carateNative(@RequestBody PostObjVo postObjVo){
         return service.ZFB(postObjVo);
     }
+    //支付宝支付修改状态
+    @PostMapping("updstatus/{orderId}")
+    public Result<List<OrderCharge>> updstatus(@RequestBody String orderId){
+        return service.updByStatus(orderId);
+    }
+
+
 
 }

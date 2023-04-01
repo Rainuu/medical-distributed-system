@@ -22,4 +22,6 @@ import java.util.Map;
 public interface HisOrderBackfeeItemService {
 
     Result<List<OrderBackfeeItem>> updateBystatus(PostObjVoV postObjVov);
+
+    Result<List<OrderBackfeeItem>> updBystatus(PostObjVoV postObjVoV);
 }

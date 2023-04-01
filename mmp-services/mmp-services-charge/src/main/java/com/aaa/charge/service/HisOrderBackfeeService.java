@@ -29,4 +29,6 @@ public interface HisOrderBackfeeService {
     Result<Map<String, Object>> selectByregId(String regId);
 
     List<OrderBackfee> listAll(String[] create_time);
+
+    List<OrderBackfeeItem> listAllitem(String[] create_time);
 }
