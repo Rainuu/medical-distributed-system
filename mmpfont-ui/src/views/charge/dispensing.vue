@@ -58,9 +58,9 @@
       <el-card style="margin-bottom: 5px">
         <el-collapse v-if="careOrders.length>0" v-model="activeNames">
           <el-collapse-item v-for="(item,index) in careOrders" :key="index" :name="index">
-            <template slot="title">
-              【{{ item.coType==='0'?'药用处方':'检查处方' }}】【{{ index+1 }}】【处方总额】:￥{{ allAmount  }}
-            </template>
+<!--            <template slot="title">-->
+<!--              【{{ item.coType==='0'?'药用处方':'检查处方' }}】【{{ index+1 }}】【处方总额】:￥{{ item.allAmount  }}-->
+<!--            </template>-->
             <el-table ref="refTable" v-loading="loading" border :data="item.careOrderItem" :row-class-name="tableRowClassName"
                       @selection-change="handleCareOrderItemSelectionChange($event,item.coId)">
               <el-table-column type="selection" width="55" align="center" prop="itemId"/>
@@ -186,6 +186,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          alert(itemIds)
             this.$axios.get(""+itemIds).then(res => {
             this.$message.success('全部药品发放成功')
             // this.resetCurrentParams()

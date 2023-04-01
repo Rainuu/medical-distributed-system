@@ -166,7 +166,6 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
          client.post();
          //获取请求的相应结果
          String content = client.getContent();
-         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!1"+content);
          Map<String, String> map = WXPayUtil.xmlToMap(content);;
          if (map.get("result_code").equals("SUCCESS")){
             Map<String,Object> result=new HashMap<>();
@@ -247,11 +246,16 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
       return new Result<>(200,"支付成功",null);
    }
 
+   //处方发药
    @Override
-   public Result updByDispense(String itemId) {
-      QueryWrapper<OrderChargeItem> wrapper = new QueryWrapper<>();
-      wrapper.eq("item_id",itemId);
-      hisOrderChargeItemMapper.updByDispense(itemId);
+   public Result updByDispense(String[] itemId) {
+      for (int i=0;itemId.length>i;i++){
+         hisOrderChargeItemMapper.updByDispense(itemId[i]);
+      }
+      for (int i=0;itemId.length>i;i++){
+         hisCareOrderItemMapper.updstatus(itemId[i]);
+      }
+      //调用fen接口 传入名字和数量
 
       return new Result<>(200,"发药成功");
    }

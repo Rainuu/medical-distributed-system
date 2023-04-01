@@ -77,7 +77,7 @@ public class ApiHisOrderChargeController {
     }
     //处方发药  发药按钮实现
     @GetMapping("updByDispense")
-    public Result updByDispense(@RequestBody String itemId){
+    public Result updByDispense(@RequestBody String[] itemId){
         return service.updByDispense(itemId);
     }
 

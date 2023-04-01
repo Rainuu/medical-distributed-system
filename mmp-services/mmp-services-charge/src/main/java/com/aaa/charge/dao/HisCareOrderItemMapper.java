@@ -22,4 +22,7 @@ public interface HisCareOrderItemMapper extends BaseMapper<CareOrderItem> {
 
 
     void updBystatus(String itemId);
+
+
+    void updstatus(String itemId);
 }

@@ -9,6 +9,12 @@
 
 
 <update id="updBystatus">
+    update his_care_order_item set 	status=0 where item_id=#{itemId}
+    </update>
+
+
+
+<update id="updstatus">
     update his_care_order_item set 	status=3 where item_id=#{itemId}
     </update>
 </mapper>

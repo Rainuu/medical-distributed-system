@@ -40,7 +40,7 @@ public interface HisOrderChargeService {
 
     Result<List<OrderCharge>> updByStatus(String orderId);
 
-    Result updByDispense(String itemId);
+    Result updByDispense(String[] itemId);
 
     List<OrderChargeItem> listAllItem(String[] create_time);
 }
