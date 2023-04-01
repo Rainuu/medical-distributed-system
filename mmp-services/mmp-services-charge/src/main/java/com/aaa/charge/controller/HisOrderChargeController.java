@@ -1,8 +1,12 @@
 package com.aaa.charge.controller;
 
 import com.aaa.charge.service.HisOrderChargeService;
+import com.aaa.core.entity.OrderCharge;
+import com.aaa.core.vo.Result;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * 收费表(HisOrderCharge)表控制层
@@ -18,5 +22,10 @@ public class HisOrderChargeController {
      */
     @Autowired
     private HisOrderChargeService hisOrderChargeService;
+
+    @PostMapping("list")
+    public List<OrderCharge> list(@RequestBody String[] create_time){
+        return hisOrderChargeService.listAll(create_time);
+    }
 
 }

@@ -255,52 +255,78 @@ export default {
     // 支付宝支付
     handlePayWithZfb() {
       if (!this.careHistory.regId) {
-        this.$message.warning('请输入挂号单ID查询')
+        this.$message.error('请输入挂号单ID查询')
         return
       } else if (this.itemObjs.length === 0) {
         this.$message.warning('请选择要支付的项目')
         return
       } else {
-        this.$confirm('是否使用支付宝支付', '提示', {
+        // 组装数据
+        const postObj = {
+          orderChargeDto: {
+            orderAmount: this.allAmount,
+            chId: this.careHistory.chId,
+            regId: this.careHistory.regId,
+            patientName: this.careHistory.patientName
+          },
+          orderChargeItemDtoList: []
+        }
+        this.itemObjs.filter(item => {
+          const obj = {
+            itemId: item.itemId,
+            coId: item.coId,
+            itemName: item.itemName,
+            itemPrice: item.price,
+            itemNum: item.num,
+            itemType: item.itemType,
+            itemAmount: item.amount
+          }
+          postObj.orderChargeItemDtoList.push(obj)
+        })
+        // 发送请求
+        this.loading = true
+        this.loadingText = '订单创建并支付宝支付中'
+        this.$confirm('是否确定创建订单并使用支付宝支付?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$axios.post("alipay/pay?outTradeNo="+this.itemObjs[0].itemId+"&subject="+this.itemObjs[0].itemName+"&totalAmount="+this.allAmount).then(res => {
-            //添加之前删除一下，单页面，页面不刷新，添加进去的内容会一直保存在页面中，二次调用form表单会出错
-            const divForm = document.getElementsByTagName('divForm')
-            if(divForm.length){
-              document.body.removeChild(divForm[0])
-            }
-            const div = document.createElement('divForm')
-            div.innerHTML = resp.data()//data返回接口的form表单字符
-            document.body.appendChild(div)
-            document.forms[0].setAttribute('target','_blank')//新窗口跳转
-            document.forms[0].submit()
+          createOrderChargeWithZfb(postObj).then(res => {
+            this.payObj = res.data
+            this.$message.success('订单创建成功，请扫码支付')
+            const tx = this
+            tx.openPay = true// 打开支付的弹出层
+            // 定时轮询
+            tx.intervalObj = setInterval(function() {
+              // 根据ID查询订单信息
+              queryOrderChargeOrderId(tx.payObj.orderId).then(r => {
+                if (r.data.orderStatus === '1') { // 说明订单状态为支付成功
+                  // 清空定时器
+                  clearInterval(tx.intervalObj)
+                  tx.$notify({
+                    title: '支付成功',
+                    message: '【' + tx.payObj.orderId + '】的订单编写支付成功',
+                    type: 'success'
+                  })
+                  tx.openPay = false
+                  tx.resetCurrentParams()
+                }
+              }).catch(() => {
+                // 清空定时器
+                clearInterval(tx.intervalObj)
+              })
+            }, 2000)
+            this.loading = false
           }).catch(() => {
-            this.$message.error('创建订单失败')
+            this.msgError('创建订单失败')
             this.loading = false
           })
         }).catch(() => {
-          this.$message.warning('创建已取消')
+          this.msgError('创建已取消')
           this.loading = false
         })
-
-        // this.$axios.post("http://localhost:8090/alipay/pay?traceNo="+this.itemObjs[0].itemId+"&subject="+this.itemObjs[0].itemName+"&totalAmount="+this.allAmount,).then(res => {
-        //       //添加之前删除一下，单页面，页面不刷新，添加进去的内容会一直保存在页面中，二次调用form表单会出错
-        //   const divForm = document.getElementsByTagName('divForm')
-        //   if(divForm.length){
-        //     document.body.removeChild(divForm[0])
-        //   }
-        //   const div = document.createElement('divForm')
-        //   div.innerHTML = resp.data()//data返回接口的form表单字符
-        //   document.body.appendChild(div)
-        //   document.forms[0].setAttribute('target','_blank')//新窗口跳转
-        //   document.forms[0].submit()
-        // })
-        }
-      },
-
+      }
+    },
     //初始化字典
    dictFormat(row,colum,dictType){
     return  this.formatDict(this.dictList,colum,dictType)

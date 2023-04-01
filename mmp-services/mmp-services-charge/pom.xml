@@ -35,6 +35,18 @@
             <artifactId>hutool-all</artifactId>
             <version>5.7.20</version>
         </dependency>
+        <!--微信需要的依赖  -->
+        <dependency>
+            <groupId>com.github.wxpay</groupId>
+            <artifactId>wxpay-sdk</artifactId>
+            <version>0.0.3</version>
+        </dependency>
+        <!--java端发送请求:在java端模拟浏览器远程访问微信的接口 -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.3</version>
+        </dependency>
 
     </dependencies>
 

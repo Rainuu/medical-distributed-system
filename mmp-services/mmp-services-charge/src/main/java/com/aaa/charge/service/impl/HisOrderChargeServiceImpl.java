@@ -4,21 +4,25 @@ import cn.hutool.core.bean.BeanUtil;
 import com.aaa.charge.dao.*;
 import com.aaa.charge.fegin.OrderCharFeign;
 import com.aaa.charge.service.HisOrderChargeService;
+import com.aaa.charge.util.HttpClient;
 import com.aaa.charge.util.MyAlipayUtil;
 import com.aaa.charge.vo.OrderChargeVo;
+import com.aaa.charge.vo.PostObjVo;
 import com.aaa.core.entity.*;
 import com.aaa.core.vo.Result;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.wxpay.sdk.WXPayUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * 收费表(HisOrderCharge)表服务实现类
@@ -40,6 +44,12 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
    private HisCareOrderMapper hisCareOrderMapper;
    @Autowired
    private HisCareOrderItemMapper hisCareOrderItemMapper;
+   @Value("${weixin.appid}")
+   private String appId;
+   @Value("${weixin.mch_id}")
+   private String mchId;
+   @Value("${weixin.api_key}")
+   private String apiKey;
    @Override
    //分页模糊查询所有数据
    public Result<IPage<OrderCharge>> findAll(Integer curr, Integer size, OrderChargeVo chargeVo) {
@@ -118,6 +128,42 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
          map.put("careOrders", list);
          return new Result<>(200, "成功", map);
       }
+   }
+
+   @Override
+   @Transactional
+   public Result<List<CareOrderItem>> ZFB(PostObjVo postObjVo) {
+      //生成orderId
+      String orderId= "ODC";
+      Random random = new Random();
+      for (int i = 0; i < 10; i++) {
+         orderId += String.valueOf(random.nextInt(10));
+      }
+      //创建HttpClient对象 作用远程调用
+      HttpClient client = new HttpClient("https://api.mch.weixin.qq.com/pay/orderquery");
+      //支持https协议
+      client.setHttps(true);
+      //设置请求的参数--格式为xml
+      Map<String, String> params = new HashMap<>();//请求参数
+      params.put("appid", appId);//公众号ID
+      params.put("mch_id", mchId);//商品号id
+      params.put("nonce_str", WXPayUtil.generateNonceStr());//随机字符串
+      params.put("body", postObjVo.getOrderChargeDto().getPatientName());//标题
+      params.put("out_trade_no", orderId);//订单号
+      //支付金额0.01 未来换成真是的金额
+      params.put("total_fee", new BigDecimal(0.01).multiply(new BigDecimal(100)).longValue() + "");
+      params.put("spbill_create_ip", "127.0.0.1");//未来写成项目部署的ip
+      params.put("notify_url", "http:localhost:8090/charge/api/hisOrderCharge");
+      params.put("trade_type", "NATIVE");//支付方式使用PC
+
+      return null;
+   }
+
+   @Override
+   public List<OrderCharge> listAll(String[] create_time) {
+      QueryWrapper<OrderCharge> wrapper = new QueryWrapper<>();
+      wrapper.between("create_time",create_time[0],create_time[1]);
+      return hisOrderChargeMapper.selectList(wrapper);
    }
 
 

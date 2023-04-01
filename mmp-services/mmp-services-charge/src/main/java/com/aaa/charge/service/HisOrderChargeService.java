@@ -2,6 +2,8 @@ package com.aaa.charge.service;
 
 
 import com.aaa.charge.vo.OrderChargeVo;
+import com.aaa.charge.vo.PostObjVo;
+import com.aaa.core.entity.CareOrderItem;
 import com.aaa.core.entity.DictData;
 import com.aaa.core.entity.OrderCharge;
 import com.aaa.core.entity.OrderChargeItem;
@@ -31,4 +33,8 @@ public interface HisOrderChargeService {
 
 
     Result<Map<String, Object>> selectupdById(String regId);
+
+    Result<List<CareOrderItem>> ZFB(PostObjVo postObjVo);
+
+   List<OrderCharge> listAll(String[] create_time);
 }

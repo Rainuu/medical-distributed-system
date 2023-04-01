@@ -4,6 +4,8 @@ import com.aaa.charge.fegin.OrderCharFeign;
 import com.aaa.charge.service.HisOrderChargeService;
 import com.aaa.charge.util.MyAlipayUtil;
 import com.aaa.charge.vo.OrderChargeVo;
+import com.aaa.charge.vo.PostObjVo;
+import com.aaa.core.entity.CareOrderItem;
 import com.aaa.core.entity.DictData;
 import com.aaa.core.entity.OrderCharge;
 import com.aaa.core.entity.OrderChargeItem;
@@ -60,6 +62,7 @@ public class ApiHisOrderChargeController {
     public Result<List<OrderCharge>> upd(@PathVariable String orderId){
         return service.updByStatusType(orderId);
     }
+    //支付宝支付未完成
     @PostMapping("pay")
     public Result payForIt(@RequestBody OrderCharge orderCharge) throws AlipayApiException {
         String orderForm = MyAlipayUtil.createOrderForm(orderCharge.getOrderId(), orderCharge.getOrderAmount().toString(), orderCharge.getPatientName());
@@ -71,6 +74,12 @@ public class ApiHisOrderChargeController {
     @GetMapping("listhand/{regId}")
     public Result<Map<String,Object>> list(@PathVariable String regId){
         return  service.selectupdById(regId);
+    }
+
+    //支付宝支付
+    @PostMapping("carateNative")
+    public Result<List<CareOrderItem>> carateNative(@RequestBody PostObjVo postObjVo){
+        return service.ZFB(postObjVo);
     }
 
 }
