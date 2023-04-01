@@ -2,6 +2,7 @@ package com.aaa.stock.controller.api;
 
 import com.aaa.core.entity.DictData;
 import com.aaa.core.entity.Medicines;
+import com.aaa.core.entity.Producer;
 import com.aaa.core.entity.Provider;
 import com.aaa.core.vo.Result;
 import com.aaa.stock.service.ProviderService;
@@ -64,6 +65,13 @@ public class ApiProviderController {
             providerService.removeById(provider.getProviderId());
         });
         return new Result(200,"批量删除成功",true);
+    }
+
+    // 全查询接口
+    @GetMapping("getAllDict")
+    public Result<List<Provider>> getAllDict(){
+        List<Provider> list = providerService.list();
+        return new Result(200,"成功",list);
     }
 
 }

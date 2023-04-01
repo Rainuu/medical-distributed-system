@@ -39,4 +39,14 @@ public class MedicinalVo {
     private Integer producerId;
 
     private Integer producterId;
+
+    // 当前页
+    private Integer current;
+
+    // 显示条数
+    private Integer size;
+
+    // 总条数
+    private  Integer total;
+
 }

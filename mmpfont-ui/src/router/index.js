@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import editPurchase from "@/views/stock/editPurchase";
+import editPurchase from "@/views/stock/purchase/editPurchase";
 Vue.use(VueRouter)
 
 const routes = [
@@ -119,6 +119,16 @@ const routes = [
             name: 'inventory',
             component: () => import('../views/stock/inventory')
         },
+        {   // 药品进销存—————库存修改（无需显示在侧边栏）
+            path: '/stock/purchase/editPurchase',
+            name: 'editPurchase',
+            component: () =>import('../views/stock/purchase/editPurchase')
+        },
+        {   // 药品进销存—————库存添加（无需显示在侧边栏）
+            path: '/stock/purchase/newPurchase',
+            name: 'newPurchase',
+            component: () =>import('../views/stock/purchase/newPurchase')
+        },
         // 收费管理(charge)——(5)——方号
         {   // 处方收费
             path: '/charge/docharge',
@@ -213,21 +223,15 @@ const routes = [
             name: 'workload',
             component: () =>import('../views/statistics/workload/workload')
         },
-        // 不在侧边栏内的页面
-        {   // 药品进销存—————库存修改
-            path: '/stock/editPurchase',
-            name: 'editPurchase',
-            component: () =>import('../views/stock/editPurchase')
-        }
     ]
   },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+  {   // 关于页面
+      path: '/about',
+      name: 'about',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   }
 ]
 

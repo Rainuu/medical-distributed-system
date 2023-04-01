@@ -107,11 +107,11 @@
       dictFormat(row, column, dictType){
         return this.formatDict( this.dictList,column, dictType)
       },
-      // 格式化翻译状态
-      statusFormat(row){
-        let v=row.status;
-        return this.formatDict(this.statusOptions,v);
-      },
+      // // 格式化翻译状态
+      // statusFormat(row){
+      //   let v=row.status;
+      //   return this.formatDict(this.statusOptions,v);
+      // },
       // 模糊查询
       search(){
         this.current=1;
@@ -241,8 +241,6 @@
       return {
         // 字典数组——接收字典表数据
         dictList: [],
-        // 状态
-        statusOptions: [],
         // 模糊查询信息
         searchForm: {},
         // 查询的页面信息

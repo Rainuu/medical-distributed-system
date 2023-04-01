@@ -58,13 +58,6 @@ public class ApiProducterController {
         }
     }
 
-    @GetMapping("getAllDict")
-    public Result<List<Producer>> getAllDict(){
-        List<Producer> list = producterService.list();
-        return new Result(200,"成功",list);
-
-    }
-
     @PostMapping("delListById")
     public Result delListById(@RequestBody List<Producer> producerList){
         producerList.forEach((Producer producer)->{
@@ -73,4 +66,10 @@ public class ApiProducterController {
         return new Result(200,"批量删除成功",true);
     }
 
+    // 全查询接口
+    @GetMapping("getAllDict")
+    public Result<List<Producer>> getAllDict(){
+        List<Producer> list = producterService.list();
+        return new Result(200,"成功",list);
+    }
 }

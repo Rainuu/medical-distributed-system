@@ -33,8 +33,8 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
         if (Objects.nonNull(purchaseVo.getProviderId())){
             wrapper.like("provider_id",purchaseVo.getProviderId());
         }
-        if (Objects.nonNull(purchaseVo.getApplyUserId())){
-            wrapper.like("apply_user_id",purchaseVo.getApplyUserId());
+        if (Objects.nonNull(purchaseVo.getApplyUserName())){
+            wrapper.like("apply_user_name",purchaseVo.getApplyUserName());
         }
         if (Objects.nonNull(purchaseVo.getStatus())){
             wrapper.eq("status",purchaseVo.getStatus());
