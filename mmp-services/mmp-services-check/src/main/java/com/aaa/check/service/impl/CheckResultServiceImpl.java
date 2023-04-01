@@ -4,13 +4,10 @@ import com.aaa.check.dao.CheckResultDao;
 import com.aaa.check.service.CheckResultService;
 
 
-import com.aaa.check.vo.CheckResultVo;
-import com.aaa.check.vo.ResultImgVo;
+import com.aaa.core.vo.CheckResultVo;
 import com.aaa.core.entity.CheckResult;
-import com.aaa.core.entity.Role;
 import com.aaa.core.vo.CheckItemVo;
 import com.aaa.core.vo.Result;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -18,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -55,8 +51,7 @@ public class CheckResultServiceImpl implements CheckResultService {
    }
 
    @Override
-   public Result<IPage<CheckResult>> getByPage(Integer current, Integer size, CheckResultVo checkResultVo) {
-      IPage<CheckResult> page = new Page<>(current,size);
+   public Result<List<CheckResult>> getByPage(CheckResultVo checkResultVo) {
       QueryWrapper<CheckResult> wrapper = new QueryWrapper<>();
       if (StringUtils.hasText(checkResultVo.getCheckItemName())){
          wrapper.like("check_item_id",checkResultVo.getCheckItemName());
@@ -67,14 +62,13 @@ public class CheckResultServiceImpl implements CheckResultService {
       if(Objects.nonNull(checkResultVo.getDateRange())&&checkResultVo.getDateRange().length==2){
          wrapper.between("create_time",checkResultVo.getDateRange()[0],checkResultVo.getDateRange()[1]);
       }
-      IPage<CheckResult> page1 = checkResultDao.selectPage(page, wrapper);
-      return new Result<>(2000,"查询角色",page1);
+      List<CheckResult> checkResults = checkResultDao.selectList(wrapper);
+      return new Result<List<CheckResult>>(2000,"查询角色",checkResults);
    }
 
    @Override
-   public Result<IPage<CheckResult>> getByPageTwo(Integer current, Integer size, CheckResultVo checkResultVo) {
-      IPage page = new Page(current,size);
-      IPage<CheckResult> page1 = checkResultDao.selectAllTwo(page,checkResultVo);
-      return new Result<>(2000,"查询角色",page1);
+   public Result<List<CheckResult>> getByPageTwo(CheckResultVo checkResultVo) {
+      List<CheckResult> checkResults = checkResultDao.selectAllTwo(checkResultVo);
+      return new Result<List<CheckResult>>(2000,"查询角色",checkResults);
    }
 }

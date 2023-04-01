@@ -1,4 +1,4 @@
-package com.aaa.check.vo;
+package com.aaa.core.vo;
 
 import lombok.Data;
 

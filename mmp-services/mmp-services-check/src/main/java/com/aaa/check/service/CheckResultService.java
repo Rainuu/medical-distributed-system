@@ -1,13 +1,12 @@
 package com.aaa.check.service;
 
 
-import com.aaa.check.vo.CheckResultVo;
-import com.aaa.check.vo.ResultImgVo;
+import com.aaa.core.vo.CheckResultVo;
 import com.aaa.core.entity.CheckResult;
 import com.aaa.core.vo.CheckItemVo;
 import com.aaa.core.vo.Result;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ public interface CheckResultService {
 
     Result addAll(CheckResult checkResult);
 
-    Result<IPage<CheckResult>> getByPage(Integer current, Integer size, CheckResultVo checkResultVo);
+    Result<List<CheckResult>> getByPage(CheckResultVo checkResultVo);
 
-    Result<IPage<CheckResult>> getByPageTwo(Integer current, Integer size, CheckResultVo checkResultVo);
+    Result<List<CheckResult>> getByPageTwo(CheckResultVo checkResultVo);
 }
