@@ -27,4 +27,6 @@ public interface HisOrderBackfeeService {
     Result<List<DictData>> selectdictionary();
 
     Result<Map<String, Object>> selectByregId(String regId);
+
+    List<OrderBackfee> listAll(String[] create_time);
 }

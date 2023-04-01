@@ -8,6 +8,7 @@ import com.aaa.charge.util.HttpClient;
 import com.aaa.charge.util.MyAlipayUtil;
 import com.aaa.charge.vo.OrderChargeVo;
 import com.aaa.charge.vo.PostObjVo;
+import com.aaa.charge.vo.PostObjVo1;
 import com.aaa.core.entity.*;
 import com.aaa.core.vo.Result;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -20,7 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -155,10 +158,58 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
       params.put("spbill_create_ip", "127.0.0.1");//未来写成项目部署的ip
       params.put("notify_url", "http:localhost:8090/charge/api/hisOrderCharge");
       params.put("trade_type", "NATIVE");//支付方式使用PC
+      //设置请求参数
+      try {
+         client.setXmlParam(WXPayUtil.generateSignedXml(params, apiKey));
+         //发送请求
+         client.post();
+         //获取请求的相应结果
+         String content = client.getContent();
+         Map<String, String> map = WXPayUtil.xmlToMap(content);;
+         if (map.get("result_code").equals("SUCCESS")){
+            Map<String,Object> result=new HashMap<>();
+            result.put("codeUrl",map.get("code_url"));
+            result.put("price",postObjVo.getOrderChargeDto().getOrderAmount());
+            result.put("orderId",orderId);
+            return new Result(200,"生成二维码成功",result);
+         }
 
-      return null;
+      } catch (Exception e) {
+         e.printStackTrace();
    }
 
+      //创建订单
+      //获取挂号单id
+      String regId = postObjVo.getOrderChargeDto().getRegId();
+      //获取患者姓名
+      String patientName = postObjVo.getOrderChargeDto().getPatientName();
+      //获取总金额
+      BigDecimal orderAmount = postObjVo.getOrderChargeDto().getOrderAmount();
+      //创建时间
+      LocalDateTime createTime = LocalDateTime.now();
+      hisOrderChargeMapper.insertAllWX(orderId,regId,patientName,orderAmount,createTime);
+      //获取itemId修改状态
+      List<PostObjVo1> orderChargeItemDtoList = postObjVo.getOrderChargeItemDtoList();
+      for (int i=0;i<orderChargeItemDtoList.size();i++){
+         hisCareOrderItemMapper.updBystatus(orderChargeItemDtoList.get(i).getItemId());
+      }
+      for (int i=0;i<orderChargeItemDtoList.size();i++) {
+         OrderChargeItem orderChargeItem = new OrderChargeItem();
+         orderChargeItem.setOrderId(orderId);
+         orderChargeItem.setItemId(orderChargeItemDtoList.get(i).getItemId());
+         orderChargeItem.setItemType(orderChargeItemDtoList.get(i).getItemType());
+         orderChargeItem.setItemName(orderChargeItemDtoList.get(i).getItemName());
+         orderChargeItem.setItemNum(orderChargeItemDtoList.get(i).getItemNum());
+         orderChargeItem.setItemPrice(orderChargeItemDtoList.get(i).getItemPrice());
+         orderChargeItem.setItemAmount(orderChargeItemDtoList.get(i).getItemAmount());
+         orderChargeItem.setCoId(orderChargeItemDtoList.get(i).getCoId());
+         orderChargeItem.setStatus("0");
+         hisOrderChargeItemMapper.insert(orderChargeItem);
+      }
+      return new Result<>(200,"成功");
+   }
+
+   //统计接口
    @Override
    public List<OrderCharge> listAll(String[] create_time) {
       QueryWrapper<OrderCharge> wrapper = new QueryWrapper<>();

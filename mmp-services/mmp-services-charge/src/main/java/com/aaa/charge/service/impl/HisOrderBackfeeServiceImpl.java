@@ -1,6 +1,7 @@
 package com.aaa.charge.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.db.sql.Order;
 import com.aaa.charge.dao.HisCareHistoryMapper;
 import com.aaa.charge.dao.HisCareOrderItemMapper;
 import com.aaa.charge.dao.HisCareOrderMapper;
@@ -123,6 +124,15 @@ public class HisOrderBackfeeServiceImpl implements HisOrderBackfeeService {
 
 
 
+   }
+
+
+   //统计数据  退费接口
+   @Override
+   public List<OrderBackfee> listAll(String[] create_time) {
+      QueryWrapper<OrderBackfee> wrapper = new QueryWrapper<>();
+      wrapper.between("create_time",create_time[0],create_time[1]);
+      return hisOrderBackfeeDao.selectList(wrapper);
    }
 
 

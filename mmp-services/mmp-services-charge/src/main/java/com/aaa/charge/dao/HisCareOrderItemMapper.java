@@ -21,4 +21,5 @@ public interface HisCareOrderItemMapper extends BaseMapper<CareOrderItem> {
     void updateBystatus(String itemId);
 
 
+    void updBystatus(String itemId);
 }

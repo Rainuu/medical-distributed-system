@@ -81,6 +81,30 @@
       <!-- 挂号输入框下面的所有内容结束 -->
     </div>
 
+    <el-dialog
+        title="请使用支付宝支付"
+        :visible.sync="openPay"
+        center
+        :close-on-click-modal="false"
+        :before-close="handleClose"
+        append-to-body
+    >
+      <el-form label-position="left" label-width="120px" inline class="demo-table-expand">
+        <el-card>
+          <el-form-item label="订单号:">
+            <span>{{ payObj.orderId }}</span>
+          </el-form-item>
+          <el-form-item label="总金额:">
+            <span>{{ payObj.allAmount }}</span>
+          </el-form-item>
+        </el-card>
+      </el-form>
+      <div style="text-align:center">
+        <vue-qr :text="payObj.payUrl" :size="200" />
+        <div>请使用支付宝扫码</div>
+      </div>
+    </el-dialog>
+
 
   </div>
 </template>
@@ -110,7 +134,14 @@ export default {
       activeNames: [],
       //字典
       dictList:[],
-      careOrderItem:[]
+      careOrderItem:[],
+      // 支付对象
+      payObj: {},
+      // 是否打开支付宝二维码支付层
+      openPay: false,
+      // 定时轮询对象
+      intervalObj: undefined
+
     }
   },
 
@@ -291,8 +322,8 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          createOrderChargeWithZfb(postObj).then(res => {
-            this.payObj = res.data
+          this.$axios.post("charge/api/hisOrderCharge/carateNative/",postObj).then(result=>{
+            this.payObj = res.data.t
             this.$message.success('订单创建成功，请扫码支付')
             const tx = this
             tx.openPay = true// 打开支付的弹出层
@@ -326,6 +357,22 @@ export default {
           this.loading = false
         })
       }
+    },
+    // 如果用户没有支付，而弹出层被关闭了
+    handleClose() {
+      this.$confirm('您确定放弃支付吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.msgError('您已放弃支付，可以回到收费查询列表里面再次支付')
+        this.resetCurrentParams()
+        this.openPay = false
+        // 关闭轮询
+        clearInterval(this.intervalObj)
+      }).catch(() => {
+        this.msgSuccess('欢迎继续支付')
+      })
     },
     //初始化字典
    dictFormat(row,colum,dictType){

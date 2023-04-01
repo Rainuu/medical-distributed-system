@@ -14,6 +14,6 @@
 
 <insert id="insertAllWX">
     INSERT INTO his_order_charge (order_id,reg_id,patient_name,order_amount,order_status,pay_type,create_time)
-    VALUES(#{param1},#{param2}, #{param3},#{param4},'1','1',#{param5})
+    VALUES(#{param1},#{param2}, #{param3},#{param4},'2','1',#{param5})
     </insert>
 </mapper>
