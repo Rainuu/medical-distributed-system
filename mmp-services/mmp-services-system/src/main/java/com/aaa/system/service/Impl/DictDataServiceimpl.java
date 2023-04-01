@@ -7,10 +7,13 @@ import com.aaa.system.dao.DictDataDao;
 import com.aaa.system.dao.DictTypeDao;
 import com.aaa.system.service.DictDataService;
 import com.aaa.system.vo.DictDataVo;
+import com.alibaba.druid.support.json.JSONUtils;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -21,6 +24,8 @@ public class DictDataServiceimpl implements DictDataService {
     private DictDataDao dictDataDao;
     @Autowired
     private DictTypeDao dictTypeDao;
+    @Autowired
+    private StringRedisTemplate redisTemplate;
     @Override
     public List<DictData> findByType(String type) {
         QueryWrapper<DictData> wrapper = new QueryWrapper<>();
@@ -31,17 +36,22 @@ public class DictDataServiceimpl implements DictDataService {
 
     @Override
     public List<DictData> getall() {
-
-        return dictDataDao.selectList(null);
+        String dictListJson = redisTemplate.opsForValue().get("dictList");
+        List<DictData>  parse = (List<DictData>) JSON.parse(dictListJson);
+        if (parse==null){
+            huancun();
+            return dictDataDao.selectList(null);
+        }
+        return parse;
     }
 
     @Override
     public Result getInfoById(DictDataVo dictDataVo, Page page, Long id) {
         DictType dictType = dictTypeDao.selectById(id);
         QueryWrapper queryWrapper=new QueryWrapper();
-        if (dictDataVo==null){
-            queryWrapper.eq("dict_type",dictType.getDictType());
-        }else {
+        if (id!=null) {
+            queryWrapper.eq("dict_type", dictType.getDictType());
+        }
             if (dictDataVo.getDictType()!=null){
                 queryWrapper.like("dict_type",dictDataVo.getDictType());
             }
@@ -51,7 +61,7 @@ public class DictDataServiceimpl implements DictDataService {
             if (dictDataVo.getStatus()!=null){
                 queryWrapper.eq("status",dictDataVo.getStatus());
             }
-        }
+
 
         return new Result(200,null,dictDataDao.selectPage(page,queryWrapper));
     }
@@ -89,5 +99,13 @@ public class DictDataServiceimpl implements DictDataService {
     @Override
     public Result selectById(Long id) {
         return new Result(200,null,dictDataDao.selectById(id));
+    }
+
+    @Override
+    public Result huancun() {
+        List<DictData> dictData = dictDataDao.selectList(null);
+        String s = JSON.toJSONString(dictData);
+        redisTemplate.opsForValue().set("dictList",s);
+        return new Result(200,"同步成功",true);
     }
 }

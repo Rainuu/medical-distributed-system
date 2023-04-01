@@ -20,4 +20,6 @@ public interface DictDataService {
     Result delInfo(Long id);
 
     Result selectById(Long id);
+
+    Result huancun();
 }

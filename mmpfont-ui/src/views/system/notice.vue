@@ -53,7 +53,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="mohu">搜索</el-button>
         <el-button type="primary" icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -65,10 +65,7 @@
         <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate">修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete">删除</el-button>
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="pldel">删除</el-button>
       </el-col>
     </el-row>
     <!-- 表格工具按钮结束 -->
@@ -191,7 +188,6 @@
   </div>
 </template>
 <script>
-
 import qs from'qs'
 export default {
   // 定义页面数据
@@ -200,7 +196,7 @@ export default {
       // 是否启用遮罩层
       loading: false,
       // 选中数组
-      ids: [],
+      ids : [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -269,52 +265,63 @@ export default {
         this.loading = false// 关闭遮罩
       })
     },
-    // 条件查询
-    handleQuery() {
-      this.getNoticeList()
-    },
     // 重置查询条件
     resetQuery() {
-      this.resetForm('queryForm')
-      this.dateRange = []
+      this.queryParams.noticeTitle=''
+      this.queryParams.createBy=''
+      this.queryParams.noticeType=''
+      this.queryParams.status=''
+      this.queryParams.dateRange = []
       this.getNoticeList()
     },
     // 数据表格的多选择框选择时触发
     handleSelectionChnage(selection) {
-      this.ids = selection.map(item => item.noticeId)
-      this.single = selection.length !== 1
+      this.ids = selection.map(item => item.noticeId);
       this.multiple = !selection.length
     },
     // 分页pageSize变化时触发
     handleSizeChange(val) {
-      this.queryParams.pageSize = val
+      this.queryParams.size = val
       // 重新查询
       this.getNoticeList()
     },
     // 点击上一页  下一页，跳转到哪一页面时触发
     handleCurrentChange(val) {
-      this.queryParams.pageNum = val
+      this.queryParams.current = val
       // 重新查询
       this.getNoticeList()
     },
-
-
     // 打开添加的弹出层
     handleAdd() {
       this.open = true
       this.reset()
       this.title = '添加通知公告信息'
     },
-    // 打开修改的弹出层
-    handleUpdate(row) {
-      this.title = '修改通知公告信息'
+    //修改弹出层
+    handleUpdate(row){
+      this.open=true
       this.form=JSON.parse(JSON.stringify(row))
-      this.open = true
-
+      this.title='修改通知信息'
+    },
+    pldel(){
+      const dataIds=this.ids
+      this.$confirm('此操作将永久删除该通知公告数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+       for (var i=0;i<dataIds.length;i++){
+        this.$axios.delete("system/api/notice/"+dataIds[i]).then(res => {
+        })}
+      }).catch(() => {
+        this.$message.success('删除已取消')
+        this.loading = false
+      })
+      this.mohu()
     },
     // 执行删除
     handleDelete(row) {
-      const noticeIds = row.noticeId || this.ids
+      const noticeIds = row.noticeId
       this.$confirm('此操作将永久删除该通知公告数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -377,6 +384,10 @@ export default {
         status: '0',
         remark: undefined
       }
+    },
+    mohu(){
+      this.queryParams.current=1
+      this.getNoticeList()
     },
     // 打开修改的弹出层
     handleView(row) {

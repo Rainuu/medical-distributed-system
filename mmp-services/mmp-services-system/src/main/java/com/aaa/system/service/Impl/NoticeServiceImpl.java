@@ -27,7 +27,7 @@ public class NoticeServiceImpl implements NoticeService {
             queryWrapper.like("notice_title",noticeVo.getNoticeTitle());
         }
         if (noticeVo.getNoticeType()!=null){
-            queryWrapper.eq("notic_type",noticeVo.getNoticeType());
+            queryWrapper.eq("notice_type",noticeVo.getNoticeType());
         }
         if (noticeVo.getCreateBy()!=null&&noticeVo.getCreateBy()!=""){
             queryWrapper.like("create_by",noticeVo.getCreateBy());

@@ -64,7 +64,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="mohu" >搜索</el-button>
-        <el-button type="primary" icon="el-icon-refresh" size="mini" >重置</el-button>
+        <el-button type="primary" icon="el-icon-refresh" size="mini" @click="chongzi">重置</el-button>
       </el-form-item>
     </el-form>
 
@@ -74,7 +74,7 @@
         <el-button type="primary" icon="el-icon-plus" size="mini" @click="adduserVisible=true">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" @click="piliangdel">批量删除</el-button>
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="piliangdel">批量删除</el-button>
       </el-col>
     </el-row>
     <!-- 表格工具按钮结束 -->
@@ -255,6 +255,10 @@ export default {
   name: "User",
   data() {
     return {
+      // 非单个禁用
+      single: true,
+      // 非多个禁用
+      multiple: true,
       //添加用户对话框显示和隐藏
       adduserVisible: false,
       //分配角色对话框的显示和隐藏
@@ -334,6 +338,9 @@ export default {
           return false;
         }
       });
+    },
+    chongzi(){
+      this.queryParams={}
     },
     //确认分配角色
     confirmRole() {
@@ -420,11 +427,13 @@ export default {
     },
     handleSelectionChange(v) {
       this.multipleSelection = v;
+      this.multiple=!v.length
     },
     piliangdel(){
       for(let i=0;i<this.multipleSelection.length;i++){
-        this.deleuser(this.multipleSelection[i].deptId)
+        this.$axios.delete('/system/api/user/'+this.multipleSelection[i].userId)
       }
+      this.mohu()
     },
     handleClose(done) {
       this.$confirm('确认关闭？')

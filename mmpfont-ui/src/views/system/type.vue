@@ -61,13 +61,10 @@
         <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate">修改</el-button>
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="pldel">删除</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete">删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button type="warning" icon="el-icon-refresh" size="mini" @click="handleCacheAsync">缓存同步</el-button>
+        <el-button type="warning" icon="el-icon-refresh" size="mini" @click="tongbu">缓存同步</el-button>
       </el-col>
     </el-row>
     <!-- 表格工具按钮结束 -->
@@ -224,7 +221,6 @@ export default {
     // 数据表格的多选择框选择时触发
     handleSelectionChnage(selection) {
       this.ids = selection.map(item => item.dictId)
-      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     // 分页pageSize变化时触发
@@ -244,27 +240,48 @@ export default {
       this.open = true
       this.reset()
     },
-    // 打开修改的弹出层
-    handleUpdate(row) {
-      const dictId = row.dictId || this.ids
-      // const dictId = row.dictId === undefined ? this.ids[0] : row.dictId
-      this.open = true
-      this.reset()
-      // 根据dictId查询一个字典信息
-      getDictTypeById(dictId).then(res => {
-        this.form = res.data
+    handleUpdate(row){
+      this.form=JSON.parse(JSON.stringify(row))
+      this.open=true
+    },
+    tongbu(){
+      this.$axios.get('system/api/dict/data/tongbu').then(res=>{
+        if (res.data.t){
+          this.$message.success(res.data.msg)
+        }else {
+          this.$message.error((res.data.msg))
+        }
+          }
+      )
+    },
+    //批量删除
+    pldel(){
+      this.$confirm('此操作将永久删除该字典数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+       for (var i=0;i<this.ids.length;i++){
+        this.$axios.delete("system/api/dictType/"+this.ids[i]).then(res => {
+
+        })
+       this.handleQuery()
+       }
+      }).catch(() => {
+        this.$message.error('删除已取消')
+        this.loading = false
       })
     },
     // 执行删除
     handleDelete(row) {
-      const dictIds = row.dictId || this.ids
+      const dictIds = row.dictId
       this.$confirm('此操作将永久删除该字典数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         this.loading = true
-        this.$axios.delete("system/api/dictType"+dictIds).then(res => {
+        this.$axios.delete("system/api/dictType/"+dictIds).then(res => {
           this.loading = false
           this.$message.success('删除成功')
           this.getDictTypeList()// 全查询

@@ -80,7 +80,7 @@ public class DictTypeServiceImpl implements DictTypeService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.MANDATORY)
+    @Transactional
     public Result delDictType(Long id) {
         DictType dictType = dao.selectById(id);
         QueryWrapper queryWrapper=new QueryWrapper();

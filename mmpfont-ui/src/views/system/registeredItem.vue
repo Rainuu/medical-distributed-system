@@ -43,7 +43,7 @@
         <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="selectUp">修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete">删除</el-button>
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="piliDelete">删除</el-button>
       </el-col>
     </el-row>
     <!-- 表格工具按钮结束 -->
@@ -178,6 +178,7 @@ export default {
     },
     // 条件查询
     handleQuery() {
+      this.queryParams.current=1
       this.getRegisteredTtemList()
     },
     // 重置查询条件
@@ -233,10 +234,10 @@ export default {
       }).then(() => {
         tx.loading = true
         for (var i = 0; i < RegisteredTtemIds.length; i++) {
-          this.$axios.delete("system/api/RegisteredTtem/" + RegisteredTtemIds).then(res => {
+          this.$axios.delete("system/api/RegisteredTtem/" + RegisteredTtemIds[i]).then(res => {
           })
         }
-        tx.getRegisteredTtemList()// 全查询
+        tx.handleQuery()// 全查询
       }).catch(() => {
         tx.$message.error('删除已取消')
         tx.loading = false

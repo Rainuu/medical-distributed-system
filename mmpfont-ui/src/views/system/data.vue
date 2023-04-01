@@ -59,7 +59,7 @@
         <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate">修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete">删除</el-button>
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="pldel">删除</el-button>
       </el-col>
 
     </el-row>
@@ -207,12 +207,13 @@ export default {
       this.$axios.post("system/api/dict/data/getInfoById",qs.stringify(this.queryParams)).then(res => {
         this.loading = false
         this.dictDataTableList = res.data.t.records
-        this.defaultDictType=this.dictDataTableList[1].dictType
+        this.defaultDictType=this.dictDataTableList[0].dictType
         this.queryParams.total = res.data.t.total
       })
     },
     // 条件查询
     handleQuery() {
+      this.queryParams.dictId=undefined
       this.getDictDataList()
     },
     // 重置查询条件
@@ -270,9 +271,26 @@ export default {
         this.form = res.data.t
       })
     },
+    //批量删除
+    pldel(){
+
+      this.$confirm('此操作将永久删除该字典数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        for (var i=0;i<this.ids.length;i++){
+          this.$axios.delete("system/api/dict/data/"+this.ids[i])
+        }
+      }).catch(() => {
+        this.$message.error('删除已取消')
+        this.loading = false
+      })
+      this.resetQuery()
+    },
     // 进行删除
     handleDelete(row) {
-      const dictCodes = row.dictCode || this.ids
+      const dictCodes = row.dictCode
       this.$confirm('此操作将永久删除该字典数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

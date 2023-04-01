@@ -61,14 +61,14 @@
                 <el-button type="primary" icon="el-icon-plus" size="mini" @click="dialogVisible=true" >新增</el-button>
             </el-col>
             <el-col :span="1.5">
-                <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
+                <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="pldel">删除</el-button>
             </el-col>
 
         </el-row>
         <!-- 表格工具按钮结束 -->
 
         <!-- 数据表格开始 -->
-        <el-table ref="multipleTable" border :data="roleTableList" @selection-change="handleSelectionChange">
+        <el-table ref="multipleTable" border :data="roleTableList" @selection-change="handleSelectionChnage">
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column label="角色ID" align="center" prop="roleId" />
             <el-table-column label="角色名称" align="center" prop="roleName" />
@@ -168,6 +168,7 @@
         name: "User",
         data(){
             return {
+              multiple:true,
               multipleSelection: [],
               dialogVisible: false,
               queryParams: {},
@@ -218,6 +219,25 @@
             this.dialogVisible=true
             this.addRole=JSON.parse(JSON.stringify(row))
           },
+          pldel(){
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              for(let i=0;i<this.multipleSelection.length;i++){
+                this.$axios.delete('/system/api/user/'+this.multipleSelection[i].roleId)
+              }
+              this.mohu()
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消删除'
+              });
+            });
+
+
+          },
           delRole(id){
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
               confirmButtonText: '确定',
@@ -266,9 +286,6 @@
               }
             });
           },
-          handleSelectionChange(v) {
-            this.multipleSelection = v;
-          },
           handleClose(done) {
             this.$confirm('确认关闭？')
                 .then(_ => {
@@ -277,6 +294,11 @@
                 })
                 .catch(_ => {
                 });
+          },
+          // 数据表格的多选择框选择时触发
+          handleSelectionChnage(selection) {
+            this.multipleSelection = selection;
+            this.multiple = !selection.length
           },
             //显示树形菜单的弹出层
             fenMenu(row){

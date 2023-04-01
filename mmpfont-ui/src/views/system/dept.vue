@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div>
     <el-form :inline="true" :model="formInline" class="demo-form-inline" ref="formInline" style="float: left">
       <el-form-item label="科室名称" label-width="100px">
         <el-select v-model="formInline.deptId" placeholder="请选择活动区域">
@@ -12,7 +13,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="状态">
+      <el-form-item label="状态" label-width="100px">
         <el-select v-model="formInline.status" placeholder="可用状态">
           <el-option
               v-for="dict in dictList.filter((n)=>{return n.dictType==='sys_normal_disable'})"
@@ -22,7 +23,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="创建时间">
+      <el-form-item label="创建时间" label-width="100px">
         <div class="block">
           <el-date-picker
               v-model="formInline.between"
@@ -34,14 +35,14 @@
         </div>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="getInfo"  icon="el-icon-search">查询</el-button>
+        <el-button type="primary" @click="mohucx"  icon="el-icon-search">查询</el-button>
         <el-button type="primary" @click="resetForm('formInline')" icon="el-icon-refresh">重置</el-button>
       </el-form-item>
     </el-form>
+  </div>
     <div style="float: left">
       <el-button type="primary" icon="el-icon-plus" @click="addDeptVisible=true">新增</el-button>
-      <el-button type="success" icon="el-icon-edit" >修改</el-button>
-      <el-button type="danger" icon="el-icon-delete">删除</el-button>
+      <el-button type="danger" icon="el-icon-delete" :disabled="multiple" @click="pldel">删除</el-button>
     </div>
     <el-table
         ref="multipleTable"
@@ -49,7 +50,7 @@
         tooltip-effect="dark"
         border
         style="width: 100%"
-        @selection-change="handleSelectionChange">
+        @selection-change="handleSelectionChnage">
       <el-table-column
           type="selection"
           width="55">
@@ -113,6 +114,7 @@
         </template>
       </el-table-column>
     </el-table>
+
     <div class="block" style="float: left">
       <el-pagination
           @size-change="handleSizeChange"
@@ -146,7 +148,7 @@
           <el-input v-model="deptForm.deptLeader"></el-input>
         </el-form-item>
         <el-form-item label="电话">
-          <el-input v-model="deptForm.LeaderPhone"></el-input>
+          <el-input v-model="deptForm.leaderPhone"></el-input>
         </el-form-item>
         <el-form-item label="排序码">
           <el-input-number v-model="deptForm.orderNum"  :min="1" :max="10" label="描述文字"></el-input-number>
@@ -178,6 +180,12 @@ export default {
         this.pagedata.total=res.data.t.total
       })
     },
+    // 数据表格的多选择框选择时触发
+    handleSelectionChnage(selection) {
+      this.multipleSelection = selection;
+      this.ids = selection.map(item => item.deptId)
+      this.multiple = !selection.length
+    },
     resetForm(formName) {
       this.formInline.deptId='';
       this.formInline.status='';
@@ -190,12 +198,21 @@ export default {
           })
           .catch(_ => {});
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    mohucx(){
+      this.pagedata.current=1
+      this.getInfo()
     },
     update(row){
       this.addDeptVisible=true
       this.deptForm=JSON.parse(JSON.stringify(row))
+    },
+    pldel(){
+      for (var i=0;i<this.ids.length;i++){
+        this.$axios.delete('/system/api/dept/'+this.ids[i]).then(res=>{
+
+        })
+      }
+      this.mohucx()
     },
     //删除角色
     delDept(id){
@@ -274,13 +291,18 @@ export default {
   },
   data() {
     return {
+      // 非单个禁用
+      single: true,
+      // 非多个禁用
+      multiple: true,
+      ids:[],
       deptForm: {
-      deptId: '',
+        deptId: '',
         deptName:'',
         deptNumber:'',
         regNumber:'',
         deptLeader:'',
-        LeaderPhone:'',
+        leaderPhone:'',
         orderNum:'',
         status:'',
     },

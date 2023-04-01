@@ -68,7 +68,7 @@
         <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate">修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete">删除</el-button>
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="piliDelete">删除</el-button>
       </el-col>
     </el-row>
     <!-- 表格工具按钮结束 -->
@@ -239,6 +239,7 @@ export default {
     },
     // 条件查询
     handleQuery() {
+      this.queryParams.current=1
       this.getCheckItemList()
     },
     // 重置查询条件
@@ -293,7 +294,7 @@ export default {
         this.$axios.delete("system/api/checkItem/" + checkItemIds).then(res => {
         })
       }
-        tx.getCheckItemList()// 全查询
+        tx.handleQuery()// 全查询
       }).catch(() => {
         tx.$message.error('删除已取消')
         tx.loading = false

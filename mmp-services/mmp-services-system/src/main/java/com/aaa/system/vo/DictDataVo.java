@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DictDataVo {
+    private String dictId;
    private String dictLabel;
     private String dictType;
     private String status;

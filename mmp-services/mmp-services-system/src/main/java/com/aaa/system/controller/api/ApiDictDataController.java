@@ -25,7 +25,7 @@ public class ApiDictDataController {
     public Result<List<DictData>> getAll(){return new Result<List<DictData>>(200,"",service.getall());};
 
     @PostMapping("getInfoById")
-    public Result getInfoById(DictDataVo dictDataVo, Page page, Long dictId){
+    public Result getInfoById(DictDataVo dictDataVo, Page page,Long dictId){
         return service.getInfoById(dictDataVo,page,dictId);
     }
     @PostMapping("saveAndUp")
@@ -39,5 +39,9 @@ public class ApiDictDataController {
     @GetMapping("{id}")
     public Result selectById(@PathVariable Long id){
         return service.selectById(id);
+    }
+    @GetMapping("tongbu")
+    public Result tongbu(){
+        return service.huancun();
     }
 }
