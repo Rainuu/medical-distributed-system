@@ -29,4 +29,16 @@ public class UserController {
       return userSercvice.queryById(id);
     }
 
+
+
+    /**
+     * 通过userId获取User
+     * @param userId
+     * @return
+     */
+    @PostMapping("getUserByUserId/{userId}")
+    public User getUserByUserId(@PathVariable Long userId){
+        return userSercvice.getUserByUserId(userId);
+    }
+
 }

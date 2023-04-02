@@ -94,7 +94,8 @@ public class RegistredListServiceImpl implements RegistredListService {
      * @return
      */
     @Override
-    public Result findDoctocList(SchedulingVoo schedulingVoo) {
+    public Result<IPage<Scheduling>> findDoctocList(Integer currentPage, Integer pageSize,SchedulingVoo schedulingVoo) {
+        IPage<Scheduling> page = new Page<>(currentPage,pageSize);
         QueryWrapper<Scheduling> wrapper = new QueryWrapper<>();
         // 部门编号
         if (Objects.nonNull(schedulingVoo.getDeptId())) {
@@ -112,8 +113,19 @@ public class RegistredListServiceImpl implements RegistredListService {
         if (Objects.nonNull(schedulingVoo.getSchedulingDay())) {
             wrapper.eq("scheduling_day",schedulingVoo.getSchedulingDay());
         }
-        List<Scheduling> schedulings = schedulingDao.selectList(wrapper);
-        return new Result<>(2000,"查询医生排班成功",schedulings);
+//        List<Scheduling> schedulings = schedulingDao.selectList(wrapper);
+        IPage<Scheduling> page1 = schedulingDao.selectPage(page, wrapper);
+        return new Result<>(2000,"查询医生排班成功",page1);
+    }
+
+    @Override
+    public Boolean updRegistrationId(String registrationId, String status) {
+        int i=-1;
+        if (Objects.nonNull(status)){
+
+            i = registredListDao.updStatus(registrationId,status);
+        }
+        return i>0?true:false;
     }
 
 

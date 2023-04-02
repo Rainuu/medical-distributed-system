@@ -13,7 +13,6 @@ import java.util.List;
  * @ProjectName medical-management-platform
  * @date 2023/3/26 19:50
  */
-public interface CareOrderDao extends BaseMapper<CareOrder> {
-    List<CareOrder> selectList(String chId);
-//    List<CareOrderItem> getOrderItem(@Param("patientId") String patientId, @Param("chId") String chId);
+public interface CareOrderItemDao extends BaseMapper<CareOrderItem> {
+    List<CareOrderItem> getOrderItem(@Param("patientId") String patientId,@Param("chId") String chId);
 }

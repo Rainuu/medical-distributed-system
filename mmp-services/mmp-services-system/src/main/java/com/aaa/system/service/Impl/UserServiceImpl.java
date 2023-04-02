@@ -157,4 +157,15 @@ public class UserServiceImpl implements UserSercvice{
         }
         return new Result(200,"退出失败",false);
     }
+
+    /**
+     * 通过userId获取User
+     * @param userId
+     * @return
+     */
+    @Override
+    public User getUserByUserId(Long userId) {
+        User user = dao.selectById(userId);
+        return user;
+    }
 }

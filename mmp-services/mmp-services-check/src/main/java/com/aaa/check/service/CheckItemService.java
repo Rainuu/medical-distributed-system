@@ -1,8 +1,10 @@
 package com.aaa.check.service;
 
 
+import com.aaa.check.vo.NewCareVo;
 import com.aaa.core.entity.CheckItem;
 import com.aaa.core.vo.Result;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.util.List;
 
@@ -16,4 +18,6 @@ public interface CheckItemService {
 
 
     Result<List<CheckItem>> selectAllCheckItem();
+
+    Page<CheckItem> selectByKey(NewCareVo newCareVo);
 }

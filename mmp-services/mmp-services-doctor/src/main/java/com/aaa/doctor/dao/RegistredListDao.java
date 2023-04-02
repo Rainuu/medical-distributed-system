@@ -6,6 +6,7 @@ import com.aaa.core.vo.Result;
 import com.aaa.doctor.vo.SchedulingVoo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public interface RegistredListDao extends BaseMapper<Registration> {
 
     Integer handleFalse(String registrationId);
 
-
+    int updStatus(@Param("registrationId") String registrationId, @Param("status") String status);
 
     /**
      * 查询医生排班

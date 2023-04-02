@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 刘鸿飞
@@ -72,5 +73,22 @@ public class CarPatientController {
         List<Registration> registrations = registrationService.queryRegistrationStatus1(status);
         return new Result<>(2000,"查询成功",registrations);
     }
+
+
+    //获取前端传输的药方跟药方内容
+    @PostMapping("getCareOrders")
+    public Result getCareOrders(@RequestBody Map<String,Object> careOrder){
+        String careOrders = careOrderService.getCareOrders(careOrder);
+
+        return new Result(2000,"添加药品处方信息成功",careOrders);
+    }
+    //根据处方id查询处方下面的药品内容
+    @PostMapping("queryCoId/{chId}")
+    public Result queryCoId(@PathVariable String chId){
+        List<CareOrder> careOrders = careOrderService.queryCoId(chId);
+        return new Result(2000,"根据处方id查询处方内容",careOrders);
+    }
+
+
 
 }

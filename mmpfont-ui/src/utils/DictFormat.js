@@ -21,3 +21,10 @@ export  function formatDict2(datas,value){
     return "";
 }
 
+// 可以重置任何页面的表单
+export function resetForm(refName) {
+    if (this.$refs[refName]) {
+        this.$refs[refName].resetFields()
+    }
+}
+

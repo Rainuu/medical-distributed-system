@@ -9,6 +9,7 @@ import com.aaa.stock.dao.ProducterDao;
 import com.aaa.stock.feign.Feign;
 import com.aaa.stock.service.MedicinalService;
 import com.aaa.stock.vo.MedicinalVo;
+import com.aaa.stock.vo.NewCareVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -93,5 +94,19 @@ public class MedicinalServiceImpl extends ServiceImpl<MedicinalDao, Medicines> i
             return false;
         }
     }
+
+    @Override
+    public Result<Page<Medicines>> MeDicinesController(NewCareVo newCareVo) {
+        Page<Medicines> medicinesPage = new Page<>(newCareVo.getPageNum(), newCareVo.getPageSize());
+
+        QueryWrapper<Medicines> queryWrapper = new QueryWrapper<Medicines>();
+        if (Objects.nonNull(newCareVo.getKeywords())){
+            queryWrapper.like("keywords",newCareVo.getKeywords());
+        }
+
+        Page<Medicines> medicinesPage1 = medicinalDao.selectPage(medicinesPage, queryWrapper);
+        return new Result<>(2000,"查询成功",medicinesPage1);
+    }
+
 
 }
