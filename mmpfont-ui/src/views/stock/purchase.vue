@@ -25,10 +25,10 @@
     </div>
     <!-- 工具栏————新增 & 删除 -->
     <div style="float:left; clear:both; padding:15px;">
-      <el-button type="primary" icon="el-icon-plus" plain @click="ToNewPurchase">新增</el-button>
-      <el-button type="danger" icon="el-icon-delete" plain>批量删除</el-button>
-      <el-button type="danger" icon="el-icon-delete" :disabled="single">作废</el-button>
-      <el-button type="success" icon="el-icon-edit" :disabled="single">提交入库</el-button>
+      <el-button type="primary" icon="el-icon-plus" plain @click="ToNewPurchase">新增采购</el-button>
+      <el-button type="success" icon="el-icon-edit" plain :disabled="single" @click="handleDoAudit">提交审核</el-button>
+      <el-button type="danger" icon="el-icon-delete" :disabled="single"  @click="handleDoInvalid">作废</el-button>
+      <el-button type="success" icon="el-icon-edit" :disabled="single" @click="handleDoInventory">提交入库</el-button>
     </div>
     <!-- 页面——数据表 & 分页 & 修改 & 删除（绑定行数据） -->
     <div>
@@ -36,7 +36,7 @@
         <el-table-column type="selection" width="55" align="center"/>
         <el-table-column label="单据ID" align="center" width="200" prop="purchaseId">
           <template slot-scope="scope">
-            <router-link :to="'/stock/editPurchase/'+scope.row.purchaseId" class="link-type">
+            <router-link :to="'/stock/purchase/editPurchase/'+scope.row.purchaseId" class="link-type">
               <span>{{ scope.row.purchaseId }}</span>
             </router-link>
           </template>
@@ -47,8 +47,7 @@
             <span>{{ scope.row.purchaseTradeTotalAmount | rounding }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="状态" align="center" width="80px"
-                         :formatter="(row)=>this.dictFormat(row,row.status,'his_order_status')"/>
+        <el-table-column prop="status" label="状态" align="center" width="80px" :formatter="(row)=>this.dictFormat(row,row.status,'his_order_status')"/>
         <el-table-column prop="applyUserName" label="申请人" align="center" width="80px"/>
         <el-table-column prop="storageOptUser" label="入库操作人" align="center" width="100px"/>
         <el-table-column prop="storageOptTime" label="入库时间" align="center" width="160px"/>
@@ -56,7 +55,7 @@
         <el-table-column prop="createTime" label="创建时间" align="center" width="160px"/>
       </el-table><br><br>
       <!-- 分页插件 -->
-      <el-pagination :current-page="current" :page-size="size" :total="total"
+      <el-pagination v-show="total>0" :current-page="current" :page-size="size" :total="total"
                      :page-sizes="[5, 10, 15, 20]" layout="total, sizes, prev, pager, next, jumper"
                      @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
     </div>
@@ -73,13 +72,13 @@ export default {
     }
   },
   methods: {
-    // 获取生产厂家表字段
+    // 字典处理————获取生产厂家表字段
     getProviderOption(){
       this.$axios.get("/stock/api/provider/getAllDict").then(r=>{
         this.providerOptions=r.data.t;
       })
     },
-    // 循环判断，将Id转换为name
+    // 处理字典姓名————循环判断，将Id转换为name
     ProviderNameDict(row){
       var a = '';
       for (let i = 0; i < this.providerOptions.length; i++) {
@@ -100,31 +99,88 @@ export default {
         this.dictList = res.data.t
       })
     },
+    // 模糊查询
+    search(){
+      this.current=1;
+      this.initTable();
+    },
     // 重置模糊
     resert(){
       this.searchForm = {};
       this.current=1;
       this.initTable();
     },
-    // 模糊查询
-    search(){
-      this.current=1;
-      this.initTable();
-    },
-    // 跳转到新增采购的路由页面
+    // 新增采购————跳转到新增采购的路由页面
     ToNewPurchase() {
       this.$router.replace('/stock/purchase/newPurchase')
     },
+    // 提交审核
+    handleDoAudit() {
+      const purchaseId = this.ids[0]
+      this.$confirm('是否确认提交单据ID为:' + purchaseId + '的数据?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post("/stock/api/purchase/doAudit/" + purchaseId).then(res => {
+          this.$message({type: 'success', message: '提交审核成功!'});
+          this.initTable();
+        }).catch(() => {
+          this.$message({type: 'error', message: '提交审核失败!'});
+        })
+      }).catch(() => {
+        this.$message({type: 'info', message: '已取消删除'});
+      })
+    },
+    // 作废【根据采购单号】
+    handleDoInvalid(row) {
+      const purchaseId = this.ids[0]
+      this.$confirm('是否确认作废单据ID为:' + purchaseId + '的数据?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post("/stock/api/purchase/" + purchaseId).then(res => {
+          this.$message({type: 'success', message: '作废成功!'});
+          this.initTable();
+        }).catch(() => {
+          this.$message({type: 'error', message: '作废失败!'});
+        })
+      }).catch(() => {
+        this.$message({type: 'info', message: '作废删除'});
+      })
+    },
+    // 执行入库
+    handleDoInventory(row) {
+      const purchaseId = this.ids[0]
+      this.$confirm('是否确认提交入库单据ID为:' + purchaseId + '的数据?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post("/stock/api/purchase/" + purchaseId).then(res => {
+          this.$message({type: 'success', message: '入库成功!'});
+          this.initTable();
+        }).catch(() => {
+          this.$message({type: 'error', message: '入库失败!'});
+        })
+      }).catch(() => {
+        this.$message({type: 'info', message: '入库删除'});
+      })
+    },
     // 查询————发出axios请求获取后端值，并将后端获取到的数据赋值给表格回填，挂载到页面，更改页面条数实现分页
     initTable(){
+      this.loading = true // 打开遮罩
       this.$axios.post("stock/api/purchase/getAll"+"/"+this.current+"/"+this.size,this.searchForm).then(result=>{
         this.tableData=result.data.t.records;
         this.total=result.data.t.total;
+        this.loading = false// 关闭遮罩
       })
     },
     // 获取批量数据————数据表格的多选择框选择时触发
     handleSelectionChange(selection) {
-      this.multipleSelection = selection;
+      this.ids = selection.map(item => item.purchaseId)
+      // this.multipleSelection = selection;
       this.single = selection.length !== 1;
       this.multiple = !selection.length;
     },
@@ -145,13 +201,15 @@ export default {
     return {
       // 字典数组——接收字典表数据
       dictList: [],
+      // 多选的id数组
+      ids: [],
       // 供应商的数据
       providerOptions: {},
       // 接收模糊查询
       searchForm: {
-        providerId: '',
-        applyUserName: '',
-        status: ''
+        providerId: undefined,
+        applyUserName: undefined,
+        status: undefined
       },
       // 查询的页面信息
       tableData: [],
