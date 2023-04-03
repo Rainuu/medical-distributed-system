@@ -20,7 +20,4 @@
         </if>
     </select>
 
-    <select id="getPurchaseItemById" resultType="com.aaa.core.entity.PurchaseItem">
-        SELECT * FROM stock_purchase_item WHERE purchase_id = #{purchaseId}
-    </select>
 </mapper>

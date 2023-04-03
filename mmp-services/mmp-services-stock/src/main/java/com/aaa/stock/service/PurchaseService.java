@@ -25,5 +25,4 @@ public interface PurchaseService extends IService<Purchase> {
 
     void auditNoPass(String purchaseId, String value);
 
-    Result<List<PurchaseItem>> getPurchaseItemById(String purchaseId);
 }

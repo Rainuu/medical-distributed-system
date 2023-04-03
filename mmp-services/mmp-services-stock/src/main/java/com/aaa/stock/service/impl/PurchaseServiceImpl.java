@@ -63,10 +63,4 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
         purchaseDao.auditNoPass(purchaseId,value);
     }
 
-    @Override
-    public Result<List<PurchaseItem>> getPurchaseItemById(String purchaseId) {
-        List<PurchaseItem> purchaseItemById = purchaseDao.getPurchaseItemById(purchaseId);
-        return new Result<List<PurchaseItem>>(200,"查询成功",purchaseItemById);
-    }
-
 }

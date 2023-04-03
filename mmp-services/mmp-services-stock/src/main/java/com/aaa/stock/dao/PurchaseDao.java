@@ -25,8 +25,6 @@ public interface PurchaseDao extends BaseMapper<Purchase> {
 
     void auditNoPass(String purchaseId, String value);
 
-    List<PurchaseItem> getPurchaseItemById(String purchaseId);
-
 //    List updById();
 
 }

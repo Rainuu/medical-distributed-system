@@ -20,7 +20,7 @@ import java.util.List;
 public interface MedicinalService extends IService<Medicines> {
 
     //全查+分页+模糊
-    Result<IPage<Medicines>> getAll(Integer current, Integer size, MedicinalVo medicinalVo);
+    Result<IPage<Medicines>> getAll(Integer current1, Integer size1, MedicinalVo medicinalVo);
     // Result<IPage<Medicines>> getMedById(Integer current, Integer size, MedicinalVo medicinalVo);
 
     // 修改 & 新增

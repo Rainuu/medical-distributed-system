@@ -164,7 +164,7 @@ export default {
       const purchaseId = this.ids[0]
       this.title = '单据编号为【' + purchaseId + '】的采购详情数据'
       this.loading = true
-      this.$axios.get("stock/api/purchase/getPurchaseItemById"+"/"+purchaseId).then(res => {
+      this.$axios.get("stock/api/purchaseItem/getPurchaseItemById"+"/"+purchaseId).then(res => {
         this.loading = false
         this.purchaseItemTableList = res.data.t;
       })

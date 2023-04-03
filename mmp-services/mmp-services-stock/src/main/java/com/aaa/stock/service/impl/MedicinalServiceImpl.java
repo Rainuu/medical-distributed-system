@@ -34,9 +34,9 @@ public class MedicinalServiceImpl extends ServiceImpl<MedicinalDao, Medicines> i
 
     // 查询 & 分页 & 模糊查询
     @Override
-    public Result<IPage<Medicines>> getAll(Integer current, Integer size, MedicinalVo medicinalVo) {
+    public Result<IPage<Medicines>> getAll(Integer current1, Integer size1, MedicinalVo medicinalVo) {
         // IPage<Medicines> medById = medicinalDao.getMedById(medicinalVo, new Page(current, size));
-        IPage<Medicines> page = new Page(current, size);
+        IPage<Medicines> page = new Page(current1, size1);
         QueryWrapper<Medicines> wrapper = new QueryWrapper();
         if (StringUtils.hasText(medicinalVo.getMedicinesName())){
             wrapper.like("medicines_name",medicinalVo.getMedicinesName());

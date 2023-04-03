@@ -24,13 +24,13 @@ public class ApiMedicinalController {
     private MedicinalService medicinalService;
 
     //查询&分页
-    @PostMapping("getAll/{current}/{size}")
+    @PostMapping("getAll/{current1}/{size1}")
     public Result<IPage<Medicines>> getAll(
-            @PathVariable Integer current,
-            @PathVariable Integer size,
+            @PathVariable Integer current1,
+            @PathVariable Integer size1,
             @RequestBody MedicinalVo medicinalVo  //把JSON转Java对象
     ){
-        return medicinalService.getAll(current,size,medicinalVo);
+        return medicinalService.getAll(current1,size1,medicinalVo);
     }
 
     // 修改或添加

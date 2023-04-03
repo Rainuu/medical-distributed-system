@@ -48,7 +48,7 @@ public class ApiPurchaseController {
     }
 
     // 暂存
-//    @PostMapping("addPurchase")
+//    @PostMapping("addPurchase/")
 //    public Result addPurchase(){
 //
 //    }
@@ -81,9 +81,4 @@ public class ApiPurchaseController {
         return purchaseService.listPurchasePendingForPage(current,size,purchaseVo);
     }
 
-    // 查看详情
-    @GetMapping("getPurchaseItemById/{purchaseId}")
-    public Result<List<PurchaseItem>> getPurchaseItemById(@PathVariable String purchaseId){
-        return purchaseService.getPurchaseItemById(purchaseId);
-    }
 }
