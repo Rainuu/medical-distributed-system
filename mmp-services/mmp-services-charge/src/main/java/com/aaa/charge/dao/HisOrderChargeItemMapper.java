@@ -22,4 +22,6 @@ public interface HisOrderChargeItemMapper extends BaseMapper<OrderChargeItem> {
     void updateBystatus(String orderId);
 
     void updByDispense(String itemId);
+
+    List<OrderChargeItem> selectList(String orderId);
 }

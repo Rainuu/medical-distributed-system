@@ -70,12 +70,38 @@
     </div>
     <!-- 分页控件结束 -->
 
-
+    <el-dialog
+        title="请使用支付宝支付"
+        :visible.sync="openPay"
+        center
+        :close-on-click-modal="false"
+        :before-close="handleClose"
+        append-to-body
+    >
+      <el-form label-position="left" label-width="120px" inline class="demo-table-expand">
+        <el-card>
+          <el-form-item label="订单号:">
+            <span>{{ payObj.orderId }}</span>
+          </el-form-item>
+          <el-form-item label="总金额:">
+            <span>{{ payObj.price }}</span>
+          </el-form-item>
+        </el-card>
+      </el-form>
+      <div style="text-align:center">
+        <vue-qr :text="payObj.codeUrl" :size="200" />
+        <div>请使用支付宝扫码</div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import vueQr from "vue-qr"
 export default {
+  components:{
+    vueQr
+  },
   data() {
     return {
       //总条数
@@ -88,7 +114,13 @@ export default {
       dialogVisible:false,
       title:"",
       statusOptions:[],
-      dictList:[]
+      dictList:[],
+      // 支付对象
+      payObj: {},
+      // 是否打开支付宝二维码支付层
+      openPay: false,
+      // 定时轮询对象
+      intervalObj: undefined
     }
   },
   methods: {
@@ -114,32 +146,51 @@ export default {
         })
       })
     },
-    //支付宝支付
+    // 支付宝收费
     handlePayWithZfb(row) {
-      this.$confirm('是否确定支付宝支付?', '提示', {
+      this.$axios.post("charge/api/hisOrderCharge/updateBystatus/"+row.orderId).then(res => {
+        this.payObj = res.data.t
+        const tx = this
+        tx.openPay = true// 打开支付的弹出层
+        // 定时轮询
+        tx.intervalObj = setInterval(function() {
+          // 根据ID查询订单信息
+          tx.$axios.post("charge/api/hisOrderCharge/updBystatus1/"+tx.payObj.orderId).then(r => {
+            if (r.data.t === true) { // 说明订单状态为支付成功
+              // 清空定时器
+              clearInterval(tx.intervalObj)
+              tx.$notify({
+                title: '支付成功',
+                message: '【' + tx.payObj.orderId + '】的订单编写支付成功',
+                type: 'success'
+              })
+              tx.openPay = false
+              tx.resetCurrentParams()
+            }
+          }).catch(() => {
+            // 清空定时器
+            clearInterval(tx.intervalObj)
+          })
+        }, 2000)
+      }).catch(() => {
+        this.$message.error('操作失败')
+      })
+    },
+    // 如果用户没有支付，而弹出层被关闭了
+    handleClose() {
+      this.$confirm('您确定放弃支付吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.post("charge/api/hisOrderCharge/pay",row).then(result => {
-          // 添加之前先删除一下，如果单页面，页面不刷新，添加进去的内容会一直保留在页面中，二次调用form表单会出错
-          const divForm = document.getElementsByTagName('div')
-          if (divForm.length) {
-            document.body.removeChild(divForm[0])
-          }
-          const div = document.createElement('div')
-          div.innerHTML = result.data.t // data就是接口返回的form 表单字符串
-          document.body.appendChild(div)
-          //document.forms[0].setAttribute('target', '_blank') // 新开窗口跳转
-          document.forms[0].submit()
-        })
+        this.$message.warning('您已放弃支付，可以回到收费查询列表里面再次支付')
+        this.openPay = false
+        // 关闭轮询
+        clearInterval(this.intervalObj)
       }).catch(() => {
-        this.$message({
-          type:"info",
-          message:'支付宝支付取消'
-        })
+        this.$message.info('欢迎继续支付')
       })
-    },
+  },
     //字典解析
     dictFormat(row, column, dictType){
       return this.formatDict( this.dictList,column, dictType)

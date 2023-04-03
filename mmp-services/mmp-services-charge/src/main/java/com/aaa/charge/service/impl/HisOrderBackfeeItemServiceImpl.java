@@ -43,13 +43,15 @@ public class HisOrderBackfeeItemServiceImpl implements HisOrderBackfeeItemServic
         BigDecimal backAmount = postObjVov.getOrderBackfeeDto().getBackAmount();
         //创建时间
         LocalDateTime createTime = LocalDateTime.now();
+        //支付时间
+        LocalDateTime backTime = LocalDateTime.now();
         //生成odbId
         String backId= "ODB";
         Random random = new Random();
         for (int i = 0; i < 10; i++) {
             backId += String.valueOf(random.nextInt(10));
         }
-        hisOrderBackfeeMapper.insertAll(backId,regId,patientName,backAmount,createTime);
+        hisOrderBackfeeMapper.insertAll(backId,regId,patientName,backAmount,createTime,backTime);
 
         //获取item状态
         List<PostObjVo1> orderBackfeeItemDtoList = postObjVov.getOrderBackfeeItemDtoList();
@@ -83,13 +85,15 @@ public class HisOrderBackfeeItemServiceImpl implements HisOrderBackfeeItemServic
         BigDecimal backAmount = postObjVoV.getOrderBackfeeDto().getBackAmount();
         //创建时间
         LocalDateTime createTime = LocalDateTime.now();
+        //支付时间
+        LocalDateTime bcakTime = LocalDateTime.now();
         //生成odbId
         String backId= "ODB";
         Random random = new Random();
         for (int i = 0; i < 10; i++) {
             backId += String.valueOf(random.nextInt(10));
         }
-        hisOrderBackfeeMapper.insertAll(backId,regId,patientName,backAmount,createTime);
+        hisOrderBackfeeMapper.insertAll(backId,regId,patientName,backAmount,createTime,bcakTime);
 
         //获取item状态
         List<PostObjVo1> orderBackfeeItemDtoList = postObjVoV.getOrderBackfeeItemDtoList();

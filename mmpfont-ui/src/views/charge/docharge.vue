@@ -327,15 +327,15 @@ export default {
         }).then(() => {
           // 打开支付的弹出层
           this.openPay = true
-          this.$axios.post("charge/api/hisOrderCharge/carateNative/",postObj).then(result=>{
+          this.$axios.post("charge/api/hisOrderCharge/carateNative",postObj).then(result=>{
             this.payObj = result.data.t
             this.$message.success('订单创建成功，请扫码支付')
             const tx = this
             // 定时轮询
             tx.intervalObj = setInterval(function() {
               // 根据ID查询订单信息
-              this.$axios.post("charge/api/hisOrderCharge/updstatus",tx.payObj.orderId).then(r => {
-                if (r.data.orderStatus === '1') { // 说明订单状态为支付成功
+              tx.$axios.post("charge/api/hisOrderCharge/updstatus/"+tx.payObj.orderId).then(r => {
+                if (r.data.t ===true) { // 说明订单状态为支付成功
                   // 清空定时器
                   clearInterval(tx.intervalObj)
                   tx.$notify({
@@ -350,14 +350,14 @@ export default {
                 // 清空定时器
                 clearInterval(tx.intervalObj)
               })
-            }, 2000)
+            }, 200)
             this.loading = false
           }).catch(() => {
-            this.msgError('创建订单失败')
+            this.$message.error('创建订单失败')
             this.loading = false
           })
         }).catch(() => {
-          this.msgError('创建已取消')
+          this.$message.info('创建已取消')
           this.loading = false
         })
       }
@@ -369,13 +369,13 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.msgError('您已放弃支付，可以回到收费查询列表里面再次支付')
+        this.$message.error('您已放弃支付，可以回到收费查询列表里面再次支付')
         this.resetCurrentParams()
         this.openPay = false
         // 关闭轮询
         clearInterval(this.intervalObj)
       }).catch(() => {
-        this.msgSuccess('欢迎继续支付')
+        this.$message.warning('欢迎继续支付')
       })
     },
     //初始化字典

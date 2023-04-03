@@ -24,7 +24,7 @@
         <el-table-column prop="patientName" label="患者姓名"  width="100px" align="center"></el-table-column>
         <el-table-column prop="backAmount" label="总金额"  width="100px" align="center"></el-table-column>
         <el-table-column prop="backType" label="退费类型"  width="100px" align="center" :formatter="(row)=>this.dictFormat(row,row.backType,'his_pay_type_status')"></el-table-column>
-        <el-table-column prop="backStatus" label="订单状态"  width="100px" align="center" :formatter="(row)=>this.dictFormat(row,row.backStatus,'his_order_details_status')"></el-table-column>
+        <el-table-column prop="backStatus" label="订单状态"  width="100px" align="center" :formatter="(row)=>this.dictFormat(row,row.backStatus,'his_backfee_status')"></el-table-column>
         <el-table-column prop="createTime" label="创建时间"  min-width="50px" align="center"></el-table-column>
         <el-table-column fixed="right" label="操作" min-width="60px" align="center">
           <template slot-scope="scope">
@@ -49,7 +49,7 @@
               {{ scope.row.itemType==='0'?'药品':'检查' }}
             </template>
           </el-table-column>
-          <el-table-column prop="status" label="状态"  min-width="50px" align="center" :formatter="(row)=>this.dictFormat(row,row.status,'his_backfee_status')"></el-table-column>
+          <el-table-column prop="status" label="状态"  min-width="50px" align="center" :formatter="(row)=>this.dictFormat(row,row.status,'his_order_details_status')"></el-table-column>
         </el-table>
         <el-button @click="stop">关闭</el-button>
       </el-dialog>

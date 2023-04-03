@@ -9,7 +9,7 @@
 
 
 <update id="updBystatus">
-    update his_care_order_item set 	status=0 where item_id=#{itemId}
+    update his_care_order_item set 	status=3 where item_id=#{itemId}
     </update>
 
 
@@ -23,4 +23,8 @@
             HAVING item_name LIKE concat('%'#{itemName}'%')
         </if>
     </select>
+
+<update id="updateitemId">
+    update his_care_order_item set status=1 where item_id=#{itemId}
+    </update>
 </mapper>

@@ -3,10 +3,7 @@ package com.aaa.charge.service;
 
 import com.aaa.charge.vo.OrderChargeVo;
 import com.aaa.charge.vo.PostObjVo;
-import com.aaa.core.entity.CareOrderItem;
-import com.aaa.core.entity.DictData;
-import com.aaa.core.entity.OrderCharge;
-import com.aaa.core.entity.OrderChargeItem;
+import com.aaa.core.entity.*;
 import com.aaa.core.vo.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.stereotype.Service;
@@ -43,4 +40,8 @@ public interface HisOrderChargeService {
     Result updByDispense(String[] itemId);
 
     List<OrderChargeItem> listAllItem(String[] create_time);
+
+    Result<List<CareOrder>> updateBystatus(String orderId);
+
+    Result<List<OrderCharge>> updBystatus1(String orderId);
 }

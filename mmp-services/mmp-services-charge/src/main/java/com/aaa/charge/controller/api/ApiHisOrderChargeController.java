@@ -5,10 +5,7 @@ import com.aaa.charge.service.HisOrderChargeService;
 import com.aaa.charge.util.MyAlipayUtil;
 import com.aaa.charge.vo.OrderChargeVo;
 import com.aaa.charge.vo.PostObjVo;
-import com.aaa.core.entity.CareOrderItem;
-import com.aaa.core.entity.DictData;
-import com.aaa.core.entity.OrderCharge;
-import com.aaa.core.entity.OrderChargeItem;
+import com.aaa.core.entity.*;
 import com.aaa.core.vo.Result;
 import com.alipay.api.AlipayApiException;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -81,14 +78,24 @@ public class ApiHisOrderChargeController {
         return service.updByDispense(itemId);
     }
 
-    //支付宝支付
+    //处方收费:支付宝支付
     @PostMapping("carateNative")
     public Result<List<CareOrderItem>> carateNative(@RequestBody PostObjVo postObjVo){
         return service.ZFB(postObjVo);
     }
-    //支付宝支付修改状态
+    //收费列表:支付宝支付
+    @PostMapping("updateBystatus/{orderId}")
+    public Result<List<CareOrder>> updateBystatus(@PathVariable String orderId)  {
+        return service.updateBystatus(orderId);
+    }
+    //收费列表:支付宝支付,成功支付后方法
+    @PostMapping("updBystatus1/{orderId}")
+    public Result<List<OrderCharge>> updBystatus1(@PathVariable String orderId) {
+        return service.updBystatus1(orderId);
+    }
+    //处方收费:支付宝支付修改状态
     @PostMapping("updstatus/{orderId}")
-    public Result<List<OrderCharge>> updstatus(@RequestBody String orderId){
+    public Result<List<OrderCharge>> updstatus(@PathVariable String orderId){
         return service.updByStatus(orderId);
     }
 

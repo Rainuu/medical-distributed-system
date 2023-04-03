@@ -19,9 +19,9 @@ public interface HisOrderChargeMapper extends BaseMapper<OrderCharge> {
     //现金支付
     boolean updByStatusType(String orderId);
 
-    void insertAll(String orderId,String regId, String patientName, BigDecimal orderAmount, LocalDateTime createTime);
+    void insertAll(String orderId,String regId, String patientName, BigDecimal orderAmount, LocalDateTime createTime,LocalDateTime payTime);
 
-    void insertAllWX(String orderId, String regId, String patientName, BigDecimal orderAmount, LocalDateTime createTime);
+    void insertAllWX(String orderId, String regId, String patientName, BigDecimal orderAmount, LocalDateTime createTime,LocalDateTime payTime);
 
     void updBystatus(String orderId);
 }

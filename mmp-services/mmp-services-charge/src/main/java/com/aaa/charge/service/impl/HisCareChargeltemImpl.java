@@ -49,6 +49,8 @@ public class HisCareChargeltemImpl implements HisCareChargeltemService {
         String patientName = postObjVo.getOrderChargeDto().getPatientName();
         //获取总金额
         BigDecimal orderAmount = postObjVo.getOrderChargeDto().getOrderAmount();
+        //支付时间
+        LocalDateTime payTime = LocalDateTime.now();
         //创建时间
         LocalDateTime createTime = LocalDateTime.now();
         //生成orderId
@@ -57,7 +59,7 @@ public class HisCareChargeltemImpl implements HisCareChargeltemService {
         for (int i = 0; i < 10; i++) {
             orderId += String.valueOf(random.nextInt(10));
         }
-        hisOrderChargeMapper.insertAll(orderId,regId,patientName,orderAmount,createTime);
+        hisOrderChargeMapper.insertAll(orderId,regId,patientName,orderAmount,createTime,payTime);
 
         //获取itemId修改状态
         List<PostObjVo1> orderChargeItemDtoList = postObjVo.getOrderChargeItemDtoList();

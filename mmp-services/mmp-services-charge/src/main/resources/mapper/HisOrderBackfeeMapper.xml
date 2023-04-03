@@ -8,7 +8,7 @@
 </select>
 
 <insert id="insertAll">
-    INSERT INTO his_order_backfee (back_id,reg_id,patient_name,back_amount,back_status,back_type,create_time)
-    VALUES(#{param1},#{param2}, #{param3},#{param4},'1','1',#{param5})
+    INSERT INTO his_order_backfee (back_id,reg_id,patient_name,back_amount,back_status,back_type,create_time,back_time)
+    VALUES(#{param1},#{param2}, #{param3},#{param4},'1','1',#{param5},#{param6})
     </insert>
 </mapper>

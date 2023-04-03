@@ -21,5 +21,5 @@ public interface HisOrderBackfeeMapper extends BaseMapper<OrderBackfee> {
      ////查询所有OrderBackfeeItem的数据根据id返回
      List<OrderBackfeeItem>  selectAll(String backId);
 
-    void insertAll(String backId, String regId, String patientName, BigDecimal backAmount, LocalDateTime createTime);
+    void insertAll(String backId, String regId, String patientName, BigDecimal backAmount, LocalDateTime createTime,LocalDateTime backTime);
 }
