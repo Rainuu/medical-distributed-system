@@ -8,6 +8,8 @@ import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 Vue.config.productionTip = false
 import{formatDict,formatDict2} from './utils/DictFormat'
+// 刘鸿飞加的全局
+import{resetForm} from './utils/DictFormat'
 // Axios
 import ax from "axios";
 const axios = ax.create({
@@ -18,7 +20,7 @@ Vue.prototype.formatDict=formatDict;
 
 // 刘鸿飞
 Vue.prototype.formatDict2=formatDict2;
-
+Vue.prototype.resetForm=resetForm;
 
 
 Vue.use(mavonEditor)
@@ -66,6 +68,7 @@ router.beforeEach(((to, from, next) => {
 }))
 
 new Vue({
+  el: '#app',
   router,
   render: h => h(App)
 }).$mount('#app')

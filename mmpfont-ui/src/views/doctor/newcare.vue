@@ -1,3 +1,4 @@
+<!--新开就诊-->
 <template>
   <div v-loading="loading" class="app-container">
     <!-- 选择门诊和急诊的选项开始 -->
@@ -50,7 +51,7 @@
                   size="small"
               />
             </el-form-item>
-            <el-form-item label="性别" prop="sex" :formatter="sexFormat" >
+            <el-form-item label="性别" prop="sex" :formatter="sexFormat">
               <el-radio-group v-model="patientAllObj.patientObj.sex">
                 <el-radio
                     v-for="d in sexOptions"
@@ -205,6 +206,7 @@
               <span v-else style="color:#0000ff">{{ careHistory.chId }}</span>
             </el-col>
             <el-col :span="12" style="text-align:right">
+
               <el-button type="primary" :disabled="careHistory.regId===undefined" icon="el-icon-check" @click="handleSaveCareHistory">保存病历</el-button>
               <el-button type="danger" :disabled="careHistory.regId===undefined" icon="el-icon-finished" @click="handleVisitComplete">完成就诊</el-button>
             </el-col>
@@ -310,15 +312,15 @@
               <el-collapse v-if="careOrders.length>0" accordion>
                 <el-collapse-item v-for="(item,index) in careOrders" :key="index">
                   <template slot="title">
-                    【{{ item.careOrder.coType==='0'?'药用处方':'检查处方' }}】【{{ index+1 }}】【处方总额】:￥{{ item.careOrder.allAmount }}
+                    【{{ item.coType==='0'?'药用处方':'检查处方' }}】【{{ index+1 }}】【处方总额】:￥{{ item.allAmount }}
                   </template>
                   <el-table
                       v-loading="loading"
                       border
-                      :data="item.careOrderItems"
+                      :data="item.careOrderItemList"
                   >
                     <el-table-column label="序号" align="center" type="index" width="50" />
-                    <el-table-column :label="item.careOrder.coType==='0'?'药品名称':'项目名称'" align="center" prop="itemName" />
+                    <el-table-column :label="item.careOrderItemList.itemType==='0'?'药品名称':'项目名称'" align="center" prop="itemName" />
                     <el-table-column label="数量" align="center" prop="num" />
                     <el-table-column label="单价(元)" align="center" prop="price" />
                     <el-table-column label="金额(元)" align="center" prop="amount" />
@@ -334,8 +336,9 @@
               </el-collapse>
               <!-- 处方详情结束 -->
               <div style="margin:3px;text-align:left">
-                <el-button type="success" icon="el-icon-plus" :disabled="careHistory.chId===undefined" @click="handelAddMedicinesOrder">添加药用处方</el-button>
-                <el-button type="success" icon="el-icon-plus" :disabled="careHistory.chId===undefined" @click="handelAddCheckItemOrder">添加检查处方</el-button>
+
+                <el-button type="success" :disabled="careHistory.chId===undefined" icon="el-icon-plus"  @click="handelAddMedicinesOrder">添加药用处方</el-button>
+                <el-button type="success" :disabled="careHistory.chId===undefined" icon="el-icon-plus"  @click="handelAddCheckItemOrder">添加检查处方</el-button>
               </div>
             </el-tab-pane>
           </el-tabs>
@@ -658,14 +661,14 @@ export default {
         patientFileObj: {},
         careHistoryObjList: []
       },
-      // 提交到数据库的对象
+      // 提交到数据库的对象 处方的中间表
       careHistory: {
         // 当前就诊中的挂号单ID
         regId: undefined,
         chId: undefined,
         caseDate: undefined,
-        receiveType: '0',
-        isContagious: '0',
+        receiveType: '',
+        isContagious: '',
         caseTitle: undefined,
         caseResult: undefined,
         doctorTips: undefined,
@@ -706,44 +709,211 @@ export default {
       // 抽屉数据加载的遮罩
       drawerLoading: false,
       // 抽屉里面选中的数据
-      selectItemList: [],
-
-
+      selectItemList: []
     }
   },
   created() {
-    //查询性别字典
-    this.initSex();
     //查询门诊急诊按钮
     this.queryRegistrationType();
-    //查询接诊类型---》初诊复诊
-    this.queryReceiveType();
-    // 查询右侧病历中---》是否传染
-    this.querycontagiousType();
-    // 查询新开就诊中挂号患者的就诊列表
-    this.queryRegistrationNumber1();
-    // 查询挂号患者的待就诊列表
-    this.queryRegistrationNumber2();
-    // 查询挂号患者的就诊完成列表
-    this.queryRegistrationNumber3();
+
+
+    //字典区
+    //查询字典
+    this.initSex();
+    //查询右边病历里的接诊类型下拉列表 初诊 复诊
+    this.queryReceptionType();
+    //查询右边病历里的是否传染
+    this.queryInfectType();
+    //查询药品处方跟内容里的支付状态
+    this.queryStatus();
+
+
   },
   methods: {
-    // 右侧保存病历
-    handleSaveCareHistory() {
+    // 门诊急诊切换事件
+    schedulingTypeChange(value) {
+
+      if (value){
+        this.schedulingType = value
+      }
 
     },
-    // 左边患者框 接诊查询患者档案信息
-//按钮区
-//左边患者弹出层里的待接诊接诊按钮
+    // 打开选择挂号患者的弹出层
+    viewRegistration() {
+      this.activeName = 't1'
+      //查询待就诊的患者
+      this.queryRegistrationNumber1();
+      this.openRegistration = true
+    },
+    //查询门诊急诊按钮
+    queryRegistrationType(){
+      this.$axios.get("/system/api/dict/data/findByType/his_scheduling_type").then(result=>{
+        this.schedulingTypeOptions=result.data.t;
+        //清空患者的数据
+        this.patientAllObj.patientObj={};
+        this.patientAllObj.patientFileObj={};
+        this.patientAllObj.areHistoryObjList=[];
+      })
+    },
+    //查询待接诊的患者的数量
+    queryRegistrationNumber1(){
+      this.$axios.post("/doctor/patient/queryRegistrationStatus1/1/",this.schedulingType).then(result=>{
+        this.toBeSeenRegistration=result.data.t;
+      })
+    },
+    //查询接诊中的患者的数量
+    queryRegistrationNumber2(){
+      this.$axios.post("/doctor/patient/queryRegistrationStatus1/2/",this.schedulingType).then(result=>{
+        this.visitingRegistration=result.data.t;
+      })
+    },
+    //查询接诊完成的患者的数量
+    queryRegistrationNumber3(){
+      this.$axios.post("/doctor/patient/queryRegistrationStatus1/3/",this.schedulingType).then(result=>{
+        this.visitCompletedRegistration=result.data.t;
+      })
+    },
+
+    //字典区
+    //查询性别字典
+    initSex(){
+      this.$axios.get("/system/api/dict/data/findByType/sys_user_sex").then(result=>{
+        this.sexOptions=result.data.t;
+      })
+    },
+    //把性别的0/1换成男女等
+    sexFormat(row){
+      let v=row.sex;
+      return this.formatDict2(this.sexOptions,v);
+    },
+    //查询药品处方跟内容里的支付状态
+    queryStatus() {
+      this.$axios.get("/system/api/dict/data/findByType/his_order_details_status").then(result=>{
+        this.orderDetailsStatusOptions=result.data.t;
+      })
+    },
+    //查询挂号类型字典下拉列表
+    queryRegistrationType(){
+      this.$axios.get("/system/api/dict/data/findByType/his_scheduling_type").then(result=>{
+        this.schedulingTypeOptions=result.data.t;
+      })
+    },
+    //
+    //查询右边病历里的接诊类型 初诊 复诊
+    queryReceptionType(){
+      this.$axios.get("/system/api/dict/data/findByType/his_receive_type").then(result=>{
+        this.receiveTypeOptions=result.data.t;
+        this.careHistory.receiveType=this.receiveTypeOptions[0].dictValue;
+      })
+    },
+    // 解析初诊复诊
+    receivetypeFormatter() {
+      let v=row.receiveType;
+      return this.formatDict2(this.receiveTypeOptions,v);
+    },
+    //查询右边病历里的是否传染下拉列表 是否
+    queryInfectType(){
+      this.$axios.get("/system/api/dict/data/findByType/his_contagious_status").then(result=>{
+        this.isContagiousOptions=result.data.t;
+        //提前设置是否传染 默认否
+        this.careHistory.isContagious=this.isContagiousOptions[0].dictValue;
+      })
+    },
+    // 右侧病历中---》是否传染  是、否
+    contagiousFormatter() {
+      let v=row.isContagious;
+      return this.formatDict(this.isContagiousOptions,v);
+    },
+
+    //翻译字典区
+    //把挂号类型翻译
+    schedulingTypeFormatter(row){
+      let v=row.schedulingType;
+      return this.formatDict2(this.schedulingTypeOptions,v);
+    },
+    // 翻译处方详情状态
+    orderDetailsStatusFormatter(row) {
+      return this.formatDict(this.orderDetailsStatusOptions, row.status)
+    },
+
+    //左边患者弹出层里的待接诊  接诊按钮
     handleVisit(row){
-      this.$axios.post("/doctor/patient/queryByPatient/"+row.patientId).then(result=>{
+      //接诊之后根据挂号单id 改变挂号的状态 改为就诊中
+      this.$axios.get("/doctor/registered/updRegistrationId/"+row.registrationId+"/2").then(result=>{
+        if (result.data.t){
+          //接诊成功后 执行查询患者数据
+          this.$message({
+            showClose: true,
+            message: '接诊成功',
+            type: 'success'
+          });
+          //根据患者id查询患者信息然后赋值到左边的表单里
+          this.$axios.post("/doctor/patient/queryByPatient/"+row.patientId).then(result=>{
+            //赋值之前先清空上一个患者的数据
+            this.patientAllObj.patientObj={};
+            this.patientAllObj.patientFileObj={};
+            this.patientAllObj.areHistoryObjList=[];
+            //把患者数据赋值到左边的表单里
+            this.patientAllObj.patientObj=result.data.t;
+            this.careHistory.regId = row.registrationId;
+            //点击接诊按钮 接诊类型直接赋值为0初诊
+            this.careHistory.receiveType=this.receiveTypeOptions[1].dictValue;
+            //提前设置是否传染 默认否
+            this.careHistory.isContagious=this.isContagiousOptions[0].dictValue;
+
+          })
+          //当点击按钮时已经获取到了当前行的数据需要用到里面的id
+          this.$axios.get("/doctor/patient/getByFileId/"+row.patientId).then(result=>{
+            this.patientAllObj.patientFileObj=result.data.t;
+
+            if (!this.patientAllObj.patientFile){
+              //检测一下patientFile里有没有值没有的话会报错所以得赋值
+              // 因为调用了里面的emergencyContactName
+              this.patientAllObj.patientFile={};
+            }
+          })
+          //查询患者病历里面的数据
+          //当点击按钮时已经获取到了当前行的数据需要用到里面的id
+          this.$axios.get("/doctor/patient/CareHistoryByIdAll/"+row.patientId).then(result=> {
+            this.patientAllObj.careHistoryObjList=result.data.t;
+          })
+
+
+          //关闭弹框
+          this.openRegistration=false;
+
+        }else{
+          this.$message({
+            showClose: true,
+            message: '接诊失败',
+            type: 'error'
+          });
+        }
+
+      })
+
+
+    },
+    //左边患者弹出层里的就诊中 跟 就诊完成 的载入按钮
+    handleLoading(row){
+
+      //根据患者id查询患者的信息赋值到左边的表单里
+      this.$axios.post("/doctor/patient/queryByIdPatient/"+row.patientId).then(result=>{
+        //赋值之前先清空上一个患者的数据
+        this.patientAllObj.patientObj={};
+        this.patientAllObj.patientFileObj={};
+        this.patientAllObj.careHistoryObjList=[];
+
+        //把患者数据赋值到左边的表单里
         this.patientAllObj.patientObj=result.data.t;
-        this.careHistory.regId=row.registrationId;
-        // careHistoryObjList: []
+        this.careHistory.regId = row.registrationId;
+        //点击载入按钮 接诊类型直接赋值为0 初诊
+        this.careHistory.isContagious=this.receiveTypeOptions[0].dictValue;
       })
       //当点击按钮时已经获取到了当前行的数据需要用到里面的id
-      this.$axios.get("/doctor/patientFile/getByFileId/"+row.patientId).then(result=>{
+      this.$axios.get("/doctor/patient/getByFileId/"+row.patientId).then(result=>{
         this.patientAllObj.patientFileObj=result.data.t;
+
         if (!this.patientAllObj.patientFile){
           //检测一下patientFile里有没有值没有的话会报错所以得赋值
           // 因为调用了里面的emergencyContactName
@@ -755,163 +925,455 @@ export default {
       this.$axios.get("/doctor/patient/CareHistoryByIdAll/"+row.patientId).then(result=> {
         this.patientAllObj.careHistoryObjList=result.data.t;
       })
+
+
+      //关闭弹框
       this.openRegistration=false;
     },
 
-    // 载入
-    handleLoading() {
-
+    //左边患者弹出层里面的待就诊表格绑定的方法
+    // 挂号患者弹出层的选项卡change事件
+    handleRegistrationTabClick(tab, event) {
+      if (tab.name === 't1') {
+        //查询待就诊的患者
+        this.queryRegistrationNumber1();
+      } else if (tab.name === 't2') {
+        //查询就诊中的患者
+        this.queryRegistrationNumber2();
+      } else if (tab.name === 't3') {
+        //查询就诊完成的患者
+        this.queryRegistrationNumber3();
+      }
     },
-    // 打开添加药用处方的弹出层
-    handelAddMedicinesOrder() {
+
+
+    // 把弹出层的表格的数据加上index
+    tableRowClassName({ row, rowIndex }) {
+      row.index = rowIndex
+    },
+
+
+
+
+    //右边处方表里面的添加药用处方按钮
+    handelAddMedicinesOrder(){
       if (!this.careHistory.regId) {
-        this.msgError('请选择挂号患者')
+        this.$message({
+          showClose: true,
+          message: '请选择患者',
+          type: 'error'
+        });
         return
       }
       if (!this.careHistory.chId) {
-        this.msgError('请先保存病历')
+        this.$message({
+          showClose: true,
+          message: '请先保存病历',
+          type: 'error'
+        });
         return
       }
       this.submitCareOrder.careOrder.coType = '0'
-      this.title = '添加【药用】处方'
+      this.submitCareOrder.careOrder={
+        allAmount: 0.00,
+        patientId: undefined,
+        patientName: undefined,
+        coType: '0' // 默认为药用处方
+      },
+          this.title = '添加【药用】处方'
       this.openAddOrderItem = true
       this.submitCareOrder.careOrderItems = []
+      //先清空表格里面的数据
+      this.tableItemList=[];
+
     },
-    // 打开添加检查处方的弹出层
-    handelAddCheckItemOrder() {
+    //右边处方表里面的添加检查项目按钮
+    handelAddCheckItemOrder(){
       if (!this.careHistory.regId) {
-        this.msgError('请选择挂号患者')
+        this.$message({
+          showClose: true,
+          message: '请选择患者',
+          type: 'error'
+        });
         return
       }
       if (!this.careHistory.chId) {
-        this.msgError('请先保存病历')
+        this.$message({
+          showClose: true,
+          message: '请先保存病历',
+          type: 'error'
+        });
         return
       }
-      this.submitCareOrder.careOrder.coType = '1'
+      this.submitCareOrder.careOrder={
+        allAmount: 0.00,
+        patientId: undefined,
+        patientName: undefined,
+        coType: '0' // 默认为药用处方
+      },
+          this.submitCareOrder.careOrder.coType = '1'
       this.title = '添加【检查】处方'
       this.openAddOrderItem = true
       this.submitCareOrder.careOrderItems = []
+      //先清空表格里面的数据
+      this.tableItemList=[];
+
     },
-    // 打开药品或者检查项目的抽屉
-    handleOpenAddOrderItemDrawer() {
+    //药品和检查项目公用的添加按钮
+    handleOpenAddOrderItemDrawer(){
+      //如果为0的话 就是药品 不为0的话 就是检查
       if (this.submitCareOrder.careOrder.coType === '0') {
+
+        //重置一下
+        this.resetItemFormQuery();
+        //查询药品的数据
+        this.queryDrug();
         // 打开药口列表抽屉
-        this.openDrawerMedicines = true
-        this.resetItemFormQuery()
-        this.getMedicinesList()
+        this.openDrawerMedicines = true;
+
       } else {
+        //重置一下
+        this.resetItemFormQuery();
+        //查询检测项目数据
+        this.queryItem();
         // 打开检查项目的抽屉
-        this.openDrawerCheckItem = true
-        this.resetItemFormQuery()
-        this.getCheckItemList()
+        this.openDrawerCheckItem = true;
       }
     },
+    //药品表格多选框选中的内容
+    handleMedicinesSelectionChange(val){
+      if (val.length>0){
+        //选中药品表格里面的数据直接赋值给selectItemList
+        this.selectItemList=val;
+      }else {
 
-    // 加载药品数据
-    getMedicinesList() {
-      this.tableItemList = []
-      this.drawerLoading = true
-      listMedicinesForPage(this.queryItemFormParams).then(res => {
-        this.tableItemList = res.data
-        this.total = res.total
-        this.drawerLoading = false
+        this.selectItemList=[];
+      }
+
+    },
+    //检查表格多选框选中的内容
+    handleCheckItemSelectionChange(val){
+      if (val.length>0){
+        //选中检查项目表格里面的数据直接赋值给selectItemList
+        this.selectItemList=val;
+      }else {
+        this.selectItemList=[];
+      }
+
+    },
+
+    // 药品 和 检查项目 确定添加按钮
+    handleSaveOrderItem(){
+      //检查开诊细表里面是否存储内容
+      if (this.submitCareOrder.careOrderItems.length === 0) {
+        this.$message({
+          showClose: true,
+          message: '请添加处方详情',
+          type: 'error'
+        });
+        return
+      }
+      //药品中间表里面的患者id
+      this.submitCareOrder.careOrder.patientId = this.careHistory.patientId;
+      //药品中间表里面的患者的名字
+      this.submitCareOrder.careOrder.patientName = this.careHistory.patientName;
+      //关联的病历id
+      this.submitCareOrder.careOrder.chId = this.careHistory.chId;
+      console.log(this.submitCareOrder)
+      this.loading = true;
+      //储存药方跟药方的内容
+      tthis.$axios.post("/doctor/patient/getCareOrders",this.submitCareOrder).then(result=>{
+        if (result.data.t){
+          this.$message({
+            showClose: true,
+            message: '添加处方成功',
+            type: 'success'
+          });
+          this.$axios.post("/doctor/patient/queryCoId/"+result.data.t).then(result=>{
+            this.careOrders=result.data.data;
+            this.openDrawerMedicines=false;
+            this.openDrawerCheckItem=false;
+            this.openAddOrderItem = false
+            this.loading=false;
+
+          })
+        }else {
+          this.$message({
+            showClose: true,
+            message: '添加处方失败',
+            type: 'error'
+          });
+        }
+      })
+
+    },
+
+
+
+    //药品表格的查询按钮
+    handleMedicinesFormQuery(){
+      this.queryDrug();
+    },
+    //药品表格的重置按钮
+    resetItemFormQuery(){
+      this.queryItemFormParams = {
+        pageNum: 1,
+        pageSize: 10,
+        keywords: undefined
+      }
+      if (this.submitCareOrder.careOrder.coType === '0') {
+        this.queryDrug();
+      } else {
+        this.queryItem();
+      }
+
+    },
+
+    //添加药品表格当前页数
+    handleMedicinesCurrentChange(val){
+      this.queryItemFormParams.pageNum=val;
+      console.log("当前页面"+val)
+      this.queryDrug();
+    },
+    //添加药品表格每页显示几条
+    handleMedicinesSizeChange(val){
+      this.queryItemFormParams.pageSize=val;
+      console.log("每页"+val+"条")
+      this.queryDrug();
+    },
+
+
+    //右边检查项目里面的查询按钮
+    handleCheckItemFormQuery(){
+      this.queryItem();
+    },
+    //右边检查项目里面的重置按钮
+    resetItemFormQuery(){
+      this.queryItemFormParams = {
+        pageNum: 1,
+        pageSize: 10,
+        keywords: undefined
+      }
+      this.queryItem();
+    },
+
+    //药品跟检查项目公用的添加并关闭按钮
+    hanldeAddCareItem(){
+      //获取 coType 0就是药品 不是0就是检查项目
+      const coType = this.submitCareOrder.careOrder.coType
+      //判断这个数组的长度是0的话 就是没有添加数据
+      if (this.selectItemList.length === 0) {
+        if (coType==='0'){
+          this.$message({
+            showClose: true,
+            message: '请选【药品】',
+            type: 'error'
+          });
+          return
+        }else {
+          this.$message({
+            showClose: true,
+            message: '请选【检查项目】',
+            type: 'error'
+          });
+          return
+        }
+      }
+
+      if (coType === '0') { // 药品
+        this.selectItemList.filter(item => {
+          const obj = {
+            itemRefId: item.medicinesId,
+            itemName: item.medicinesName,
+            itemType: coType,
+            num: 1,
+            price: item.prescriptionPrice,
+            amount: 1 * item.prescriptionPrice,
+            remark: '请按说明服用'
+          }
+          let flag = false// 默认里面没有加
+          this.submitCareOrder.careOrderItems.filter(i => {
+            if (i.itemRefId === obj.itemRefId) {
+              i.num = i.num + 1
+              flag = true// 说明之前加过
+            }
+          })
+          if (!flag) {
+            this.submitCareOrder.careOrderItems.push(obj)
+          }
+          this.openDrawerMedicines = false
+        })
+      } else { // 检查项目
+        this.selectItemList.filter(item => {
+          const obj = {
+            itemRefId: item.checkItemId,
+            itemName: item.checkItemName,
+            itemType: coType,
+            num: 1,
+            price: item.unitPrice,
+            amount: 1 * item.unitPrice,
+            remark: '按要求检查'
+          }
+          let flag = false// 默认里面没有加
+          this.submitCareOrder.careOrderItems.filter(i => {
+            if (i.itemRefId === obj.itemRefId) {
+              i.num = i.num + 1
+              flag = true// 说明之前加过
+            }
+          })
+          if (!flag) {
+            this.submitCareOrder.careOrderItems.push(obj)
+          }
+          this.openDrawerCheckItem = false
+        })
+      }
+      // 计算总价
+      this.computeOrderItemAllAmount()
+
+    },
+    // 删除弹出层里面的详情
+    handleCareOrderItemDelete(row) {
+      this.submitCareOrder.careOrderItems.splice(row.index, 1)
+      this.computeOrderItemAllAmount()
+    },
+    // 把弹出层的表格的数据加上index
+    tableRowClassName({ row, rowIndex }) {
+      row.index = rowIndex
+    },
+    // 计算当前处方详情的总价
+    computeOrderItemAllAmount() {
+      this.submitCareOrder.careOrder.allAmount = 0.00
+      this.submitCareOrder.careOrderItems.filter(item => {
+        this.submitCareOrder.careOrder.allAmount +=
+            (item.num * item.price)
+      })
+    },
+    // 监听药品或检查项目弹出层的数量的变化
+    handleCareOrderItemNumChange(row) {
+      row.amount = row.num * row.price
+      this.computeOrderItemAllAmount()
+    },
+    //药品的查询按钮
+    handleCheckItemFormQuery1(){
+
+    },
+    //检查项目的重置按钮
+    resetItemFormQuery1(){
+      this.queryItemFormParams = {
+        pageNum: 1,
+        pageSize: 10,
+        keywords: undefined
+      }
+      this.queryDrug();
+    },
+
+
+
+    //保存病历按钮
+    handleSaveCareHistory(){
+      this.careHistory.patientId=this.patientAllObj.patientObj.patientId;
+      this.careHistory.patientName=this.patientAllObj.patientObj.name;
+      this.$axios.post("/doctor/newcare/insertCareHistory",this.careHistory).then(result=> {
+        if (result.data.t){
+          //把病历id赋值给上面的病历id
+          this.careHistory.chId=result.data.t;
+        }else {
+          this.$message({
+            showClose: true,
+            message: '保存病历成功',
+            type: 'success'
+          });
+        }
+
+      })
+
+
+
+
+    },
+    //完成就诊按钮
+    handleVisitComplete(){
+      if (!this.careHistory.chId){
+        this.$message({
+          showClose: true,
+          message: '请获取病历号',
+          type: 'error'
+        });
+        return;
+      }
+      this.$confirm('确认就诊完成?', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.get("/doctor/registration/updRegistrationId/"+this.careHistory.regId+"/3").then(result=>{
+          alert(JSON.stringify(result.data.t))
+          if (result.data.data){
+            this.$message({
+              showClose: true,
+              message: '就诊完成成功',
+              type: 'success'
+            });
+          }else{
+            this.$message({
+              showClose: true,
+              message: '就诊完成失败',
+              type: 'error'
+            });
+          }
+
+        })
       }).catch(() => {
-        this.drawerLoading = false
-        this.msgError('查询药品失败')
+        this.$message({
+          showClose: true,
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+
+    },
+    //查询药品表格
+    queryDrug(){
+      this.drawerLoading=true;
+      this.$axios.post("/doctor/newcare/getStockMedicines",this.queryItemFormParams).then(result=> {
+        //先清空表格里面的数据
+        this.tableItemList=[];
+        //给添加药品表格赋值
+        this.tableItemList=result.data.t.records;
+        this.total=result.data.t.total
       })
+      this.drawerLoading=false;
     },
+    //检查项目表格里的数据查询
+    queryItem(){
+      this.drawerLoading=true;
+      this.$axios.post("/doctor/newcare/getCheckItem",this.queryItemFormParams).then(result=> {
 
-
-
-
-
-    //初始化性别
-    initSex(){
-      this.$axios.get("/system/api/dict/data/findByType/sys_user_sex").then(result=>{
-        this.sexOptions=result.data.t;
+        //先清空表格里面的数据
+        this.tableItemList=[];
+        //给添加药品表格赋值
+        this.tableItemList=result.data.t.records;
+        this.total=result.data.t.total
       })
-    },
-    //把性别的0/1换成男女等
-    sexFormat(row){
-      let v=row.sex;
-      return this.formatDict2(this.sexOptions,v);
-    },
-    // 门诊急诊切换事件
-    schedulingTypeChange(value) {
-      this.schedulingType = value
-    },
-    // 打开选择挂号患者的弹出层
-    viewRegistration() {
-        this.activeName = 't1'
-        this.openRegistration = true
-        this.queryToBeSeenRegistration()
-    },
-    //查询门诊急诊按钮
-    queryRegistrationType(){
-      this.$axios.get("/system/api/dict/data/findByType/his_scheduling_type").then(result=>{
-        this.schedulingTypeOptions=result.data.t;
-      })
-    },
-    //接诊类型----》初诊复诊
-    queryReceiveType(){
-      this.$axios.get("/system/api/dict/data/findByType/his_receive_type").then(result=>{
-        this.receiveTypeOptions=result.data.t;
-      })
-    },
-    // 解析初诊复诊
-    receivetypeFormatter() {
-      let v=row.receiveType;
-      return this.formatDict2(this.receiveTypeOptions,v);
-    },
-    // 右侧病历中---》是否传染  是、否
-    querycontagiousType() {
-      this.$axios.get("/system/api/dict/data/findByType/his_contagious_status").then(result=>{
-        this.isContagiousOptions=result.data.t;
-      })
-    },
-    // 右侧病历中---》是否传染  是、否
-    contagiousFormatter() {
-      let v=row.isContagious;
-      return this.formatDict2(this.isContagiousOptions,v);
-    },
-    //查询门诊急诊按钮
-    queryRegistrationType(){
-      this.$axios.get("/system/api/dict/data/findByType/his_scheduling_type").then(result=>{
-        this.schedulingTypeOptions=result.data.t;
-      })
-    },
-    // 解析挂号类型
-    schedulingTypeFormatter(row) {
-      let v=row.schedulingType;
-      return this.formatDict2(this.schedulingTypeOptions,v);
+      this.drawerLoading=false;
     },
 
-    // 查询挂号患者的待就诊列表
-    queryRegistrationNumber1() {
-      this.$axios.post("/doctor/patient/queryRegistrationStatus1/1/",this.schedulingType).then(result=> {
-        this.toBeSeenRegistration = result.data.t;
-      })
+
+    //分页插件没页几条
+    handleCheckItemSizeChange(val){
+
     },
-    // 查询挂号患者的就诊中列表
-    queryRegistrationNumber2() {
-      this.$axios.post("/doctor/patient/queryRegistrationStatus1/2/",this.schedulingType).then(result=> {
-        this.visitingRegistration = result.data.t;
-      })
+    //分页插件当前页
+    handleCheckItemCurrentChange(val){
+
     },
-    // 查询挂号患者的就诊完成列表
-    queryRegistrationNumber3() {
-      this.$axios.post("/doctor/patient/queryRegistrationStatus1/3/",this.schedulingType).then(result=> {
-        this.visitCompletedRegistration = result.data.t;
-      })
-    }
 
 
 
 
 
 
-
-   }
+  }
 }
 </script>
 <style scoped>

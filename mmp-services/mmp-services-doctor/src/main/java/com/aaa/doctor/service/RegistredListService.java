@@ -29,5 +29,9 @@ public interface RegistredListService {
      * @param
      * @return
      */
-    Result findDoctocList(SchedulingVoo schedulingVoo);
+    Result<IPage<Scheduling>> findDoctocList(Integer currentPage, Integer pageSize,SchedulingVoo schedulingVoo);
+
+
+
+    Boolean updRegistrationId(String registrationId, String status);
 }

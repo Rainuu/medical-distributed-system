@@ -17,4 +17,10 @@
 <update id="updstatus">
     update his_care_order_item set 	status=3 where item_id=#{itemId}
     </update>
+    <select id="getData" resultType="java.util.Map">
+        select item_ref_id ,item_name,sum(amount)as amount,SUM(num)as num from his_care_order_item WHERE item_type = 0 and create_time BETWEEN #{dateRange1} and #{dateRange2} GROUP BY item_name,item_ref_id
+        <if test="itemName==null and itemName==''">
+            HAVING item_name LIKE concat('%'#{itemName}'%')
+        </if>
+    </select>
 </mapper>

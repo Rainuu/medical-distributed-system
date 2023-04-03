@@ -20,4 +20,12 @@
         UPDATE his_registration hr set hr.registration_status =5 WHERE registration_id=#{registrationId}
     </update>
 
+
+    <select id="getRegNumber" resultType="java.lang.Integer">
+        SELECT MAX(registration_number) numberMax FROM his_registration WHERE dept_id=#{deptId}
+    </select>
+
+    <update id="updStatus">
+        UPDATE his_registration hr set hr.registration_status =#{status} WHERE registration_id=#{registrationId}
+    </update>
 </mapper>

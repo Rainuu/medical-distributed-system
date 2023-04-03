@@ -1,11 +1,12 @@
 package com.aaa.stock.controller.api;
 
 import com.aaa.core.entity.Medicines;
-import com.aaa.core.entity.Producer;
 import com.aaa.core.vo.Result;
 import com.aaa.stock.service.MedicinalService;
 import com.aaa.stock.vo.MedicinalVo;
+import com.aaa.stock.vo.NewCareVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,6 +61,15 @@ public class ApiMedicinalController {
         });
 
         return new Result(200,"批量删除成功",true);
+    }
+
+
+
+
+    // 远程调用 查询 药品信息表全部
+    @PostMapping("MeDicinesController")
+    public Result<Page<Medicines>> MeDicinesController(@RequestBody NewCareVo newCareVo){
+        return medicinalService.MeDicinesController(newCareVo);
     }
 
 }

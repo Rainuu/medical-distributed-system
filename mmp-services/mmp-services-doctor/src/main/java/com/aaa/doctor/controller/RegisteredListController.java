@@ -1,6 +1,7 @@
 package com.aaa.doctor.controller;
 
 import com.aaa.core.entity.Registration;
+import com.aaa.core.entity.Scheduling;
 import com.aaa.core.vo.Result;
 import com.aaa.doctor.service.RegistredListService;
 import com.aaa.doctor.vo.RegisteredListVo;
@@ -59,9 +60,36 @@ public class RegisteredListController {
     /**
      * 查询医生排班
      */
-    @PostMapping("findDoctocList")
-    public Result findDoctocList(@RequestBody SchedulingVoo schedulingVoo) {
-        return registredListService.findDoctocList(schedulingVoo);
+    @PostMapping("findDoctocList/{currentPage}/{pageSize}")
+    public Result<IPage<Scheduling>> findDoctocList(
+            @PathVariable Integer currentPage,
+            @PathVariable Integer pageSize,
+            @RequestBody SchedulingVoo schedulingVoo) {
+        return registredListService.findDoctocList(currentPage,pageSize,schedulingVoo);
+    }
+
+
+    //根据挂号列表里的registration_id修改它收费状态
+    @GetMapping("updRegistrationId/{registrationId}/{status}")
+    public Result updRegistrationId(@PathVariable String registrationId ,@PathVariable String status){
+        System.out.println("registrationId = " + registrationId);
+        System.out.println("status = " + status);
+        Boolean aBoolean = registredListService.updRegistrationId(registrationId,status);
+        return new Result(2000,"修改状态收费成功",aBoolean);
+    }
+
+    //根据挂号列表里的registration_id修改它退费状态
+    @GetMapping("updRegistrationId2/{registrationId}/{status}")
+    public Result updRegistrationId2(@PathVariable String registrationId ,@PathVariable String status){
+        Boolean aBoolean = registredListService.updRegistrationId(registrationId,status);
+        return new Result(2000,"修改状态退费成功",aBoolean);
+    }
+
+    //根据挂号列表里的registration_id修改它作废状态
+    @GetMapping("updRegistrationId3/{registrationId}/{status}")
+    public Result updRegistrationId3(@PathVariable String registrationId ,@PathVariable String status){
+        Boolean aBoolean = registredListService.updRegistrationId(registrationId,status);
+        return new Result(2000,"修改状态作废成功",aBoolean);
     }
 
 }

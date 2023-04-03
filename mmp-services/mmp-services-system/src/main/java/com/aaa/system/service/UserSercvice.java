@@ -28,4 +28,7 @@ public interface UserSercvice {
     Result upPassword(String newPassword);
 
     Result exitUser();
+
+    //通过userId获取User
+    User getUserByUserId(Long userId);
 }

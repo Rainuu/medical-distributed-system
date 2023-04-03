@@ -1,8 +1,10 @@
 package com.aaa.check.controller.api;
 
 import com.aaa.check.service.CheckItemService;
+import com.aaa.check.vo.NewCareVo;
 import com.aaa.core.entity.CheckItem;
 import com.aaa.core.vo.Result;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,6 +30,12 @@ public class CheckItemController {
         return checkItemService.selectAllCheckItem();
     }
 
+
+    //提供doctor查询检查项目接口
+    @PostMapping("queryCheckItem/")
+    public Page<CheckItem> queryCheckItem(@RequestBody NewCareVo newCareVo){
+        return  checkItemService.selectByKey(newCareVo);
+    }
 
 
 }
