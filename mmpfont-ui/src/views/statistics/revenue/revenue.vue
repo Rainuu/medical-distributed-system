@@ -1,21 +1,20 @@
 <template>
-  <div v-loading="loading" class="app-container">
+  <div  class="app-container">
     <div style="color:red;text-align:center">*注意默认只查询当天的统计数据，如果要查询其它的，请选择范围查询</div>
     <br>
     <!-- 查询条件开始 -->
     <el-card class="cardmargin">
-      <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
+      <el-form ref="queryParams" :model="queryParams" :inline="true" label-width="68px">
         <el-form-item label="选择日期">
           <el-date-picker
-            v-model="dateRange"
-            size="small"
-            style="width:240px"
-            value-format="yyyy-MM-dd"
-            type="daterange"
-            range-separator="-"
-            start-placeholde="开始日期"
-            end-placeholde="结束日期"
-          />
+              v-model="queryParams.dateRange"
+              size="small"
+              style="width:240px"
+              value-format="yyyy-MM-dd"
+              type="daterange"
+              range-separator="-"
+              start-placeholde="开始日期"
+              end-placeholde="结束日期"/>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -29,7 +28,7 @@
     </el-card>
     <el-card class="cardmargin">
       收支概况:
-      <span class="spancls">总收入￥{{ revenueObj.overview.toll }}</span>
+      <span class="spancls">总收入￥{{revenueObj.overview.toll}}</span>
       <span class="spancls spanred">总退费￥{{ revenueObj.overview.refund }}</span>
     </el-card>
     <el-card class="cardmargin">
@@ -65,20 +64,15 @@
 </template>
 
 <script>
-// import PieChart from './components/PieChart'
-// import { queryAllRevenueData } from '@/api/statistics/revenue'
+import PieChart from './components/PieChart'
 export default {
   components: {
     PieChart
   },
   data() {
     return {
-      // 遮罩
-      loading: false,
       // 查询参数
       queryParams: {},
-      // 日期范围
-      dateRange: undefined,
       // 数组结构
       revenueObj: {
         totalRevenue: 0.00, // 合计收入
@@ -124,14 +118,17 @@ export default {
     // 查询数据
     loadData() {
       this.loading = true
-      queryAllRevenueData(this.addDateRange(this.queryParams, this.dateRange)).then(res => {
-        this.revenueObj = res.data.revenueObj
-        this.revenueOverview = res.data.revenueOverview
-        this.incomeChanel = res.data.incomeChanel
-        this.refund = res.data.refund
+      this.$axios.post('statistics/api/revenue/getInfo',this.queryParams).then(res => {
+        this.revenueObj.totalRevenue = res.data.t.totalRevenue
+        this.revenueObj.overview.refund=res.data.t.refund
+        this.revenueObj.overview.toll=res.data.t.toll
+        this.revenueObj.channel.alipayIncome=res.data.t.alipayIncome
+        this.revenueObj.channel.alipayRefund=res.data.t.alipayRefund
+        this.revenueObj.channel.cashIncome=res.data.t.cashIncome
+        this.revenueObj.channel.cashRefund=res.data.t.cashRefund
         this.loading = false
       }).catch(() => {
-        this.msgError('查询失败')
+        this.$message.error('查询失败')
         this.loading = false
       })
     },
@@ -141,22 +138,21 @@ export default {
     },
     // 重置查询条件
     resetQuery() {
-      this.resetForm('queryForm')
-      this.dateRange = []
+      this.queryParams={};
       this.loadData()
     }
   }
 }
 </script>
 <style  scoped>
-  .cardmargin{
-    margin-bottom: 3px;
-  }
-  .spancls{
-    display: inline-block;
-    margin-left: 80px;
-  }
-  .spanred{
-    color: red;
-  }
+.cardmargin{
+  margin-bottom: 3px;
+}
+.spancls{
+  display: inline-block;
+  margin-left: 80px;
+}
+.spanred{
+  color: red;
+}
 </style>

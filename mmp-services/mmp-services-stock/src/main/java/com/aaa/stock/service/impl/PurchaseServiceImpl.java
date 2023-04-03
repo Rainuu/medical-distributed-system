@@ -2,6 +2,7 @@ package com.aaa.stock.service.impl;
 
 import com.aaa.core.entity.Provider;
 import com.aaa.core.entity.Purchase;
+import com.aaa.core.entity.PurchaseItem;
 import com.aaa.core.vo.Result;
 import com.aaa.stock.dao.PurchaseDao;
 import com.aaa.stock.service.PurchaseService;
@@ -13,6 +14,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -42,4 +44,29 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
         IPage<Purchase> page1 = purchaseDao.selectPage(page, wrapper);
         return new Result<IPage<Purchase>>(200,"查询成功",page1);
     }
+
+    // 分页查询所有的待审核采购单数据
+    @Override
+    public Result<IPage<Purchase>> listPurchasePendingForPage(Integer current, Integer size, PurchaseVo purchaseVo) {
+        IPage<Purchase> page = new Page<>(current, size); //分页对象
+        IPage<Purchase> page1 = purchaseDao.listPurchasePendingForPage(page,purchaseVo);
+        return new Result<IPage<Purchase>>(200,"查询成功",page1);
+    }
+
+    @Override
+    public void auditPass(String purchaseId) {
+        purchaseDao.auditPass(purchaseId);
+    }
+
+    @Override
+    public void auditNoPass(String purchaseId, String value) {
+        purchaseDao.auditNoPass(purchaseId,value);
+    }
+
+    @Override
+    public Result<List<PurchaseItem>> getPurchaseItemById(String purchaseId) {
+        List<PurchaseItem> purchaseItemById = purchaseDao.getPurchaseItemById(purchaseId);
+        return new Result<List<PurchaseItem>>(200,"查询成功",purchaseItemById);
+    }
+
 }

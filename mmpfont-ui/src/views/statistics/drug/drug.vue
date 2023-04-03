@@ -35,8 +35,8 @@
         <!-- 查询条件结束 -->
         <!-- 数据表格开始 -->
         <el-table v-loading="loading" border :data="drugList" show-summary>
-          <el-table-column label="药品ID" prop="medicinesId" align="center" />
-          <el-table-column label="药品名称" prop="medicinesName" align="center" />
+          <el-table-column label="药品ID" prop="itemId" align="center" />
+          <el-table-column label="药品名称" prop="itemName" align="center" />
           <el-table-column label="销售价格" prop="price" align="center" />
           <el-table-column label="交易数量" prop="num" align="center" />
           <el-table-column label="交易总价" prop="amount" align="center" />
@@ -77,10 +77,10 @@
         <!-- 查询条件结束 -->
         <!-- 数据表格开始 -->
         <el-table v-loading="loading" border :data="drugStatList" show-summary>
-          <el-table-column label="药品ID" prop="medicinesId" align="center" />
-          <el-table-column label="药品名称" prop="medicinesName" align="center" />
-          <el-table-column label="总金额" prop="totalAmount" align="center" />
-          <el-table-column label="销售数量" prop="count" align="center" />
+          <el-table-column label="药品ID" prop="item_ref_id" align="center" />
+          <el-table-column label="药品名称" prop="item_name" align="center" />
+          <el-table-column label="总金额" prop="amount" align="center" />
+          <el-table-column label="销售数量" prop="num" align="center" />
         </el-table>
         <!-- 数据结束结束 -->
       </el-tab-pane>
@@ -90,6 +90,8 @@
 
 <script>
 //import { queryDrug, queryDrugStat } from '@/api/statistics/drug'
+import {param} from "@/utils";
+import qs from 'qs'
 export default {
   data() {
     return {
@@ -116,6 +118,8 @@ export default {
   created() {
     // 默认查询销售列表
     this.listDrug()
+    //默认查询销售总列表
+   this.listDrugStat()
   },
   methods: {
     // 点击tab事件
@@ -130,11 +134,12 @@ export default {
     // 查询销售列表
     listDrug() {
       this.loading = true
-      queryDrug(this.addDateRange(this.queryDrugParams, this.dateRange)).then(res => {
-        this.drugList = res.data
+      var param={'drugName':this.queryDrugParams.drugName,'dateRange1':this.dateRange[0],'dateRange2':this.dateRange[1]}
+      this.$axios.post('statistics/api/durg/list',qs.stringify(param)).then(res => {
+        this.drugList = res.data.t
         this.loading = false
       }).catch(() => {
-        this.msgError('查询失败')
+        this.$message.error('查询失败')
         this.loading = false
       })
     },
@@ -151,11 +156,12 @@ export default {
     // 查询销售列表
     listDrugStat() {
       this.loading = true
-      queryDrugStat(this.addDateRange(this.queryDrugStatParams, this.dateRange)).then(res => {
-        this.drugStatList = res.data
+      var param={'drugName':this.queryDrugParams.drugName,'dateRange1':this.dateRange[0],'dateRange2':this.dateRange[1]}
+      this.$axios.post('statistics/api/durg/getData',qs.stringify(param)).then(res => {
+        this.drugStatList = res.data.t
         this.loading = false
       }).catch(() => {
-        this.msgError('查询失败')
+        this.$message.error('查询失败')
         this.loading = false
       })
     },

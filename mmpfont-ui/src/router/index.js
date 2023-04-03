@@ -104,7 +104,7 @@ const routes = [
             name: 'provider',
             component: () => import('../views/stock/provider'),
         },
-        {   // 采购入库
+        {   // 采购入库列表
             path: '/stock/purchase',
             name: 'purchase',
             component: () => import('../views/stock/purchase')
@@ -119,12 +119,12 @@ const routes = [
             name: 'inventory',
             component: () => import('../views/stock/inventory')
         },
-        {   // 药品进销存—————库存修改（无需显示在侧边栏）
-            path: '/stock/purchase/editPurchase',
+        {   // 药品进销存—————采购入库修改,使用 /:参数 的形式路径传参（无需显示在侧边栏）
+            path: '/stock/purchase/editPurchase/:purchaseId',
             name: 'editPurchase',
             component: () =>import('../views/stock/purchase/editPurchase')
         },
-        {   // 药品进销存—————库存添加（无需显示在侧边栏）
+        {   // 药品进销存—————库存入库新增采购（无需显示在侧边栏）
             path: '/stock/purchase/newPurchase',
             name: 'newPurchase',
             component: () =>import('../views/stock/purchase/newPurchase')
