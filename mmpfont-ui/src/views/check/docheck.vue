@@ -208,6 +208,9 @@ export default {
     },
     //查询
     query(){
+      if (this.queryParams.checkItemIds.length==0){
+        this.queryParams.checkItemIds.push(0)
+      }
       this.queryData()
     },
     // 加载所有可用的检查项目
