@@ -36,8 +36,8 @@ public class NewCareController {
 
     @PostMapping("queryCareHistoryId/{patientId}")
     public Result queryCareHistoryId(@PathVariable String patientId){
-        careHistoryService.queryCareHistoryId(patientId);
-        return null;
+        CareHistory careHistory = careHistoryService.queryCareHistoryId(patientId);
+        return new Result<>(2000,"根据患者id查询名下的所有关联数据成功",careHistory);
     }
 
     //远程调用获取Stock模块里面的药品信息
@@ -51,6 +51,13 @@ public class NewCareController {
     public Result getCheckItem(@RequestBody NewCareVo newCareVo){
         Page<CheckItem> checkItem = careOrderService.getCheckItem(newCareVo);
         return new Result(2000,"查询检测项目表成功",checkItem);
+    }
+
+    //根据前端传输过来的病历id查看病历是否存在 存在true 不存在 false
+    @PostMapping("queryCareHistoryById/{chId}")
+    public Result queryCareHistoryById(@PathVariable String chId){
+        Boolean aBoolean = careHistoryService.queryCareHistoryById(chId);
+        return new Result(2000,"根据病历id查询是否存在成功",aBoolean);
     }
 
 }

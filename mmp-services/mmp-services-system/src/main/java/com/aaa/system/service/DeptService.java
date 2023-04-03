@@ -16,4 +16,8 @@ public interface DeptService {
 
     public boolean deleById(Long id);
     public boolean saveAndUp(Dept dept);
+
+
+    //通过deptId获取Dept
+    Dept getDeptByDeptId(Long deptId);
 }

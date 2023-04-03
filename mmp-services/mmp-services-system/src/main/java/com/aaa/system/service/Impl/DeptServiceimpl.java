@@ -71,4 +71,15 @@ public class DeptServiceimpl implements DeptService {
         }
         return false;
     }
+
+    /**
+     * 通过deptId获取Dept
+     * @param deptId
+     * @return
+     */
+    @Override
+    public Dept getDeptByDeptId(Long deptId) {
+        Dept selectOne = deptDao.selectById(deptId);
+        return selectOne;
+    }
 }

@@ -67,7 +67,7 @@ public class RegistrationServiceImpl implements RegistrationService {
      * @return
      */
     @Override
-    public Boolean insertRegistration(String userId, String regItemAmount, Long regItemId, Map<String, Object> obj) {
+    public Boolean insertRegistration(String userId, String regItemAmount, Integer regItemId, Map<String, Object> obj) {
         Integer insert=0;
         //id随机生成
         String id="";
@@ -113,10 +113,10 @@ public class RegistrationServiceImpl implements RegistrationService {
             registration.setUserId(scheduling.getUserId());//接诊医生id
             registration.setDoctorName(userByUserId.getUserName());//接诊医生id
             registration.setDeptId(scheduling.getDeptId());//科室id
-            registration.setRegistrationItemId(regItemId);//挂号费用id
+            registration.setRegistrationItemId(Long.valueOf(regItemId));//挂号费用id
             registration.setRegistrationAmount(new BigDecimal(regItemAmount));//挂号总金额 挂号费
             registration.setRegistrationNumber(regNumber);//挂号编号
-            registration.setRegistrationStatus("1");//挂号状态 1待接诊
+            registration.setRegistrationStatus("0");//挂号状态 1待接诊
             registration.setVisitDate(visitDate);//就诊日期
             registration.setSchedulingType(scheduling.getSchedulingType());//排班类型 门诊 急诊等
             registration.setSubsectionType(scheduling.getSubsectionType());//排班时段 上午 下午
@@ -138,9 +138,9 @@ public class RegistrationServiceImpl implements RegistrationService {
     // 根据部门id查询最大编号
     @Override
     public Integer getRagNumber(Long deptId) {
-        Integer regNumber = registrationDao.getRegNumber(deptId);
+        Integer regNumber = registrationDao.getRegNumber(deptId)+1;
         if (!Objects.nonNull(regNumber)) {
-            regNumber=0;
+            regNumber=1;
         }
         return regNumber;
     }

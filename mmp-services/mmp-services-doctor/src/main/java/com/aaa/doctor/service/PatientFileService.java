@@ -13,5 +13,5 @@ import java.util.List;
  */
 public interface PatientFileService {
 
-    Result<PatientFile> getByFileId(String patientId);
+    PatientFile getByFileId(String patientId);
 }

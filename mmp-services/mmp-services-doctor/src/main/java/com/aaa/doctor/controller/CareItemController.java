@@ -6,10 +6,10 @@ import com.aaa.core.vo.Result;
 import com.aaa.doctor.service.CareHistoryService;
 import com.aaa.doctor.service.CareItemService;
 import com.aaa.doctor.service.RegistrationService;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -54,4 +54,15 @@ public class CareItemController {
         Integer regNumber = registrationService.getRagNumber(deptId);
         return new Result(2000,"查询符合条件的挂号单成功",regNumber);
     }
+
+    /**
+     * 根据id删除未支付的订单
+     */
+    @GetMapping("deleteCareOrderItemById/{itemId}/{amount}")
+    public Result<Boolean> deleteCareOrderItemById(@PathVariable String itemId,@PathVariable BigDecimal amount ) {
+        boolean booleanResult = careHistoryService.deleteCareOrderItemById(itemId, amount);
+        return new Result<Boolean>(2000,"删除未支付订单成功",booleanResult);
+    }
+
+
 }

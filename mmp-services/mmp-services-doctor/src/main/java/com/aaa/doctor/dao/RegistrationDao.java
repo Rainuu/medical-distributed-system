@@ -2,6 +2,7 @@ package com.aaa.doctor.dao;
 
 import com.aaa.core.entity.Registration;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface RegistrationDao extends BaseMapper<Registration> {
     Integer getRegNumber(Long deptId);
 
     List<Registration> selectSum(String doctorName, String[] dateRange);
+
+    int updStatus(@Param("registrationId") String registrationId, @Param("status") String status);
 }

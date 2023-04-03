@@ -28,4 +28,22 @@
     <update id="updStatus">
         UPDATE his_registration hr set hr.registration_status =#{status} WHERE registration_id=#{registrationId}
     </update>
+
+
+    <select id="selectSum" resultType="com.aaa.core.entity.Registration">
+        SELECT user_id,doctor_name,SUM(registration_amount) sum,COUNT(*) count FROM his_registration
+        <if test="doctorName!='' and doctorName!=null or dateRange !='' and dateRange > 0">
+            where
+        </if>
+        <if test="doctorName!='' and doctorName!=null">
+            doctor_name=#{param1,jdbcType=VARCHAR}
+        </if>
+        <if test="doctorName!='' and doctorName!=null and dateRange !='' and dateRange > 0">
+            and
+        </if>
+        <if test="dateRange !='' and dateRange > 0">
+            create_time between #{dateRange[0]} and #{dateRange[1]};
+        </if>
+        GROUP BY user_id,doctor_name
+    </select>
 </mapper>

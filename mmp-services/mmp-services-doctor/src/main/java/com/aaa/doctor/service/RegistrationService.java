@@ -21,7 +21,7 @@ public interface RegistrationService {
     List<Registration> queryRegistrationStatus1(String status);
 
     // 给挂号单添加挂单号
-    Boolean insertRegistration(String userId, String regItemAmount, Long regItemId, Map<String, Object> obj);
+    Boolean insertRegistration(String userId, String regItemAmount, Integer regItemId, Map<String, Object> obj);
 
     // 根据部门号查询编号最大的编号
     Integer getRagNumber(Long deptId);

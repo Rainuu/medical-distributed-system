@@ -6,7 +6,8 @@
 <!--1.sql语句     2.绑定接口-->
 <mapper namespace="com.aaa.doctor.dao.RegistrationDao">
 
-<select id="selectSum" resultType="com.aaa.core.entity.Registration">
+
+    <select id="selectSum" resultType="com.aaa.core.entity.Registration">
     SELECT user_id,doctor_name,SUM(registration_amount) sum,COUNT(*) count FROM his_registration
     <if test="doctorName!='' and doctorName!=null or dateRange !='' and dateRange > 0">
         where
@@ -22,4 +23,9 @@
     </if>
     GROUP BY user_id,doctor_name
     </select>
+
+    <select id="getRegNumber" resultType="java.lang.Integer">
+        SELECT MAX(registration_number) numberMax FROM his_registration WHERE dept_id=#{deptId}
+    </select>
+
 </mapper>

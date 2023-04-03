@@ -406,11 +406,9 @@ export default {
     },
     //重置清空表单
     clearfrom(){
-
       // 下 - 重置
-
         this.resetForm('queryDeptForm')
-        this.queryConditionRegistration()
+        // this.queryConditionRegistration()
 
       // this.patientParams={};
       // this.queryDeptParams={};

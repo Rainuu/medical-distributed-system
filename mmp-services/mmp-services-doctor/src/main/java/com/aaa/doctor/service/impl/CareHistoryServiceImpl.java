@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -117,34 +118,85 @@ public class CareHistoryServiceImpl implements CareHistoryService {
         return id;
     }
 
+    /**
+     * 删除处方药品后查询
+     * @param patientId
+     * @return
+     */
     @Override
     public CareHistory queryCareHistoryId(String patientId) {
         QueryWrapper<CareHistory> wrapper = new QueryWrapper<>();
         if (StringUtils.hasText(patientId)){
             wrapper.eq("patient_id",patientId);
             wrapper.orderByDesc("care_time");
-            List<CareHistory> careHistories = careHistoryDao.selectList(wrapper);
-            CareHistory careHistory = careHistories.get(0);
-            QueryWrapper<CareOrder> wrapper1 = new QueryWrapper<>();
-            if (StringUtils.hasText(careHistory.getChId())){
-                wrapper1.eq("ch_id",careHistory.getChId());
-                List<CareOrder> careOrders = careOrderDao.selectList(wrapper1);
-                careHistory.setCareOrderList(careOrders);
-                for (CareOrder careOrder : careOrders) {
-                    QueryWrapper<CareOrderItem> careOrderItemQueryWrapper = new QueryWrapper<>();
-                    if (StringUtils.hasText(careOrder.getCoId())){
-                        careOrderItemQueryWrapper.eq("co_id",careOrder.getCoId());
-                        List<CareOrderItem> careOrderItems = careOrderItemDao.selectList(careOrderItemQueryWrapper);
-                        careOrder.setCareOrderItemList(careOrderItems);
-                    }
+        }
+        CareHistory careHistory = careHistoryDao.selectList(wrapper).get(0);
+        QueryWrapper<CareOrder> wrapper1 = new QueryWrapper<>();
+        if (StringUtils.hasText(careHistory.getChId())){
+            wrapper1.eq("ch_id",careHistory.getChId());
+            List<CareOrder> careOrders = careOrderDao.selectList(wrapper1);
+            careHistory.setCareOrderList(careOrders);
+            for (CareOrder careOrder : careOrders) {
+                QueryWrapper<CareOrderItem> careOrderItemQueryWrapper = new QueryWrapper<>();
+                if (StringUtils.hasText(careOrder.getCoId())){
+                    careOrderItemQueryWrapper.eq("co_id",careOrder.getCoId());
+                    List<CareOrderItem> careOrderItems = careOrderItemDao.selectList(careOrderItemQueryWrapper);
+                    careOrder.setCareOrderItemList(careOrderItems);
                 }
             }
-            return careHistory;
-
-        }else {
-            return null;
         }
+        return careHistory;
 
+    }
+
+    /**
+     * 根据id删除未支付的订单
+     * @param itemId
+     * @param amount
+     * @return
+     */
+    @Override
+    public boolean deleteCareOrderItemById(String itemId, BigDecimal amount) {
+        QueryWrapper<CareOrderItem> wrapper=new QueryWrapper<>();
+        wrapper.eq("item_id",itemId);
+        //通过开诊细表id查询药品内容
+        CareOrderItem careOrderItem = careOrderItemDao.selectOne(wrapper);
+        QueryWrapper<CareOrder> wrapper1 = new QueryWrapper<>();
+        wrapper1.eq("co_id",careOrderItem.getCoId());
+        //通过处方id查询处方内容
+        CareOrder careOrder = careOrderDao.selectOne(wrapper1);
+        //把减去药品金额后的总额储存
+        careOrder.setAllAmount(careOrder.getAllAmount().subtract(amount));//减去删除的金额
+        //定义一个i
+        int i=0;
+        //获取总额转成double类型如果大于0 执行修改 小于0 执行删除
+        if (careOrder.getAllAmount().doubleValue()>0){
+            //修改处方里的金额
+            i = careOrderDao.updateById(careOrder);
+            //删除开诊明细表里面的药品
+            i = careOrderItemDao.deleteById(itemId);
+        }else {
+            //删除处方表
+            i = careOrderDao.deleteById(careOrder.getCoId());
+            //删除开诊明细表里面的药品
+            i = careOrderItemDao.deleteById(itemId);
+        }
+        //如果i3大于0就是删除或修改成功
+        return i>0?true:false;
+
+
+    }
+
+    //根据前端传输过来的病历id查看病历是否存在 存在true 不存在 false
+    @Override
+    public Boolean queryCareHistoryById(String chId) {
+        QueryWrapper<CareHistory> wrapper = new QueryWrapper<>();
+        if (StringUtils.hasText(chId)){
+            wrapper.eq("ch_id",chId);
+            List<CareHistory> careHistories = careHistoryDao.selectList(wrapper);
+            return careHistories.size()>0?true:false;
+        }
+        return false;
     }
 
 

@@ -26,8 +26,9 @@ public class PatientFileController {
     private RegistrationService registrationService;
 
     @GetMapping("getByFileId/{patientId}")
-    public Result<PatientFile> getByFileId(@PathVariable String patientId) {
-        return patientFileService.getByFileId(patientId);
+    public Result getByFileId(@PathVariable String patientId) {
+        PatientFile patientFile = patientFileService.getByFileId(patientId);
+        return new Result(2000,"查询患者的档案成功",patientFile);
     }
 
 
@@ -37,9 +38,9 @@ public class PatientFileController {
     @PostMapping("storage/{userId}/{regItemAmount}/{regItemid}")
     public Result insertRegistration(@PathVariable String userId,
                                      @PathVariable String regItemAmount,
-                                     @PathVariable Long regItemId,
+                                     @PathVariable Integer regItemid,
                                      @RequestBody Map<String,Object> obj){
-        Boolean aBoolean = registrationService.insertRegistration(userId, regItemAmount, regItemId, obj);
+        Boolean aBoolean = registrationService.insertRegistration(userId, regItemAmount, regItemid, obj);
         return new Result<>(2000,"添加挂号成功",aBoolean);
     }
 

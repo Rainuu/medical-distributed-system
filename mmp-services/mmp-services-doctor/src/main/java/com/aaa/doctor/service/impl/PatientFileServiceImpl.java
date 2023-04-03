@@ -24,12 +24,12 @@ public class PatientFileServiceImpl implements PatientFileService {
     private PatientFileDao patientFileDao;
 
     @Override
-    public Result<PatientFile> getByFileId(String patientId) {
+    public PatientFile getByFileId(String patientId) {
         QueryWrapper<PatientFile> wrapper = new QueryWrapper<>();
         if (StringUtils.hasText(patientId)) {
             wrapper.eq("patient_id",patientId);
         }
         PatientFile patientFile = patientFileDao.selectOne(wrapper);
-        return new Result<PatientFile>(2000,"查询成功",patientFile);
+        return patientFile;
     }
 }

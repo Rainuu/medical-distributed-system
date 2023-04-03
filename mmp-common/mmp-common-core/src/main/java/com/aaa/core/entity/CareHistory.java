@@ -102,7 +102,7 @@ public class CareHistory implements Serializable {
 
 
     /*
-    * 加的属性
+    * 患者的处方信息
     * */
     @TableField(exist = false)
     private List<CareOrder> CareOrderList;

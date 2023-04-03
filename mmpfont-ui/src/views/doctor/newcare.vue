@@ -328,7 +328,7 @@
                     <el-table-column label="状态" align="center" prop="status" :formatter="orderDetailsStatusFormatter" />
                     <el-table-column label="操作" align="center">
                       <template slot-scope="scope">
-                        <el-button v-show="scope.row.status==='0'" type="text" icon="el-icon-delete" size="mini" @click="handleCareOrderItemDeleteByItemId(scope.row)">删除</el-button>
+                        <el-button v-show="scope.row.status==='0'" type="text" icon="el-icon-delete" size="mini" @click="DeleteByItemIdhandleCareOrderItem(scope.row)">删除</el-button>
                       </template>
                     </el-table-column>
                   </el-table>
@@ -775,6 +775,7 @@ export default {
     },
 
     //字典区
+    //药与处方状态
     //查询性别字典
     initSex(){
       this.$axios.get("/system/api/dict/data/findByType/sys_user_sex").then(result=>{
@@ -833,7 +834,7 @@ export default {
     },
     // 翻译处方详情状态
     orderDetailsStatusFormatter(row) {
-      return this.formatDict(this.orderDetailsStatusOptions, row.status)
+      return this.formatDict2(this.orderDetailsStatusOptions, row.status)
     },
 
     //左边患者弹出层里的待接诊  接诊按钮
@@ -894,11 +895,10 @@ export default {
 
 
     },
-    //左边患者弹出层里的就诊中 跟 就诊完成 的载入按钮
+    //左边患者弹出层里的就诊完成 的载入按钮
     handleLoading(row){
-
       //根据患者id查询患者的信息赋值到左边的表单里
-      this.$axios.post("/doctor/patient/queryByIdPatient/"+row.patientId).then(result=>{
+      this.$axios.post("/doctor/patient/queryByPatient/"+row.patientId).then(result=>{
         //赋值之前先清空上一个患者的数据
         this.patientAllObj.patientObj={};
         this.patientAllObj.patientFileObj={};
@@ -925,7 +925,11 @@ export default {
       this.$axios.get("/doctor/patient/CareHistoryByIdAll/"+row.patientId).then(result=> {
         this.patientAllObj.careHistoryObjList=result.data.t;
       })
-
+      //给右边的病历表和处方表赋值
+      this.$axios.post("/doctor/newcare/queryCareHistoryId/"+row.patientId).then(result=> {
+        this.careHistory=result.data.t;
+        this.careOrders=this.careHistory.careOrderList;
+      })
 
       //关闭弹框
       this.openRegistration=false;
@@ -945,7 +949,6 @@ export default {
         this.queryRegistrationNumber3();
       }
     },
-
 
     // 把弹出层的表格的数据加上index
     tableRowClassName({ row, rowIndex }) {
@@ -1082,7 +1085,7 @@ export default {
       console.log(this.submitCareOrder)
       this.loading = true;
       //储存药方跟药方的内容
-      tthis.$axios.post("/doctor/patient/getCareOrders",this.submitCareOrder).then(result=>{
+      this.$axios.post("/doctor/patient/getCareOrders",this.submitCareOrder).then(result=>{
         if (result.data.t){
           this.$message({
             showClose: true,
@@ -1090,7 +1093,7 @@ export default {
             type: 'success'
           });
           this.$axios.post("/doctor/patient/queryCoId/"+result.data.t).then(result=>{
-            this.careOrders=result.data.data;
+            this.careOrders=result.data.t;
             this.openDrawerMedicines=false;
             this.openDrawerCheckItem=false;
             this.openAddOrderItem = false
@@ -1107,8 +1110,6 @@ export default {
       })
 
     },
-
-
 
     //药品表格的查询按钮
     handleMedicinesFormQuery(){
@@ -1232,9 +1233,54 @@ export default {
 
     },
     // 删除弹出层里面的详情
-    handleCareOrderItemDelete(row) {
-      this.submitCareOrder.careOrderItems.splice(row.index, 1)
-      this.computeOrderItemAllAmount()
+    // handleCareOrderItemDelete(row) {
+    //   this.submitCareOrder.careOrderItems.splice(row.index, 1)
+    //   this.computeOrderItemAllAmount()
+    // },
+    // 根据详情ID删除数据库里面的详情【只能删除未支付的】
+    DeleteByItemIdhandleCareOrderItem(row) {
+
+      const itemId=row.itemId
+      const itemName=row.itemName;
+      const amount=row.amount;
+      this.$confirm('是否确定删除【' + itemName + '】这条详情, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.get("/doctor/patient/deleteCareOrderItemById/"+itemId+"/"+amount).then(result=> {
+
+          if (result.data.t==true){
+            //给右边的处方表赋值
+            this.$axios.post("/doctor/newcare/queryCareHistoryId/"+this.careHistory.patientId).then(result=> {
+              alert(JSON.stringify(result.data.t))
+              this.careOrders=result.data.t.careOrderList;
+
+            })
+            this.$message({
+              showClose: true,
+              message: '删除成功!',
+              type: 'success'
+            });
+          }else {
+            this.$message({
+              showClose: true,
+              message: '删除失败',
+              type: 'error'
+            });
+            //给右边的处方表赋值
+            this.$axios.post("/doctor/newcare/queryCareHistoryId/"+this.careHistory.patientId).then(result=> {
+              this.careOrders=result.data.t.careOrderList;
+            })
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+
     },
     // 把弹出层的表格的数据加上index
     tableRowClassName({ row, rowIndex }) {
@@ -1274,22 +1320,47 @@ export default {
       this.careHistory.patientId=this.patientAllObj.patientObj.patientId;
       this.careHistory.patientName=this.patientAllObj.patientObj.name;
       this.$axios.post("/doctor/newcare/insertCareHistory",this.careHistory).then(result=> {
-        if (result.data.t){
+        if (result.data.t.length>4){
+          this.$message({
+            showClose: true,
+            message: '获取病历编号成功',
+            type: 'success'
+          });
           //把病历id赋值给上面的病历id
           this.careHistory.chId=result.data.t;
+        }else if (result.data.t=="添加成功"){
+          this.$message({
+            showClose: true,
+            message: '添加成功',
+            type: 'success'
+          });
+        }else if (result.data.t=="添加失败"){
+          this.$message({
+            showClose: true,
+            message: '添加失败',
+            type: 'error'
+          });
+        }else if (result.data.t=="修改成功"){
+          this.$message({
+            showClose: true,
+            message: '修改成功',
+            type: 'success'
+          });
+        }else if (result.data.t=="修改失败"){
+          this.$message({
+            showClose: true,
+            message: '修改失败',
+            type: 'error'
+          });
         }else {
           this.$message({
             showClose: true,
-            message: '保存病历成功',
+            message: '保存病历失败',
             type: 'success'
           });
         }
 
       })
-
-
-
-
     },
     //完成就诊按钮
     handleVisitComplete(){
@@ -1306,23 +1377,36 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.get("/doctor/registration/updRegistrationId/"+this.careHistory.regId+"/3").then(result=>{
-          alert(JSON.stringify(result.data.t))
-          if (result.data.data){
+        this.$axios.post("/doctor/newcare/queryCareHistoryById/"+this.careHistory.chId).then(result=>{
+          if (result.data.t==true){
+            this.$axios.get("/doctor/registered/updRegistrationId/"+this.careHistory.regId+"/3").then(result=>{
+              if (result.data.t){
+                this.$message({
+                  showClose: true,
+                  message: '就诊完成成功',
+                  type: 'success'
+                });
+                //清空一下数据
+                this.resetAllData();
+              }else{
+                this.$message({
+                  showClose: true,
+                  message: '就诊完成失败',
+                  type: 'error'
+                });
+              }
+
+            })
+          }else {
             this.$message({
               showClose: true,
-              message: '就诊完成成功',
-              type: 'success'
-            });
-          }else{
-            this.$message({
-              showClose: true,
-              message: '就诊完成失败',
+              message: '请保存病历',
               type: 'error'
             });
           }
 
         })
+
       }).catch(() => {
         this.$message({
           showClose: true,
