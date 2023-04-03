@@ -2,8 +2,6 @@ package com.aaa.doctor.service;
 
 import com.aaa.core.entity.CareHistory;
 import com.aaa.core.vo.Result;
-
-import javax.smartcardio.CardTerminal;
 import java.util.List;
 
 /**
