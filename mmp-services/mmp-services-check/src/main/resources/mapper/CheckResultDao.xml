@@ -35,10 +35,10 @@
             </if>
     </select>
 
-    <delete id="addMsg">
+    <update id="addMsg">
         update his_check_result set result_msg = #{param2,jdbcType=VARCHAR},result_img = #{param3},
                                     result_status = 1 where coc_id = #{param1,jdbcType=VARCHAR}
-    </delete>
+    </update>
 
     <select id="selectAllTwo" resultMap="HisCheckResultMap">
         SELECT check_item_id,check_item_name,SUM(price) sum,COUNT(*) count FROM his_check_result

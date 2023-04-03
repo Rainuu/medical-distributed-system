@@ -21,12 +21,12 @@ public class CheckFeignController {
     private CheckService checkService;
 
     @PostMapping("selectAll")
-    public Result<List<CheckResult>> selectAll(String patientName, String checkItemId,String[] dateRange){
-        CheckResultVo checkResultVo = new CheckResultVo();
-        checkResultVo.setPatientName(patientName);
-        checkResultVo.setCheckItemId(checkItemId);
-        checkResultVo.setDateRange(dateRange);
-        System.out.println(checkResultVo);
+    public Result<List<CheckResult>> selectAll(CheckResultVo checkResultVo){
+//        CheckResultVo checkResultVo = new CheckResultVo();
+//        checkResultVo.setPatientName(patientName);
+//        checkResultVo.setCheckItemId(checkItemId);
+//        checkResultVo.setDateRange(dateRange);
+//        System.out.println(checkResultVo);
         return checkService.selectAll(checkResultVo);
     };
 

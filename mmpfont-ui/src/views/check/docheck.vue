@@ -269,6 +269,7 @@ export default {
         this.$axios.get("check/api/checkResult/addAll",{params:this.fromData}).then(res => {
           this.showBottom = false
           this.queryData()// 重新查询
+          this.reset()
         }).catch(() => {
           tx.msgError('开始检查失败')
           tx.loading = false
@@ -278,6 +279,9 @@ export default {
         tx.loading = false
       })
     },
+    reset(){
+      this.$router.push({path:'/check/checkresult',query:{regId:this.fromData.regId}})
+    }
   },
   created() {
     //加载系统状态
@@ -287,6 +291,7 @@ export default {
     //展示页面
     this.queryData()
   },
+
 }
 </script>
 

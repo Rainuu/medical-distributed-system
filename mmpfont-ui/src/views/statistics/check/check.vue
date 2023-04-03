@@ -164,7 +164,7 @@ export default {
     // 查询销售列表
     listCheck() {
       this.loading = true
-      //alert(this.queryCheckParams.checkItemId)
+      alert(this.queryCheckParams.checkItemId)
       this.$axios.post("/statistics/api/checkFeign/selectAll",this.queryCheckParams,this.dateRange).then(res => {
         this.checkList = res.data.t
         this.loading = false

@@ -324,8 +324,12 @@ export default {
     //       .catch(_ => {
     //       });
     // }
+
   },
   created() {
+    var query = this.$route.query;
+    this.queryParams.regId = query.regId
+    alert(this.queryParams.regId)
     //加载系统状态
     this.initStatus();
     //加载状态的字典数据
