@@ -1,6 +1,8 @@
 package com.aaa.stock.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
@@ -48,5 +50,12 @@ public class MedicinalVo {
 
     // 总条数
     private  Integer total;
+
+    /**
+     * 创建时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private String[] dateRange;
 
 }

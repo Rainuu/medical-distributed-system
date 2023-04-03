@@ -7,12 +7,14 @@ import com.aaa.core.vo.Result;
 import com.aaa.stock.dao.PurchaseDao;
 import com.aaa.stock.service.PurchaseService;
 import com.aaa.stock.vo.PurchaseVo;
+import com.aaa.stock.vo.purchaseAllVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -62,5 +64,19 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
     public void auditNoPass(String purchaseId, String value) {
         purchaseDao.auditNoPass(purchaseId,value);
     }
+
+    @Override
+    public void insertByPurchaseId(Purchase purchase) {
+        purchaseDao.insertByPurchaseId(purchase);
+    }
+
+//    @Override
+//    @Transactional
+//    public void add(purchaseAllVo purchaseAllVo) {
+//        purchaseAllVo.getPurchaseDto().getPurchaseId();
+//        purchaseAllVo.getPurchaseDto();
+//        purchaseAllVo.getPurchaseItemDtos();
+//
+//    }
 
 }

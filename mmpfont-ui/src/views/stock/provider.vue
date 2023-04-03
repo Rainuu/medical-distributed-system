@@ -27,7 +27,7 @@
     <!-- 工具栏————新增 & 删除 -->
     <div style="float: left;clear: both;padding:15px;">
       <el-button type="primary" icon="el-icon-plus" plain @click="addUser">新增</el-button>
-      <el-button type="success" icon="el-icon-edit" :disabled="single" @click="updPro">修改</el-button>
+<!--      <el-button type="success" icon="el-icon-edit" :disabled="single" @click="updPro">修改</el-button>-->
       <el-button type="danger" icon="el-icon-delete" :disabled="multiple" @click="delLists" plain>批量删除</el-button>
     </div>
     <!-- 弹出层表单 -->

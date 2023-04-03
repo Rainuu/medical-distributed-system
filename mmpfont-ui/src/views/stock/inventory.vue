@@ -1,42 +1,47 @@
 <template>
   <div class="app-container">
     <el-tabs v-model="activeName" :stretch="true" @tab-click="handleClick">
+      <!-- 药品总库存页面 -->
       <el-tab-pane label="药品总库存" name="medicinesTab">
-        <!-- 查询条件开始 -->
-        <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
-          <el-form-item label="药品名称" prop="medicinesName">
-            <el-input v-model="queryParams.medicinesName" placeholder="请输入药品名称" clearable size="small" style="width:180px"/>
-          </el-form-item>
-          <el-form-item label="关键字" prop="keywords">
-            <el-input v-model="queryParams.keywords" placeholder="请输入关键字" clearable size="small" style="width:180px"/>
-          </el-form-item>
-          <el-form-item label="药品类型" prop="medicinesType">
-            <el-select v-model="queryParams.medicinesType" placeholder="药品类型" clearable size="small" style="width:180px">
-              <el-option v-for="dict in medicinesTypeOptions" :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="生产厂家" prop="producterId">
-            <el-select v-model="queryParams.producterId" placeholder="生产厂家" clearable size="small" style="width:180px">
-              <el-option v-for="dict in producterOptions" :key="dict.producterId" :label="dict.producterName" :value="dict.producterId"/>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="处方类型" prop="prescriptionType">
-            <el-select v-model="queryParams.prescriptionType" placeholder="处方类型" clearable size="small" style="width:180px">
-              <el-option v-for="dict in prescriptionTypeOptions" :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="创建时间">
-            <el-date-picker v-model="dateRange" size="small" style="width:240px" value-format="yyyy-MM-dd"
-                type="daterange" range-separator="-" start-placeholde="开始日期" end-placeholde="结束日期"/>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button type="primary" icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-          </el-form-item>
+        <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="85px" style="margin: 20px 0;">
+          <div style="float: left;clear: both;">
+            <el-form-item label="药品名称" prop="medicinesName">
+              <el-input v-model="queryParams.medicinesName" placeholder="请输入药品名称" clearable style="width:200px"/>
+            </el-form-item>
+            <el-form-item label="关键字" prop="keywords">
+              <el-input v-model="queryParams.keywords" placeholder="请输入关键字" clearable style="width:220px"/>
+            </el-form-item>
+            <el-form-item label="药品类型" prop="medicinesType">
+              <el-select v-model="queryParams.medicinesType" clearable placeholder="药品类型" style="width: 200px">
+                <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_medicines_type'})"
+                           :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="生产厂家" prop="producterId"> <!-- 遍历的是item内容 -->
+              <el-select v-model="queryParams.producerId" clearable placeholder="生产厂家" style="width: 200px">
+                <el-option v-for="item in producterNameOption"
+                           :key="item.producerId" :label="item.producerName" :value="item.producerId"/>
+              </el-select>
+            </el-form-item>
+          </div>
+          <div style="float: left;clear: both;">
+            <el-form-item label="处方类型" prop="prescriptionType">
+              <el-select v-model="queryParams.prescriptionType" clearable placeholder="处方类型" style="width: 200px">
+                <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_prescription_type'})"
+                           :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="创建时间">
+              <el-date-picker type="daterange" v-model="queryParams.dateRange" style="width:220px" clearable
+                              value-format="yyyy-MM-dd" range-separator="-" start-placeholde="开始日期" end-placeholde="结束日期"/>
+            </el-form-item>&nbsp;&nbsp;
+            <el-form-item>
+              <el-button type="primary" icon="el-icon-search" @click="handleQuery">搜索</el-button>&nbsp;&nbsp;
+              <el-button type="primary" icon="el-icon-refresh" @click="resetQuery">重置</el-button>
+            </el-form-item>
+          </div>
         </el-form>
-        <!-- 查询条件结束 -->
-        <!-- 数据表格开始 -->
-        <el-table v-loading="loading" border :data="medicinesTableList">
+        <el-table v-loading="loading" border :data="medicinesTableList" style="margin: 20px 0;">
           <el-table-column label="药品ID" align="center" prop="medicinesId" />
           <el-table-column label="药品名称" align="center" prop="medicinesName" />
           <el-table-column label="药品编号" align="center" prop="medicinesNumber" />
@@ -48,46 +53,51 @@
           <el-table-column label="预警值" align="center" prop="medicinesStockDangerNum" />
           <el-table-column label="状态" prop="status" align="center" :formatter="(row)=>this.dictFormat(row,row.status,'sys_normal_disable')"/>
         </el-table>
-        <!-- 分页控件开始 -->
         <el-pagination v-show="total>0" :current-page="current1" :page-size="size1" :total="total"
                        :page-sizes="[5, 10, 15, 20]" layout="total, sizes, prev, pager, next, jumper"
                        @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
       </el-tab-pane>
+      <!--批次库存及价格页面-->
       <el-tab-pane label="批次库存及价格" name="inventoryLogTab">
-        <!-- 查询条件开始 -->
-        <el-form ref="queryLogForm" :model="queryLogParams" :inline="true" label-width="88px">
-          <el-form-item label="采购单据号" prop="purchaseId">
-            <el-input v-model="queryLogParams.purchaseId" placeholder="采购单据号" clearable size="small" style="width:180px"/>
-          </el-form-item>
-          <el-form-item label="药品名称" prop="medicinesName">
-            <el-input v-model="queryLogParams.medicinesName" placeholder="请输入药品名称" clearable size="small" style="width:180px"/>
-          </el-form-item>
-          <el-form-item label="药品类型" prop="medicinesType">
-            <el-select v-model="queryLogParams.medicinesType" placeholder="药品类型" clearable size="small" style="width:180px">
-              <el-option v-for="dict in medicinesTypeOptions" :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="生产厂家" prop="producterId">
-            <el-select v-model="queryLogParams.producterId" placeholder="生产厂家" clearable size="small" style="width:180px">
-              <el-option v-for="dict in producterOptions" :key="dict.producterId" :label="dict.producterName" :value="dict.producterId"/>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="处方类型" prop="prescriptionType">
-            <el-select v-model="queryLogParams.prescriptionType" placeholder="处方类型" clearable size="small" style="width:180px">
-              <el-option v-for="dict in prescriptionTypeOptions" :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="创建时间">
-            <el-date-picker v-model="dateRange" size="small" style="width:240px" value-format="yyyy-MM-dd"
-                type="daterange" range-separator="-" start-placeholde="开始日期" end-placeholde="结束日期"/>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button type="primary" icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-          </el-form-item>
+        <el-form ref="queryLogForm" :model="queryLogParams" :inline="true" label-width="85px" style="margin: 20px 0;">
+          <div style="float: left;clear: both;">
+            <el-form-item label="采购单据号" prop="purchaseId">
+              <el-input v-model="queryLogParams.purchaseId" placeholder="采购单据号" clearable style="width:200px"/>
+            </el-form-item>
+            <el-form-item label="药品名称" prop="medicinesName">
+              <el-input v-model="queryLogParams.medicinesName" placeholder="请输入药品名称" clearable style="width:210px"/>
+            </el-form-item>
+            <el-form-item label="药品类型" prop="medicinesType">
+              <el-select v-model="queryLogParams.medicinesType" clearable placeholder="药品类型" style="width: 180px">
+                <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_medicines_type'})"
+                           :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="生产厂家" prop="producterId"> <!-- 遍历的是item内容 -->
+              <el-select v-model="queryLogParams.producterId" clearable placeholder="生产厂家" style="width: 200px">
+                <el-option v-for="item in producterNameOption"
+                           :key="item.producerId" :label="item.producerName" :value="item.producerId"/>
+              </el-select>
+            </el-form-item>
+          </div>
+          <div style="float: left;clear: both;">
+            <el-form-item label="处方类型" prop="prescriptionType">
+              <el-select v-model="queryLogParams.prescriptionType" clearable placeholder="处方类型" style="width: 200px">
+                <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_prescription_type'})"
+                           :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="创建时间">
+              <el-date-picker type="daterange" v-model="queryLogParams.dateRange" style="width:210px" clearable
+                              value-format="yyyy-MM-dd" range-separator="-" start-placeholde="开始日期" end-placeholde="结束日期"/>
+            </el-form-item>&nbsp;&nbsp;&nbsp;&nbsp;
+            <el-form-item>
+              <el-button type="primary" icon="el-icon-search" @click="handleQuery">搜索</el-button>&nbsp;&nbsp;
+              <el-button type="primary" icon="el-icon-refresh" @click="resetQuery">重置</el-button>
+            </el-form-item>
+          </div>
         </el-form>
-        <!-- 数据表格开始 -->
-        <el-table v-loading="loading" border :data="inventoryLogTableList">
+        <el-table v-loading="loading" border :data="inventoryLogTableList" style="margin: 20px 0;">
           <el-table-column type="expand">
             <template slot-scope="props">
               <el-form label-position="left" style="padding-left: 120px" inline class="demo-table-expand">
@@ -95,15 +105,14 @@
                   <span>{{ props.row.inventoryLogId }}</span>
                 </el-form-item>
                 <el-form-item label="单据号">
-                  <span>{{ props.row.purchaseId }}</span>
-                </el-form-item>
+                  <span>{{ props.row.purchaseId }}</span></el-form-item>
                 <el-form-item label="规格">
                   <span>{{ props.row.conversion }}{{ props.row.unit }}</span>
                 </el-form-item>
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column label="药品ID" align="center" prop="medicinesId" />
+          <el-table-column label="药品ID" align="center" prop="medicinesId"/>
           <el-table-column label="药品名称" align="center" prop="medicinesName" />
           <el-table-column label="采购量" align="center" prop="inventoryLogNum" />
           <el-table-column label="批发价" align="center" prop="tradePrice">
@@ -117,12 +126,11 @@
             </template>
           </el-table-column>
           <el-table-column label="批次号" align="center" prop="batchNumber" />
-          <el-table-column label="生产厂家" width="280px" align="center" prop="producterId" :formatter="ProducterNameDict"/>
-          <el-table-column label="药品类型" align="center" prop="medicinesType" :formatter="(row)=>this.dictFormat(row,row.medicinesType,'his_medicines_type')"/>
-          <el-table-column label="处方类型" align="center" prop="prescriptionType" :formatter="(row)=>this.dictFormat(row,row.prescriptionType,'his_prescription_type')"/>
+          <el-table-column label="生产厂家" width="260px" align="center" prop="producterId" :formatter="ProducterNameDict"/>
+          <el-table-column label="药品类型" align="center" prop="medicinesType" width="80px" :formatter="(row)=>this.dictFormat(row,row.medicinesType,'his_medicines_type')"/>
+          <el-table-column label="处方类型" align="center" prop="prescriptionType" width="80px" :formatter="(row)=>this.dictFormat(row,row.prescriptionType,'his_prescription_type')"/>
           <el-table-column label="入库时间" width="180px" align="center" prop="createTime" />
         </el-table>
-        <!-- 分页控件开始 -->
         <el-pagination v-show="totalLog>0" :current-page="current2" :page-size="size2" :total="totalLog"
                        :page-sizes="[5, 10, 15, 20]" layout="total, sizes, prev, pager, next, jumper"
                        @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
@@ -137,9 +145,17 @@ export default {
       return value.toFixed(2)
     }
   },
-  // 方法
   methods: {
-// 获取生产厂家表字段
+    // 切换按钮————点击tab调用的事件
+    handleClick(tab, event) {
+      console.log(this.activeName)
+      if (this.activeName === 'medicinesTab') {
+        this.getMedicinesList()
+      } else if (this.activeName === 'inventoryLogTab') {
+        this.getInventoryLogList()
+      }
+    },
+    // 获取生产厂家表字段
     getProducterNameOption(){
       this.$axios.get("/stock/api/producter/getAllDict").then(r=>{
         this.producterNameOption=r.data.t;
@@ -166,13 +182,24 @@ export default {
     dictFormat(row, column, dictType){
       return this.formatDict( this.dictList,column, dictType)
     },
-    // 点击tab调用的事件
-    handleClick(tab, event) {
-      console.log(this.activeName)
+    // 模糊————药品条件查询
+    handleQuery() {
       if (this.activeName === 'medicinesTab') {
         this.getMedicinesList()
       } else if (this.activeName === 'inventoryLogTab') {
         this.getInventoryLogList()
+      }
+    },
+    // 模糊————药品重置查询条件
+    resetQuery() {
+      if (this.activeName === 'medicinesTab') {
+        this.queryParams={};
+        this.getMedicinesList();
+        this.current1=1;
+      } else if (this.activeName === 'inventoryLogTab') {
+        this.queryLogParams={};
+        this.getInventoryLogList();
+        this.current2=1;
       }
     },
     // 查询药品表格数据
@@ -182,6 +209,15 @@ export default {
         this.medicinesTableList = res.data.t.records;
         this.total = res.data.t.total;
         this.loading = false; // 关闭遮罩
+      })
+    },
+    // 批次库存及价格
+    getInventoryLogList() {
+      this.loading = true // 打开遮罩
+      this.$axios.post("/stock/api/InventoryLog/getAll"+"/"+this.current2+"/"+this.size2,this.addDateRange(this.queryLogParams, this.dateRange)).then(res => {
+        this.inventoryLogTableList = res.data.t.records;
+        this.totalLog = res.data.t.total;
+        this.loading = false// 关闭遮罩
       })
     },
     // 把日期范围构造成beginTime和endTime
@@ -194,34 +230,6 @@ export default {
         search.endTime = this.dateRange[1]
       }
       return search
-    },
-    // 查询入库记录表格数据
-    getInventoryLogList() {
-      this.loading = true // 打开遮罩
-      this.$axios.post("/stock/api/InventoryLog/getAll"+"/"+this.current2+"/"+this.size2,this.addDateRange(this.queryLogParams, this.dateRange)).then(res => {
-        this.inventoryLogTableList = res.data.t.records;
-        this.totalLog = res.data.t.total;
-        this.loading = false// 关闭遮罩
-      })
-    },
-    // 药品条件查询
-    handleQuery() {
-      if (this.activeName === 'medicinesTab') {
-        this.getMedicinesList()
-      } else if (this.activeName === 'inventoryLogTab') {
-        this.getInventoryLogList()
-      }
-    },
-    // 药品重置查询条件
-    resetQuery() {
-      if (this.activeName === 'medicinesTab') {
-        this.resetForm('queryForm')
-        this.getMedicinesList()
-      } else if (this.activeName === 'inventoryLogTab') {
-        this.resetForm('queryLogForm')
-        this.dateRange = []
-        this.getInventoryLogList()
-      }
     },
     // 分页pageSize变化时触发
     handleSizeChange(val) {
@@ -293,7 +301,8 @@ export default {
         medicinesName: undefined,
         medicinesType: undefined,
         prescriptionType: undefined,
-        producterId: undefined
+        producterId: undefined,
+        dateRange: []
       },
       // 入库详情查询参数
       queryLogParams: {
@@ -301,9 +310,9 @@ export default {
         medicinesName: undefined,
         medicinesType: undefined,
         prescriptionType: undefined,
-        producterId: undefined
+        producterId: undefined,
+        dateRange: []
       },
-      dateRange: []
     }
   },
 }

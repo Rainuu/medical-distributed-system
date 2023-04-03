@@ -1,10 +1,12 @@
 package com.aaa.stock.controller.api;
 
+import com.aaa.core.entity.Medicines;
 import com.aaa.core.entity.Purchase;
 import com.aaa.core.entity.PurchaseItem;
 import com.aaa.core.vo.Result;
 import com.aaa.stock.service.PurchaseService;
 import com.aaa.stock.vo.PurchaseVo;
+import com.aaa.stock.vo.purchaseAllVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -47,11 +49,11 @@ public class ApiPurchaseController {
         return new Result<>(200,"单据号生成成功",purchaseId);
     }
 
-    // 暂存
-//    @PostMapping("addPurchase/")
-//    public Result addPurchase(){
-//
-//    }
+    // 暂存 status=1
+    @PostMapping("addPurchase")
+    public void addPurchase(@RequestBody purchaseAllVo purchaseAllVo){
+       // return purchaseService.add(purchaseAllVo);
+    }
 
     // 提交审核[待审核] status=2
     @PostMapping("addPurchaseToAudit")
@@ -80,5 +82,6 @@ public class ApiPurchaseController {
     ){
         return purchaseService.listPurchasePendingForPage(current,size,purchaseVo);
     }
+
 
 }

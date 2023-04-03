@@ -57,6 +57,9 @@ public class MedicinalServiceImpl extends ServiceImpl<MedicinalDao, Medicines> i
         if (Objects.nonNull(medicinalVo.getStatus())){
             wrapper.like("status",medicinalVo.getStatus());
         }
+        if (Objects.nonNull(medicinalVo.getDateRange())&&medicinalVo.getDateRange().length==2){
+            wrapper.between("create_time",medicinalVo.getDateRange()[0],medicinalVo.getDateRange()[1]);
+        }
         IPage<Medicines> page1 = medicinalDao.selectPage(page, wrapper);
         return new Result(200, "查询药品信息信息", page1);
     }

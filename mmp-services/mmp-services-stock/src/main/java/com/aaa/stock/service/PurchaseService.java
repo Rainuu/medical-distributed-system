@@ -4,6 +4,7 @@ import com.aaa.core.entity.Purchase;
 import com.aaa.core.entity.PurchaseItem;
 import com.aaa.core.vo.Result;
 import com.aaa.stock.vo.PurchaseVo;
+import com.aaa.stock.vo.purchaseAllVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -20,9 +21,13 @@ public interface PurchaseService extends IService<Purchase> {
     Result<IPage<Purchase>> getAll(Integer current, Integer size, PurchaseVo purchaseVo);
 
     Result<IPage<Purchase>> listPurchasePendingForPage(Integer current, Integer size, PurchaseVo purchaseVo);
-
+    // 审核通过 status=3
     void auditPass(String purchaseId);
-
+    // 审核不通过 status=4
     void auditNoPass(String purchaseId, String value);
 
+    void insertByPurchaseId(Purchase purchase);
+
+
+    // void add(purchaseAllVo purchaseAllVo);
 }

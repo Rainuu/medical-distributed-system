@@ -63,9 +63,6 @@ public class ApiMedicinalController {
         return new Result(200,"批量删除成功",true);
     }
 
-
-
-
     // 远程调用 查询 药品信息表全部
     @PostMapping("MeDicinesController")
     public Result<Page<Medicines>> MeDicinesController(@RequestBody NewCareVo newCareVo){
