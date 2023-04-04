@@ -117,7 +117,7 @@
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column prop="schedulingType[1]" :label="labelNames[0]" align="center">
+        <el-table-column prop="schedulingType[1]" :label="labelNames[1]" align="center">
           <template slot-scope="scope">
             <el-select
                 v-model="scope.row.schedulingType[1]"
@@ -133,7 +133,7 @@
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column prop="schedulingType[2]" :label="labelNames[0]" align="center">
+        <el-table-column prop="schedulingType[2]" :label="labelNames[2]" align="center">
           <template slot-scope="scope">
             <el-select
                 v-model="scope.row.schedulingType[2]"
@@ -149,7 +149,7 @@
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column prop="schedulingType[3]" :label="labelNames[0]" align="center">
+        <el-table-column prop="schedulingType[3]" :label="labelNames[3]" align="center">
           <template slot-scope="scope">
             <el-select
                 v-model="scope.row.schedulingType[3]"
@@ -165,7 +165,7 @@
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column prop="schedulingType[4]" :label="labelNames[0]" align="center">
+        <el-table-column prop="schedulingType[4]" :label="labelNames[4]" align="center">
           <template slot-scope="scope">
             <el-select
                 v-model="scope.row.schedulingType[4]"
@@ -181,7 +181,7 @@
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column prop="schedulingType[5]" :label="labelNames[0]" align="center">
+        <el-table-column prop="schedulingType[5]" :label="labelNames[5]" align="center">
           <template slot-scope="scope">
             <el-select
                 v-model="scope.row.schedulingType[5]"
@@ -197,7 +197,7 @@
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column prop="schedulingType[6]" :label="labelNames[0]" align="center">
+        <el-table-column prop="schedulingType[6]" :label="labelNames[6]" align="center">
           <template slot-scope="scope">
             <el-select
                 v-model="scope.row.schedulingType[6]"

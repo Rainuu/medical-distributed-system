@@ -27,6 +27,14 @@ public class NewCareController {
     private CareOrderService careOrderService;
 
     //根据前端传输的患者病历信息进行储存返回一个病历号码
+//    @PostMapping("insertCareHistory")
+//    public Result insertCareHistory(@RequestBody CareHistory careHistory){
+//        System.out.println(careHistory);
+//        String s = careHistoryService.insertCareHistory(careHistory);
+//        return new Result(2000,"添加成功返回病历",s);
+//    }
+
+    //根据前端传输的患者病历信息进行储存返回一个病历号码
     @PostMapping("insertCareHistory")
     public Result insertCareHistory(@RequestBody CareHistory careHistory){
         System.out.println(careHistory);
@@ -34,11 +42,17 @@ public class NewCareController {
         return new Result(2000,"添加成功返回病历",s);
     }
 
-    @PostMapping("queryCareHistoryId/{patientId}")
-    public Result queryCareHistoryId(@PathVariable String patientId){
-        CareHistory careHistory = careHistoryService.queryCareHistoryId(patientId);
-        return new Result<>(2000,"根据患者id查询名下的所有关联数据成功",careHistory);
-    }
+//    @PostMapping("queryCareHistoryId/{patientId}")
+//    public Result queryCareHistoryId(@PathVariable String patientId){
+//        CareHistory careHistory = careHistoryService.queryCareHistoryId(patientId);
+//        return new Result<>(2000,"根据患者id查询名下的所有关联数据成功",careHistory);
+//    }
+//新开就诊就诊完成载入按钮时 查询挂号单号的病历以就诊时间降序排获取第一条
+@PostMapping("queryCareHistoryId/{registrationId}")
+public Result queryCareHistoryId(@PathVariable String registrationId){
+    CareHistory careHistory = careHistoryService.queryCareHistoryId(registrationId);
+    return new Result(2000,"根据患者id查询名下的所有关联数据成功",careHistory);
+}
 
     //远程调用获取Stock模块里面的药品信息
     @PostMapping("getStockMedicines")

@@ -732,7 +732,7 @@ export default {
   methods: {
     // 门诊急诊切换事件
     schedulingTypeChange(value) {
-
+      this.resetAllData();
       if (value){
         this.schedulingType = value
       }
@@ -926,7 +926,16 @@ export default {
         this.patientAllObj.careHistoryObjList=result.data.t;
       })
       //给右边的病历表和处方表赋值
-      this.$axios.post("/doctor/newcare/queryCareHistoryId/"+row.patientId).then(result=> {
+      // this.$axios.post("/doctor/newcare/queryCareHistoryId/"+row.patientId).then(result=> {
+      //   this.careHistory=result.data.t;
+      //   this.careOrders=this.careHistory.careOrderList;
+      // })
+      //给右边的病历表和处方表赋值 查询以挂号单查询病历 没有就返回空的病历
+      this.$axios.post("/doctor/newcare/queryCareHistoryId/"+row.registrationId).then(result=> {
+        if (JSON.stringify(result.data.t.chId)=="null"){
+          this.careHistory=result.data.t;
+          this.careOrders=this.careHistory.careOrderList;
+        }
         this.careHistory=result.data.t;
         this.careOrders=this.careHistory.careOrderList;
       })

@@ -25,10 +25,15 @@ public interface CareHistoryService {
     Result<CareHistory> SaveHistroy(String registrationId, CareHistory careHistory);
 
     //根据前端传输的患者病历信息进行储存返回一个病历号码
+//    String  insertCareHistory(CareHistory careHistory);
+
+    //根据前端传输的患者病历信息进行储存返回一个病历号码
     String  insertCareHistory(CareHistory careHistory);
 
     //新开就诊就诊完成载入按钮时 查询患者id的病历以就诊时间降序排获取第一条
-    CareHistory queryCareHistoryId(String patientId);
+//    CareHistory queryCareHistoryId(String patientId);
+    //新开就诊就诊完成载入按钮时 查询挂号单号的病历以就诊时间降序排获取第一条
+    CareHistory queryCareHistoryId(String registrationId);
 
 
     /**

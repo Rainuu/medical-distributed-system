@@ -90,47 +90,127 @@ public class CareHistoryServiceImpl implements CareHistoryService {
         return new Result<CareHistory>(2000,"添加成功",careHistory1);
     }
 
+//    @Override
+//    public String insertCareHistory(CareHistory careHistory) {
+//        String id=null;
+//        if (Objects.nonNull(careHistory.getChId())){
+//            String token = WebUtil.getRequest().getHeader("token");
+//            Map<String, Object> tokenData = JwtUtil.getTokenChaim(token);
+//            String phone = (String) tokenData.get("username");
+//            User user = userFeign.getByUsername(phone);//获取当前登录的人的信息
+//            Dept deptByDeptId = userFeign.getDeptByDeptId(user.getDeptId());
+//
+//
+//            DateTime date = DateUtil.date();
+//            String date1 = DateUtil.format(date, "yyyy-MM-dd");
+//            careHistory.setUserId(user.getUserId());
+//            careHistory.setUserName(user.getUserName());
+//            careHistory.setDeptId(user.getDeptId());
+//            careHistory.setDeptName(deptByDeptId.getDeptName());
+//            careHistory.setCareTime(new Date());
+//            careHistory.setCaseDate(date1);
+//            int insert = careHistoryDao.insert(careHistory);
+//        }else {
+//            IdWorker idWorker = new IdWorker();
+//            id = "CH" + idWorker.nextId();
+//        }
+//
+//        return id;
+//    }
+
     @Override
     public String insertCareHistory(CareHistory careHistory) {
-        String id=null;
-        if (Objects.nonNull(careHistory.getChId())){
-            String token = WebUtil.getRequest().getHeader("token");
-            Map<String, Object> tokenData = JwtUtil.getTokenChaim(token);
-            String phone = (String) tokenData.get("username");
-            User user = userFeign.getByUsername(phone);//获取当前登录的人的信息
-            Dept deptByDeptId = userFeign.getDeptByDeptId(user.getDeptId());
+        String id = null;
+        if (Objects.nonNull(careHistory.getChId())) {
+            QueryWrapper<CareHistory> wrapper = new QueryWrapper<>();
+            wrapper.eq("ch_id", careHistory.getChId());
+            List<CareHistory> careHistories = careHistoryDao.selectList(wrapper);
+            if (careHistories.size() > 0) {
+                String token = WebUtil.getRequest().getHeader("token");
+                Map<String, Object> tokenData = JwtUtil.getTokenChaim(token);
+                String phone = (String) tokenData.get("username");
+                User user = userFeign.getByUsername(phone);//获取当前登录的人的信息
+                Dept deptByDeptId = userFeign.getDeptByDeptId(user.getDeptId());
+
+                DateTime date = DateUtil.date();
+                String date1 = DateUtil.format(date, "yyyy-MM-dd");
+                QueryWrapper<CareHistory> wrapper1 = new QueryWrapper<>();
+                wrapper1.eq("ch_id", careHistory.getChId());
+                careHistory.setUserId(user.getUserId());
+                careHistory.setUserName(user.getUserName());
+                careHistory.setDeptId(user.getDeptId());
+                careHistory.setDeptName(deptByDeptId.getDeptName());
+                careHistory.setCareTime(new Date());
+                careHistory.setCaseDate(date1);
+                System.out.println("------------------");
+                System.out.println(careHistory);
+                int insert = careHistoryDao.update(careHistory, wrapper1);
+                return insert > 0 ? "修改成功" : "修改失败";
+            } else {
+                String token = WebUtil.getRequest().getHeader("token");
+                Map<String, Object> tokenData = JwtUtil.getTokenChaim(token);
+                String phone = (String) tokenData.get("username");
+                User user = userFeign.getByUsername(phone);//获取当前登录的人的信息
+                Dept deptByDeptId = userFeign.getDeptByDeptId(user.getDeptId());
 
 
-            DateTime date = DateUtil.date();
-            String date1 = DateUtil.format(date, "yyyy-MM-dd");
-            careHistory.setUserId(user.getUserId());
-            careHistory.setUserName(user.getUserName());
-            careHistory.setDeptId(user.getDeptId());
-            careHistory.setDeptName(deptByDeptId.getDeptName());
-            careHistory.setCareTime(new Date());
-            careHistory.setCaseDate(date1);
-            int insert = careHistoryDao.insert(careHistory);
-        }else {
+                DateTime date = DateUtil.date();
+                String date1 = DateUtil.format(date, "yyyy-MM-dd");
+                careHistory.setUserId(user.getUserId());
+                careHistory.setUserName(user.getUserName());
+                careHistory.setDeptId(user.getDeptId());
+                careHistory.setDeptName(deptByDeptId.getDeptName());
+                careHistory.setCareTime(new Date());
+                careHistory.setCaseDate(date1);
+                int insert = careHistoryDao.insert(careHistory);
+                return insert > 0 ? "添加成功" : "添加失败";
+            }
+
+        } else {
             IdWorker idWorker = new IdWorker();
             id = "CH" + idWorker.nextId();
+            return id;
         }
-
-        return id;
     }
 
-    /**
-     * 删除处方药品后查询
-     * @param patientId
-     * @return
-     */
-    @Override
-    public CareHistory queryCareHistoryId(String patientId) {
-        QueryWrapper<CareHistory> wrapper = new QueryWrapper<>();
-        if (StringUtils.hasText(patientId)){
-            wrapper.eq("patient_id",patientId);
-            wrapper.orderByDesc("care_time");
-        }
-        CareHistory careHistory = careHistoryDao.selectList(wrapper).get(0);
+
+
+//    @Override
+//    public CareHistory queryCareHistoryId(String patientId) {
+//        QueryWrapper<CareHistory> wrapper = new QueryWrapper<>();
+//        if (StringUtils.hasText(patientId)){
+//            wrapper.eq("patient_id",patientId);
+//            wrapper.orderByDesc("care_time");
+//        }
+//        CareHistory careHistory = careHistoryDao.selectList(wrapper).get(0);
+//        QueryWrapper<CareOrder> wrapper1 = new QueryWrapper<>();
+//        if (StringUtils.hasText(careHistory.getChId())){
+//            wrapper1.eq("ch_id",careHistory.getChId());
+//            List<CareOrder> careOrders = careOrderDao.selectList(wrapper1);
+//            careHistory.setCareOrderList(careOrders);
+//            for (CareOrder careOrder : careOrders) {
+//                QueryWrapper<CareOrderItem> careOrderItemQueryWrapper = new QueryWrapper<>();
+//                if (StringUtils.hasText(careOrder.getCoId())){
+//                    careOrderItemQueryWrapper.eq("co_id",careOrder.getCoId());
+//                    List<CareOrderItem> careOrderItems = careOrderItemDao.selectList(careOrderItemQueryWrapper);
+//                    careOrder.setCareOrderItemList(careOrderItems);
+//                }
+//            }
+//        }
+//        return careHistory;
+//
+//    }
+//新开就诊就诊完成载入按钮时 查询挂号单号的病历以就诊时间降序排获取第一条
+@Override
+public CareHistory queryCareHistoryId(String registrationId) {
+    QueryWrapper<CareHistory> wrapper = new QueryWrapper<>();
+    if (StringUtils.hasText(registrationId)){
+        wrapper.eq("reg_id",registrationId);
+        wrapper.orderByDesc("care_time");
+    }
+    List<CareHistory> careHistories = careHistoryDao.selectList(wrapper);
+    if (careHistories.size()>0){
+        CareHistory careHistory = careHistories.get(0);
         QueryWrapper<CareOrder> wrapper1 = new QueryWrapper<>();
         if (StringUtils.hasText(careHistory.getChId())){
             wrapper1.eq("ch_id",careHistory.getChId());
@@ -146,8 +226,11 @@ public class CareHistoryServiceImpl implements CareHistoryService {
             }
         }
         return careHistory;
-
     }
+    return new CareHistory();
+
+
+}
 
     /**
      * 根据id删除未支付的订单
