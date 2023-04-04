@@ -186,10 +186,8 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          alert(itemIds)
-            this.$axios.get(""+itemIds).then(res => {
+            this.$axios.get("charge/api/hisOrderCharge/updByDispense/"+itemIds).then(res => {
             this.$message.success('全部药品发放成功')
-            // this.resetCurrentParams()
             this.handleQuery()
             this.loading = false
           }).catch(() => {

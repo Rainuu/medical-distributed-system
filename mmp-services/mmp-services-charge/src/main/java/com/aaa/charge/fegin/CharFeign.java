@@ -5,14 +5,14 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-@FeignClient(value = "mmp-services-system")
-public interface OrderCharFeign {
-    //服务与服务之间的调用返回类型为实体类，前端调用返回result
-    @GetMapping("/system/dict/getAll")
-    List<DictData> getAll();
-
+@FeignClient(value = "mmp-services-stock")
+public interface CharFeign {
+    @PostMapping("stock/api/medicinal/num")
+    public Boolean num(@RequestParam String num,@RequestParam String itemName);
 
 }

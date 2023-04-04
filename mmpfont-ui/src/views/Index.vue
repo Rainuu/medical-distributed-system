@@ -100,7 +100,7 @@
         name: "Index",
         data(){
           return {
-            asideWidth: '250px',
+            asideWidth: '220px',
             isCollaps:false,
                userinfo:{},
                leftMenu:[],

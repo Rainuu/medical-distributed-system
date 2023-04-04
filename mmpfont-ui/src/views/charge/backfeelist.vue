@@ -10,7 +10,7 @@
           <el-input v-model="formInline.regId" placeholder="请输入挂号单号"></el-input>
         </el-form-item>
         <el-form-item style="padding-left: 60px;">
-          <el-button type="primary" @click="initUser"  icon="el-icon-search">搜索</el-button> &nbsp;&nbsp; |&nbsp;
+          <el-button type="primary" @click="select"  icon="el-icon-search">搜索</el-button> &nbsp;&nbsp; |&nbsp;
           <el-button type="primary" @click="empty" icon="el-icon-refresh">重置</el-button>
         </el-form-item>
       </el-form>
@@ -90,6 +90,11 @@ export default {
     }
   },
   methods: {
+    select(){
+      this.curr=1,
+      this.initUser()
+    },
+
     //字典解析
     dictFormat(row, column, dictType){
       return this.formatDict( this.dictList,column, dictType)

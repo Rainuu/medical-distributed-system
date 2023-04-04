@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -33,4 +34,5 @@ public interface MedicinalService extends IService<Medicines> {
     // 远程调用
     Result<Page<Medicines>> MeDicinesController(NewCareVo newCareVo);
 
+    Boolean num(String num, String itemName);
 }

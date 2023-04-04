@@ -72,7 +72,7 @@
               <el-table-column label="单价(元)" align="center" prop="price" />
               <el-table-column label="金额(元)" align="center" prop="amount" />
               <el-table-column label="备注" align="center" prop="remark" />
-              <el-table-column label="状态" align="center" prop="status" :formatter="(row)=>dictFormat(row,row.status,' his_order_details_status')"/>
+              <el-table-column label="状态" align="center" prop="status" :formatter="(row)=>dictFormat(row,row.status,'his_order_details_status')"/>
             </el-table>
           </el-collapse-item>
         </el-collapse>

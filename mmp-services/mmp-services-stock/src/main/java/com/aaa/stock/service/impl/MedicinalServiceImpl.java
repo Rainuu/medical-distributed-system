@@ -1,12 +1,8 @@
 package com.aaa.stock.service.impl;
 
-import com.aaa.core.entity.DictData;
 import com.aaa.core.entity.Medicines;
-import com.aaa.core.entity.Producer;
 import com.aaa.core.vo.Result;
 import com.aaa.stock.dao.MedicinalDao;
-import com.aaa.stock.dao.ProducterDao;
-import com.aaa.stock.feign.Feign;
 import com.aaa.stock.service.MedicinalService;
 import com.aaa.stock.vo.MedicinalVo;
 import com.aaa.stock.vo.NewCareVo;
@@ -18,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -109,6 +105,28 @@ public class MedicinalServiceImpl extends ServiceImpl<MedicinalDao, Medicines> i
 
         Page<Medicines> medicinesPage1 = medicinalDao.selectPage(medicinesPage, queryWrapper);
         return new Result<>(2000,"查询成功",medicinesPage1);
+    }
+
+    @Override
+    //收费减库存接口
+    public Boolean num(String num, String itemName) {
+        BigDecimal bigDecimal = new BigDecimal(num);
+        QueryWrapper<Medicines> wrapper1=new QueryWrapper<>();
+        wrapper1.eq("medicines_name",itemName);
+        Medicines medicines = medicinalDao.selectOne(wrapper1);
+        BigDecimal medicinesStockNum = new BigDecimal(medicines.getMedicinesStockNum());
+        BigDecimal a=medicinesStockNum.subtract(bigDecimal);
+        if(a.compareTo(BigDecimal.valueOf(0))> -1 ){
+            BigDecimal i= medicinesStockNum.subtract(bigDecimal);
+            Medicines medicines1=new Medicines();
+            Integer z=i.intValue();
+            medicines1.setMedicinesStockNum(z);
+            QueryWrapper<Medicines> wrapper2=new QueryWrapper<>();
+            wrapper2.eq("medicines_name",itemName);
+            int update = medicinalDao.update(medicines1, wrapper2);
+            return update>0?true:false;
+        }
+    return false;
     }
 
 

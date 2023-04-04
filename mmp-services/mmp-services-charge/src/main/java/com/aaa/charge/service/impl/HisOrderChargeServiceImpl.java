@@ -2,6 +2,7 @@ package com.aaa.charge.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.aaa.charge.dao.*;
+import com.aaa.charge.fegin.CharFeign;
 import com.aaa.charge.fegin.OrderCharFeign;
 import com.aaa.charge.service.HisOrderChargeService;
 import com.aaa.charge.util.HttpClient;
@@ -47,6 +48,8 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
    private HisCareOrderMapper hisCareOrderMapper;
    @Autowired
    private HisCareOrderItemMapper hisCareOrderItemMapper;
+   @Autowired
+   private CharFeign charFeign;
    @Value("${weixin.appid}")
    private String appId;
    @Value("${weixin.mch_id}")
@@ -198,7 +201,7 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
         }
         for (int i = 0; i < orderChargeItemDtoList.size(); i++) {
            OrderChargeItem orderChargeItem = new OrderChargeItem();
-           orderChargeItem.setOrderId(orderId);
+           orderChargeItem.setOrderId(orderId1);
            orderChargeItem.setItemId(orderChargeItemDtoList.get(i).getItemId());
            orderChargeItem.setItemType(orderChargeItemDtoList.get(i).getItemType());
            orderChargeItem.setItemName(orderChargeItemDtoList.get(i).getItemName());
@@ -255,18 +258,32 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
    //处方发药
    @Override
    public Result updByDispense(String[] itemId) {
-      for (int i=0;itemId.length>i;i++){
+      for (int i = 0; itemId.length > i; i++) {
          hisOrderChargeItemMapper.updByDispense(itemId[i]);
       }
-      for (int i=0;itemId.length>i;i++){
+      for (int i = 0; itemId.length > i; i++) {
          hisCareOrderItemMapper.updstatus(itemId[i]);
       }
-      //调用fen接口 传入名字和数量
 
-      return new Result<>(200,"发药成功");
+      for (int i = 0; i <itemId.length ; i++) {
+         QueryWrapper<CareOrderItem> queryWrapper=new QueryWrapper<>();
+         queryWrapper.eq("item_id", itemId);
+         List<CareOrderItem> careOrderItems = hisCareOrderItemMapper.selectList(queryWrapper);
+         for (CareOrderItem careOrderItem : careOrderItems) {
+            BigDecimal num = careOrderItem.getNum();
+            String itemName = careOrderItem.getItemName();
+            //调用fen接口 传入名字和数量
+            Boolean num1 = charFeign.num(String.valueOf(num), itemName);
+            if (num1){
+               return new Result<>(200, "发药失败");
+            }
+            return new Result<>(200, "发药成功");
+         }
+      }
+
+
+      return new Result<>(200,"失败",false);
    }
-
-
 
 
    //统计接口
@@ -344,7 +361,6 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
          client.setXmlParam(WXPayUtil.generateSignedXml(params,apiKey));
          client.post();
          String content = client.getContent();
-         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"+content);
          Map<String, String> map = WXPayUtil.xmlToMap(content);
          if (map.get("trade_state").equals("SUCCESS")){
             //1修改订单状态
