@@ -254,6 +254,7 @@ export default {
               this.addDeptVisible=false;
               this.deptForm={};
               this.getInfo()
+              this.initDept()
             }else {
               this.$message.error("添加失败")
             }

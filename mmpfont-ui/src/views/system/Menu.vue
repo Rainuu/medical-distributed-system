@@ -236,7 +236,6 @@ export default {
     handleUpdate(row) {
       this.reset()
       this.getTreeselect()
-      alert(JSON.stringify(row))
         this.form = JSON.parse(JSON.stringify(row))
         this.open = true
         this.title = '修改菜单权限'

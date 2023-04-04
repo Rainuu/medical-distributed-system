@@ -71,7 +71,7 @@
     <!-- 表格工具按钮开始 -->
     <el-row :gutter="10" style="margin-bottom: 8px;">
       <el-col :span="1.5">
-        <el-button type="primary" icon="el-icon-plus" size="mini" @click="adduserVisible=true">新增</el-button>
+        <el-button type="primary" icon="el-icon-plus" size="mini" @click="adduserVisible=true,judge=true">新增</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="piliangdel">批量删除</el-button>
@@ -157,7 +157,11 @@
         <el-form-item label="姓名" prop="userName">
           <el-input v-model="userForm.userName"></el-input>
         </el-form-item>
-
+        <template v-if="judge">
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="userForm.password"></el-input>
+        </el-form-item>
+        </template>
           <el-form-item label="手机号" prop="phone">
             <el-input v-model="userForm.phone"></el-input>
           </el-form-item>
@@ -236,6 +240,18 @@
                 v-model="userForm.introduction">
             </el-input>
           </el-form-item>
+        <el-form-item label="上传头像" prop="file">
+          <el-upload
+              class="avatar-uploader"
+              action="#"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :on-change="fileSubmit"
+              :before-upload="beforeAvatarUpload">
+            <img v-if="this.userForm.picture" :src="this.userForm.picture" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+        </el-form-item>
 
         <el-form-item>
           <el-button @click="adduserVisible = false">取 消</el-button>
@@ -278,10 +294,14 @@ export default {
       total: 0,
       pageSize: 5,
       currentPage: 1,
+     //控制列表显示
+      judge:true,
       //用户表单
       userForm: {
+        picture:'',
         deptId: '',
         userName: '',
+        password:'',
         userType: '',
         sex: '',
         age: '',
@@ -355,6 +375,7 @@ export default {
       })
     },
     update(row){
+      this.judge=false
       this.adduserVisible=true
       this.userForm=JSON.parse(JSON.stringify(row))
     },
@@ -495,11 +516,69 @@ export default {
     // 重新查询
     this.initUser()
   },
-}
+    fileSubmit(file){
+      this.files = file.raw;
+              // FormData 对象
+        var formData = new FormData();
+           // 文件对象
+        formData.append('file', this.files);
+          let config = {
+               headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+          methods: 'post'
+        }
+        this.$axios.post('system/api/oss/upload',formData,config).then(res=>{
+          if (res.data.t===undefined){
+            this.$message.error("上传失败")
+          }else {
+            this.userForm.picture=res.data.t
+          }
+        })
+    },
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg';
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!');
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!');
+      }
+      return isJPG && isLt2M;
+    }
+  }
   }
 
 </script>
 
 <style scoped>
 
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409EFF;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
 </style>

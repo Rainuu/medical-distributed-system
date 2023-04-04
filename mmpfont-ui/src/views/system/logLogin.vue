@@ -99,8 +99,8 @@
       <el-table-column label="登陆地址" align="center" prop="loginLocation" />
       <el-table-column label="浏览器" align="center" prop="browser" />
       <el-table-column label="操作系统" align="center" prop="os" />
-      <el-table-column label="登陆状态" prop="loginStatus" align="center" :formatter="(row)=>dictFormat(row,row.status,'sys_common_status')"  />
-      <el-table-column label="用户类型" prop="loginType" align="center" :formatter="(row)=>dictFormat(row,row.status,'sys_user_type')" />
+      <el-table-column label="登陆状态" prop="loginStatus" align="center" :formatter="(row)=>dictFormat(row,row.loginStatus,'sys_common_status')"  />
+      <el-table-column label="用户类型" prop="loginType" align="center" :formatter="(row)=>dictFormat(row,row.loginType,'sys_user_type')" />
       <el-table-column label="登陆时间" align="center" prop="loginTime" width="200" />
       <el-table-column label="操作" align="center" width="100">
         <template slot-scope="scope">

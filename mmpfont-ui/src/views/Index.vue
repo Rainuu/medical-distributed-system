@@ -2,11 +2,13 @@
     <el-container class="home-container">
       <!-- 侧边栏 -->
       <el-aside :width="asideWidth">
-        <div style="margin-left: 15px">
+        <div style="margin-left: -118px;height: 60px">
           <!-- logo -->
-          <img  src="../assets/logo.jpeg" width="30" height="30" style="border-radius: 10px" alt="">
+          <img  src="../assets/logo.jpeg" width="50" height="50" style="border-radius: 10px;margin-top: 5px" alt="">
           <!-- 顶部标题 -->
-          <a v-if="!isCollaps" style="color: #eeeeee">医院挂号管理系统</a>
+          <div style="margin-left: 172px;margin-top: -48px">
+          <a v-if="!isCollaps" style="color: #eeeeee ; font-size: 30px" >云医疗</a>
+          </div>
         </div>
         <!-- 侧边栏菜单 -->
         <el-menu
@@ -20,9 +22,9 @@
 
         >
           <!-- 一级菜单 -->
-          <el-submenu :index="first.path" v-for="(first,index) in leftMenu" :key="index">
+          <el-submenu :index="first.path" v-for="(first,index) in leftMenu" :key="index" style="margin-right: 50px; width: 200px" >
             <!-- 一级菜单模板 -->
-            <template slot="title" >
+            <template slot="title">
               <!-- 图标 -->
               <svg-icon :icon-file-name="first.icon"/>
 
@@ -30,9 +32,9 @@
               <span style="margin-left: 15px" >{{first.menuName}}</span>
             </template>
             <!-- 二级子菜单 -->
-            <el-menu-item :index="second.path" v-for="(second,sindex) in first.children" :key="sindex">
+            <el-menu-item :index="second.path" v-for="(second,sindex) in first.children" :key="sindex" style="padding-left: 80px">
               <!-- 二级菜单模板 -->
-              <template slot="title">
+              <template slot="title" style="margin-left: 50px">
                 <!-- 图标 -->
                 <svg-icon :icon-file-name="second.icon"/>
                 <!-- 文本 -->
@@ -98,7 +100,7 @@
         name: "Index",
         data(){
           return {
-            asideWidth: '200px',
+            asideWidth: '250px',
             isCollaps:false,
                userinfo:{},
                leftMenu:[],

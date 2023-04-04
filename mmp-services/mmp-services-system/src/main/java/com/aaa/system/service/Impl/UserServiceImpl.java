@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserSercvice{
 
         if (user.getCreateTime()==null){
             user.setCreateTime(new Date());
-            user.setPassword(passwordEncoder.encode("123456"));
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setUpdateTime(new Date());
         }else {
             user.setUpdateTime(new Date());
