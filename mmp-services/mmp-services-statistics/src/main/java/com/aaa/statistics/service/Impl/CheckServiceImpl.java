@@ -19,11 +19,19 @@ public class CheckServiceImpl implements CheckService {
 
     @Override
     public Result<List<CheckResult>> selectAll(CheckResultVo checkResultVo) {
-        return checkFeign.selectAll(checkResultVo);
+        System.out.println("checkResultVo -----------------------= " + checkResultVo);
+        String checkItemId = checkResultVo.getCheckItemId();
+        String patientName = checkResultVo.getPatientName();
+        String dateRange1 = checkResultVo.getDateRange1();
+        String dateRange2 = checkResultVo.getDateRange2();
+        return checkFeign.selectAll(checkItemId,patientName,dateRange1,dateRange2);
     }
 
     @Override
     public Result<List<CheckResult>> selectAllTwo(CheckResultVo checkResultVo) {
-        return checkFeign.selectAllTwo(checkResultVo);
+        String checkItemId = checkResultVo.getCheckItemId();
+        String dateRange1 = checkResultVo.getDateRange1();
+        String dateRange2 = checkResultVo.getDateRange2();
+        return checkFeign.selectAllTwo(checkItemId,dateRange1,dateRange2);
     }
 }

@@ -7,6 +7,7 @@ import com.aliyun.oss.common.utils.BinaryUtil;
 import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,8 +19,8 @@ import java.util.Map;
 @RestController
 public class OSSController {
 
-    @CrossOrigin
-    @RequestMapping("/oss/policy")
+
+    @GetMapping("check/oss/policy")
     public Map<String,String> policy(){
         // 阿里云账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM用户进行API访问或日常运维，请登录RAM控制台创建RAM用户。
         String accessId = "LTAI5tQFUzG9zfHf7kU1Joom";

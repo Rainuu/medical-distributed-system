@@ -285,7 +285,7 @@ export default {
       //上传前进行服务器签名
       return new Promise((resolve,reject) => {
         //请求后端
-        this.$axios.get(`http://localhost:8082/oss/policy`).then(r=>{
+        this.$axios.get(`check/oss/policy`).then(r=>{
           this.objData.OSSAccessKeyId=r.data.accessId;
           this.objData.policy=r.data.policy;
           this.objData.Signature=r.data.signature;
@@ -329,7 +329,7 @@ export default {
   created() {
     var query = this.$route.query;
     this.queryParams.regId = query.regId
-    alert(this.queryParams.regId)
+    //alert(this.queryParams.regId)
     //加载系统状态
     this.initStatus();
     //加载状态的字典数据

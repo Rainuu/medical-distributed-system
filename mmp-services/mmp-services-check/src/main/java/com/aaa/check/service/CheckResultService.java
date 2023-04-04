@@ -23,7 +23,8 @@ public interface CheckResultService {
 
     Result addAll(CheckResult checkResult);
 
-    Result<List<CheckResult>> getByPage(CheckResultVo checkResultVo);
+    Result<List<CheckResult>> getByPage(String checkItemId,String patientName, String dateRange1,
+                                        String dateRange2);
 
-    Result<List<CheckResult>> getByPageTwo(CheckResultVo checkResultVo);
+    Result<List<CheckResult>> getByPageTwo(String checkItemId,String dateRange1, String dateRange2);
 }

@@ -1,9 +1,13 @@
 package com.aaa.check.service.impl;
 
+import com.aaa.check.feign.CheckResultFeign;
 import com.aaa.check.dao.CheckResultDao;
 import com.aaa.check.service.CheckResultService;
 
 
+import com.aaa.core.entity.User;
+import com.aaa.core.util.JwtUtil;
+import com.aaa.core.util.WebUtil;
 import com.aaa.core.vo.CheckResultVo;
 import com.aaa.core.entity.CheckResult;
 import com.aaa.core.vo.CheckItemVo;
@@ -15,8 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -29,6 +35,9 @@ import java.util.Objects;
 public class CheckResultServiceImpl implements CheckResultService {
    @Autowired
    private CheckResultDao checkResultDao;
+
+   @Autowired
+   private CheckResultFeign checkResultFeign;
 
    @Override
    public Result<IPage<CheckResult>> getByPageStatus(Integer current, Integer size, CheckItemVo checkItemVo) {
@@ -46,31 +55,38 @@ public class CheckResultServiceImpl implements CheckResultService {
    @Override
    public Result addAll(CheckResult checkResult) {
       checkResult.setCreateTime(new Date());
+      HttpServletRequest request = WebUtil.getRequest();
+      String token = request.getHeader("token");
+      Map<String, Object> info = JwtUtil.getTokenChaim(token);
+      String phone = (String) info.get("username");
+      User byUsername = checkResultFeign.getByUsername(phone);
+      String userName = byUsername.getUserName();
+      checkResult.setCreateBy(userName);
       int insert = checkResultDao.insert(checkResult);
       return new Result(200,"开始检查成功",insert);
    }
 
    @Override
-   public Result<List<CheckResult>> getByPage(CheckResultVo checkResultVo) {
+   public Result<List<CheckResult>> getByPage(String checkItemId,String patientName, String dateRange1,
+                                              String dateRange2) {
+      System.out.println("====================================="+checkItemId);
       QueryWrapper<CheckResult> wrapper = new QueryWrapper<>();
-      if (StringUtils.hasText(checkResultVo.getCheckItemId())){
-         wrapper.like("check_item_id",checkResultVo.getCheckItemId());
+      if (StringUtils.hasText(checkItemId)){
+         wrapper.like("check_item_id",checkItemId);
       }
-      if (StringUtils.hasText(checkResultVo.getPatientName())){
-         wrapper.like("patient_name",checkResultVo.getPatientName());
+      if (StringUtils.hasText(patientName)){
+         wrapper.like("patient_name",patientName);
       }
-      if(Objects.nonNull(checkResultVo.getDateRange())&&checkResultVo.getDateRange().length==2){
-         wrapper.between("create_time",checkResultVo.getDateRange()[0],checkResultVo.getDateRange()[1]);
+      if(StringUtils.hasText(dateRange1)&&StringUtils.hasText(dateRange2)){
+         wrapper.between("create_time",dateRange1,dateRange2);
       }
       List<CheckResult> checkResults = checkResultDao.selectList(wrapper);
       return new Result<>(2000,"查询角色",checkResults);
    }
 
    @Override
-   public Result<List<CheckResult>> getByPageTwo(CheckResultVo checkResultVo) {
-      String checkItemId = checkResultVo.getCheckItemId();
-      String[] dateRange = checkResultVo.getDateRange();
-      List<CheckResult> checkResults = checkResultDao.selectAllTwo(checkItemId,dateRange);
+   public Result<List<CheckResult>> getByPageTwo(String checkItemId,String dateRange1, String dateRange2) {
+      List<CheckResult> checkResults = checkResultDao.selectAllTwo(checkItemId,dateRange1,dateRange2);
       return new Result<>(2000,"查询角色",checkResults);
    }
 }

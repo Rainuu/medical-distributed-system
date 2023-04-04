@@ -115,6 +115,8 @@
 <script>
 // import { selectAllCheckItem } from '@/api/system/checkItem'
 // import { queryCheck, queryCheckStat } from '@/api/statistics/check'
+import qs from "qs";
+
 export default {
   data() {
     return {
@@ -164,8 +166,9 @@ export default {
     // 查询销售列表
     listCheck() {
       this.loading = true
-      alert(this.queryCheckParams.checkItemId)
-      this.$axios.post("/statistics/api/checkFeign/selectAll",this.queryCheckParams,this.dateRange).then(res => {
+      //alert(this.queryCheckParams.checkItemId)
+      var param={'checkItemId':this.queryCheckParams.checkItemId,'patientName':this.queryCheckParams.patientName,'dateRange1':this.dateRange[0],'dateRange2':this.dateRange[1]}
+      this.$axios.post('/statistics/api/checkFeign/selectAll',qs.stringify(param)).then(res => {
         this.checkList = res.data.t
         this.loading = false
       }).catch(() => {
@@ -193,7 +196,8 @@ export default {
     listCheckStat() {
       this.loading = true
       //alert(this.queryCheckParams.checkItemId)
-      this.$axios.post("/statistics/api/checkFeign/selectAllTwo",this.queryCheckParams,this.dateRange).then(res => {
+      var param={'checkItemId':this.queryCheckParams.checkItemId,'dateRange1':this.dateRange[0],'dateRange2':this.dateRange[1]}
+      this.$axios.post('/statistics/api/checkFeign/selectAllTwo',qs.stringify(param)).then(res => {
         this.checkStatList = res.data.t
         this.loading = false
       }).catch(() => {

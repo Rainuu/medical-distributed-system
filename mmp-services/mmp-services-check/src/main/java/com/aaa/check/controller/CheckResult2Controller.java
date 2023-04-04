@@ -27,13 +27,15 @@ public class CheckResult2Controller {
     private CheckResultService checkResultService;
 
     @PostMapping("selectAll")
-    public Result<List<CheckResult>> selectAll(CheckResultVo checkResultVo){
-        return checkResultService.getByPage(checkResultVo);
+    public Result<List<CheckResult>> selectAll(String checkItemId,String patientName, String dateRange1,String dateRange2){
+
+        System.out.println("checkResultVo = " + checkItemId);
+        return checkResultService.getByPage(checkItemId,patientName,dateRange1,dateRange2);
     }
 
     @PostMapping("selectAllTwo")
-    public Result<List<CheckResult>> selectAllTwo(CheckResultVo checkResultVo){
-        return checkResultService.getByPageTwo(checkResultVo);
+    public Result<List<CheckResult>> selectAllTwo(String checkItemId, String dateRange1,String dateRange2){
+        return checkResultService.getByPageTwo(checkItemId,dateRange1,dateRange2);
     }
 
 

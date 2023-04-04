@@ -42,17 +42,17 @@
 
     <select id="selectAllTwo" resultMap="HisCheckResultMap">
         SELECT check_item_id,check_item_name,SUM(price) sum,COUNT(*) count FROM his_check_result
-            <if test="checkItemId!='' and checkItemId!=null or dateRange !='' and dateRange > 0">
+            <if test="checkItemId!='' and checkItemId!=null or dateRange1 !='' and dateRange1 !=null ">
                 where
             </if>
             <if test="checkItemId!='' and checkItemId!=null">
                 check_item_id=#{param1,jdbcType=VARCHAR}
             </if>
-            <if test="checkItemId!='' and checkItemId!=null and dateRange !='' and dateRange > 0">
+            <if test="checkItemId!='' and checkItemId!=null and dateRange1 !='' and dateRange1 !=null">
                 and
             </if>
-            <if test="dateRange !='' and dateRange > 0">
-                create_time between #{dateRange[0]} and #{dateRange[1]};
+            <if test="dateRange1 !='' and dateRange1 !=null">
+                create_time between #{param2,jdbcType=VARCHAR} and #{param3,jdbcType=VARCHAR};
             </if>
       GROUP BY check_item_id,check_item_name
     </select>

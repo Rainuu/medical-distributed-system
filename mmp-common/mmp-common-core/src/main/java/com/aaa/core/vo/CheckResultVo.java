@@ -6,5 +6,6 @@ import lombok.Data;
 public class CheckResultVo {
     private String checkItemId;
     private String patientName;
-    private String[] dateRange;
+    private String dateRange1;
+    private String dateRange2;
 }

@@ -15,5 +15,5 @@ public interface CheckResultDao extends BaseMapper<CheckResult> {
 
     IPage<CheckResult> selectAll(IPage<CheckResult> page,CheckItemVo checkItemVo);
 
-    List<CheckResult> selectAllTwo(String checkItemId,String[] dateRange);
+    List<CheckResult> selectAllTwo(String checkItemId,String dateRange1,String dateRange2);
 }
