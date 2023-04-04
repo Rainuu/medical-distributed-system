@@ -28,6 +28,5 @@ public interface PurchaseService extends IService<Purchase> {
 
     void insertByPurchaseId(Purchase purchase);
 
-
-    // void add(purchaseAllVo purchaseAllVo);
+     void addPurchase(purchaseAllVo purchaseAllVo);
 }

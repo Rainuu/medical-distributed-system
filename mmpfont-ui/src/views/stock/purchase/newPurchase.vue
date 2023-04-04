@@ -276,7 +276,6 @@ export default {
         this.$refs['form'].validate((valid) => {
           if (valid) {
             // 组装要提交到后台的数据
-            // 组装要提交到后台的数据
             const purchaseVo = { 'purchaseDto': this.form, 'purchaseItemDtos': this.purchaseItemList }
             // 添加采购单和详情
             console.log(JSON.stringify(purchaseVo))

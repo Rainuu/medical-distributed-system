@@ -7,6 +7,7 @@ import com.aaa.stock.service.PurchaseService;
 import com.aaa.stock.vo.MedicinalVo;
 import com.aaa.stock.vo.PurchaseItemVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,4 +32,13 @@ public class ApiPurchaseItemController {
         return purchaseItemService.getPurchaseItemById(purchaseId);
     }
 
+    // 查询&分页
+    @PostMapping("getAllById/{current}/{size}/{purchaseId}")
+    public Result<IPage<List<PurchaseItem>>> getAllById(
+            @PathVariable Integer current,
+            @PathVariable Integer size,
+            @PathVariable String purchaseId
+    ){
+        return purchaseItemService.getAllById(current,size,purchaseId);
+    }
 }

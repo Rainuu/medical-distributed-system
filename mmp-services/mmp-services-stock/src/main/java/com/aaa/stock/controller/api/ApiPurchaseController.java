@@ -52,7 +52,7 @@ public class ApiPurchaseController {
     // 暂存 status=1
     @PostMapping("addPurchase")
     public void addPurchase(@RequestBody purchaseAllVo purchaseAllVo){
-       // return purchaseService.add(purchaseAllVo);
+        purchaseService.addPurchase(purchaseAllVo);
     }
 
     // 提交审核[待审核] status=2

@@ -1,5 +1,6 @@
 package com.aaa.stock.service.impl;
 
+import com.aaa.core.entity.InventoryLog;
 import com.aaa.core.entity.Medicines;
 import com.aaa.core.entity.Purchase;
 import com.aaa.core.entity.PurchaseItem;
@@ -36,4 +37,13 @@ public class PurchaseItemServiceImpl extends ServiceImpl<PurchaseItemDao, Purcha
         List<PurchaseItem> purchaseItemById = purchaseItemDao.getPurchaseItemById(purchaseId);
         return new Result<List<PurchaseItem>>(200,"查询成功",purchaseItemById);
     }
+
+    @Override
+    public Result<IPage<List<PurchaseItem>>> getAllById(Integer current, Integer size, String purchaseId) {
+        IPage<PurchaseItem> page = new Page(current, size);
+        QueryWrapper<PurchaseItem> wrapper = new QueryWrapper();
+        IPage<PurchaseItem> page1 = purchaseItemDao.selectPage(page, wrapper);
+        return new Result(200, "成功", page1);
+    }
+
 }

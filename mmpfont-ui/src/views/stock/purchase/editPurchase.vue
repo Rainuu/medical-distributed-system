@@ -1,51 +1,59 @@
 <template>
   <div class="app-container">
-    <!-- 按钮 开始-->
+    <!-- 工具栏按钮 -->
     <el-card class="box-card">
       <div style="text-align:right;">
-        <el-button type="primary" icon="el-icon-plus" :disabled="isSubmit" @click="handleAddMedicines">添加药品</el-button>
-        <el-button type="success" icon="el-icon-s-operation" :disabled="isSubmit" @click="handleBatchSet">批量设置</el-button>
-        <el-button type="warning" icon="el-icon-check" :disabled="isSubmit" @click="handleSubmit">暂存</el-button>
-        <el-button type="danger" icon="el-icon-finished" :disabled="isSubmit" @click="handleSubmitAndAudit">提交审核</el-button>
+        <el-button type="primary" icon="el-icon-plus" :disabled="isSubmit" size="small" @click="handleAddMedicines">添加药品</el-button>
+        <el-button type="success" icon="el-icon-s-operation" :disabled="isSubmit" size="small" @click="handleBatchSet">批量设置</el-button>
+        <el-button type="warning" icon="el-icon-check" :disabled="isSubmit" size="small" @click="handleSubmit">暂存</el-button>
+        <el-button type="danger" icon="el-icon-finished" :disabled="isSubmit" size="small" @click="handleSubmitAndAudit">提交审核</el-button>
       </div>
     </el-card>
-    <!-- 主表单开始 -->
+    <!-- 工具栏2 -->
     <el-card class="box-card">
-      <el-form ref="form" :model="form" :rules="rules" :inline="true" label-width="120px">
-        <el-form-item label="单据号" prop="purchaseId">
-          <el-input v-model="form.purchaseId" placeholder="请输入单据号" :disabled="true" style="width:220px"/>
-        </el-form-item>
-        <el-form-item label="供应商" prop="providerId">
-          <el-select v-model="form.providerId" placeholder="请选择供应商" style="width:220px">
-            <el-option v-for="item in providerOptions"
-                       :key="item.providerId" :label="item.providerName" :value="item.providerId"/>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="总批发额" prop="purchaseTradeTotalAmount">
-          <el-input v-model="form.purchaseTradeTotalAmount" placeholder="请输入总批发额" :disabled="true" style="width:220px"/>
-        </el-form-item>
+      <el-form ref="form"  :model="form" :rules="rules" :inline="true" label-width="68px">
+        <el-row :gutter="10">
+          <el-col :span="1.5">
+            <el-form-item label="单据号" prop="purchaseId">
+              <el-input v-model="form.purchaseId" placeholder="请输入单据号" :disabled="true" size="small" style="width:220px"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="1.5">
+            <el-form-item label="供应商" prop="providerId">
+              <el-select v-model="form.providerId" placeholder="请选择供应商" style="width:220px">
+                <el-option v-for="item in providerOptions"
+                           :key="item.providerId" :label="item.providerName" :value="item.providerId"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="1.5">
+            <el-form-item label="总批发额" prop="purchaseTradeTotalAmount">
+              <el-input v-model="form.purchaseTradeTotalAmount" placeholder="请输入总批发额" :disabled="true" size="small" style="width:220px"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </el-card>
-    <!-- 选择中的详情数据表格开始 -->
+    <!-- 表格 -->
     <el-card class="box-card">
       <el-table :data="purchaseItemList" class="tb-edit" style="width:100%" border highlight-current-row>
-        <el-table-column label="药品ID" align="center" width="70px" prop="medicinesId" />
-        <el-table-column label="药品名称" align="center" width="120px" prop="medicinesName" />
-        <el-table-column label="规则" align="center" width="60px" prop="conversion">
+        <el-table-column label="药品ID" align="center" width="80" prop="medicinesId" />
+        <el-table-column label="药品名称" align="center" width="150" prop="medicinesName" />
+        <el-table-column label="规则" align="center" width="80" prop="conversion">
           <template slot-scope="scope">
             <span> {{ scope.row.conversion }}{{ scope.row.unit }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="生产厂家" align="center" width="200px" prop="producterId" :formatter="ProducterNameDict"/>
-        <el-table-column label="数量" align="center" width="210px" prop="purchaseNumber">
+        <el-table-column label="生产厂家" align="center" width="220" prop="producterId" :formatter="producterFormatter" />
+        <el-table-column label="数量" align="center" width="160" prop="purchaseNumber">
           <template slot-scope="scope">
-            <el-input-number v-model="scope.row.purchaseNumber" :step="1" />
+            <el-input-number v-model="scope.row.purchaseNumber" :step="1" size="small"/>
           </template>
         </el-table-column>
-        <el-table-column label="单位" align="center" width="60px" prop="unit" />
-        <el-table-column label="批发价" align="center" width="210px" prop="tradePrice">
+        <el-table-column label="单位" align="center" width="80" prop="unit" />
+        <el-table-column label="批发价" align="center" width="160" prop="tradePrice">
           <template slot-scope="scope">
-            <el-input-number v-model="scope.row.tradePrice" :step="0.1" :precision="2" />
+            <el-input-number v-model="scope.row.tradePrice" :step="0.1" :precision="2" size="small"/>
           </template>
         </el-table-column>
         <el-table-column label="批发额" align="center" width="80" prop="tradeTotalAmount">
@@ -55,53 +63,53 @@
         </el-table-column>
         <el-table-column label="批次号" align="center" width="180" prop="batchNumber">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.batchNumber"/>
+            <el-input v-model="scope.row.batchNumber" size="small"/>
           </template>
         </el-table-column>
         <el-table-column label="备注" align="center" width="180" prop="remark">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.remark"/>
+            <el-input v-model="scope.row.remark" size="small"/>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" width="100px">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button type="danger" :disabled="isSubmit" @click="handleDelete(scope.$index,scope.row)" >删除</el-button>
+            <el-button size="small" type="danger" :disabled="isSubmit" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
-    <!-- 弹出层————药品列表 -->
+
+    <!-- 药品列表的弹出层开始 -->
     <el-dialog :title="title" :visible.sync="open" width="1100px" center append-to-body>
       <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
         <el-form-item label="关键字" prop="keywords">
-          <el-input v-model="queryParams.keywords" placeholder="请输入关键字" clearable style="width:180px"/>
+          <el-input v-model="queryParams.keywords" placeholder="请输入关键字" clearable size="small" style="width:180px"/>
         </el-form-item>
         <el-form-item label="药品类型" prop="medicinesType">
-          <el-select v-model="queryParams.medicinesType" clearable placeholder="药品类型" style="width: 200px">
-            <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_medicines_type'})"
-                       :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
+          <el-select v-model="queryParams.medicinesType" placeholder="药品类型" clearable size="small" style="width:180px">
+            <el-option v-for="dict in medicinesTypeOptions" :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
           </el-select>
         </el-form-item>
+
         <el-form-item label="处方类型" prop="prescriptionType">
-          <el-select v-model="queryParams.prescriptionType" clearable placeholder="处方类型" style="width: 190px">
-            <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_prescription_type'})"
-                       :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
+          <el-select v-model="queryParams.prescriptionType" placeholder="处方类型" clearable size="small" style="width:180px">
+            <el-option v-for="dict in prescriptionTypeOptions" :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="handleQuery">搜索</el-button>
-          <el-button type="primary" icon="el-icon-refresh" @click="resetQuery">重置</el-button>
+          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+          <el-button type="primary" icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
         </el-form-item>
       </el-form>
-      <!-- 药品的数据表格开始 -->
-      <el-table ref="medicinesTableList" v-loading="loading" border :data="medicinesTableList" @selection-change="handleSelectionChange">
+
+      <el-table ref="medicinesTableList" v-loading="loading" border :data="medicinesTableList" @selection-change="handleSelectionChnage">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="药品ID" align="center" prop="medicinesId" />
         <el-table-column label="药品名称" align="center" prop="medicinesName" />
         <el-table-column label="药品编号" align="center" prop="medicinesNumber" />
-        <el-table-column label="生产厂家" width="280px" align="center" prop="producterId" :formatter="ProducterNameDict"/>
-        <el-table-column label="药品类型" align="center" prop="medicinesType" :formatter="(row)=>this.dictFormat(row,row.medicinesType,'his_medicines_type')"/>
-        <el-table-column label="处方类型" align="center" prop="prescriptionType" :formatter="(row)=>this.dictFormat(row,row.prescriptionType,'his_prescription_type')"/>
+        <el-table-column label="生产厂家" width="280px" align="center" prop="producterId" :formatter="producterFormatter" />
+        <el-table-column label="药品类型" align="center" prop="medicinesType" :formatter="medicinesTypeFormatter" />
+        <el-table-column label="处方类型" align="center" prop="prescriptionType" :formatter="prescriptionTypeFormatter" />
         <el-table-column label="关键字" align="center" prop="keywords" />
       </el-table>
       <!-- 分页控件 -->
@@ -113,16 +121,16 @@
     <el-dialog :title="title" :visible.sync="batchSetOpen" width="500px" center append-to-body>
       <el-form ref="batchSetForm" :model="batchSetForm" label-width="100px">
         <el-form-item label="数量" prop="purchaseNumber">
-          <el-input-number v-model="batchSetForm.purchaseNumber" placeholder="请输入数量"/>
+          <el-input-number v-model="batchSetForm.purchaseNumber" placeholder="请输入数量" size="small" />
         </el-form-item>
         <el-form-item label="批发价格" prop="tradePrice">
-          <el-input-number v-model="batchSetForm.tradePrice" :precision="2" placeholder="请输入数量"/>
+          <el-input-number v-model="batchSetForm.tradePrice" :precision="2" placeholder="请输入数量" size="small" />
         </el-form-item>
         <el-form-item label="批次号" prop="batchNumber">
-          <el-input v-model="batchSetForm.batchNumber" placeholder="请输入批次号"/>
+          <el-input v-model="batchSetForm.batchNumber" placeholder="请输入批次号" size="small" />
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <el-input v-model="batchSetForm.remark" placeholder="请输入备注"/>
+          <el-input v-model="batchSetForm.remark" placeholder="请输入备注" size="small" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -140,8 +148,8 @@ export default {
       return value.toFixed(2)
     }
   },
+  // 监听purchaseItemList里面的数据变化，更新总批发额
   watch: {
-    // 监听purchaseItemList里面的数据变化，更新总批发额
     purchaseItemList: {
       handler: function() {
         this.form.purchaseTradeTotalAmount = 0.00
@@ -188,17 +196,6 @@ export default {
       }
       return name;
     },
-    // 条件查询
-    handleQuery() {
-      this.current=1;
-      this.getMedicinesList();
-    },
-    // 重置查询条件
-    resetQuery() {
-      this.queryParams={};
-      this.current=1;
-      this.getMedicinesList();
-    },
     // 弹出层————显示药品数据列表
     getMedicinesList() {
       this.loading = true
@@ -218,8 +215,19 @@ export default {
         })
       })
     },
+    // 条件查询
+    handleQuery() {
+      this.current=1;
+      this.getMedicinesList()
+    },
+    // 重置查询条件
+    resetQuery() {
+      this.queryParams={};
+      this.current=1;
+      this.getMedicinesList();
+    },
     // 数据表格的多选择框选择时触发
-    handleSelectionChange(selection) {
+    handleSelectionChnage(selection) {
       // console.log(selection)
       this.selectMedicines = selection
       this.selectMedicines.filter(m1 => {
@@ -277,8 +285,8 @@ export default {
           if (valid) {
             // 组装要提交到后台的数据
             const purcheseObj = { 'purchaseDto': this.form, 'purchaseItemDtos': this.purchaseItemList }
-            // 添加采购单和详情
-            this.$axios.post("/stock/api/purchase/addPurchase",purcheseObj).then(res => {
+            console.log(JSON.stringify(purcheseObj))
+            this.$axios.post("/stock/api/purchase/addPurchase", {params: purcheseObj}).then(res => {
               this.$message({type: 'success', message: '暂存成功!'});
             }).catch(() => {
               this.$message({type: 'error', message: '暂存失败!'});
@@ -297,9 +305,10 @@ export default {
           if (valid) {
             // 组装要提交到后台的数据
             const purcheseObj = { 'purchaseDto': this.form, 'purchaseItemDtos': this.purchaseItemList }
-            this.$axios.post("/stock/api/purchase/addPurchaseToAudit",purcheseObj).then(res => {
+            this.$axios.post("/stock/api/purchase/addPurchaseToAudit", {params: purcheseObj}).then(res => {
               this.$message({type: 'success', message: '提交审核成功!'});
-              this.isSubmit = true;  //上面的四个按钮不能按了
+              // 上面的四个按钮不能按了
+              this.isSubmit = true
             }).catch(() => {
               this.$message({type: 'error', message: '提交审核失败!'});
             })
@@ -314,16 +323,17 @@ export default {
       this.purchaseItemList.splice(index, 1)
     },
     // -----------------------------展示的药品页面---------------------------------------
+    // 根据单据号去查询单据信息及详情
     queryPurchaseAndItemByPurchaseId(){
-      // 因为是修改页面，先接收路由传参
-      const purchaseId = this.$route.params && this.$route.params.purchaseId;
-      // 根据单据号去查询单据信息及详情
-      this.$axios.get("/stock/api/purchase/queryPurchaseAndItemByPurchaseId",purchaseId).then(res => {
-        this.form = res.data.purchase
+      // 接收路由传参————因为是修改页面
+      const purchaseId = this.$route.params && this.$route.params.purchaseId
+      // alert(purchaseId)
+      this.$axios.post("stock/api/purchaseItem/getAllById"+"/"+this.current+"/"+this.size+"/"+purchaseId).then(res => {
+        this.form = res.data.t.records;
         this.form.providerId = parseInt(this.form.providerId)
         this.purchaseItemList = res.data.items
         // 如果当前单据的状态为1或者4那么不能进行其它操作
-        if (res.data.purchase.status === '1' || res.data.purchase.status === '4') {
+        if (res.data.t.status === '1' || res.data.t.status === '4') {
           this.isSubmit = false
         }
       })
@@ -339,13 +349,10 @@ export default {
       console.log(`当前页: ${val}`);
       this.current = val
       this.getMedicinesList()
-    },
+    }
   },
-  // 钩子函数
   created() {
-    // 查询供应商的数据
-    this.selectAllProvider();
-    // 获取单据号
+    // 根据单据号去查询单据信息及详情
     this.queryPurchaseAndItemByPurchaseId();
     // 字典表数据
     this.getDict();
@@ -362,7 +369,7 @@ export default {
       // 弹出层的标题
       title: '',
       // 是否已提交
-      isSubmit: true,
+      isSubmit: false,
       // 供应商的下拉列表数据
       providerOptions: [],
       // 生产厂家的列表数据
@@ -406,7 +413,6 @@ export default {
       total: 0,
       current: 1,
       size: 5,
-
     }
   },
 }

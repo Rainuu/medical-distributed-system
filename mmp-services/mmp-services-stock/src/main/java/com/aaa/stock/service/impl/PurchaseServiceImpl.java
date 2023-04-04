@@ -70,13 +70,13 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
         purchaseDao.insertByPurchaseId(purchase);
     }
 
-//    @Override
-//    @Transactional
-//    public void add(purchaseAllVo purchaseAllVo) {
-//        purchaseAllVo.getPurchaseDto().getPurchaseId();
-//        purchaseAllVo.getPurchaseDto();
-//        purchaseAllVo.getPurchaseItemDtos();
-//
-//    }
+    @Transactional
+    @Override
+    public void addPurchase(purchaseAllVo purchaseAllVo) {
+        purchaseAllVo.getPurchaseDto().getPurchaseId();
+        purchaseAllVo.getPurchaseDto();
+        purchaseAllVo.getPurchaseItemDtos();
+
+    }
 
 }
