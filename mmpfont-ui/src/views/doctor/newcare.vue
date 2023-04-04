@@ -478,6 +478,8 @@
                 v-model="scope.row.num"
                 size="small"
                 @change="handleCareOrderItemNumChange(scope.row)"
+                :max="scope.row.stock"
+                min="1"
             />
           </template>
         </el-table-column>
@@ -757,19 +759,19 @@ export default {
     },
     //查询待接诊的患者的数量
     queryRegistrationNumber1(){
-      this.$axios.post("/doctor/patient/queryRegistrationStatus1/1/",this.schedulingType).then(result=>{
+      this.$axios.post("/doctor/patient/queryRegistrationStatus1/1/"+this.schedulingType).then(result=>{
         this.toBeSeenRegistration=result.data.t;
       })
     },
     //查询接诊中的患者的数量
     queryRegistrationNumber2(){
-      this.$axios.post("/doctor/patient/queryRegistrationStatus1/2/",this.schedulingType).then(result=>{
+      this.$axios.post("/doctor/patient/queryRegistrationStatus1/2/"+this.schedulingType).then(result=>{
         this.visitingRegistration=result.data.t;
       })
     },
     //查询接诊完成的患者的数量
     queryRegistrationNumber3(){
-      this.$axios.post("/doctor/patient/queryRegistrationStatus1/3/",this.schedulingType).then(result=>{
+      this.$axios.post("/doctor/patient/queryRegistrationStatus1/3/"+this.schedulingType).then(result=>{
         this.visitCompletedRegistration=result.data.t;
       })
     },
@@ -1199,7 +1201,8 @@ export default {
             num: 1,
             price: item.prescriptionPrice,
             amount: 1 * item.prescriptionPrice,
-            remark: '请按说明服用'
+            remark: '请按说明服用',
+            stock:item.medicinesStockNum
           }
           let flag = false// 默认里面没有加
           this.submitCareOrder.careOrderItems.filter(i => {
@@ -1242,10 +1245,10 @@ export default {
 
     },
     // 删除弹出层里面的详情
-    // handleCareOrderItemDelete(row) {
-    //   this.submitCareOrder.careOrderItems.splice(row.index, 1)
-    //   this.computeOrderItemAllAmount()
-    // },
+    handleCareOrderItemDelete(row) {
+      this.submitCareOrder.careOrderItems.splice(row.index, 1)
+      this.computeOrderItemAllAmount()
+    },
     // 根据详情ID删除数据库里面的详情【只能删除未支付的】
     DeleteByItemIdhandleCareOrderItem(row) {
 
@@ -1329,7 +1332,7 @@ export default {
       this.careHistory.patientId=this.patientAllObj.patientObj.patientId;
       this.careHistory.patientName=this.patientAllObj.patientObj.name;
       this.$axios.post("/doctor/newcare/insertCareHistory",this.careHistory).then(result=> {
-        if (result.data.t.length>4){
+        if (result.data.t.length>10){
           this.$message({
             showClose: true,
             message: '获取病历编号成功',
@@ -1424,6 +1427,38 @@ export default {
         });
       });
 
+    },
+    // 重置所有数据
+    resetAllData() {
+      this.patientAllObj = {
+        patientObj: {},
+        patientFileObj: {},
+        careHistoryObjList: []
+      }
+      this.careHistory = {
+        // 当前就诊中的挂号单ID
+        regId: undefined,
+        chId: undefined,
+        caseDate: undefined,
+        receiveType: '0',
+        isContagious: '0',
+        caseTitle: undefined,
+        caseResult: undefined,
+        doctorTips: undefined,
+        remark: undefined,
+        patientId: undefined,
+        patientName: undefined
+      }
+      this.careOrders = []
+      this.submitCareOrder = {
+        careOrder: {
+          allAmount: 0.00,
+          patientId: undefined,
+          patientName: undefined,
+          coType: '0' // 默认为药用处方
+        },
+        careOrderItems: []
+      }
     },
     //查询药品表格
     queryDrug(){

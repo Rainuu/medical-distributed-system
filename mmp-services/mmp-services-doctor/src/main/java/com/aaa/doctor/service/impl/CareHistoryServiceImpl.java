@@ -242,7 +242,7 @@ public CareHistory queryCareHistoryId(String registrationId) {
     public boolean deleteCareOrderItemById(String itemId, BigDecimal amount) {
         QueryWrapper<CareOrderItem> wrapper=new QueryWrapper<>();
         wrapper.eq("item_id",itemId);
-        //通过开诊细表id查询药品内容
+        //通过开诊明细表id查询药品内容
         CareOrderItem careOrderItem = careOrderItemDao.selectOne(wrapper);
         QueryWrapper<CareOrder> wrapper1 = new QueryWrapper<>();
         wrapper1.eq("co_id",careOrderItem.getCoId());

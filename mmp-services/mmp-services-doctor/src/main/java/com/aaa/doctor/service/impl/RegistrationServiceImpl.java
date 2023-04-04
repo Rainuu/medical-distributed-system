@@ -49,10 +49,21 @@ public class RegistrationServiceImpl implements RegistrationService {
      * 查询新开就诊中的就诊列表状态
      * */
     @Override
-    public List<Registration> queryRegistrationStatus1(String status) {
+    public List<Registration> queryRegistrationStatus1(String status,String schedulingType) {
+        String token = WebUtil.getRequest().getHeader("token");
+        Map<String, Object> tokenData = JwtUtil.getTokenChaim(token);
+        String phone = (String) tokenData.get("username");
+        User user = userFeign.getByUsername(phone);
+
         QueryWrapper<Registration> wrapper = new QueryWrapper<>();
-        if (StringUtils.hasText(status)) {
+        if (Objects.nonNull(status)){
             wrapper.eq("registration_status",status);
+        }
+        if (Objects.nonNull(schedulingType)){
+            wrapper.eq("scheduling_type",schedulingType);
+        }
+        if(Objects.nonNull(user.getUserId())){
+            wrapper.eq("user_id",user.getUserId());
         }
         List<Registration> registrations = registrationDao.selectList(wrapper);
         return registrations;
@@ -123,6 +134,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             registration.setCreateTime(new Date()); //创建时间
             registration.setUpdateTime(new Date());//更新时间
             registration.setCreateBy(user.getUserName());//创建人
+
 
             insert = registrationDao.insert(registration);
         }else {

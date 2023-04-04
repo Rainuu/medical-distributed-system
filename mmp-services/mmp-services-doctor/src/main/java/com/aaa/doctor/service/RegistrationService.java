@@ -18,7 +18,7 @@ public interface RegistrationService {
     /*
     * 查询新开就诊中的就诊列表状态
     * */
-    List<Registration> queryRegistrationStatus1(String status);
+    List<Registration> queryRegistrationStatus1(String status,String schedulingType);
 
     // 给挂号单添加挂单号
     Boolean insertRegistration(String userId, String regItemAmount, Integer regItemId, Map<String, Object> obj);

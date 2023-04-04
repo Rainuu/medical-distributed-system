@@ -68,10 +68,10 @@ public class CarPatientController {
      * @param status
      * @return
      */
-    @PostMapping("queryRegistrationStatus1/{status}")
-    public Result queryRegistrationStatus1(@PathVariable String status) {
-        List<Registration> registrations = registrationService.queryRegistrationStatus1(status);
-        return new Result<>(2000,"查询成功",registrations);
+    @PostMapping("queryRegistrationStatus1/{status}/{schedulingType}")
+    public Result queryRegistrationStatus1(@PathVariable String status,@PathVariable String schedulingType) {
+        List<Registration> registrations = registrationService.queryRegistrationStatus1(status,schedulingType);
+        return new Result<>(2000,"符合查询条件的挂单号成功",registrations);
     }
 
 

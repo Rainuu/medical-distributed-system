@@ -205,6 +205,7 @@
 
 <script>
 // import scheduling from "@/views/doctor/scheduling";
+import moment from "moment";
 
 export default {
   data() {
@@ -222,7 +223,7 @@ export default {
         deptId: undefined,
         schedulingType: '1',
         subsectionType: undefined,
-        schedulingDay: new Date(),
+        schedulingDay: moment(new Date()).format('YYYY-MM-DD'),
         regItemId: 1,
         regItemAmount: undefined,
       },
