@@ -58,7 +58,7 @@ public class CareItemController {
     /**
      * 根据id删除未支付的订单
      */
-    @GetMapping("deleteCareOrderItemById/{itemId}/{amount}")
+    @PostMapping("deleteCareOrderItemById/{itemId}/{amount}")
     public Result<Boolean> deleteCareOrderItemById(@PathVariable String itemId,@PathVariable BigDecimal amount ) {
         boolean booleanResult = careHistoryService.deleteCareOrderItemById(itemId, amount);
         return new Result<Boolean>(2000,"删除未支付订单成功",booleanResult);

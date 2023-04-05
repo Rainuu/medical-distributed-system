@@ -479,7 +479,7 @@
                 size="small"
                 @change="handleCareOrderItemNumChange(scope.row)"
                 :max="scope.row.stock"
-                min="1"
+                :min="1"
             />
           </template>
         </el-table-column>
@@ -717,8 +717,6 @@ export default {
   created() {
     //查询门诊急诊按钮
     this.queryRegistrationType();
-
-
     //字典区
     //查询字典
     this.initSex();
@@ -935,13 +933,28 @@ export default {
       //给右边的病历表和处方表赋值 查询以挂号单查询病历 没有就返回空的病历
       this.$axios.post("/doctor/newcare/queryCareHistoryId/"+row.registrationId).then(result=> {
         if (JSON.stringify(result.data.t.chId)=="null"){
+          this.careHistory={
+            // 当前就诊中的挂号单ID
+                regId: undefined,
+                chId: undefined,
+                caseDate: undefined,
+                receiveType: '',
+                isContagious: '',
+                caseTitle: undefined,
+                caseResult: undefined,
+                doctorTips: undefined,
+                remark: undefined,
+                patientId: undefined,
+                patientName: undefined
+          }
+          // 开的处方清空
+          this.careOrders=[];
+        }else {
           this.careHistory=result.data.t;
           this.careOrders=this.careHistory.careOrderList;
         }
-        this.careHistory=result.data.t;
-        this.careOrders=this.careHistory.careOrderList;
-      })
 
+      })
       //关闭弹框
       this.openRegistration=false;
     },
@@ -1251,7 +1264,6 @@ export default {
     },
     // 根据详情ID删除数据库里面的详情【只能删除未支付的】
     DeleteByItemIdhandleCareOrderItem(row) {
-
       const itemId=row.itemId
       const itemName=row.itemName;
       const amount=row.amount;
@@ -1260,12 +1272,12 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.get("/doctor/patient/deleteCareOrderItemById/"+itemId+"/"+amount).then(result=> {
-
+        this.$axios.post("/doctor/patient/deleteCareOrderItemById/"+itemId+"/"+amount).then(result=> {
+          console.log(result)
           if (result.data.t==true){
             //给右边的处方表赋值
-            this.$axios.post("/doctor/newcare/queryCareHistoryId/"+this.careHistory.patientId).then(result=> {
-              alert(JSON.stringify(result.data.t))
+            this.$axios.post("/doctor/newcare/queryCareHistoryId/"+this.careHistory.regId).then(result=> {
+              alert(JSON.stringify(result.data.t.careOrderList))
               this.careOrders=result.data.t.careOrderList;
 
             })
@@ -1281,7 +1293,7 @@ export default {
               type: 'error'
             });
             //给右边的处方表赋值
-            this.$axios.post("/doctor/newcare/queryCareHistoryId/"+this.careHistory.patientId).then(result=> {
+            this.$axios.post("/doctor/newcare/queryCareHistoryId/"+this.careHistory.regId).then(result=> {
               this.careOrders=result.data.t.careOrderList;
             })
           }
