@@ -8,10 +8,10 @@
             <el-input v-model="searchForm.producerName" clearable placeholder="请输入厂家名称" style="width: 240px"/>
           </el-form-item> &nbsp;&nbsp;
           <el-form-item label="关键字" prop="keywords">
-            <el-input v-model="searchForm.keywords" clearable placeholder="请输入关键字" style="width: 200px"/>
+            <el-input v-model="searchForm.keywords" clearable placeholder="请输入关键字" style="width: 180px"/>
           </el-form-item> &nbsp;&nbsp;
           <el-form-item label="厂家电话" prop="producerTel">
-            <el-input v-model="searchForm.producerTel" clearable placeholder="请输入厂家电话" style="width: 200px"/>
+            <el-input v-model="searchForm.producerTel" clearable placeholder="请输入厂家电话" style="width: 180px"/>
           </el-form-item> &nbsp;&nbsp;
           <el-form-item label="状态" prop="status">
             <el-select v-model="searchForm.status" clearable placeholder="可用状态" style="width: 200px">

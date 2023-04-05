@@ -26,4 +26,5 @@ public interface PurchaseDao extends BaseMapper<Purchase> {
     void auditNoPass(String purchaseId, String value);
 
     void insertByPurchaseId(@Param("purchase") Purchase purchase);
+
 }

@@ -1,12 +1,11 @@
 package com.aaa.stock.controller.api;
 
-import com.aaa.core.entity.Medicines;
 import com.aaa.core.entity.Purchase;
 import com.aaa.core.entity.PurchaseItem;
 import com.aaa.core.vo.Result;
 import com.aaa.stock.service.PurchaseService;
 import com.aaa.stock.vo.PurchaseVo;
-import com.aaa.stock.vo.purchaseAllVo;
+import com.aaa.stock.vo.PurchaseAllVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -51,15 +50,15 @@ public class ApiPurchaseController {
 
     // 暂存 status=1
     @PostMapping("addPurchase")
-    public void addPurchase(@RequestBody purchaseAllVo purchaseAllVo){
-        purchaseService.addPurchase(purchaseAllVo);
+    public Result<List<PurchaseItem>> addPurchase(@RequestBody PurchaseAllVo purchaseAllVo){
+        return purchaseService.addPurchase(purchaseAllVo);
     }
 
     // 提交审核[待审核] status=2
-    @PostMapping("addPurchaseToAudit")
-    public void addPurchaseToAudit(){
-
-    }
+//    @PostMapping("addPurchaseToAudit")
+//    public Result<List<PurchaseItem>> addPurchaseToAudit(){
+//
+//    }
 
     // 审核通过 status=3
     @PostMapping("auditPass/{purchaseId}")

@@ -276,10 +276,10 @@ export default {
         this.$refs['form'].validate((valid) => {
           if (valid) {
             // 组装要提交到后台的数据
-            const purchaseVo = { 'purchaseDto': this.form, 'purchaseItemDtos': this.purchaseItemList }
+            const purchaseAllVo = { 'purchaseDto': this.form, 'purchaseItemDtos': this.purchaseItemList }
             // 添加采购单和详情
-            console.log(JSON.stringify(purchaseVo))
-            this.$axios.post("/stock/api/purchase/addPurchase", {params: purchaseVo}).then(res => {
+            // console.log(JSON.stringify(purchaseAllVo))
+            this.$axios.post("/stock/api/purchase/addPurchase", purchaseAllVo).then(res => {
               this.$message({type: 'success', message: '暂存成功!'});
             }).catch(() => {
               this.$message({type: 'error', message: '暂存失败!'});
@@ -297,8 +297,8 @@ export default {
         this.$refs['form'].validate((valid) => {
           if (valid) {
             // 组装要提交到后台的数据
-            const purchaseVo = {...this.form, ...this.purchaseItemList};
-            this.$axios.post("/stock/api/purchase/addPurchaseToAudit", {params: purchaseVo}).then(res => {
+            const purchaseAllVo = { 'purchaseDto': this.form, 'purchaseItemDtos': this.purchaseItemList }
+            this.$axios.post("/stock/api/purchase/addPurchaseToAudit", purchaseAllVo).then(res => {
               this.$message({type: 'success', message: '提交审核成功!'});
               this.isSubmit = true;  //上面的四个按钮不能按了
             }).catch(() => {

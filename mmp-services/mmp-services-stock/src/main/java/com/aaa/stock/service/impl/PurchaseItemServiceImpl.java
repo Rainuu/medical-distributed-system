@@ -10,6 +10,7 @@ import com.aaa.stock.dao.PurchaseItemDao;
 import com.aaa.stock.service.PurchaseItemService;
 import com.aaa.stock.service.PurchaseService;
 import com.aaa.stock.vo.PurchaseItemVo;
+import com.aaa.stock.vo.editPurchaseVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
@@ -39,11 +41,9 @@ public class PurchaseItemServiceImpl extends ServiceImpl<PurchaseItemDao, Purcha
     }
 
     @Override
-    public Result<IPage<List<PurchaseItem>>> getAllById(Integer current, Integer size, String purchaseId) {
-        IPage<PurchaseItem> page = new Page(current, size);
-        QueryWrapper<PurchaseItem> wrapper = new QueryWrapper();
-        IPage<PurchaseItem> page1 = purchaseItemDao.selectPage(page, wrapper);
-        return new Result(200, "成功", page1);
+    public Result<List<editPurchaseVo>> getAllById(String purchaseId) {
+        List<editPurchaseVo> allById = purchaseItemDao.getAllById(purchaseId);
+        return new Result(200, "成功",allById);
     }
 
 }

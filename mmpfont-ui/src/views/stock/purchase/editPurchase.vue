@@ -11,27 +11,18 @@
     </el-card>
     <!-- 工具栏2 -->
     <el-card class="box-card">
-      <el-form ref="form"  :model="form" :rules="rules" :inline="true" label-width="68px">
-        <el-row :gutter="10">
-          <el-col :span="1.5">
-            <el-form-item label="单据号" prop="purchaseId">
-              <el-input v-model="form.purchaseId" placeholder="请输入单据号" :disabled="true" size="small" style="width:220px"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="1.5">
-            <el-form-item label="供应商" prop="providerId">
-              <el-select v-model="form.providerId" placeholder="请选择供应商" style="width:220px">
-                <el-option v-for="item in providerOptions"
-                           :key="item.providerId" :label="item.providerName" :value="item.providerId"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="1.5">
-            <el-form-item label="总批发额" prop="purchaseTradeTotalAmount">
-              <el-input v-model="form.purchaseTradeTotalAmount" placeholder="请输入总批发额" :disabled="true" size="small" style="width:220px"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
+      <el-form ref="form" :model="form" :rules="rules" :inline="true" label-width="68px">
+        <el-form-item label="单据号" prop="purchaseId">
+          <el-input v-model="form.purchaseId" placeholder="请输入单据号" :disabled="true" style="width:220px"/>
+        </el-form-item>&nbsp;&nbsp;&nbsp;
+        <el-form-item label="供应商" prop="providerId">
+          <el-select v-model="form.providerId" placeholder="请选择供应商" style="width:220px">
+            <el-option v-for="item in providerOptions" :key="item.providerId" :label="item.providerName" :value="item.providerId"/>
+          </el-select>
+        </el-form-item>&nbsp;&nbsp;&nbsp;
+        <el-form-item label="总批发额" prop="purchaseTradeTotalAmount">
+          <el-input v-model="form.purchaseTradeTotalAmount" placeholder="请输入总批发额" :disabled="true" style="width:220px"/>
+        </el-form-item>&nbsp;&nbsp;&nbsp;
       </el-form>
     </el-card>
     <!-- 表格 -->
@@ -44,7 +35,7 @@
             <span> {{ scope.row.conversion }}{{ scope.row.unit }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="生产厂家" align="center" width="220" prop="producterId" :formatter="producterFormatter" />
+        <el-table-column label="生产厂家" align="center" width="220" prop="producterId" :formatter="ProducterNameDict"/>
         <el-table-column label="数量" align="center" width="160" prop="purchaseNumber">
           <template slot-scope="scope">
             <el-input-number v-model="scope.row.purchaseNumber" :step="1" size="small"/>
@@ -196,6 +187,23 @@ export default {
       }
       return name;
     },
+    // 字典处理————获取生产厂家表字段
+    getProviderOption(){
+      this.$axios.get("/stock/api/provider/getAllDict").then(r=>{
+        this.providerOptions=r.data.t;
+      })
+    },
+    // 处理字典姓名————循环判断，将Id转换为name
+    ProviderNameDict(row){
+      let a = '';
+      for (let i = 0; i < this.providerOptions.length; i++) {
+        if (row.providerId == this.providerOptions[i].providerId){
+          a = this.providerOptions[i].providerName;
+          break;
+        }
+      }
+      return a;
+    },
     // 弹出层————显示药品数据列表
     getMedicinesList() {
       this.loading = true
@@ -327,11 +335,11 @@ export default {
     queryPurchaseAndItemByPurchaseId(){
       // 接收路由传参————因为是修改页面
       const purchaseId = this.$route.params && this.$route.params.purchaseId
-      // alert(purchaseId)
-      this.$axios.post("stock/api/purchaseItem/getAllById"+"/"+this.current+"/"+this.size+"/"+purchaseId).then(res => {
-        this.form = res.data.t.records;
-        this.form.providerId = parseInt(this.form.providerId)
-        this.purchaseItemList = res.data.items
+      this.$axios.post("stock/api/purchaseItem/getAllById"+"/"+purchaseId).then(res => {
+        this.purchaseItemList=res.data.t;
+        this.form.purchaseId=purchaseId;
+        this.form.providerId=res.data.t[0].providerId;
+        // alert(JSON.stringify(this.form));
         // 如果当前单据的状态为1或者4那么不能进行其它操作
         if (res.data.t.status === '1' || res.data.t.status === '4') {
           this.isSubmit = false
@@ -358,6 +366,8 @@ export default {
     this.getDict();
     // 查询生产厂家表数据
     this.getProducterNameOption();
+    // 查询供应商表数据
+    this.getProviderOption();
   },
   // 数据
   data() {

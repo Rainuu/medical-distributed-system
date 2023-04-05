@@ -4,7 +4,7 @@ import com.aaa.core.entity.Purchase;
 import com.aaa.core.entity.PurchaseItem;
 import com.aaa.core.vo.Result;
 import com.aaa.stock.vo.PurchaseVo;
-import com.aaa.stock.vo.purchaseAllVo;
+import com.aaa.stock.vo.PurchaseAllVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -28,5 +28,5 @@ public interface PurchaseService extends IService<Purchase> {
 
     void insertByPurchaseId(Purchase purchase);
 
-     void addPurchase(purchaseAllVo purchaseAllVo);
+    Result<List<PurchaseItem>> addPurchase(PurchaseAllVo purchaseAllVo);
 }

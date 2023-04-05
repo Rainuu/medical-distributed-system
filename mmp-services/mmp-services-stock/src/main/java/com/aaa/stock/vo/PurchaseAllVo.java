@@ -11,10 +11,10 @@ import java.util.List;
  * @DATE: 2023/4/3 21:45
  */
 @Data
-public class purchaseAllVo {
+public class PurchaseAllVo {
 
-    private purchaseDtoVo purchaseDto;
+    private PurchaseDtoVo purchaseDto;
 
-    private List<purchaseItemDtosVo> purchaseItemDtos;
+    private List<PurchaseItemDtosVo> purchaseItemDtos;
 
 }

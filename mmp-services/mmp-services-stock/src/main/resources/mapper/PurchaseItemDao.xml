@@ -7,4 +7,10 @@
         SELECT * FROM stock_purchase_item WHERE purchase_id = #{purchaseId}
     </select>
 
+    <select id="getAllById" resultType="com.aaa.stock.vo.editPurchaseVo">
+        SELECT pi.*, p.* FROM stock_purchase_item pi
+        JOIN stock_purchase p ON pi.purchase_id=p.purchase_id
+        WHERE pi.purchase_id = #{purchaseId}
+    </select>
+
 </mapper>

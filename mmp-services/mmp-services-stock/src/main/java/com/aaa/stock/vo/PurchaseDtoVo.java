@@ -3,7 +3,6 @@ package com.aaa.stock.vo;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
@@ -12,7 +11,7 @@ import java.util.List;
  * @DATE: 2023/4/3 21:28
  */
 @Data
-public class purchaseDtoVo {
+public class PurchaseDtoVo {
     //制单号ID 全局ID雪花算法
     private String purchaseId;
     //供应商ID

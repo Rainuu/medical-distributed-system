@@ -4,22 +4,22 @@
     <div style="height: 70px; padding-top: 30px; background-color: whitesmoke">
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
         <el-form-item label="供应商名称" prop="providerName">
-          <el-input v-model="searchForm.providerName" placeholder="请输入供应商名称" clearable style="width: 160px"/>
+          <el-input v-model="searchForm.providerName" placeholder="请输入供应商名称" clearable style="width: 150px"/>
         </el-form-item>&nbsp;
         <el-form-item label="联系人" prop="contactName">
-          <el-input v-model="searchForm.contactName" placeholder="请输入联系人" clearable style="width: 160px"/>
+          <el-input v-model="searchForm.contactName" placeholder="请输入联系人" clearable style="width: 150px"/>
         </el-form-item>&nbsp;
         <el-form-item label="供销商电话" prop="contactTel">
-          <el-input v-model="searchForm.contactTel" placeholder="请输入供销商电话" clearable style="width: 160px"/>
+          <el-input v-model="searchForm.contactTel" placeholder="请输入供销商电话" clearable style="width: 170px"/>
         </el-form-item>&nbsp;
         <el-form-item label="状态" prop="status">
-          <el-select v-model="searchForm.status" placeholder="可用状态" clearable style="width: 150px">
+          <el-select v-model="searchForm.status" placeholder="可用状态" clearable style="width: 120px">
             <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='sys_normal_disable'})"
                        :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue" clearable/>
           </el-select>
         </el-form-item>&nbsp;
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" plain @click="search">搜索</el-button>&nbsp;&nbsp;
+          <el-button type="primary" icon="el-icon-search" plain @click="search">搜索</el-button>&nbsp;
           <el-button type="primary" icon="el-icon-refresh" plain @click="resert">重置</el-button>
         </el-form-item>
       </el-form>

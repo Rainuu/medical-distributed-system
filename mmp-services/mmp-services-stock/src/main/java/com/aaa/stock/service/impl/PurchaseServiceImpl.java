@@ -1,13 +1,19 @@
 package com.aaa.stock.service.impl;
 
-import com.aaa.core.entity.Provider;
 import com.aaa.core.entity.Purchase;
 import com.aaa.core.entity.PurchaseItem;
+import com.aaa.core.entity.User;
+import com.aaa.core.util.JwtUtil;
+import com.aaa.core.util.WebUtil;
 import com.aaa.core.vo.Result;
 import com.aaa.stock.dao.PurchaseDao;
+import com.aaa.stock.dao.PurchaseItemDao;
+import com.aaa.stock.feign.Feign;
 import com.aaa.stock.service.PurchaseService;
+import com.aaa.stock.vo.PurchaseItemDtosVo;
+import com.aaa.stock.vo.PurchaseItemVo;
 import com.aaa.stock.vo.PurchaseVo;
-import com.aaa.stock.vo.purchaseAllVo;
+import com.aaa.stock.vo.PurchaseAllVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -16,8 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Objects;
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
@@ -27,8 +34,15 @@ import java.util.Objects;
  */
 @Service
 public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> implements PurchaseService {
+
     @Autowired
     private PurchaseDao purchaseDao;
+
+    @Autowired
+    private PurchaseItemDao purchaseItemDao;
+
+    @Autowired
+    private Feign feign;
 
     @Override
     public Result<IPage<Purchase>> getAll(Integer current, Integer size, PurchaseVo purchaseVo) {
@@ -70,13 +84,71 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
         purchaseDao.insertByPurchaseId(purchase);
     }
 
-    @Transactional
     @Override
-    public void addPurchase(purchaseAllVo purchaseAllVo) {
-        purchaseAllVo.getPurchaseDto().getPurchaseId();
-        purchaseAllVo.getPurchaseDto();
-        purchaseAllVo.getPurchaseItemDtos();
+    @Transactional
+    public Result<List<PurchaseItem>> addPurchase(PurchaseAllVo purchaseAllVo) {
+        // 单插
+        String purchaseId = purchaseAllVo.getPurchaseDto().getPurchaseId();
+        String providerId = purchaseAllVo.getPurchaseDto().getProviderId();
+        BigDecimal purchaseTradeTotalAmount = purchaseAllVo.getPurchaseDto().getPurchaseTradeTotalAmount();
 
+        System.out.println("===================================="+providerId+purchaseId+purchaseTradeTotalAmount);
+
+        HttpServletRequest request = WebUtil.getRequest();
+        String token = request.getHeader("token");
+        Map<String, Object> info = JwtUtil.getTokenChaim(token);
+        String phone = (String) info.get("username");
+        User byUsername = feign.getByUsername(phone);
+        String userName = byUsername.getUserName();
+        // LocalDateTime localDateTime = LocalDateTime.now(); // 当前日期和时间】
+        Date date = new Date();
+        Purchase purchase = new Purchase();
+
+        purchase.setPurchaseId(purchaseId);
+        purchase.setProviderId(providerId);
+        purchase.setPurchaseTradeTotalAmount(purchaseTradeTotalAmount);
+        purchase.setStatus("1");
+        purchase.setCreateBy(userName);
+        purchase.setUpdateBy(userName);
+        purchase.setCreateTime(new Date());
+        purchase.setStorageOptTime(new Date());
+        // purchase.setExamine();
+        purchaseDao.insert(purchase);
+
+
+        List<PurchaseItemDtosVo> purchaseItemDtosVos = purchaseAllVo.getPurchaseItemDtos();
+        for (int i = 0; i < purchaseItemDtosVos.size(); i++) {
+            String medicinesId = purchaseAllVo.getPurchaseItemDtos().get(i).getMedicinesId().toString();
+            String medicinesName = purchaseAllVo.getPurchaseItemDtos().get(i).getMedicinesName();
+            Integer purchaseNumber = purchaseAllVo.getPurchaseItemDtos().get(i).getPurchaseNumber();
+            String medicinesType = purchaseAllVo.getPurchaseItemDtos().get(i).getMedicinesType();
+            String prescriptionType = purchaseAllVo.getPurchaseItemDtos().get(i).getPrescriptionType();
+            String unit = purchaseAllVo.getPurchaseItemDtos().get(i).getUnit();
+            Integer conversion = purchaseAllVo.getPurchaseItemDtos().get(i).getConversion();
+            String keywords = purchaseAllVo.getPurchaseItemDtos().get(i).getKeywords();
+            BigDecimal tradePrice = purchaseAllVo.getPurchaseItemDtos().get(i).getTradePrice();
+            BigDecimal tradeTotalAmount = purchaseAllVo.getPurchaseItemDtos().get(i).getTradeTotalAmount();
+            String batchNumber = purchaseAllVo.getPurchaseItemDtos().get(i).getBatchNumber();
+            String remark = purchaseAllVo.getPurchaseItemDtos().get(i).getRemark();
+            PurchaseItem purchaseItem = new PurchaseItem();
+
+            purchaseItem.setPurchaseId(purchaseId);
+            purchaseItem.setMedicinesId(medicinesId);
+            purchaseItem.setPurchaseNumber(purchaseNumber);
+            purchaseItem.setTradePrice(tradePrice);
+            purchaseItem.setTradeTotalAmount(tradeTotalAmount);
+            purchaseItem.setBatchNumber(batchNumber);
+            purchaseItem.setRemark(remark);
+            purchaseItem.setMedicinesName(medicinesName);
+            purchaseItem.setMedicinesType(medicinesType);
+            purchaseItem.setPrescriptionType(prescriptionType);
+            purchaseItem.setPurchaseId(purchaseId);
+            purchaseItem.setConversion(conversion);
+            purchaseItem.setUnit(unit);
+            purchaseItem.setKeywords(keywords);
+            purchaseItemDao.insert(purchaseItem);
+        }
+        return new Result<>(200,"成功");
     }
 
 }

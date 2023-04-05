@@ -8,10 +8,10 @@
             <el-input v-model="searchForm.medicinesName" clearable placeholder="请输入药品名称" style="width: 190px"/>
           </el-form-item> &nbsp;&nbsp;
           <el-form-item label="关键字" prop="keywords">
-            <el-input v-model="searchForm.keywords" clearable placeholder="请输入关键字" style="width: 190px"/>
+            <el-input v-model="searchForm.keywords" clearable placeholder="请输入关键字" style="width: 160px"/>
           </el-form-item> &nbsp;&nbsp;
           <el-form-item label="药品类型" prop="medicinesType">
-            <el-select v-model="searchForm.medicinesType" clearable placeholder="药品类型" style="width: 200px">
+            <el-select v-model="searchForm.medicinesType" clearable placeholder="药品类型" style="width: 180px">
               <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_medicines_type'})"
                          :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
             </el-select>
@@ -31,7 +31,7 @@
             </el-select>
           </el-form-item> &nbsp;&nbsp;
           <el-form-item label="状态值" prop="status">
-            <el-select v-model="searchForm.status" clearable placeholder="可用状态" style="width: 190px">
+            <el-select v-model="searchForm.status" clearable placeholder="可用状态" style="width: 160px">
               <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='sys_normal_disable'})"
                          :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
             </el-select>

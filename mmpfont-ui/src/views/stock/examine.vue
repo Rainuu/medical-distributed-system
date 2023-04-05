@@ -18,7 +18,7 @@
       </el-form>
     </div>
     <!-- 工具栏———— -->
-    <div style="float:left; clear:both; padding:15px;">
+    <div style="float:left; clear:both; padding:25px;">
       <el-button type="success" icon="el-icon-edit" :disabled="single" @click="handleAuditPass">审核通过</el-button>
       <el-button type="danger" icon="el-icon-delete" :disabled="single" @click="handleAuditNoPass">审核不通过</el-button>
       <el-button type="success" icon="el-icon-edit" :disabled="single" @click="handleViewItem">查看详情</el-button>

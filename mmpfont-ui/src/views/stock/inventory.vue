@@ -6,19 +6,19 @@
         <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="85px" style="margin: 20px 0;">
           <div style="float: left;clear: both;">
             <el-form-item label="药品名称" prop="medicinesName">
-              <el-input v-model="queryParams.medicinesName" placeholder="请输入药品名称" clearable style="width:200px"/>
+              <el-input v-model="queryParams.medicinesName" placeholder="请输入药品名称" clearable style="width:160px"/>
             </el-form-item>
             <el-form-item label="关键字" prop="keywords">
-              <el-input v-model="queryParams.keywords" placeholder="请输入关键字" clearable style="width:220px"/>
+              <el-input v-model="queryParams.keywords" placeholder="请输入关键字" clearable style="width:200px"/>
             </el-form-item>
             <el-form-item label="药品类型" prop="medicinesType">
-              <el-select v-model="queryParams.medicinesType" clearable placeholder="药品类型" style="width: 200px">
+              <el-select v-model="queryParams.medicinesType" clearable placeholder="药品类型" style="width: 180px">
                 <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_medicines_type'})"
                            :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
               </el-select>
             </el-form-item>
             <el-form-item label="生产厂家" prop="producterId"> <!-- 遍历的是item内容 -->
-              <el-select v-model="queryParams.producerId" clearable placeholder="生产厂家" style="width: 200px">
+              <el-select v-model="queryParams.producerId" clearable placeholder="生产厂家" style="width: 220px">
                 <el-option v-for="item in producterNameOption"
                            :key="item.producerId" :label="item.producerName" :value="item.producerId"/>
               </el-select>
@@ -26,13 +26,13 @@
           </div>
           <div style="float: left;clear: both;">
             <el-form-item label="处方类型" prop="prescriptionType">
-              <el-select v-model="queryParams.prescriptionType" clearable placeholder="处方类型" style="width: 200px">
+              <el-select v-model="queryParams.prescriptionType" clearable placeholder="处方类型" style="width: 160px">
                 <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_prescription_type'})"
                            :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
               </el-select>
             </el-form-item>
             <el-form-item label="创建时间">
-              <el-date-picker type="daterange" v-model="queryParams.dateRange" style="width:220px" clearable
+              <el-date-picker type="daterange" v-model="queryParams.dateRange" style="width:200px" clearable
                               value-format="yyyy-MM-dd" range-separator="-" start-placeholde="开始日期" end-placeholde="结束日期"/>
             </el-form-item>&nbsp;&nbsp;
             <el-form-item>
@@ -62,19 +62,19 @@
         <el-form ref="queryLogForm" :model="queryLogParams" :inline="true" label-width="85px" style="margin: 20px 0;">
           <div style="float: left;clear: both;">
             <el-form-item label="采购单据号" prop="purchaseId">
-              <el-input v-model="queryLogParams.purchaseId" placeholder="采购单据号" clearable style="width:200px"/>
+              <el-input v-model="queryLogParams.purchaseId" placeholder="采购单据号" clearable style="width:180px"/>
             </el-form-item>
             <el-form-item label="药品名称" prop="medicinesName">
-              <el-input v-model="queryLogParams.medicinesName" placeholder="请输入药品名称" clearable style="width:210px"/>
+              <el-input v-model="queryLogParams.medicinesName" placeholder="请输入药品名称" clearable style="width:190px"/>
             </el-form-item>
             <el-form-item label="药品类型" prop="medicinesType">
-              <el-select v-model="queryLogParams.medicinesType" clearable placeholder="药品类型" style="width: 180px">
+              <el-select v-model="queryLogParams.medicinesType" clearable placeholder="药品类型" style="width: 170px">
                 <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_medicines_type'})"
                            :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
               </el-select>
             </el-form-item>
             <el-form-item label="生产厂家" prop="producterId"> <!-- 遍历的是item内容 -->
-              <el-select v-model="queryLogParams.producterId" clearable placeholder="生产厂家" style="width: 200px">
+              <el-select v-model="queryLogParams.producterId" clearable placeholder="生产厂家" style="width: 220px">
                 <el-option v-for="item in producterNameOption"
                            :key="item.producerId" :label="item.producerName" :value="item.producerId"/>
               </el-select>
@@ -82,13 +82,13 @@
           </div>
           <div style="float: left;clear: both;">
             <el-form-item label="处方类型" prop="prescriptionType">
-              <el-select v-model="queryLogParams.prescriptionType" clearable placeholder="处方类型" style="width: 200px">
+              <el-select v-model="queryLogParams.prescriptionType" clearable placeholder="处方类型" style="width: 180px">
                 <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_prescription_type'})"
                            :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
               </el-select>
             </el-form-item>
             <el-form-item label="创建时间">
-              <el-date-picker type="daterange" v-model="queryLogParams.dateRange" style="width:210px" clearable
+              <el-date-picker type="daterange" v-model="queryLogParams.dateRange" style="width:190px" clearable
                               value-format="yyyy-MM-dd" range-separator="-" start-placeholde="开始日期" end-placeholde="结束日期"/>
             </el-form-item>&nbsp;&nbsp;&nbsp;&nbsp;
             <el-form-item>

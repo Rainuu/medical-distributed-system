@@ -4,15 +4,15 @@
     <div style="height: 70px; padding-top: 30px; background-color: whitesmoke">
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
         <el-form-item label="供应商名称" prop="providerId">
-          <el-select v-model="searchForm.providerId" placeholder="请选择供应商名称" clearable style="width:240px">
+          <el-select v-model="searchForm.providerId" placeholder="请选择供应商名称" clearable style="width:220px">
             <el-option v-for="item in providerOptions" :key="item.providerId" :label="item.providerName" :value="item.providerId"/>
           </el-select>
         </el-form-item>&nbsp;
         <el-form-item label="申请人" prop="applyUserName">
-          <el-input v-model="searchForm.applyUserName" placeholder="请输入申请人" clearable style="width: 240px"></el-input>
+          <el-input v-model="searchForm.applyUserName" placeholder="请输入申请人" clearable style="width: 220px"></el-input>
         </el-form-item>&nbsp;
         <el-form-item label="单据状态" prop="status">
-          <el-select v-model="searchForm.status" placeholder="可用状态" clearable style="width: 220px">
+          <el-select v-model="searchForm.status" placeholder="可用状态" clearable style="width: 200px">
             <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_order_status'})"
                        :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue" clearable/>
           </el-select>

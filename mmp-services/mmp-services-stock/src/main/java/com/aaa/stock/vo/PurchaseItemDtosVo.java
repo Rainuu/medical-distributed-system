@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * @DATE: 2023/4/3 21:30
  */
 @Data
-public class purchaseItemDtosVo {
+public class PurchaseItemDtosVo {
 
     // stock_medicines表
 

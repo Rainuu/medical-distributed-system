@@ -1,8 +1,10 @@
 package com.aaa.stock.feign;
 
 import com.aaa.core.entity.DictData;
+import com.aaa.core.entity.User;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -17,4 +19,10 @@ public interface Feign {
 
     @GetMapping("/system/dict/getAll")
     List<DictData> getAll();
+
+
+    @GetMapping( "/system/user/getByUsername/{username}")
+    public User getByUsername(@PathVariable String username);
+
+
 }

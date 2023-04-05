@@ -4,11 +4,13 @@ import com.aaa.core.entity.Purchase;
 import com.aaa.core.entity.PurchaseItem;
 import com.aaa.core.vo.Result;
 import com.aaa.stock.vo.PurchaseItemVo;
+import com.aaa.stock.vo.editPurchaseVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
@@ -22,5 +24,5 @@ public interface PurchaseItemService extends IService<PurchaseItem> {
     Result<List<PurchaseItem>> getPurchaseItemById(String purchaseId);
 
 
-    Result<IPage<List<PurchaseItem>>> getAllById(Integer current, Integer size, String purchaseId);
+    Result<List<editPurchaseVo>> getAllById(String purchaseId);
 }
