@@ -258,31 +258,23 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
    //处方发药
    @Override
    public Result updByDispense(String[] itemId) {
+      //修改收费表查看详情状态为已支付
+      // 修改当前页面状态为已支付
       for (int i = 0; itemId.length > i; i++) {
          hisOrderChargeItemMapper.updByDispense(itemId[i]);
       }
       for (int i = 0; itemId.length > i; i++) {
          hisCareOrderItemMapper.updstatus(itemId[i]);
       }
-
-      for (int i = 0; i <itemId.length ; i++) {
-         QueryWrapper<CareOrderItem> queryWrapper=new QueryWrapper<>();
-         queryWrapper.eq("item_id", itemId);
-         List<CareOrderItem> careOrderItems = hisCareOrderItemMapper.selectList(queryWrapper);
-         for (CareOrderItem careOrderItem : careOrderItems) {
-            BigDecimal num = careOrderItem.getNum();
-            String itemName = careOrderItem.getItemName();
-            //调用fen接口 传入名字和数量
-            Boolean num1 = charFeign.num(String.valueOf(num), itemName);
-            if (num1){
-               return new Result<>(200, "发药失败");
-            }
-            return new Result<>(200, "发药成功");
-         }
+      for (int i = 0; i <itemId.length; i++) {
+         QueryWrapper<CareOrderItem> wrapper = new QueryWrapper<>();
+         wrapper.eq("item_id",itemId[i]);
+         CareOrderItem careOrderItem = hisCareOrderItemMapper.selectOne(wrapper);
+         BigDecimal num = careOrderItem.getNum();
+         String itemName = careOrderItem.getItemName();
+         charFeign.num(String.valueOf(num), itemName);
       }
-
-
-      return new Result<>(200,"失败",false);
+      return new Result<>(200,"成功",true);
    }
 
 
@@ -328,7 +320,6 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
          client.post();
          //获取请求的相应结果
          String content = client.getContent();
-         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+content);
          Map<String, String> map = WXPayUtil.xmlToMap(content);
          if (map.get("result_code").equals("SUCCESS")) {
             Map<String, Object> result = new HashMap<>();
