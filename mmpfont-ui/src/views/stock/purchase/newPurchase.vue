@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <!-- 按钮 开始-->
+    <!-- 工具栏按钮 -->
     <el-card class="box-card">
       <div style="text-align:right;">
         <el-button type="primary" icon="el-icon-plus" :disabled="isSubmit" @click="handleAddMedicines">添加药品</el-button>
@@ -9,21 +9,20 @@
         <el-button type="danger" icon="el-icon-finished" :disabled="isSubmit" @click="handleSubmitAndAudit">提交审核</el-button>
       </div>
     </el-card>
-    <!-- 主表单开始 -->
+    <!-- 工具栏2 -->
     <el-card class="box-card">
-      <el-form ref="form" :model="form" :rules="rules" :inline="true" label-width="120px">
+      <el-form ref="form" :model="form" :rules="rules" :inline="true" label-width="100px">
         <el-form-item label="单据号" prop="purchaseId">
           <el-input v-model="form.purchaseId" placeholder="请输入单据号" :disabled="true" style="width:220px"/>
-        </el-form-item>
+        </el-form-item>&nbsp;&nbsp;&nbsp;
         <el-form-item label="供应商" prop="providerId">
           <el-select v-model="form.providerId" placeholder="请选择供应商" style="width:220px">
-            <el-option v-for="item in providerOptions"
-                       :key="item.providerId" :label="item.providerName" :value="item.providerId"/>
+            <el-option v-for="item in providerOptions" :key="item.providerId" :label="item.providerName" :value="item.providerId"/>
           </el-select>
-        </el-form-item>
+        </el-form-item>&nbsp;&nbsp;&nbsp;
         <el-form-item label="总批发额" prop="purchaseTradeTotalAmount">
           <el-input v-model="form.purchaseTradeTotalAmount" placeholder="请输入总批发额" :disabled="true" style="width:220px"/>
-        </el-form-item>
+        </el-form-item>&nbsp;&nbsp;&nbsp;
       </el-form>
     </el-card>
     <!-- 选择中的详情数据表格开始 -->
@@ -48,17 +47,17 @@
             <el-input-number v-model="scope.row.tradePrice" :step="0.1" :precision="2" />
           </template>
         </el-table-column>
-        <el-table-column label="批发额" align="center" width="80" prop="tradeTotalAmount">
+        <el-table-column label="批发额" align="center" width="80px" prop="tradeTotalAmount">
           <template slot-scope="scope">
             <span>{{ scope.row.tradeTotalAmount|rounding }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="批次号" align="center" width="180" prop="batchNumber">
+        <el-table-column label="批次号" align="center" width="180px" prop="batchNumber">
           <template slot-scope="scope">
             <el-input v-model="scope.row.batchNumber"/>
           </template>
         </el-table-column>
-        <el-table-column label="备注" align="center" width="180" prop="remark">
+        <el-table-column label="备注" align="center" width="180px" prop="remark">
           <template slot-scope="scope">
             <el-input v-model="scope.row.remark"/>
           </template>
@@ -187,6 +186,23 @@ export default {
         }
       }
       return name;
+    },
+    // 字典处理————获取生产厂家表字段
+    getProviderOption(){
+      this.$axios.get("/stock/api/provider/getAllDict").then(r=>{
+        this.providerOptions=r.data.t;
+      })
+    },
+    // 处理字典姓名————循环判断，将Id转换为name
+    ProviderNameDict(row){
+      let a = '';
+      for (let i = 0; i < this.providerOptions.length; i++) {
+        if (row.providerId == this.providerOptions[i].providerId){
+          a = this.providerOptions[i].providerName;
+          break;
+        }
+      }
+      return a;
     },
     // 条件查询
     handleQuery() {
@@ -350,6 +366,8 @@ export default {
     this.getDict();
     // 查询生产厂家表数据
     this.getProducterNameOption();
+    // 查询供应商表数据
+    this.getProviderOption();
   },
   // 数据
   data() {

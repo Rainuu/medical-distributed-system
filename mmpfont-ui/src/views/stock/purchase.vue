@@ -122,14 +122,16 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.post("/stock/api/purchase/doAudit/" + purchaseId).then(res => {
-          this.$message({type: 'success', message: '提交审核成功!'});
-          this.initTable();
-        }).catch(() => {
-          this.$message({type: 'error', message: '提交审核失败!'});
-        })
-      }).catch(() => {
-        this.$message({type: 'info', message: '已取消删除'});
+        if (this.rowStatus == 1 || this.rowStatus == 4){
+          this.$axios.post("/stock/api/purchase/doAudit/" + purchaseId).then(res => {
+            this.$message({type: 'success', message: '提交审核成功!'});
+            this.initTable();
+          })
+        } else if(this.rowStatus == 2 || this.rowStatus == 3 || this.rowStatus == 5){
+          this.$message({type: 'error', message: '提交审核失败! '});
+        } else{
+          this.$message({type: 'info', message: '已取消删除'});
+        }
       })
     },
     // 作废【根据采购单号】
@@ -140,32 +142,37 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.post("/stock/api/purchase/" + purchaseId).then(res => {
-          this.$message({type: 'success', message: '作废成功!'});
-          this.initTable();
-        }).catch(() => {
+        if (this.rowStatus == 1 || this.rowStatus == 4){
+          this.$axios.post("/stock/api/purchase/doInvalid/" + purchaseId).then(res => {
+            this.$message({type: 'success', message: '作废成功!'});
+            this.initTable();
+          })
+        } else if(this.rowStatus == 2 || this.rowStatus == 3 || this.rowStatus == 5){
           this.$message({type: 'error', message: '作废失败!'});
-        })
-      }).catch(() => {
-        this.$message({type: 'info', message: '作废删除'});
+        } else {
+          this.$message({type: 'info', message: '作废删除'});
+        }
       })
     },
     // 执行入库
     handleDoInventory(row) {
       const purchaseId = this.ids[0]
+      // alert(purchaseId)
       this.$confirm('是否确认提交入库单据ID为:' + purchaseId + '的数据?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.post("/stock/api/purchase/" + purchaseId).then(res => {
-          this.$message({type: 'success', message: '入库成功!'});
-          this.initTable();
-        }).catch(() => {
-          this.$message({type: 'error', message: '入库失败!'});
-        })
-      }).catch(() => {
-        this.$message({type: 'info', message: '入库删除'});
+        if (this.rowStatus == 3){
+          this.$axios.post("/stock/api/purchase/doInventory/" + purchaseId).then(res => {
+            this.$message({type: 'success', message: '入库成功!'});
+            this.initTable();
+          })
+        } else if (this.rowStatus == 1 || this.rowStatus == 2 || this.rowStatus == 4 || this.rowStatus == 5){
+            this.$message({type: 'error', message: '入库失败!'});
+        }else {
+          this.$message({type: 'info', message: '入库删除'});
+        }
       })
     },
     // 查询————发出axios请求获取后端值，并将后端获取到的数据赋值给表格回填，挂载到页面，更改页面条数实现分页
@@ -183,6 +190,9 @@ export default {
       // this.multipleSelection = selection;
       this.single = selection.length !== 1;
       this.multiple = !selection.length;
+      // alert(JSON.stringify(selection))
+      this.rowStatus=selection.map(item => item.status)
+      // alert(JSON.stringify(this.rowStatus))
     },
     // 分页————改变每页展示的数据数量，在size变化时触发
     handleSizeChange(val) {
@@ -199,6 +209,8 @@ export default {
   },
   data() {
     return {
+      // 获取行数据
+      rowStatus: [],
       // 字典数组——接收字典表数据
       dictList: [],
       // 多选的id数组

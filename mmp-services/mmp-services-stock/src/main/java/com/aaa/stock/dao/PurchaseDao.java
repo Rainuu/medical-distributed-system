@@ -1,14 +1,11 @@
 package com.aaa.stock.dao;
 
 import com.aaa.core.entity.Purchase;
-import com.aaa.core.entity.PurchaseItem;
 import com.aaa.stock.vo.PurchaseVo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
@@ -27,4 +24,9 @@ public interface PurchaseDao extends BaseMapper<Purchase> {
 
     void insertByPurchaseId(@Param("purchase") Purchase purchase);
 
+    int updateByPurchaseId(String purchaseId);
+
+    void doAudit(String purchaseId);
+
+    void RuKuUpd(String purchaseId);
 }

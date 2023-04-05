@@ -54,11 +54,17 @@ public class ApiPurchaseController {
         return purchaseService.addPurchase(purchaseAllVo);
     }
 
-    // 提交审核[待审核] status=2
-//    @PostMapping("addPurchaseToAudit")
-//    public Result<List<PurchaseItem>> addPurchaseToAudit(){
-//
-//    }
+    // 提交审核[待审核]
+    @PostMapping("addPurchaseToAudit")
+    public Result<List<PurchaseItem>> addPurchaseToAudit(@RequestBody PurchaseAllVo purchaseAllVo){
+        return purchaseService.addPurchaseToAudit(purchaseAllVo);
+    }
+
+    // 提交审核[待审核]
+    @PostMapping("doAudit/{purchaseId}")
+    public void doAudit(@PathVariable String purchaseId){
+        purchaseService.doAudit(purchaseId);
+    }
 
     // 审核通过 status=3
     @PostMapping("auditPass/{purchaseId}")
@@ -72,6 +78,12 @@ public class ApiPurchaseController {
         purchaseService.auditNoPass(purchaseId,value);
     }
 
+    // 作废 status=5
+    @PostMapping("doInvalid/{purchaseId}")
+    public void doInvalid(@PathVariable String purchaseId){
+        purchaseService.doInvalid(purchaseId);
+    }
+
     // 分页查询所有的待审核采购单数据
     @PostMapping("listPurchasePendingForPage/{current}/{size}")
     public Result<IPage<Purchase>> listPurchasePendingForPage(
@@ -82,5 +94,10 @@ public class ApiPurchaseController {
         return purchaseService.listPurchasePendingForPage(current,size,purchaseVo);
     }
 
+    // 执行入库
+    @PostMapping("doInventory/{purchaseId}")
+    public void doInventory(@PathVariable String purchaseId){
+         purchaseService.doInventory(purchaseId);
+    }
 
 }

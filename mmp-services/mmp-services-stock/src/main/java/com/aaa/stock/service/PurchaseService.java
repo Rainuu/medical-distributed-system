@@ -29,4 +29,12 @@ public interface PurchaseService extends IService<Purchase> {
     void insertByPurchaseId(Purchase purchase);
 
     Result<List<PurchaseItem>> addPurchase(PurchaseAllVo purchaseAllVo);
+
+    Result<List<PurchaseItem>> addPurchaseToAudit(PurchaseAllVo purchaseAllVo);
+
+    void doInvalid(String purchaseId);
+
+    void doAudit(String purchaseId);
+
+    void doInventory(String purchaseId);
 }

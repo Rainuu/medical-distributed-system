@@ -10,8 +10,21 @@
     <update id="auditPass">
         UPDATE stock_purchase SET status=3 WHERE purchase_id=#{purchaseId}
     </update>
+
     <update id="auditNoPass">
         UPDATE stock_purchase SET status=4,audit_msg=#{value} WHERE purchase_id=#{purchaseId}
+    </update>
+
+    <update id="updateByPurchaseId">
+        UPDATE stock_purchase SET status=5 WHERE purchase_id=#{purchaseId}
+    </update>
+
+    <update id="doAudit">
+        UPDATE stock_purchase SET status=2 WHERE purchase_id=#{purchaseId}
+    </update>
+
+    <update id="RuKuUpd">
+        UPDATE stock_purchase SET status=6 WHERE purchase_id=#{purchaseId}
     </update>
 
     <select id="listPurchasePendingForPage" resultType="com.aaa.core.entity.Purchase">

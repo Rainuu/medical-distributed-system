@@ -3,15 +3,15 @@
     <!-- 工具栏按钮 -->
     <el-card class="box-card">
       <div style="text-align:right;">
-        <el-button type="primary" icon="el-icon-plus" :disabled="isSubmit" size="small" @click="handleAddMedicines">添加药品</el-button>
-        <el-button type="success" icon="el-icon-s-operation" :disabled="isSubmit" size="small" @click="handleBatchSet">批量设置</el-button>
-        <el-button type="warning" icon="el-icon-check" :disabled="isSubmit" size="small" @click="handleSubmit">暂存</el-button>
-        <el-button type="danger" icon="el-icon-finished" :disabled="isSubmit" size="small" @click="handleSubmitAndAudit">提交审核</el-button>
+        <el-button type="primary" icon="el-icon-plus" :disabled="isSubmit" @click="handleAddMedicines">添加药品</el-button>
+        <el-button type="success" icon="el-icon-s-operation" :disabled="isSubmit" @click="handleBatchSet">批量设置</el-button>
+        <el-button type="warning" icon="el-icon-check" :disabled="isSubmit" @click="handleSubmit">暂存</el-button>
+        <el-button type="danger" icon="el-icon-finished" :disabled="isSubmit" @click="handleSubmitAndAudit">提交审核</el-button>
       </div>
     </el-card>
     <!-- 工具栏2 -->
     <el-card class="box-card">
-      <el-form ref="form" :model="form" :rules="rules" :inline="true" label-width="68px">
+      <el-form ref="form" :model="form" :rules="rules" :inline="true" label-width="100px">
         <el-form-item label="单据号" prop="purchaseId">
           <el-input v-model="form.purchaseId" placeholder="请输入单据号" :disabled="true" style="width:220px"/>
         </el-form-item>&nbsp;&nbsp;&nbsp;
@@ -25,66 +25,66 @@
         </el-form-item>&nbsp;&nbsp;&nbsp;
       </el-form>
     </el-card>
-    <!-- 表格 -->
+    <!-- 选择中的详情数据表格开始 -->
     <el-card class="box-card">
       <el-table :data="purchaseItemList" class="tb-edit" style="width:100%" border highlight-current-row>
-        <el-table-column label="药品ID" align="center" width="80" prop="medicinesId" />
-        <el-table-column label="药品名称" align="center" width="150" prop="medicinesName" />
-        <el-table-column label="规则" align="center" width="80" prop="conversion">
+        <el-table-column label="药品ID" align="center" width="70px" prop="medicinesId" />
+        <el-table-column label="药品名称" align="center" width="120px" prop="medicinesName" />
+        <el-table-column label="规则" align="center" width="60px" prop="conversion">
           <template slot-scope="scope">
             <span> {{ scope.row.conversion }}{{ scope.row.unit }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="生产厂家" align="center" width="220" prop="producterId" :formatter="ProducterNameDict"/>
-        <el-table-column label="数量" align="center" width="160" prop="purchaseNumber">
+        <el-table-column label="生产厂家" align="center" width="200px" prop="producterId" :formatter="ProducterNameDict"/>
+        <el-table-column label="数量" align="center" width="210px" prop="purchaseNumber">
           <template slot-scope="scope">
-            <el-input-number v-model="scope.row.purchaseNumber" :step="1" size="small"/>
+            <el-input-number v-model="scope.row.purchaseNumber" :step="1"/>
           </template>
         </el-table-column>
-        <el-table-column label="单位" align="center" width="80" prop="unit" />
-        <el-table-column label="批发价" align="center" width="160" prop="tradePrice">
+        <el-table-column label="单位" align="center" width="60px" prop="unit" />
+        <el-table-column label="批发价" align="center" width="210px" prop="tradePrice">
           <template slot-scope="scope">
             <el-input-number v-model="scope.row.tradePrice" :step="0.1" :precision="2" size="small"/>
           </template>
         </el-table-column>
-        <el-table-column label="批发额" align="center" width="80" prop="tradeTotalAmount">
+        <el-table-column label="批发额" align="center" width="80px" prop="tradeTotalAmount">
           <template slot-scope="scope">
             <span>{{ scope.row.tradeTotalAmount|rounding }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="批次号" align="center" width="180" prop="batchNumber">
+        <el-table-column label="批次号" align="center" width="180px" prop="batchNumber">
           <template slot-scope="scope">
             <el-input v-model="scope.row.batchNumber" size="small"/>
           </template>
         </el-table-column>
-        <el-table-column label="备注" align="center" width="180" prop="remark">
+        <el-table-column label="备注" align="center" width="180px" prop="remark">
           <template slot-scope="scope">
             <el-input v-model="scope.row.remark" size="small"/>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column label="操作" align="center" width="100px">
           <template slot-scope="scope">
             <el-button size="small" type="danger" :disabled="isSubmit" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
-
-    <!-- 药品列表的弹出层开始 -->
+    <!-- 弹出层————药品列表 -->
     <el-dialog :title="title" :visible.sync="open" width="1100px" center append-to-body>
       <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
         <el-form-item label="关键字" prop="keywords">
-          <el-input v-model="queryParams.keywords" placeholder="请输入关键字" clearable size="small" style="width:180px"/>
+          <el-input v-model="queryParams.keywords" placeholder="请输入关键字" clearable style="width:180px"/>
         </el-form-item>
         <el-form-item label="药品类型" prop="medicinesType">
-          <el-select v-model="queryParams.medicinesType" placeholder="药品类型" clearable size="small" style="width:180px">
-            <el-option v-for="dict in medicinesTypeOptions" :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
+          <el-select v-model="queryParams.medicinesType" clearable placeholder="药品类型" style="width: 200px">
+            <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_medicines_type'})"
+                       :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
           </el-select>
         </el-form-item>
-
         <el-form-item label="处方类型" prop="prescriptionType">
-          <el-select v-model="queryParams.prescriptionType" placeholder="处方类型" clearable size="small" style="width:180px">
-            <el-option v-for="dict in prescriptionTypeOptions" :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
+          <el-select v-model="queryParams.prescriptionType" clearable placeholder="处方类型" style="width: 190px">
+            <el-option v-for="dict in this.dictList.filter((n)=>{ return n.dictType==='his_prescription_type'})"
+                       :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -98,9 +98,9 @@
         <el-table-column label="药品ID" align="center" prop="medicinesId" />
         <el-table-column label="药品名称" align="center" prop="medicinesName" />
         <el-table-column label="药品编号" align="center" prop="medicinesNumber" />
-        <el-table-column label="生产厂家" width="280px" align="center" prop="producterId" :formatter="producterFormatter" />
-        <el-table-column label="药品类型" align="center" prop="medicinesType" :formatter="medicinesTypeFormatter" />
-        <el-table-column label="处方类型" align="center" prop="prescriptionType" :formatter="prescriptionTypeFormatter" />
+        <el-table-column label="生产厂家" width="280px" align="center" prop="producterId" :formatter="ProducterNameDict"/>
+        <el-table-column label="药品类型" align="center" prop="medicinesType" :formatter="(row)=>this.dictFormat(row,row.medicinesType,'his_medicines_type')"/>
+        <el-table-column label="处方类型" align="center" prop="prescriptionType" :formatter="(row)=>this.dictFormat(row,row.prescriptionType,'his_prescription_type')"/>
         <el-table-column label="关键字" align="center" prop="keywords" />
       </el-table>
       <!-- 分页控件 -->
@@ -112,16 +112,16 @@
     <el-dialog :title="title" :visible.sync="batchSetOpen" width="500px" center append-to-body>
       <el-form ref="batchSetForm" :model="batchSetForm" label-width="100px">
         <el-form-item label="数量" prop="purchaseNumber">
-          <el-input-number v-model="batchSetForm.purchaseNumber" placeholder="请输入数量" size="small" />
+          <el-input-number v-model="batchSetForm.purchaseNumber" placeholder="请输入数量" />
         </el-form-item>
         <el-form-item label="批发价格" prop="tradePrice">
-          <el-input-number v-model="batchSetForm.tradePrice" :precision="2" placeholder="请输入数量" size="small" />
+          <el-input-number v-model="batchSetForm.tradePrice" :precision="2" placeholder="请输入数量" />
         </el-form-item>
         <el-form-item label="批次号" prop="batchNumber">
-          <el-input v-model="batchSetForm.batchNumber" placeholder="请输入批次号" size="small" />
+          <el-input v-model="batchSetForm.batchNumber" placeholder="请输入批次号" />
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <el-input v-model="batchSetForm.remark" placeholder="请输入备注" size="small" />
+          <el-input v-model="batchSetForm.remark" placeholder="请输入备注" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -139,8 +139,8 @@ export default {
       return value.toFixed(2)
     }
   },
-  // 监听purchaseItemList里面的数据变化，更新总批发额
   watch: {
+    // 监听purchaseItemList里面的数据变化，更新总批发额
     purchaseItemList: {
       handler: function() {
         this.form.purchaseTradeTotalAmount = 0.00

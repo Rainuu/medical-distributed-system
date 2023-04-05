@@ -22,4 +22,6 @@ public interface PurchaseItemDao extends BaseMapper<PurchaseItem> {
 
     // 用Map<String,object>做返回值容器也可接多表参数，但前端的字段和数据库字段一致，没有经过Vo加工
     List<editPurchaseVo> getAllById(String purchaseId);
+
+    List<PurchaseItem> getByPurchaseId(String purchaseId);
 }
