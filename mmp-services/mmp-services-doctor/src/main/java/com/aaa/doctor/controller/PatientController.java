@@ -42,8 +42,6 @@ public class PatientController {
             @PathVariable Integer pageSize,
             @RequestBody PatientVo patientVo
     ) {
-        System.out.println("===========================" + currentPage);
-        System.out.println("================" + patientVo.getIdNumber());
         return patientService.findByPat(currentPage, pageSize, patientVo);
 
     }

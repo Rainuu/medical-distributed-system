@@ -1273,11 +1273,12 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$axios.post("/doctor/patient/deleteCareOrderItemById/"+itemId+"/"+amount).then(result=> {
-          console.log(result)
+          // console.log(result)
+          // this.careOrders=[];
           if (result.data.t==true){
             //给右边的处方表赋值
             this.$axios.post("/doctor/newcare/queryCareHistoryId/"+this.careHistory.regId).then(result=> {
-              alert(JSON.stringify(result.data.t.careOrderList))
+              // alert(JSON.stringify(result.data.t.careOrderList))
               this.careOrders=result.data.t.careOrderList;
 
             })

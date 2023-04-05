@@ -209,7 +209,7 @@ export default {
     },
     //查询所有部门
     queryDept(){
-      this.$axios.get("/doctor/api/registration/getDeptAll").then(result=>{
+      this.$axios.get("/doctor/registration/getDeptAll").then(result=>{
         this.deptOptions=result.data.t;
       })
     },
