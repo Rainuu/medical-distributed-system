@@ -22,9 +22,9 @@
 
         >
           <!-- 一级菜单 -->
-          <el-submenu :index="first.path" v-for="(first,index) in leftMenu" :key="index" style="margin-right: 50px; width: 200px" >
+          <el-submenu :index="first.path" v-for="(first,index) in leftMenu" :key="index">
             <!-- 一级菜单模板 -->
-            <template slot="title">
+            <template slot="title" style="margin-left: 50px">
               <!-- 图标 -->
               <svg-icon :icon-file-name="first.icon"/>
 
@@ -32,7 +32,7 @@
               <span style="margin-left: 15px" >{{first.menuName}}</span>
             </template>
             <!-- 二级子菜单 -->
-            <el-menu-item :index="second.path" v-for="(second,sindex) in first.children" :key="sindex" style="padding-left: 80px">
+            <el-menu-item :index="second.path" v-for="(second,sindex) in first.children" :key="sindex"style="padding-left: 80px">
               <!-- 二级菜单模板 -->
               <template slot="title" style="margin-left: 50px">
                 <!-- 图标 -->
@@ -110,7 +110,7 @@
               editableTabs: [{
                   title: '首页',
                   name: '1',
-                  url: '/index'
+                  url: '/common/findex'
                   //content: 'Tab 1 content'
               }],
           }
@@ -199,7 +199,7 @@
             },
           foldOrOpen(){
             this.isCollaps = !this.isCollaps
-            this.asideWidth = !this.isCollaps ? '200px' : '64px'
+            this.asideWidth = !this.isCollaps ? '220px' : '64px'
           },
           exit(){
             this.$axios.get('system/api/user/exit').then(res=>{

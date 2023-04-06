@@ -65,7 +65,7 @@
         <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate">修改</el-button>
+        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="biaoUpdata">修改</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="piliDelete">删除</el-button>
@@ -169,6 +169,8 @@ export default {
   // 定义页面数据
   data() {
     return {
+      //存放临时表数据
+      lins:{},
       // 是否启用遮罩层
       loading: false,
       // 选中数组
@@ -252,6 +254,10 @@ export default {
     },
     // 数据表格的多选择框选择时触发
     handleSelectionChnage(selection) {
+      if (selection.length===1){
+        this.lins=selection[0]
+      }
+
       this.ids = selection.map(item => item.checkItemId)
       this.single = selection.length !== 1
       this.multiple = !selection.length
@@ -273,6 +279,11 @@ export default {
       this.open = true
       this.reset()
       this.title = '添加检查项目信息'
+    },
+    biaoUpdata(){
+      this.title = '修改检查项目信息'
+      this.form=JSON.parse(JSON.stringify(this.lins));
+      this.open = true
     },
     // 打开修改的弹出层
     handleUpdate(row) {

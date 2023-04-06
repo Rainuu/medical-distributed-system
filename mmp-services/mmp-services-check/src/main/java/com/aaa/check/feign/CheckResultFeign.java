@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * 2023/4/4
  */
 
-@FeignClient(value = "his-open-system")
+@FeignClient(value = "mmp-services-system")
 public interface CheckResultFeign {
     @GetMapping( "/system/user/getByUsername/{username}")
     public User getByUsername(@PathVariable String username);

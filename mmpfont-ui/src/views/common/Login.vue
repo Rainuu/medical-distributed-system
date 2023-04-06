@@ -46,7 +46,6 @@ export default {
     dataFormSubmit() {
       this.$axios.post("/login",qs.stringify(this.dataForm)).then(res=>{
         sessionStorage.setItem("token",res.data.t);
-        alert("登陆成功")
         this.$router.push("/index")
       })
     }

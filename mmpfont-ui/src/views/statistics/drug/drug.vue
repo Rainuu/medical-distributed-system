@@ -156,7 +156,7 @@ export default {
     // 查询销售列表
     listDrugStat() {
       this.loading = true
-      var param={'drugName':this.queryDrugParams.drugName,'dateRange1':this.dateRange[0],'dateRange2':this.dateRange[1]}
+      var param={'drugName':this.queryDrugStatParams.drugName,'dateRange1':this.dateRange[0],'dateRange2':this.dateRange[1]}
       this.$axios.post('statistics/api/durg/getData',qs.stringify(param)).then(res => {
         this.drugStatList = res.data.t
         this.loading = false

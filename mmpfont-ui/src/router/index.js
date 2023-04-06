@@ -21,6 +21,12 @@ const routes = [
     name: 'index',
     component:()=>import('../views/Index'),
     children: [
+        //首页
+        {
+          path: '/common/findex',
+          name: 'findex',
+          component:()=>import('../views/common/findex.vue')
+        },
         // 系统管理(System)——(10)——梁梦磊
         {   //科室管理
             path: '/system/dept',
