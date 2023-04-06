@@ -100,9 +100,7 @@ public class HisOrderBackfeeServiceImpl implements HisOrderBackfeeService {
             //根据order表关联order_item表
             //计算出订单总金额
             if (careOrderItem.size()!=0){
-
                map1.put("careOrderItem", careOrderItem);
-
                list.add(map1);
             }
 

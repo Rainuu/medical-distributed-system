@@ -3,13 +3,17 @@ package com.aaa.charge.service.impl;
 
 import com.aaa.charge.dao.HisOrderBackfeeItemMapper;
 import com.aaa.charge.dao.HisOrderBackfeeMapper;
+import com.aaa.charge.dao.HisOrderChargeMapper;
 import com.aaa.charge.service.HisOrderBackfeeItemService;
 import com.aaa.charge.vo.PostObjVo;
 import com.aaa.charge.vo.PostObjVo1;
 import com.aaa.charge.vo.PostObjVoV;
+import com.aaa.core.entity.OrderBackfee;
 import com.aaa.core.entity.OrderBackfeeItem;
+import com.aaa.core.entity.OrderCharge;
 import com.aaa.core.entity.OrderChargeItem;
 import com.aaa.core.vo.Result;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +35,8 @@ public class HisOrderBackfeeItemServiceImpl implements HisOrderBackfeeItemServic
     private HisOrderBackfeeMapper hisOrderBackfeeMapper;
     @Autowired
     private HisOrderBackfeeItemMapper hisOrderBackfeeItemMapper;
+    @Autowired
+    private HisOrderChargeMapper hisOrderChargeMapper;
 
     @Override
     @Transactional//开启事务
@@ -51,8 +57,12 @@ public class HisOrderBackfeeItemServiceImpl implements HisOrderBackfeeItemServic
         for (int i = 0; i < 10; i++) {
             backId += String.valueOf(random.nextInt(10));
         }
+        QueryWrapper<OrderCharge> wrapper = new QueryWrapper<>();
+        wrapper.eq("reg_id",regId);
+        List<OrderCharge> orderCharge = hisOrderChargeMapper.selectList(wrapper);
+        for (OrderCharge OrderCharge:orderCharge) {
+        if (OrderCharge.getPayType().equals("0")){
         hisOrderBackfeeMapper.insertAll(backId,regId,patientName,backAmount,createTime,backTime);
-
         //获取item状态
         List<PostObjVo1> orderBackfeeItemDtoList = postObjVov.getOrderBackfeeItemDtoList();
         for (int i=0;i<orderBackfeeItemDtoList.size();i++){
@@ -70,6 +80,8 @@ public class HisOrderBackfeeItemServiceImpl implements HisOrderBackfeeItemServic
             orderBackfeeItem.setCoId(orderBackfeeItemDtoList.get(i).getCoId());
             orderBackfeeItem.setStatus("2");
             hisOrderBackfeeItemMapper.insert(orderBackfeeItem);
+        }
+        }
         }
         return new Result<>(200,"退费成功");
     }
@@ -93,25 +105,31 @@ public class HisOrderBackfeeItemServiceImpl implements HisOrderBackfeeItemServic
         for (int i = 0; i < 10; i++) {
             backId += String.valueOf(random.nextInt(10));
         }
-        hisOrderBackfeeMapper.insertAll(backId,regId,patientName,backAmount,createTime,bcakTime);
-
-        //获取item状态
-        List<PostObjVo1> orderBackfeeItemDtoList = postObjVoV.getOrderBackfeeItemDtoList();
-        for (int i=0;i<orderBackfeeItemDtoList.size();i++){
-            hisOrderBackfeeItemMapper.updateBystatus(orderBackfeeItemDtoList.get(i).getItemId());
-        }
-        for (int i=0;i<orderBackfeeItemDtoList.size();i++) {
-            OrderBackfeeItem orderBackfeeItem = new OrderBackfeeItem();
-            orderBackfeeItem.setBackId(backId);
-            orderBackfeeItem.setItemId(orderBackfeeItemDtoList.get(i).getItemId());
-            orderBackfeeItem.setItemType(orderBackfeeItemDtoList.get(i).getItemType());
-            orderBackfeeItem.setItemName(orderBackfeeItemDtoList.get(i).getItemName());
-            orderBackfeeItem.setItemNum(orderBackfeeItemDtoList.get(i).getItemNum());
-            orderBackfeeItem.setItemPrice(orderBackfeeItemDtoList.get(i).getItemPrice());
-            orderBackfeeItem.setItemAmount(orderBackfeeItemDtoList.get(i).getItemAmount());
-            orderBackfeeItem.setCoId(orderBackfeeItemDtoList.get(i).getCoId());
-            orderBackfeeItem.setStatus("2");
-            hisOrderBackfeeItemMapper.insert(orderBackfeeItem);
+        QueryWrapper<OrderCharge> wrapper = new QueryWrapper<>();
+        wrapper.eq("reg_id",regId);
+        List<OrderCharge> orderCharge = hisOrderChargeMapper.selectList(wrapper);
+        for (OrderCharge OrderCharge:orderCharge) {
+            if (OrderCharge.getPayType().equals("1")) {
+                hisOrderBackfeeMapper.insertAllzfb(backId, regId, patientName, backAmount, createTime, bcakTime);
+                //获取item状态
+                List<PostObjVo1> orderBackfeeItemDtoList = postObjVoV.getOrderBackfeeItemDtoList();
+                for (int i = 0; i < orderBackfeeItemDtoList.size(); i++) {
+                    hisOrderBackfeeItemMapper.updateBystatus(orderBackfeeItemDtoList.get(i).getItemId());
+                }
+                for (int i = 0; i < orderBackfeeItemDtoList.size(); i++) {
+                    OrderBackfeeItem orderBackfeeItem = new OrderBackfeeItem();
+                    orderBackfeeItem.setBackId(backId);
+                    orderBackfeeItem.setItemId(orderBackfeeItemDtoList.get(i).getItemId());
+                    orderBackfeeItem.setItemType(orderBackfeeItemDtoList.get(i).getItemType());
+                    orderBackfeeItem.setItemName(orderBackfeeItemDtoList.get(i).getItemName());
+                    orderBackfeeItem.setItemNum(orderBackfeeItemDtoList.get(i).getItemNum());
+                    orderBackfeeItem.setItemPrice(orderBackfeeItemDtoList.get(i).getItemPrice());
+                    orderBackfeeItem.setItemAmount(orderBackfeeItemDtoList.get(i).getItemAmount());
+                    orderBackfeeItem.setCoId(orderBackfeeItemDtoList.get(i).getCoId());
+                    orderBackfeeItem.setStatus("2");
+                    hisOrderBackfeeItemMapper.insert(orderBackfeeItem);
+                }
+            }
         }
         return new Result<>(200,"退费成功");
     }

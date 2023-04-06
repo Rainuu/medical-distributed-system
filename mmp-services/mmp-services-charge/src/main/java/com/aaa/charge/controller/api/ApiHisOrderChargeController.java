@@ -88,12 +88,8 @@ public class ApiHisOrderChargeController {
     public Result<List<CareOrder>> updateBystatus(@PathVariable String orderId)  {
         return service.updateBystatus(orderId);
     }
-    //收费列表:支付宝支付,成功支付后方法
-    @PostMapping("updBystatus1/{orderId}")
-    public Result<List<OrderCharge>> updBystatus1(@PathVariable String orderId) {
-        return service.updBystatus1(orderId);
-    }
-    //处方收费:支付宝支付修改状态
+
+    //处方收费,收费列表:支付宝支付修改状态
     @PostMapping("updstatus/{orderId}")
     public Result<List<OrderCharge>> updstatus(@PathVariable String orderId){
         return service.updByStatus(orderId);

@@ -58,7 +58,7 @@ public class ApiHisOrderBackfeeController {
 
     //处方退费
     @GetMapping("list/{regId}")
-    public Result<Map<String,Object>> list(@PathVariable String regId){
+    public Result<Map<String,Object>> list(@PathVariable String regId)  {
         return  service.selectByregId(regId);
     }
     //处方退费：现金退费

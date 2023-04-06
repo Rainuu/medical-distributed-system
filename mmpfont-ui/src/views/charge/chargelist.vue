@@ -18,7 +18,7 @@
     <br>
     <!-- 页面表格 -->
     <div>
-      <el-table :data="tableData" border style="width: 100%" max-height="330px">
+      <el-table :data="tableData" border style="width: 100%" max-height="400px">
         <el-table-column fixed prop="orderId" label="订单号"  min-width="50px" align="center"></el-table-column>
         <el-table-column prop="regId" label="挂号单号"  min-width="50px" align="center"></el-table-column>
         <el-table-column prop="patientName" label="患者姓名"  width="100px" align="center"></el-table-column>
@@ -146,34 +146,40 @@ export default {
         })
       })
     },
-    // 支付宝收费
+    //支付宝支付
     handlePayWithZfb(row) {
-      this.$axios.post("charge/api/hisOrderCharge/updateBystatus/"+row.orderId).then(res => {
-        this.payObj = res.data.t
-        const tx = this
-        tx.openPay = true// 打开支付的弹出层
-        // 定时轮询
-        tx.intervalObj = setInterval(function() {
-          // 根据ID查询订单信息
-          tx.$axios.post("charge/api/hisOrderCharge/updBystatus1/"+tx.payObj.orderId).then(r => {
-            if (r.data.t === true) { // 说明订单状态为支付成功
+      this.$confirm('是否确定支付宝支付', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post("charge/api/hisOrderCharge/updateBystatus/"+row.orderId).then(result => {
+          this.payObj = result.data.t;
+          const tx = this
+          tx.openPay = true// 打开支付的弹出层
+          // 定时轮询
+          tx.intervalObj = setInterval(function () {
+            // 根据ID查询订单信息
+            tx.$axios.post("charge/api/hisOrderCharge/updstatus/"+tx.payObj.orderId).then(result => {
+              if (result.data.t === true) { // 说明订单状态为支付成功
+                // 清空定时器
+                clearInterval(tx.intervalObj)
+                tx.$notify({
+                  title: '支付成功',
+                  message: '【' + tx.payObj.orderId + '】的订单编写支付成功',
+                  type: 'success'
+                })
+                tx.openPay = false
+                tx.initUser();
+              }
+            }).catch(() => {
               // 清空定时器
               clearInterval(tx.intervalObj)
-              tx.$notify({
-                title: '支付成功',
-                message: '【' + tx.payObj.orderId + '】的订单编写支付成功',
-                type: 'success'
-              })
-              tx.openPay = false
-              tx.resetCurrentParams()
-            }
-          }).catch(() => {
-            // 清空定时器
-            clearInterval(tx.intervalObj)
-          })
-        }, 2000)
-      }).catch(() => {
-        this.$message.error('操作失败')
+            })
+          }, 2000)
+        }).catch(() => {
+          this.$message('操作失败')
+        })
       })
     },
     // 如果用户没有支付，而弹出层被关闭了

@@ -19,9 +19,11 @@ public interface HisOrderChargeItemMapper extends BaseMapper<OrderChargeItem> {
     //查询所有OrderChargeItem的数据根据id返回
     List<OrderChargeItem> selectListAll(String orderId);
 
-    void updateBystatus(String orderId);
+
 
     void updByDispense(String itemId);
 
-    List<OrderChargeItem> selectList(String orderId);
+    void updataBystatus(String orderId);
+
+//    List<OrderChargeItem> selectList(String orderId);
 }

@@ -43,5 +43,5 @@ public interface HisOrderChargeService {
 
     Result<List<CareOrder>> updateBystatus(String orderId);
 
-    Result<List<OrderCharge>> updBystatus1(String orderId);
+
 }

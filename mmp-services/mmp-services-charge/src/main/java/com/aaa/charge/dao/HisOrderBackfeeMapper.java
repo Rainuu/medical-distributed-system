@@ -22,4 +22,6 @@ public interface HisOrderBackfeeMapper extends BaseMapper<OrderBackfee> {
      List<OrderBackfeeItem>  selectAll(String backId);
 
     void insertAll(String backId, String regId, String patientName, BigDecimal backAmount, LocalDateTime createTime,LocalDateTime backTime);
+
+    void insertAllzfb(String backId, String regId, String patientName, BigDecimal backAmount, LocalDateTime createTime, LocalDateTime bcakTime);
 }

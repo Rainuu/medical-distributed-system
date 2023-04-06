@@ -147,112 +147,101 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
       for (int i = 0; i < 10; i++) {
          orderId += String.valueOf(random.nextInt(10));
       }
-      //生成orderId1
-      String orderId1 = "ODC1";
-      Random random1 = new Random();
-      for (int i = 0; i < 10; i++) {
-         orderId1 += String.valueOf(random1.nextInt(10));
-      };
-  try {
-     //设置请求的参数--格式为xml
-     Map<String, String> params = new HashMap<>();//请求参数
-     params.put("appid", appId);//公众号ID
-     params.put("mch_id", mchId);//商品号id
-     params.put("nonce_str", WXPayUtil.generateNonceStr());//随机字符串
-     params.put("body", postObjVo.getOrderChargeDto().getPatientName());//标题
-     params.put("out_trade_no", orderId);//订单号
-     //支付金额0.01 未来换成真是的金额
-     params.put("total_fee", new BigDecimal(0.01).multiply(new BigDecimal(100)).longValue() + "");
-     params.put("spbill_create_ip", "127.0.0.1");//未来写成项目部署的ip
-     params.put("notify_url", "http:localhost:8090/charge/api/hisOrderCharge");
-     params.put("trade_type", "NATIVE");//支付方式使用PC
-     //创建httpClient对象 作用远程调用
-     HttpClient client = new HttpClient("https://api.mch.weixin.qq.com/pay/unifiedorder");
-     //支持https协议
-     client.setHttps(true);
-     //设置请求参数
-     client.setXmlParam(WXPayUtil.generateSignedXml(params, apiKey));
-     //发送请求
-     client.post();
-     //获取请求的相应结果
-     String content = client.getContent();
-     Map<String, String> map = WXPayUtil.xmlToMap(content);
-     if (map.get("result_code").equals("SUCCESS")) {
-        Map<String, Object> result = new HashMap<>();
-        result.put("codeUrl", map.get("code_url"));
-        result.put("price", postObjVo.getOrderChargeDto().getOrderAmount());
-        result.put("orderId", orderId1);
-        //创建订单
-        //获取挂号单id
-        String regId = postObjVo.getOrderChargeDto().getRegId();
-        //获取患者姓名
-        String patientName = postObjVo.getOrderChargeDto().getPatientName();
-        //获取总金额
-        BigDecimal orderAmount = postObjVo.getOrderChargeDto().getOrderAmount();
-        //创建时间
-        LocalDateTime createTime = LocalDateTime.now();
-        //支付时间
-        LocalDateTime payTime = LocalDateTime.now();
-        hisOrderChargeMapper.insertAllWX(orderId1, regId, patientName, orderAmount, createTime,payTime);
-        //获取itemId修改状态
-        List<PostObjVo1> orderChargeItemDtoList = postObjVo.getOrderChargeItemDtoList();
-        for (int i = 0; i < orderChargeItemDtoList.size(); i++) {
-           hisCareOrderItemMapper.updBystatus(orderChargeItemDtoList.get(i).getItemId());
-        }
-        for (int i = 0; i < orderChargeItemDtoList.size(); i++) {
-           OrderChargeItem orderChargeItem = new OrderChargeItem();
-           orderChargeItem.setOrderId(orderId1);
-           orderChargeItem.setItemId(orderChargeItemDtoList.get(i).getItemId());
-           orderChargeItem.setItemType(orderChargeItemDtoList.get(i).getItemType());
-           orderChargeItem.setItemName(orderChargeItemDtoList.get(i).getItemName());
-           orderChargeItem.setItemNum(orderChargeItemDtoList.get(i).getItemNum());
-           orderChargeItem.setItemPrice(orderChargeItemDtoList.get(i).getItemPrice());
-           orderChargeItem.setItemAmount(orderChargeItemDtoList.get(i).getItemAmount());
-           orderChargeItem.setCoId(orderChargeItemDtoList.get(i).getCoId());
-           orderChargeItem.setStatus("0");
-           hisOrderChargeItemMapper.insert(orderChargeItem);
-        }
-        return new Result(200, "生成二维码成功", result);
+      try {
+         //设置请求的参数--格式为xml
+         Map<String, String> params = new HashMap<>();//请求参数
+         params.put("appid", appId);//公众号ID
+         params.put("mch_id", mchId);//商品号id
+         params.put("nonce_str", WXPayUtil.generateNonceStr());//随机字符串
+         params.put("body", postObjVo.getOrderChargeDto().getPatientName());//标题
+         params.put("out_trade_no", orderId);//订单号
+         //支付金额0.01 未来换成真是的金额
+         params.put("total_fee", new BigDecimal(0.01).multiply(new BigDecimal(100)).longValue() + "");
+         params.put("spbill_create_ip", "127.0.0.1");//未来写成项目部署的ip
+         params.put("notify_url", "http:localhost:8090/charge/api/hisOrderCharge");
+         params.put("trade_type", "NATIVE");//支付方式使用PC
+         //创建httpClient对象 作用远程调用
+         HttpClient client = new HttpClient("https://api.mch.weixin.qq.com/pay/unifiedorder");
+         //支持https协议
+         client.setHttps(true);
+         //设置请求参数
+         client.setXmlParam(WXPayUtil.generateSignedXml(params, apiKey));
+         //发送请求
+         client.post();
+         //获取请求的相应结果
+         String content = client.getContent();
+         Map<String, String> map = WXPayUtil.xmlToMap(content);
+         if (map.get("result_code").equals("SUCCESS")) {
+            Map<String, Object> result = new HashMap<>();
+            result.put("codeUrl", map.get("code_url"));
+            result.put("price", postObjVo.getOrderChargeDto().getOrderAmount());
+            result.put("orderId", orderId);
+            //创建订单
+            //获取挂号单id
+            String regId = postObjVo.getOrderChargeDto().getRegId();
+            //获取患者姓名
+            String patientName = postObjVo.getOrderChargeDto().getPatientName();
+            //获取总金额
+            BigDecimal orderAmount = postObjVo.getOrderChargeDto().getOrderAmount();
+            //创建时间
+            LocalDateTime createTime = LocalDateTime.now();
+            //支付时间
+            LocalDateTime payTime = LocalDateTime.now();
+            hisOrderChargeMapper.insertAllWX(orderId, regId, patientName, orderAmount, createTime,payTime);
+            //获取itemId修改状态
+            List<PostObjVo1> orderChargeItemDtoList = postObjVo.getOrderChargeItemDtoList();
+            for (int i = 0; i < orderChargeItemDtoList.size(); i++) {
+               hisCareOrderItemMapper.updBystatus(orderChargeItemDtoList.get(i).getItemId());
+            }
+            for (int i = 0; i < orderChargeItemDtoList.size(); i++) {
+               OrderChargeItem orderChargeItem = new OrderChargeItem();
+               orderChargeItem.setOrderId(orderId);
+               orderChargeItem.setItemId(orderChargeItemDtoList.get(i).getItemId());
+               orderChargeItem.setItemType(orderChargeItemDtoList.get(i).getItemType());
+               orderChargeItem.setItemName(orderChargeItemDtoList.get(i).getItemName());
+               orderChargeItem.setItemNum(orderChargeItemDtoList.get(i).getItemNum());
+               orderChargeItem.setItemPrice(orderChargeItemDtoList.get(i).getItemPrice());
+               orderChargeItem.setItemAmount(orderChargeItemDtoList.get(i).getItemAmount());
+               orderChargeItem.setCoId(orderChargeItemDtoList.get(i).getCoId());
+               orderChargeItem.setStatus("0");
+               hisOrderChargeItemMapper.insert(orderChargeItem);
+            }
+            return new Result(200, "生成二维码成功", result);
 
-     }
-  }catch (Exception e){
-     e.printStackTrace();
+         }
+      }catch (Exception e){
+         e.printStackTrace();
       }
-         return new Result<>(200, "订单失效", null);
+      return new Result<>(200, "订单失效", null);
    }
 
    @Override
    public Result<List<OrderCharge>> updByStatus(String orderId) {
       try {
-         //根据订单状态查询微信的支付的状态
-         HttpClient client = new HttpClient("https://api.mch.weixin.qq.com/pay/orderquery");
-         Map<String, String> params = new HashMap<>();
-         params.put("appid", appId);
-         params.put("mch_id", mchId);
-         params.put("out_trade_no", orderId);
-         params.put("nonce_str", WXPayUtil.generateNonceStr());
-         client.setHttps(true);
-         client.setXmlParam(WXPayUtil.generateSignedXml(params,apiKey));
-         client.post();
-         String content = client.getContent();
-         System.out.println(content);
-         Map<String, String> map = WXPayUtil.xmlToMap(content);
-         if (map.get("trade_state").equals("SUCCESS")){
-
-            //1修改订单状态
-            hisOrderChargeMapper.updBystatus(orderId);
+         HttpClient httpClient = new HttpClient("https://api.mch.weixin.qq.com/pay/orderquery");
+         HashMap<String, String> map = new HashMap<>();
+         map.put("appid", appId);
+         map.put("mch_id", mchId);
+         map.put("nonce_str", WXPayUtil.generateNonceStr());
+         map.put("out_trade_no", orderId);
+         httpClient.setHttps(true);
+         httpClient.setXmlParam(WXPayUtil.generateSignedXml(map, apiKey));
+         httpClient.post();
+         // 获取请求的响应结果
+         String content = httpClient.getContent();
+         Map<String, String> StringMap = WXPayUtil.xmlToMap(content);
+         if (StringMap.get("trade_state").equals("SUCCESS")) { //二维码支付成功 开始修改订单
             QueryWrapper<OrderChargeItem> wrapper = new QueryWrapper<>();
-            wrapper.eq("order_id",orderId);
+            wrapper.eq("order_id", orderId);
             List<OrderChargeItem> orderChargeItems = hisOrderChargeItemMapper.selectList(wrapper);
-            for (int i =0;orderChargeItems.size()>i;i++){
-               hisOrderChargeItemMapper.updateBystatus(orderId);
+            for (int i = 0; i < orderChargeItems.size(); i++) {
+               hisOrderChargeItemMapper.updataBystatus(orderId);
             }
-            return  new Result(2000,"支付成功",true);
+            return new Result(2000, "支付成功", true);
          }
-      }catch (Exception e){
-         e.printStackTrace();
+      } catch (Exception e) {
       }
-      return new Result(200,"支付成功",false);
+      return new Result(2000, "请从新扫描二维码支付", false);
    }
 
    //处方发药
@@ -274,6 +263,7 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
          String itemName = careOrderItem.getItemName();
          charFeign.num(String.valueOf(num), itemName);
       }
+
       return new Result<>(200,"成功",true);
    }
 
@@ -296,14 +286,19 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
    @Override
    //收费列表：支付宝支付
    public Result<List<CareOrder>> updateBystatus(String orderId) {
-      System.out.println("sriogioweiowe"+orderId);
+      //1.根据订单号查询出订单信息
+      QueryWrapper<OrderCharge> wrapper = new QueryWrapper<>();
+      wrapper.eq("order_id", orderId);
+      OrderCharge orderCharge = hisOrderChargeMapper.selectOne(wrapper);
+      String patientName = orderCharge.getPatientName();
+      BigDecimal orderAmount = orderCharge.getOrderAmount();
       try {
          //设置请求的参数--格式为xml
          Map<String, String> params = new HashMap<>();//请求参数
          params.put("appid", appId);//公众号ID
          params.put("mch_id", mchId);//商品号id
          params.put("nonce_str", WXPayUtil.generateNonceStr());//随机字符串
-         params.put("body", "药材");//标题
+         params.put("body",patientName);//标题
          params.put("out_trade_no", orderId);//订单号
          //支付金额0.01 未来换成真是的金额
          params.put("total_fee", new BigDecimal(0.01).multiply(new BigDecimal(100)).longValue() + "");
@@ -324,56 +319,14 @@ public class HisOrderChargeServiceImpl implements HisOrderChargeService {
          if (map.get("result_code").equals("SUCCESS")) {
             Map<String, Object> result = new HashMap<>();
             result.put("codeUrl", map.get("code_url"));
-            QueryWrapper<OrderCharge> wrapper = new QueryWrapper<>();
-            wrapper.eq("order_id",orderId);
-            OrderCharge orderCharge = hisOrderChargeMapper.selectOne(wrapper);
-            result.put("price",orderCharge.getOrderAmount());
+            result.put("price",orderAmount );
             result.put("orderId", orderId);
-            return new Result(200, "生成二维码成功", result);
+            return new Result(2000, "生成二维码成功", result);
          }
-      }catch (Exception e){
+      } catch (Exception e) {
          e.printStackTrace();
       }
-      return new Result<>(200, "订单失效", null);
+      return new Result(2000, "订单失效了", null);
    }
-
-   @Override
-   public Result<List<OrderCharge>> updBystatus1(String orderId) {
-       System.out.println("sriogioweiowsdsdseweafafafafasfe===="+orderId);
-      try {
-         //根据订单状态查询微信的支付的状态
-         HttpClient client = new HttpClient("https://api.mch.weixin.qq.com/pay/orderquery");
-         Map<String, String> params = new HashMap<>();
-         params.put("appid", appId);
-         params.put("mch_id", mchId);
-         params.put("out_trade_no", orderId);
-         params.put("nonce_str", WXPayUtil.generateNonceStr());
-         client.setHttps(true);
-         client.setXmlParam(WXPayUtil.generateSignedXml(params,apiKey));
-         client.post();
-         String content = client.getContent();
-         Map<String, String> map = WXPayUtil.xmlToMap(content);
-         if (map.get("trade_state").equals("SUCCESS")){
-            //1修改订单状态
-            hisOrderChargeMapper.updBystatus(orderId);
-            QueryWrapper<OrderChargeItem> wrapper = new QueryWrapper<>();
-            wrapper.eq("order_id",orderId);
-            List<OrderChargeItem> orderChargeItems = hisOrderChargeItemMapper.selectList(wrapper);
-            for (int i =0;orderChargeItems.size()>i;i++){
-               hisOrderChargeItemMapper.updateBystatus(orderId);
-            }
-            for (int i =0;orderChargeItems.size()>i;i++){
-               QueryWrapper<CareOrderItem> wrapper1 = new QueryWrapper<>();
-               wrapper1.eq("item_id",orderChargeItems.get(i).getItemId());
-               hisCareOrderItemMapper.updateitemId(wrapper1);
-            }
-            return  new Result(200,"支付成功",true);
-         }
-      }catch (Exception e){
-         e.printStackTrace();
-      }
-      return new Result(200,"支付成功",false);
-   }
-
 
 }

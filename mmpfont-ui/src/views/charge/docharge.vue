@@ -286,13 +286,13 @@ export default {
       }
     },
 
-    // 支付宝支付
-    handlePayWithZfb() {
+    //支付宝支付
+    handlePayWithZfb(){
       if (!this.careHistory.regId) {
-        this.$message.error('请输入挂号单ID查询')
+        this.$message.warning("请输入挂单号ID查询")
         return
       } else if (this.itemObjs.length === 0) {
-        this.$message.warning('请选择要支付的项目')
+        this.$message.warning("请选择要支付的项目")
         return
       } else {
         // 组装数据
@@ -325,18 +325,17 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          // 打开支付的弹出层
-          this.openPay = true
           this.$axios.post("charge/api/hisOrderCharge/carateNative",postObj).then(result=>{
             this.payObj = result.data.t
             this.$message.success('订单创建成功，请扫码支付')
             const tx = this
+            tx.openPay=true // 打开支付的弹出层
             // 定时轮询
             tx.intervalObj = setInterval(function() {
+
               // 根据ID查询订单信息
-              tx.$axios.post("charge/api/hisOrderCharge/updstatus/"+tx.payObj.orderId).then(r => {
-                if (r.data.t ===true) { // 说明订单状态为支付成功
-                  // 清空定时器
+              tx.$axios.post("charge/api/hisOrderCharge/updstatus/"+tx.payObj.orderId).then(result=>{
+                if (result.data.t==true){  // 说明订单状态为支付成功
                   clearInterval(tx.intervalObj)
                   tx.$notify({
                     title: '支付成功',
@@ -346,18 +345,18 @@ export default {
                   tx.openPay = false
                   tx.resetCurrentParams()
                 }
-              }).catch(() => {
+              }).catch(()=>{
                 // 清空定时器
                 clearInterval(tx.intervalObj)
               })
-            }, 200)
+            },2000)
             this.loading = false
           }).catch(() => {
             this.$message.error('创建订单失败')
             this.loading = false
           })
-        }).catch(() => {
-          this.$message.info('创建已取消')
+        }).catch(()=>{
+          this.$message.error('创建已取消')
           this.loading = false
         })
       }
