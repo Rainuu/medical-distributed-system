@@ -15,7 +15,7 @@
     <if test="doctorName!='' and doctorName!=null">
         doctor_name like concat('%',#{doctorName},'%')
     </if>
-    <if test="doctorName!='' and doctorName!=null or dateRange1 !='' and dateRange1 !=null ">
+    <if test="doctorName!='' and doctorName!=null and dateRange1 !='' and dateRange1 !=null ">
         and
     </if>
     <if test="dateRange1 !='' and dateRange1 !=null">
