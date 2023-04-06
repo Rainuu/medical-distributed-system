@@ -72,7 +72,7 @@
           label="备注">
       </el-table-column>
       <el-table-column
-          prop="registrationId"
+          prop="regId"
           label="挂号单号"
           v-if="false">
       </el-table-column>
@@ -101,7 +101,7 @@
     <!-- 开始检查开始 -->
     <el-card style="margin-bottom:3px">
       <div v-if="showBottom" v-loading="bottomLoading">
-        <el-form style="clear: both" label-position="left" label-width="120px" inline class="demo-table-expand">
+        <el-form label-position="left" label-width="120px" inline class="demo-table-expand">
           <el-form-item label="挂号单号:">
             <span>{{ fromData.regId }}</span>
           </el-form-item>
@@ -236,7 +236,7 @@ export default {
       this.currentRow = row
       if (row !== null) {
         this.bottomLoading = true;
-        this.fromData.regId=row.registrationId
+        this.fromData.regId=row.regId
         this.fromData.patientName=row.patientName
         this.fromData.checkItemName=row.itemName
         this.fromData.remark=row.remark

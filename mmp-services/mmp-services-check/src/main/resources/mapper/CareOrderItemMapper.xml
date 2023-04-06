@@ -17,13 +17,14 @@
     </resultMap>
 
     <select id="selectAll" resultMap="HisCareOrderItemMap">
-        select a.* from (select r.registration_id,r.patient_name,r.patient_id,o.co_id,i.item_id,
-        i.item_ref_id,i.item_name,i.num,i.price,i.amount,i.remark,i.status
-        from his_registration r,his_care_order o,his_care_order_item i
-        where r.patient_id=o.patient_id and o.co_id=i.co_id and
-        i.item_type=1 and i.status=1 and r.registration_status=3
+        select a.* from (SELECT c.reg_id,c.patient_id,c.patient_name,c.co_id,i.item_id,
+        i.item_ref_id,i.item_name,i.num,i.price,i.amount,i.remark,i.status FROM his_care_order_item i LEFT JOIN
+        (select r.reg_id,r.patient_id,r.patient_name,o.co_id
+        from his_care_history r,his_care_order o
+        where r.ch_id=o.ch_id)c on c.co_id=i.co_id where
+        i.item_type=1 and i.status=1
         <if test="regId!='' and regId!=null">
-            and r.registration_id=#{param2}
+            and r.reg_id=#{param2}
         </if>
         <if test="checkItemIds != null and checkItemIds.size > 0">and i.item_ref_id in
             <foreach collection="checkItemIds" item="checkItemId" open="(" separator="," close=")">

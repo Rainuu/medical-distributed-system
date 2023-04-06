@@ -195,8 +195,8 @@ export default {
     // 查询销售列表
     listCheckStat() {
       this.loading = true
-      //alert(this.queryCheckParams.checkItemId)
-      var param={'checkItemId':this.queryCheckParams.checkItemId,'dateRange1':this.dateRange[0],'dateRange2':this.dateRange[1]}
+      //alert(this.queryCheckStatParams.checkItemId)
+      var param={'checkItemId':this.queryCheckStatParams.checkItemId,'dateRange1':this.dateRange[0],'dateRange2':this.dateRange[1]}
       this.$axios.post('/statistics/api/checkFeign/selectAllTwo',qs.stringify(param)).then(res => {
         this.checkStatList = res.data.t
         this.loading = false

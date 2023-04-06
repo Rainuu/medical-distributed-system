@@ -31,8 +31,8 @@ public class ApiRegistrationServiceImpl implements ApiRegistrationService {
         if (StringUtils.hasText(registrationVo.getDoctorName())) {
             wrapper.like("doctor_name",registrationVo.getDoctorName());
         }
-        if(Objects.nonNull(registrationVo.getDateRange())&&registrationVo.getDateRange().length==2){
-            wrapper.between("create_time",registrationVo.getDateRange()[0],registrationVo.getDateRange()[1]);
+        if(StringUtils.hasText(registrationVo.getDateRange1())&&StringUtils.hasText(registrationVo.getDateRange2())){
+            wrapper.between("create_time",registrationVo.getDateRange1(),registrationVo.getDateRange2());
         }
         List<Registration> registrations = registrationDao.selectList(wrapper);
         return new Result<>(200,"统计查询",registrations);
@@ -46,8 +46,9 @@ public class ApiRegistrationServiceImpl implements ApiRegistrationService {
     @Override
     public Result<List<Registration>> ApiRegistrationSql(RegistrationVo registrationVo) {
         String doctorName = registrationVo.getDoctorName();
-        String[] dateRange = registrationVo.getDateRange();
-        List<Registration> registrations = registrationDao.selectSum(doctorName,dateRange);
+        String dateRange1 = registrationVo.getDateRange1();
+        String dateRange2 = registrationVo.getDateRange2();
+        List<Registration> registrations = registrationDao.selectSum(doctorName,dateRange1,dateRange2);
         return new Result<>(200,"统计查询",registrations);
     }
 }

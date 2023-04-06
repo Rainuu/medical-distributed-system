@@ -73,7 +73,7 @@ public class CareOrderItem implements Serializable {
     private String patientName;
 
     @TableField(exist = false)
-    private String registrationId;
+    private String regId;
 
 
 

@@ -52,7 +52,7 @@
                 and
             </if>
             <if test="dateRange1 !='' and dateRange1 !=null">
-                create_time between #{param2,jdbcType=VARCHAR} and #{param3,jdbcType=VARCHAR};
+                create_time between #{param2,jdbcType=VARCHAR} and #{param3,jdbcType=VARCHAR}
             </if>
       GROUP BY check_item_id,check_item_name
     </select>

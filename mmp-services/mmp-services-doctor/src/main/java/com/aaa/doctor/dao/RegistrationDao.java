@@ -16,7 +16,6 @@ public interface RegistrationDao extends BaseMapper<Registration> {
 
     Integer getRegNumber(Long deptId);
 
-    List<Registration> selectSum(String doctorName, String[] dateRange);
+    List<Registration> selectSum(String doctorName, String dateRange1,String dateRange2);
 
-    int updStatus(@Param("registrationId") String registrationId, @Param("status") String status);
 }

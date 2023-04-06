@@ -35,7 +35,7 @@
         <!-- 查询条件结束 -->
         <!-- 数据表格开始 -->
         <el-table v-loading="loading" border :data="workloadList" show-summary>
-          <el-table-column label="挂号ID" prop="regId" align="center" />
+          <el-table-column label="挂号ID" prop="registrationId" align="center" />
           <el-table-column label="医生编号" prop="userId" align="center" />
           <el-table-column label="医生姓名" prop="doctorName" align="center" />
           <el-table-column label="挂号费用" prop="registrationAmount" align="center" />
@@ -90,6 +90,8 @@
 
 <script>
 // import { queryWorkload, queryWorkloadStat } from '@/api/statistics/workload'
+import qs from "qs";
+
 export default {
   data() {
     return {
@@ -130,7 +132,8 @@ export default {
     // 查询工作量列表
     listWorkload() {
       this.loading = true
-      this.$axios.post("/doctor/api/registration/queryByDoctor",this.queryWorkloadParams,this.dateRange).then(res => {
+      var param={'doctorName':this.queryWorkloadParams.doctorName,'dateRange1':this.dateRange[0],'dateRange2':this.dateRange[1]}
+      this.$axios.post('/doctor/api/registration/queryByDoctor',qs.stringify(param)).then(res => {
         this.workloadList = res.data.t
         this.loading = false
       }).catch(() => {
@@ -151,7 +154,8 @@ export default {
     // 查询工作量列表
     listWorkloadStat() {
       this.loading = true
-      this.$axios.post("/doctor/api/registration/queryByDoctor2",this.queryWorkloadParams,this.dateRange).then(res => {
+      var param={'doctorName':this.queryWorkloadStatParams.doctorName,'dateRange1':this.dateRange[0],'dateRange2':this.dateRange[1]}
+      this.$axios.post('/doctor/api/registration/queryByDoctor2',qs.stringify(param)).then(res => {
         this.workloadStatList = res.data.t
         this.loading = false
       }).catch(() => {
