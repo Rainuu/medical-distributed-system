@@ -41,7 +41,7 @@ public class LoginInfoAspect {
             LoginLocation = IpUtil.getAddress(ipAddr);
         }
         String browser=getBrowserName(request.getHeader("User-Agent"));
-        String os=getRequestSystemInfo(request);
+        String os=getRequestSystemInfo(request.getHeader("User-Agent"));
         String loginStatus="0";
         String loginType="0";
         String msg="";
@@ -106,45 +106,55 @@ public class LoginInfoAspect {
         }
     }
 
-    private   String getRequestSystemInfo(HttpServletRequest request){
-        String systenInfo = null;
-        String header = request.getHeader("user-agent");
-        if(header == null || header.equals("")){
-            return "";
+    private   String getRequestSystemInfo(String header){
+        String systenInfo = "";
+        if (header == null || header.equals(""))// 为空都默认win10
+        {
+            systenInfo = "windows10";
+            return systenInfo;
         }
-        //得到用户的操作系统
-        if (header.indexOf("NT 6.0") > 0){
-            systenInfo = "Windows Vista/Server 2008";
-        } else if (header.indexOf("NT 5.2") > 0){
-            systenInfo = "Windows Server 2003";
-        } else if (header.indexOf("NT 5.1") > 0){
-            systenInfo = "Windows XP";
-        } else if (header.indexOf("NT 6.0") > 0){
-            systenInfo = "Windows Vista";
-        } else if (header.indexOf("NT 6.1") > 0){
-            systenInfo = "Windows 7";
-        } else if (header.indexOf("NT 6.2") > 0){
-            systenInfo = "Windows Slate";
-        } else if (header.indexOf("NT 6.3") > 0){
-            systenInfo = "Windows 9";
-        } else if (header.indexOf("NT 5") > 0){
-            systenInfo = "Windows 2000";
-        } else if (header.indexOf("NT 4") > 0){
-            systenInfo = "Windows NT4";
-        } else if (header.indexOf("Me") > 0){
-            systenInfo = "Windows Me";
-        } else if (header.indexOf("98") > 0){
-            systenInfo = "Windows 98";
-        } else if (header.indexOf("95") > 0){
-            systenInfo = "Windows 95";
-        } else if (header.indexOf("Mac") > 0){
-            systenInfo = "Mac";
-        } else if (header.indexOf("Unix") > 0){
-            systenInfo = "UNIX";
-        } else if (header.indexOf("Linux") > 0){
-            systenInfo = "Linux";
-        } else if (header.indexOf("SunOS") > 0){
-            systenInfo = "SunOS";
+
+        // 得到用户的操作系统
+        if (header.indexOf("NT 6.1") > 0 || header.indexOf("NT 5") > 0 || header.indexOf("NT 6.3") > 0 || header.indexOf("NT 6.2") > 0 || header.indexOf("NT 6.0") > 0 || header.indexOf("NT 5.1") > 0
+                || header.indexOf("NT 5.2") > 0 || header.indexOf("NT 6.0") > 0)// win10一下的都取win7
+        {
+            systenInfo = "windows7";
+        }
+        if (header.indexOf("Mac") > 0)// mac系统
+        {
+            systenInfo = "mac系统";
+        }
+        if (header.indexOf("Unix") > 0)// unix系统
+        {
+            systenInfo = "unix系统";
+        }
+        if (header.indexOf("SunOS") > 0)// solaris系统
+        {
+            systenInfo = "solaris系统";
+        }
+        if (header.indexOf("Linux") > 0)// Linux系统
+        {
+            systenInfo = "linux系统";
+        }
+        if (header.indexOf("Ubuntu") > 0)// ubuntu系统
+        {
+            systenInfo = "ubuntu系统";
+        }
+        if (header.indexOf("iPhone") > 0)// 苹果手机
+        {
+            systenInfo = "苹果手机";
+        }
+        if (header.indexOf("Android") > 0)// 安卓系统
+        {
+            systenInfo = "安卓手机";
+        }
+        if (header.indexOf("NT 10") > 0)// win10
+        {
+            systenInfo = "windows10";
+        }
+        if (header == null || header.equals("") || systenInfo.equals("") || systenInfo == null)// 没找到默认为windows10
+        {
+            systenInfo = "windows10";
         }
         return systenInfo;
     }

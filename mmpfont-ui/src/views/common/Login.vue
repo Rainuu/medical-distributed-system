@@ -3,7 +3,7 @@
     <div class="login-content">
       <div class="login-main">
         <h2 class="login-main-title">管理员登录</h2>
-        <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
+        <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit('dataForm')" status-icon>
           <el-form-item prop="userName">
             <el-input v-model="dataForm.username" placeholder="帐号"></el-input>
           </el-form-item>
@@ -28,7 +28,7 @@ export default {
         password: '123456'
       },
       dataRule: {
-        userName: [{
+        username: [{
           required: true,
           message: '帐号不能为空',
           trigger: 'blur'
@@ -43,10 +43,22 @@ export default {
   },
   methods: {
     // 提交表单
-    dataFormSubmit() {
-      this.$axios.post("/login",qs.stringify(this.dataForm)).then(res=>{
-        sessionStorage.setItem("token",res.data.t);
-        this.$router.push("/index")
+    dataFormSubmit(formName) {
+      this.$refs.dataForm.validate((valid) => {
+        if (valid) {
+          this.$axios.post("/login",qs.stringify(this.dataForm)).then(res=>{
+            if(res.data.code!=200){
+              this.$message.error("登录失败")
+              this.$router.push("/login")
+
+            }else {
+              sessionStorage.setItem("token",res.data.t);
+              this.$router.push("/index")}
+        })
+        }else {
+
+        }
+
       })
     }
   }

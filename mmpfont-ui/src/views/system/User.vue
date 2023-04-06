@@ -151,95 +151,135 @@
         :before-close="handleClose">
       <el-form :model="userForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 
-        <el-form-item label="ID" prop="userId" hidden="true" size="mini">
-          <el-input v-model="userForm.userId"></el-input>
-        </el-form-item>
-        <el-form-item label="姓名" prop="userName">
-          <el-input v-model="userForm.userName"></el-input>
-        </el-form-item>
-        <template v-if="judge">
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="userForm.password"></el-input>
-        </el-form-item>
-        </template>
-          <el-form-item label="手机号" prop="phone">
-            <el-input v-model="userForm.phone"></el-input>
-          </el-form-item>
-          <el-form-item label="所属科室" prop="strong">
-            <el-select v-model="userForm.deptId" placeholder="请选择活动区域">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="姓名" prop="userName">
+              <el-input v-model="userForm.userName" style="width:240px" placeholder="请输入用户名称" clearable size="small" />
+            </el-form-item></el-col>
+          <el-col :span="12">
+            <el-form-item label="手机号" prop="phone">
+              <el-input v-model="userForm.phone" style="width:240px" placeholder="请输入手机号，作为登陆凭证" clearable size="small" />
+            </el-form-item></el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="所属科室" prop="deptId">
+              <el-select
+                  v-model="userForm.deptId"
+                  placeholder="所属科室"
+                  clearable
+                  size="small"
+                  style="width:240px"
+              >
                 <el-option
-                    v-for="item in this.deptInfo"
-                    :key="item.deptId"
-                    :label="item.deptName"
-                    :value="item.deptId">
-                </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="级别" prop="userRank">
-            <el-select v-model="userForm.userRank" placeholder="请选择活动区域">
-              <el-option
-                  v-for="item in this.dictList.filter((n)=>{ return n.dictType==='sys_user_level'})"
-                  :key="item.dictValue"
-                  :label="item.dictLabel"
-                  :value="item.dictValue">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="年龄">
-            <el-input-number v-model="userForm.age"  :min="1" :max="10" label="描述文字"></el-input-number>
-          </el-form-item>
-          <el-form-item label="背景" prop="background">
-            <el-select v-model="userForm.background" placeholder="请选择活动区域">
-              <el-option
-                  v-for="item in this.dictList.filter((n)=>{ return n.dictType==='sys_user_background'})"
-                  :key="item.dictValue"
-                  :label="item.dictLabel"
-                  :value="item.dictValue">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="性别">
-            <el-radio v-model="userForm.sex" label="0">男</el-radio>
-            <el-radio v-model="userForm.sex" label="1">女</el-radio>
-            <el-radio v-model="userForm.sex" label="2">未知</el-radio>
-          </el-form-item>
-
-          <el-form-item label="状态">
-            <el-radio v-model="userForm.status" label="0">正常</el-radio>
-            <el-radio v-model="userForm.status" label="1">停用</el-radio>
-          </el-form-item>
-
-          <el-form-item label="是否参与排班">
-            <el-radio v-model="userForm.schedulingFlag" label="1">是</el-radio>
-            <el-radio v-model="userForm.schedulingFlag" label="0">否</el-radio>
-          </el-form-item>
-          <el-form-item label="邮箱" prop="name">
-            <el-input v-model="userForm.email"></el-input>
-          </el-form-item>
-              <el-form-item label="擅长" prop="name">
-                <el-input
-                    type="textarea"
-                    :rows="2"
-                    placeholder="请输入内容"
-                    v-model="userForm.strong">
-                </el-input>
-              </el-form-item>
-          <el-form-item label="荣誉" prop="name">
-            <el-input
-                type="textarea"
-                :rows="2"
-                placeholder="请输入内容"
-                v-model="userForm.honor">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="简介" prop="name">
-            <el-input
-                type="textarea"
-                :rows="2"
-                placeholder="请输入内容"
-                v-model="userForm.introduction">
-            </el-input>
-          </el-form-item>
+                    v-for="d in deptInfo"
+                    :key="d.deptId"
+                    :label="d.deptName"
+                    :value="d.deptId"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="级别" prop="userRank">
+              <el-select
+                  v-model="userForm.userRank"
+                  placeholder="用户级别"
+                  clearable
+                  size="small"
+                  style="width:240px"
+              >
+                <el-option
+                    v-for="d in dictList.filter((n)=>{return n.dictType==='sys_user_level'})"
+                    :key="d.dictValue"
+                    :label="d.dictLabel"
+                    :value="d.dictValue"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="年龄" prop="age">
+              <el-input-number v-model="userForm.age" clearable size="small" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="背景" prop="background">
+              <el-select
+                  v-model="userForm.background"
+                  placeholder="学历"
+                  clearable
+                  size="small"
+                  style="width:240px"
+              >
+                <el-option
+                    v-for="d in dictList.filter((n)=>{return n.dictType==='sys_user_background'})"
+                    :key="d.dictValue"
+                    :label="d.dictLabel"
+                    :value="d.dictValue"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="性别" prop="sex">
+              <el-radio-group v-model="userForm.sex">
+                <el-radio
+                    v-for="d in  dictList.filter((n)=>{return n.dictType==='sys_user_sex'})"
+                    :key="d.dictValue"
+                    :label="d.dictValue"
+                    :value="d.dictValue"
+                >{{ d.dictLabel }}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="状态" prop="status">
+              <el-radio-group v-model="userForm.status">
+                <el-radio
+                    v-for="dict in  dictList.filter((n)=>{return n.dictType==='sys_normal_disable'})"
+                    :key="dict.dictValue"
+                    :label="dict.dictValue"
+                    :value="dict.dictValue"
+                >{{ dict.dictLabel }}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="是否参与排班" prop="schedulingFlag">
+                <el-radio v-model="userForm.schedulingFlag" label="0">是</el-radio>
+                <el-radio v-model="userForm.schedulingFlag" label="1">否</el-radio>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="邮箱" prop="email">
+              <el-input v-model="userForm.email" style="width:240px" placeholder="请输入用户邮箱" clearable size="small" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="擅长" prop="strong">
+              <el-input v-model="userForm.strong" type="textarea" placeholder="请输入用户擅长" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="荣誉" prop="honor">
+              <el-input v-model="userForm.honor" type="textarea" placeholder="请输入用户相关荣誉" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="简介" prop="introduction">
+              <el-input v-model="userForm.introduction" type="textarea" placeholder="请输入用户简介" />
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="上传头像" prop="file">
           <el-upload
               class="avatar-uploader"
@@ -270,6 +310,17 @@ import qs from 'qs'
 export default {
   name: "User",
   data() {
+    /**
+     * 校验手机号
+     */
+    const validatePhone = (rule, value, callback) => {
+      const regExp = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/
+      if (!regExp.test(value)) {
+        callback(new Error('请输入正确的手机号'))
+      } else {
+        callback()
+      }
+    }
     return {
       // 非单个禁用
       single: true,
@@ -325,6 +376,16 @@ export default {
           {required: true, message: '请输入活动名称', trigger: 'blur'},
           {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
         ],
+        phone:[
+          {
+            required: true,
+            message: '请填写手机号码',
+            trigger: 'blur',
+          }, {
+            validator: validatePhone,
+            trigger: 'change',
+          }
+        ]
 
       }
     }

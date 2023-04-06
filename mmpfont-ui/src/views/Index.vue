@@ -4,7 +4,7 @@
       <el-aside :width="asideWidth">
         <div style="margin-left: -118px;height: 60px">
           <!-- logo -->
-          <img  src="../assets/logo.jpeg" width="50" height="50" style="border-radius: 10px;margin-top: 5px" alt="">
+          <img  src="../assets/logo.jpeg" width="50" height="50" style="border-radius: 10px;margin-top: 5px" alt="" @click="begin">
           <!-- 顶部标题 -->
           <div style="margin-left: 172px;margin-top: -48px">
           <a v-if="!isCollaps" style="color: #eeeeee ; font-size: 30px" >云医疗</a>
@@ -107,20 +107,20 @@
               //标签页 开始
               editableTabsValue: '1',
               tabIndex: 1,
-              editableTabs: [{
-                  title: '首页',
-                  name: '1',
-                  url: '/common/findex'
-                  //content: 'Tab 1 content'
-              }],
+              editableTabs: [],
           }
         },
         created() {
             console.log(this)
           this.info()
           this.initLiftMenu()
+          this.begin()
         },
         methods:{
+          begin(){
+            this.tiaoz('/common/index','首页')
+           /* this.$router.push('/common/index')*/
+          },
           initLiftMenu(){
             this.$axios.get("/system/api/menu/leftMenu").then(res=>{
               this.leftMenu=res.data.t

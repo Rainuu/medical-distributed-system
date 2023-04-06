@@ -23,9 +23,9 @@ const routes = [
     children: [
         //首页
         {
-          path: '/common/findex',
-          name: 'findex',
-          component:()=>import('../views/common/findex.vue')
+          path: '/common/index',
+          name: 'index',
+          component:()=>import('../views/common/index')
         },
         // 系统管理(System)——(10)——梁梦磊
         {   //科室管理
