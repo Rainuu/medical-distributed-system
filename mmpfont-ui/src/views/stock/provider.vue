@@ -96,6 +96,12 @@
 <script>
   import qs from "qs";
   export default {
+    // 刷新页面
+    deactivated() {
+      //解决vue组件 前进刷新，后退不刷新，
+      //$destroy完全销毁一个实例，清理它与其它实例的连接，解绑它的全部指令及事件监听器。
+      this.$destroy();
+    },
     methods: {
       // 获取字典表数据————发请求给后端，由后端调用接口、跨域并获取字典表数据传给前端处理数据
       getDict() {

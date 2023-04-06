@@ -98,16 +98,12 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
         String providerId = purchaseAllVo.getPurchaseDto().getProviderId();
         BigDecimal purchaseTradeTotalAmount = purchaseAllVo.getPurchaseDto().getPurchaseTradeTotalAmount();
 
-        System.out.println("===================================="+providerId+purchaseId+purchaseTradeTotalAmount);
-
         HttpServletRequest request = WebUtil.getRequest();
         String token = request.getHeader("token");
         Map<String, Object> info = JwtUtil.getTokenChaim(token);
         String phone = (String) info.get("username");
         User byUsername = feign.getByUsername(phone);
         String userName = byUsername.getUserName();
-        // LocalDateTime localDateTime = LocalDateTime.now(); // 当前日期和时间】
-        Date date = new Date();
         Purchase purchase = new Purchase();
 
         purchase.setPurchaseId(purchaseId);
@@ -117,7 +113,9 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
         purchase.setCreateBy(userName);
         purchase.setUpdateBy(userName);
         purchase.setCreateTime(new Date());
-        purchase.setStorageOptTime(new Date());
+        purchase.setCreateBy(userName);
+        purchase.setUpdateBy(userName);
+        purchase.setApplyUserName(userName);
         // purchase.setExamine();
         purchaseDao.insert(purchase);
 
@@ -181,7 +179,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
         purchase.setCreateBy(userName);
         purchase.setUpdateBy(userName);
         purchase.setCreateTime(new Date());
-        purchase.setStorageOptTime(new Date());
+        purchase.setApplyUserName(userName);
         // purchase.setExamine();
         purchaseDao.insert(purchase);
 
@@ -236,6 +234,20 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
 
     @Override
     public void doInventory(String purchaseId) {
+
+        HttpServletRequest request = WebUtil.getRequest();
+        String token = request.getHeader("token");
+        Map<String, Object> info = JwtUtil.getTokenChaim(token);
+        String phone = (String) info.get("username");
+        User byUsername = feign.getByUsername(phone);
+        String userName = byUsername.getUserName();
+
+        // 添加入库操作人
+        Purchase purchase = new Purchase();
+        purchase.setStorageOptUser(userName);
+        purchase.setStorageOptTime(new Date());
+        purchaseDao.update(purchase,null);
+
         // 修改状态
         purchaseDao.RuKuUpd(purchaseId);
 
@@ -276,6 +288,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
             inventoryLog.setProducterId(producterId);
             inventoryLog.setConversion(conversion);
             inventoryLog.setUnit(unit);
+            inventoryLog.setCreateTime(new Date());
             //inventoryLog.setProviderId(producterId);
             inventoryLogDao.insert(inventoryLog);
 

@@ -145,6 +145,12 @@ export default {
       return value.toFixed(2)
     }
   },
+  // 刷新页面
+  deactivated() {
+    //解决vue组件 前进刷新，后退不刷新，
+    //$destroy完全销毁一个实例，清理它与其它实例的连接，解绑它的全部指令及事件监听器。
+    this.$destroy();
+  },
   methods: {
     // 切换按钮————点击tab调用的事件
     handleClick(tab, event) {

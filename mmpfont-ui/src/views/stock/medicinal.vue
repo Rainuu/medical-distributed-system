@@ -156,7 +156,7 @@
         <el-table-column prop="medicinesName" label="药品名称" width="100px" align="center"/>
         <el-table-column prop="medicinesNumber" label="药品编号" width="80px" align="center"/>
         <el-table-column prop="producterId" label="生产厂家" min-width="120px" align="center" :formatter="ProducterNameDict"/>
-        <el-table-column prop="medicinesType" label="药品类型" align="center" :formatter="(row)=>this.dictFormat(row,row.medicinesType,'his_medicines_type')"/>
+        <el-table-column prop="medicinesType" label="药品类型" width="105px" align="center" :formatter="(row)=>this.dictFormat(row,row.medicinesType,'his_medicines_type')"/>
         <el-table-column prop="prescriptionType" label="处方类型" width="80px" align="center" :formatter="(row)=>this.dictFormat(row,row.prescriptionType,'his_prescription_type')"/>
         <el-table-column prop="keywords" label="关键字" width="80px" align="center"/>
         <el-table-column prop="prescriptionPrice" label="处方价格" width="80px" align="center"/>
@@ -179,6 +179,12 @@
 <script>
   import qs from 'qs';
   export default {
+    // 刷新页面
+    deactivated() {
+      //解决vue组件 前进刷新，后退不刷新，
+      //$destroy完全销毁一个实例，清理它与其它实例的连接，解绑它的全部指令及事件监听器。
+      this.$destroy();
+    },
     methods: {
       // 获取生产厂家表字段
       getProducterNameOption(){
