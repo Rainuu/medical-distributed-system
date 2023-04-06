@@ -18,11 +18,17 @@ public class WorkServiceImpl implements WorkService {
 
     @Override
     public Result<List<Registration>> selectAll(RegistrationVo registrationVo) {
-        return workFeign.queryByDoctor(registrationVo);
+        String doctorName = registrationVo.getDoctorName();
+        String dateRange1 = registrationVo.getDateRange1();
+        String dateRange2 = registrationVo.getDateRange2();
+        return workFeign.queryByDoctor(doctorName,dateRange1,doctorName);
     }
 
     @Override
     public Result<List<Registration>> selectAllTwo(RegistrationVo registrationVo) {
-        return workFeign.queryByDoctor2(registrationVo);
+        String doctorName = registrationVo.getDoctorName();
+        String dateRange1 = registrationVo.getDateRange1();
+        String dateRange2 = registrationVo.getDateRange2();
+        return workFeign.queryByDoctor2(doctorName,dateRange1,doctorName);
     }
 }

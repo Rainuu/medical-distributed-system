@@ -7,15 +7,16 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 @FeignClient(value = "mmp-services-doctor") //获取system的nacos服务名，注册feign服务
 public interface WorkFeign {
     @PostMapping("doctor/api/registration/queryByDoctor")
-    public Result<List<Registration>> queryByDoctor(RegistrationVo registrationVo);
+    public Result<List<Registration>> queryByDoctor(@RequestParam String doctorName,@RequestParam String dateRange1, @RequestParam  String dateRange2);
     @PostMapping("doctor/api/registration/queryByDoctor2")
-    public Result<List<Registration>> queryByDoctor2(RegistrationVo registrationVo);
+    public Result<List<Registration>> queryByDoctor2(@RequestParam String doctorName,@RequestParam String dateRange1, @RequestParam  String dateRange2);
 
 
 }

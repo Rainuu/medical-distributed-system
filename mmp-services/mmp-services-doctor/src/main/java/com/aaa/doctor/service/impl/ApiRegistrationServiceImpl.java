@@ -26,13 +26,13 @@ public class ApiRegistrationServiceImpl implements ApiRegistrationService {
     private RegistrationDao registrationDao;
 
     @Override
-    public Result<List<Registration>> queryByDoctor(RegistrationVo registrationVo) {
+    public Result<List<Registration>> queryByDoctor(String doctorName, String dateRange1,String dateRange2) {
         QueryWrapper<Registration> wrapper = new QueryWrapper<>();
-        if (StringUtils.hasText(registrationVo.getDoctorName())) {
-            wrapper.like("doctor_name",registrationVo.getDoctorName());
+        if (StringUtils.hasText(doctorName)) {
+            wrapper.like("doctor_name",doctorName);
         }
-        if(StringUtils.hasText(registrationVo.getDateRange1())&&StringUtils.hasText(registrationVo.getDateRange2())){
-            wrapper.between("create_time",registrationVo.getDateRange1(),registrationVo.getDateRange2());
+        if(StringUtils.hasText(dateRange1)&&StringUtils.hasText(dateRange2)){
+            wrapper.between("create_time",dateRange1,dateRange2);
         }
         List<Registration> registrations = registrationDao.selectList(wrapper);
         return new Result<>(200,"统计查询",registrations);
@@ -44,10 +44,7 @@ public class ApiRegistrationServiceImpl implements ApiRegistrationService {
      * @param
      */
     @Override
-    public Result<List<Registration>> ApiRegistrationSql(RegistrationVo registrationVo) {
-        String doctorName = registrationVo.getDoctorName();
-        String dateRange1 = registrationVo.getDateRange1();
-        String dateRange2 = registrationVo.getDateRange2();
+    public Result<List<Registration>> ApiRegistrationSql(String doctorName, String dateRange1,String dateRange2) {
         List<Registration> registrations = registrationDao.selectSum(doctorName,dateRange1,dateRange2);
         return new Result<>(200,"统计查询",registrations);
     }

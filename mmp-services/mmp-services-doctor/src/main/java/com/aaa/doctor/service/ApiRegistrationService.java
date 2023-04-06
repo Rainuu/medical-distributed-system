@@ -14,6 +14,6 @@ import java.util.List;
  */
 public interface ApiRegistrationService {
 
-    Result<List<Registration>> queryByDoctor(RegistrationVo registrationVo);
-    Result<List<Registration>> ApiRegistrationSql(RegistrationVo registrationVo);
+    Result<List<Registration>> queryByDoctor(String doctorName, String dateRange1,String dateRange2);
+    Result<List<Registration>> ApiRegistrationSql(String doctorName, String dateRange1,String dateRange2);
 }

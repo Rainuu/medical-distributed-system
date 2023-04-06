@@ -73,6 +73,9 @@ public class CareOrderItem implements Serializable {
     private String patientName;
 
     @TableField(exist = false)
+    private String patientId;
+
+    @TableField(exist = false)
     private String regId;
 
 

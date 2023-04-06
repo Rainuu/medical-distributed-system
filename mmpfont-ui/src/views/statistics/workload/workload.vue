@@ -133,7 +133,7 @@ export default {
     listWorkload() {
       this.loading = true
       var param={'doctorName':this.queryWorkloadParams.doctorName,'dateRange1':this.dateRange[0],'dateRange2':this.dateRange[1]}
-      this.$axios.post('/doctor/api/registration/queryByDoctor',qs.stringify(param)).then(res => {
+      this.$axios.post('/statistics/api/workFeign/queryByDoctor',qs.stringify(param)).then(res => {
         this.workloadList = res.data.t
         this.loading = false
       }).catch(() => {
@@ -155,7 +155,7 @@ export default {
     listWorkloadStat() {
       this.loading = true
       var param={'doctorName':this.queryWorkloadStatParams.doctorName,'dateRange1':this.dateRange[0],'dateRange2':this.dateRange[1]}
-      this.$axios.post('/doctor/api/registration/queryByDoctor2',qs.stringify(param)).then(res => {
+      this.$axios.post('/statistics/api/workFeign/queryByDoctor2',qs.stringify(param)).then(res => {
         this.workloadStatList = res.data.t
         this.loading = false
       }).catch(() => {

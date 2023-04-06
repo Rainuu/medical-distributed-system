@@ -28,13 +28,13 @@ public class ApiRegistrationController {
      * @return
      */
     @PostMapping("queryByDoctor")
-    public Result<List<Registration>> queryByDoctor(RegistrationVo registrationVo) {
-        return apiregistrationService.queryByDoctor(registrationVo);
+    public Result<List<Registration>> queryByDoctor(String doctorName, String dateRange1,String dateRange2) {
+        return apiregistrationService.queryByDoctor(doctorName,dateRange1,dateRange2);
     }
 
     @PostMapping("queryByDoctor2")
-    public Result<List<Registration>> queryByDoctor2(RegistrationVo registrationVo) {
-        return apiregistrationService.ApiRegistrationSql(registrationVo);
+    public Result<List<Registration>> queryByDoctor2(String doctorName, String dateRange1,String dateRange2) {
+        return apiregistrationService.ApiRegistrationSql(doctorName,dateRange1,dateRange2);
     }
 
 }
