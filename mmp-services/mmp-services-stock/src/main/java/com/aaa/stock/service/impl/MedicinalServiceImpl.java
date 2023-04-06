@@ -129,5 +129,26 @@ public class MedicinalServiceImpl extends ServiceImpl<MedicinalDao, Medicines> i
     return false;
     }
 
+    @Override
+    public Boolean AddNum(String num, String itemName) {
+        BigDecimal bigDecimal = new BigDecimal(num);
+        QueryWrapper<Medicines> wrapper1=new QueryWrapper<>();
+        wrapper1.eq("medicines_name",itemName);
+        Medicines medicines = medicinalDao.selectOne(wrapper1);
+        BigDecimal medicinesStockNum = new BigDecimal(medicines.getMedicinesStockNum());
+        BigDecimal a=medicinesStockNum.subtract(bigDecimal);
+        if(a.compareTo(BigDecimal.valueOf(0))> -1 ){
+            BigDecimal i= medicinesStockNum.add(bigDecimal);
+            Medicines medicines1=new Medicines();
+            Integer z=i.intValue();
+            medicines1.setMedicinesStockNum(z);
+            QueryWrapper<Medicines> wrapper2=new QueryWrapper<>();
+            wrapper2.eq("medicines_name",itemName);
+            int update = medicinalDao.update(medicines1, wrapper2);
+            return update>0?true:false;
+        }
+        return false;
+    }
+
 
 }

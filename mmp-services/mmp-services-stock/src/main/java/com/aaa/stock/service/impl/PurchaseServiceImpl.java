@@ -11,6 +11,7 @@ import com.aaa.stock.dao.InventoryLogDao;
 import com.aaa.stock.dao.PurchaseDao;
 import com.aaa.stock.dao.PurchaseItemDao;
 import com.aaa.stock.feign.Feign;
+import com.aaa.stock.service.MedicinalService;
 import com.aaa.stock.service.PurchaseService;
 import com.aaa.stock.vo.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -45,6 +46,9 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
 
     @Autowired
     private Feign feign;
+
+    @Autowired
+    private MedicinalService medicinalService;
 
     @Override
     public Result<IPage<Purchase>> getAll(Integer current, Integer size, PurchaseVo purchaseVo) {
@@ -190,6 +194,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
             String medicinesType = purchaseAllVo.getPurchaseItemDtos().get(i).getMedicinesType();
             String prescriptionType = purchaseAllVo.getPurchaseItemDtos().get(i).getPrescriptionType();
             String unit = purchaseAllVo.getPurchaseItemDtos().get(i).getUnit();
+            String producterId = purchaseAllVo.getPurchaseItemDtos().get(i).getProducterId();
             Integer conversion = purchaseAllVo.getPurchaseItemDtos().get(i).getConversion();
             String keywords = purchaseAllVo.getPurchaseItemDtos().get(i).getKeywords();
             BigDecimal tradePrice = purchaseAllVo.getPurchaseItemDtos().get(i).getTradePrice();
@@ -199,6 +204,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
 
             PurchaseItem purchaseItem = new PurchaseItem();
 
+            purchaseItem.setProducterId(producterId);
             purchaseItem.setPurchaseId(purchaseId);
             purchaseItem.setMedicinesId(medicinesId);
             purchaseItem.setPurchaseNumber(purchaseNumber);
@@ -272,6 +278,9 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
             inventoryLog.setUnit(unit);
             //inventoryLog.setProviderId(producterId);
             inventoryLogDao.insert(inventoryLog);
+
+            // 修改入库
+            medicinalService.AddNum(inventoryLog.getInventoryLogNum().toString(),inventoryLog.getMedicinesName());
         }
 
 

@@ -35,4 +35,6 @@ public interface MedicinalService extends IService<Medicines> {
     Result<Page<Medicines>> MeDicinesController(NewCareVo newCareVo);
 
     Boolean num(String num, String itemName);
+
+    Boolean AddNum(String num, String itemName);
 }

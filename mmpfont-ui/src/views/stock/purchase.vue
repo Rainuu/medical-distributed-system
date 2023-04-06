@@ -168,7 +168,7 @@ export default {
             this.$message({type: 'success', message: '入库成功!'});
             this.initTable();
           })
-        } else if (this.rowStatus == 1 || this.rowStatus == 2 || this.rowStatus == 4 || this.rowStatus == 5){
+        } else if (this.rowStatus == 1 || this.rowStatus == 2 || this.rowStatus == 4 || this.rowStatus == 5 || this.rowStatus == 6){
             this.$message({type: 'error', message: '入库失败!'});
         }else {
           this.$message({type: 'info', message: '入库删除'});

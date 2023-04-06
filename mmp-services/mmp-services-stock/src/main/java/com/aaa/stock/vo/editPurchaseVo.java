@@ -145,6 +145,7 @@ public class editPurchaseVo {
      */
     private String producterId;
 
+    private String producerId;
     /**
      * 换算量
      */

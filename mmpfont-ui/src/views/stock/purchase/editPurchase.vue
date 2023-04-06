@@ -152,6 +152,11 @@ export default {
       deep: true
     }
   },
+  deactivated() {
+    //解决vue组件 前进刷新，后退不刷新，
+    //$destroy完全销毁一个实例，清理它与其它实例的连接，解绑它的全部指令及事件监听器。
+    this.$destroy();
+  },
   methods: {
     //----------------------添加药品-------------------------------------
     // 打开选择药品的弹出层
@@ -335,7 +340,7 @@ export default {
     queryPurchaseAndItemByPurchaseId(){
       // 接收路由传参————因为是修改页面
       const purchaseId = this.$route.params && this.$route.params.purchaseId
-      this.$axios.post("stock/api/purchaseItem/getAllById"+"/"+purchaseId).then(res => {
+      this.$axios.post("stock/api/purchaseItem/getAllById/"+purchaseId).then(res => {
         this.purchaseItemList=res.data.t;
         this.form.purchaseId=purchaseId;
         this.form.providerId=res.data.t[0].providerId;
