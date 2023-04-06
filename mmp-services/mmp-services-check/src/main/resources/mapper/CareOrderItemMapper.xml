@@ -24,7 +24,7 @@
         where r.ch_id=o.ch_id)c on c.co_id=i.co_id where
         i.item_type=1 and i.status=1
         <if test="regId!='' and regId!=null">
-            and r.reg_id=#{param2}
+            and c.reg_id=#{param2}
         </if>
         <if test="checkItemIds != null and checkItemIds.size > 0">and i.item_ref_id in
             <foreach collection="checkItemIds" item="checkItemId" open="(" separator="," close=")">
