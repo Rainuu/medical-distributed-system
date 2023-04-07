@@ -302,6 +302,10 @@ export default {
         });
       });
     },
+    resetQuery(){
+      this.selectAllCheckItem()
+      this.queryParams.regId=''
+    },
     /*上传文件*/
     handleRemove(file, fileList) {
       console.log(file, fileList);

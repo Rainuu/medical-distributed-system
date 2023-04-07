@@ -279,6 +279,10 @@ export default {
         tx.loading = false
       })
     },
+    resetQuery(){
+      this.selectAllCheckItem()
+      this.queryParams.regId=''
+    },
     reset(){
       this.$router.push({path:'/check/checkresult',query:{regId:this.fromData.regId}})
     }

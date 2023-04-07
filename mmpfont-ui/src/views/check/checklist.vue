@@ -225,6 +225,10 @@ export default {
       let v=row.resultStatus;
       return this.formatDict2(this.statusOptions,v);
     },
+    resetQuery(){
+      this.selectAllCheckItem()
+      this.queryParams.regId=''
+    }
   },
   created() {
     //加载系统状态

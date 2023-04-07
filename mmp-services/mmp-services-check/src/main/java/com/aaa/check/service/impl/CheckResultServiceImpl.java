@@ -78,7 +78,6 @@ public class CheckResultServiceImpl implements CheckResultService {
                                               String dateRange2) {
       System.out.println("====================================="+checkItemId);
       QueryWrapper<CheckResult> wrapper = new QueryWrapper<>();
-
       if (StringUtils.hasText(checkItemId)){
          wrapper.like("check_item_id",checkItemId);
       }
