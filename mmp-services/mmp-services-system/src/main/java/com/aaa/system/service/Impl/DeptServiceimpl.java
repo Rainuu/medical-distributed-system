@@ -7,6 +7,7 @@ import com.aaa.system.service.DeptService;
 import com.aaa.system.vo.DeptVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -114,5 +115,21 @@ public class DeptServiceimpl implements DeptService {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 通过deptId更新挂号量
+     * @param deptId
+     * @param regNum
+     * @return
+     */
+    @Override
+    public Boolean updDeptRegNumByDeptId(Long deptId, Integer regNum) {
+        UpdateWrapper<Dept> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("dept_id",deptId);
+        updateWrapper.set("reg_number",regNum);
+        int update = deptDao.update(null, updateWrapper);
+        boolean b = update == 1 ? true : false;
+        return b;
     }
 }

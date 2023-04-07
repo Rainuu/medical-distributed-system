@@ -16,7 +16,7 @@ import java.util.Map;
  * @date 2023/3/25 17:38
  */
 @RestController
-@RequestMapping("doctor/patient")
+@RequestMapping("doctor/patientFile")
 public class PatientFileController {
 
     @Autowired

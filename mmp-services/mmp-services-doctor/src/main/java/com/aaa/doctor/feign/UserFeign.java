@@ -37,4 +37,8 @@ public interface UserFeign {
     public Dept getDeptByDeptId(@PathVariable Long deptId);
 
 
+    @GetMapping("system/dept/updDeptRegNumByDeptId")
+    public Boolean updDeptRegNumByDeptId(@PathVariable Long deptId, @PathVariable Integer regNum);
+
+
 }

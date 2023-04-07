@@ -47,6 +47,10 @@ public class PatientServiceImpl implements PatientService {
 
     }
 
+    /*
+     * 门诊挂号查询身份信息
+     *  加载身份证信息
+     * */
     @Override
     public Result<Patient> patientAll(String idCard) {
         QueryWrapper<Patient> wrapper = new QueryWrapper<>();

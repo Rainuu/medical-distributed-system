@@ -23,4 +23,7 @@ public interface DeptService {
 
     boolean addNum(Long id,Integer num);
     boolean jianNum(Long id,Integer num);
+
+    //通过deptId更新挂号量
+    Boolean updDeptRegNumByDeptId(Long deptId, Integer regNum);
 }

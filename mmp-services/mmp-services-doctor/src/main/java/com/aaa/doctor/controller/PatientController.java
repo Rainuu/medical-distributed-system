@@ -46,24 +46,6 @@ public class PatientController {
 
     }
 
-    /*
-    * 门诊挂号查询身份信息
-    * */
-    @PostMapping("patientAll/{idCard}")
-    public Result<Patient> patientAll(@PathVariable String idCard) {
-        return patientService.patientAll(idCard);
-    }
-
-
-    /*
-     * 门诊挂号下的四个动态按钮
-     * */
-    @GetMapping("registeredItem")
-    public Result registeredItem() {
-        List<RegisteredItem> registeredItems = patienFeign.getAll();
-        return new Result(2000,"查询动态数组成功",registeredItems);
-    }
-
     /**
      * 根据患者id进行查询患者病历
      */

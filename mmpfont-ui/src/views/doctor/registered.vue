@@ -221,7 +221,7 @@ export default {
       //有号部门的的查询条件
       queryDeptParams: {
         deptId: undefined,
-        schedulingType: '1',
+        schedulingType: '',
         subsectionType: undefined,
         schedulingDay: moment(new Date()).format('YYYY-MM-DD'),
         regItemId: 1,
@@ -273,10 +273,20 @@ export default {
     //
     this.deptTableList.schedulingDay=new Date();
   },
+  watch: {
+    patientParams: {
+      handler: function() {
+        if (this.patientParams.birthday !== undefined) {
+          this.patientParams.age = this.getAge(this.patientParams.birthday)
+        }
+      },
+      deep: true
+    }
+  },
   methods: {
     //查询门诊急诊等四个按钮
     queryButton(){
-      this.$axios.get("/doctor/patient/registeredItem").then(result => {
+      this.$axios.get("/doctor/registered/registeredItem").then(result => {
         this.regItemOptions = result.data.t;
         //给挂号费 赋值 选中按钮的第一个数据取出数据给 赋值 默认选中第一个按钮
         this.queryDeptParams.regItemId=this.regItemOptions[0].regItemId
@@ -287,12 +297,15 @@ export default {
     queryDept() {
       this.$axios.get("/system/api/dept/list").then(result => {
         this.deptOptions = result.data.t;
+        this.queryDeptParams.deptId = this.deptOptions[0].deptId;
       })
     },
     //查询挂号类型字典下拉列表   门诊、急诊
     queryRegistrationType() {
       this.$axios.get("/system/api/dict/data/findByType/his_scheduling_type").then(result => {
         this.registrationType = result.data.t;
+        //起始默认赋值为第一选项
+        this.queryDeptParams.schedulingType=result.data.t[0].dictValue;
 
       })
     },
@@ -310,6 +323,21 @@ export default {
     queryRegistrationPeriod() {
       this.$axios.get("/system/api/dict/data/findByType/his_subsection_type").then(result => {
         this.registrationPeriod = result.data.t;
+        //获取当前时间
+        const data1 = new Date();
+        //获取当前时
+        const time=data1.getHours()
+        //判断是上午还是下午或者晚上
+        if (time>0&&time<12){
+          //给下拉选项赋值为上午
+          this.queryDeptParams.subsectionType=this.registrationPeriod[0].dictValue;
+        }else if (time>12&&time<18){
+          //给下拉选项赋值为下午
+          this.queryDeptParams.subsectionType=this.registrationPeriod[1].dictValue;
+        }else {
+          //给下拉选项赋值为晚上
+          this.queryDeptParams.subsectionType=this.registrationPeriod[2].dictValue;
+        }
       })
     },
     //根据出生日期获取年龄
@@ -325,9 +353,9 @@ export default {
         return calculationAge - 1
       }
     },
-    //查询表格按钮的方法
+    //查询表格按钮的方法 加载身份证信息
     queryfrom(formName) {
-      this.$axios.post("/doctor/patient/patientAll/"+this.patientParams.idCard).then(result => {
+      this.$axios.post("/doctor/registered/patientAll/"+this.patientParams.idCard).then(result => {
         if (result.data.t==null){
           this.$message({
             showClose: true,
@@ -371,11 +399,11 @@ export default {
     queryConditionRegistration(){
       if (this.queryDeptParams.deptId){
         //查询部门当前的流水号
-        this.$axios.post("/doctor/patient/queryDeptNumber/"+this.queryDeptParams.deptId).then(result => {
+        this.$axios.post("/doctor/careItem/queryDeptNumber/"+this.queryDeptParams.deptId).then(result => {
           this.initialNumber=result.data.t;
 
         })
-        //传输查询条件
+        //传输查询条件 查询医生排班信息
         this.$axios.post("/doctor/registered/findDoctocList/"+this.currentPage+"/"+this.pageSize,this.queryDeptParams).then(result => {
           this.deptTableList = result.data.t.records;
           this.total = result.data.t.total;
@@ -439,7 +467,7 @@ export default {
           }).then(() => {
             const obj={tableData:this.tableData,patientParams:this.patientParams}
             //把挂单的数据储存起来发送到后端
-            this.$axios.post("/doctor/patient/storage/"+this.tableData.userId+"/"+this.queryDeptParams.regItemAmount+"/"+this.queryDeptParams.regItemId,obj).then(result => {
+            this.$axios.post("/doctor/patientFile/storage/"+this.tableData.userId+"/"+this.queryDeptParams.regItemAmount+"/"+this.queryDeptParams.regItemId,obj).then(result => {
               if (result.data.t==true){
                 this.$message({
                   showClose: true,

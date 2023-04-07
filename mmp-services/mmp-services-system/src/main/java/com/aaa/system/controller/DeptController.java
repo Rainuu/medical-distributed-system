@@ -2,9 +2,7 @@ package com.aaa.system.controller;
 
 import com.aaa.system.service.Impl.DeptServiceimpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("system/dept")
@@ -19,4 +17,16 @@ public class DeptController {
     public boolean jian(Long id,Integer num){
         return service.jianNum(id, num);
     }
+
+    /**
+     * 通过deptId更新挂号量
+     * @param deptId
+     * @param regNum
+     * @return
+     */
+    @GetMapping("updDeptRegNumByDeptId/{deptId}/{regNum}")
+    public Boolean updDeptRegNumByDeptId(@PathVariable Long deptId, @PathVariable Integer regNum){
+        return service.updDeptRegNumByDeptId(deptId,regNum);
+    }
+
 }

@@ -22,7 +22,7 @@ import java.util.Map;
  * @date 2023/3/25 10:15
  */
 @RestController
-@RequestMapping("doctor/patient")
+@RequestMapping("doctor/Carepatient")
 public class CarPatientController {
 
     @Autowired

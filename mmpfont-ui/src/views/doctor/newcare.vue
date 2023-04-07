@@ -757,19 +757,19 @@ export default {
     },
     //查询待接诊的患者的数量
     queryRegistrationNumber1(){
-      this.$axios.post("/doctor/patient/queryRegistrationStatus1/1/"+this.schedulingType).then(result=>{
+      this.$axios.post("/doctor/Carepatient/queryRegistrationStatus1/1/"+this.schedulingType).then(result=>{
         this.toBeSeenRegistration=result.data.t;
       })
     },
     //查询接诊中的患者的数量
     queryRegistrationNumber2(){
-      this.$axios.post("/doctor/patient/queryRegistrationStatus1/2/"+this.schedulingType).then(result=>{
+      this.$axios.post("/doctor/Carepatient/queryRegistrationStatus1/2/"+this.schedulingType).then(result=>{
         this.visitingRegistration=result.data.t;
       })
     },
     //查询接诊完成的患者的数量
     queryRegistrationNumber3(){
-      this.$axios.post("/doctor/patient/queryRegistrationStatus1/3/"+this.schedulingType).then(result=>{
+      this.$axios.post("/doctor/Carepatient/queryRegistrationStatus1/3/"+this.schedulingType).then(result=>{
         this.visitCompletedRegistration=result.data.t;
       })
     },
@@ -840,7 +840,7 @@ export default {
     //左边患者弹出层里的待接诊  接诊按钮
     handleVisit(row){
       //接诊之后根据挂号单id 改变挂号的状态 改为就诊中
-      this.$axios.get("/doctor/registered/updRegistrationId/"+row.registrationId+"/2").then(result=>{
+      this.$axios.get("/doctor/newcare/updRegistrationId/"+row.registrationId+"/2").then(result=>{
         if (result.data.t){
           //接诊成功后 执行查询患者数据
           this.$message({
@@ -862,9 +862,10 @@ export default {
             //提前设置是否传染 默认否
             this.careHistory.isContagious=this.isContagiousOptions[0].dictValue;
 
+
           })
           //当点击按钮时已经获取到了当前行的数据需要用到里面的id
-          this.$axios.get("/doctor/patient/getByFileId/"+row.patientId).then(result=>{
+          this.$axios.get("/doctor/patientFile/getByFileId/"+row.patientId).then(result=>{
             this.patientAllObj.patientFileObj=result.data.t;
 
             if (!this.patientAllObj.patientFile){
@@ -875,7 +876,7 @@ export default {
           })
           //查询患者病历里面的数据
           //当点击按钮时已经获取到了当前行的数据需要用到里面的id
-          this.$axios.get("/doctor/patient/CareHistoryByIdAll/"+row.patientId).then(result=> {
+          this.$axios.get("/doctor/Carepatient/CareHistoryByIdAll/"+row.patientId).then(result=> {
             this.patientAllObj.careHistoryObjList=result.data.t;
           })
 
@@ -911,7 +912,7 @@ export default {
         this.careHistory.isContagious=this.receiveTypeOptions[0].dictValue;
       })
       //当点击按钮时已经获取到了当前行的数据需要用到里面的id
-      this.$axios.get("/doctor/patient/getByFileId/"+row.patientId).then(result=>{
+      this.$axios.get("/doctor/patientFile/getByFileId/"+row.patientId).then(result=>{
         this.patientAllObj.patientFileObj=result.data.t;
 
         if (!this.patientAllObj.patientFile){
@@ -922,7 +923,7 @@ export default {
       })
       //查询患者病历里面的数据
       //当点击按钮时已经获取到了当前行的数据需要用到里面的id
-      this.$axios.get("/doctor/patient/CareHistoryByIdAll/"+row.patientId).then(result=> {
+      this.$axios.get("/doctor/Carepatient/CareHistoryByIdAll/"+row.patientId).then(result=> {
         this.patientAllObj.careHistoryObjList=result.data.t;
       })
       //给右边的病历表和处方表赋值
@@ -935,7 +936,7 @@ export default {
         if (JSON.stringify(result.data.t.chId)=="null"){
           this.careHistory={
             // 当前就诊中的挂号单ID
-                regId: undefined,
+
                 chId: undefined,
                 caseDate: undefined,
                 receiveType: '',
@@ -947,6 +948,7 @@ export default {
                 patientId: undefined,
                 patientName: undefined
           }
+          this.careHistory.regId=row.registrationId;
           // 开的处方清空
           this.careOrders=[];
         }else {
@@ -1109,14 +1111,14 @@ export default {
       console.log(this.submitCareOrder)
       this.loading = true;
       //储存药方跟药方的内容
-      this.$axios.post("/doctor/patient/getCareOrders",this.submitCareOrder).then(result=>{
+      this.$axios.post("/doctor/Carepatient/getCareOrders",this.submitCareOrder).then(result=>{
         if (result.data.t){
           this.$message({
             showClose: true,
             message: '添加处方成功',
             type: 'success'
           });
-          this.$axios.post("/doctor/patient/queryCoId/"+result.data.t).then(result=>{
+          this.$axios.post("/doctor/Carepatient/queryCoId/"+result.data.t).then(result=>{
             this.careOrders=result.data.t;
             this.openDrawerMedicines=false;
             this.openDrawerCheckItem=false;
@@ -1272,7 +1274,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.post("/doctor/patient/deleteCareOrderItemById/"+itemId+"/"+amount).then(result=> {
+        this.$axios.post("/doctor/careItem/deleteCareOrderItemById/"+itemId+"/"+amount).then(result=> {
           // console.log(result)
           // this.careOrders=[];
           if (result.data.t==true){
@@ -1404,7 +1406,7 @@ export default {
       }).then(() => {
         this.$axios.post("/doctor/newcare/queryCareHistoryById/"+this.careHistory.chId).then(result=>{
           if (result.data.t==true){
-            this.$axios.get("/doctor/registered/updRegistrationId/"+this.careHistory.regId+"/3").then(result=>{
+            this.$axios.get("/doctor/newcare/updRegistrationId/"+this.careHistory.regId+"/3").then(result=>{
               if (result.data.t){
                 this.$message({
                   showClose: true,

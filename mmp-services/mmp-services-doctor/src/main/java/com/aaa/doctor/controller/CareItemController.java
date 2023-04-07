@@ -19,7 +19,7 @@ import java.util.List;
  * @date 2023/3/25 18:05
  */
 @RestController
-@RequestMapping("doctor/patient")
+@RequestMapping("doctor/careItem")
 public class CareItemController {
     @Autowired
     private CareItemService careItemService;
@@ -30,6 +30,12 @@ public class CareItemController {
     @Autowired
     private RegistrationService registrationService;
 
+    /**
+     * 获取处方详情
+     * @param patientId
+     * @param chId
+     * @return
+     */
     @GetMapping("FindByItem/{patientId}/{chId}")
     public Result<List<CareOrderItem>> FindByItem(@PathVariable String patientId,@PathVariable String chId) {
 
@@ -48,7 +54,7 @@ public class CareItemController {
 
 
 
-    //获取挂号编号
+    //获取挂号编号 流水号
     @PostMapping("queryDeptNumber/{deptId}")
     public Result queryDeptNumber(@PathVariable Long deptId){
         Integer regNumber = registrationService.getRagNumber(deptId);

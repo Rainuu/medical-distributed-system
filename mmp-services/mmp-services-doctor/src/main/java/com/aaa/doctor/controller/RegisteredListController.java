@@ -1,14 +1,20 @@
 package com.aaa.doctor.controller;
 
+import com.aaa.core.entity.Patient;
+import com.aaa.core.entity.RegisteredItem;
 import com.aaa.core.entity.Registration;
 import com.aaa.core.entity.Scheduling;
 import com.aaa.core.vo.Result;
+import com.aaa.doctor.feign.PatienFeign;
+import com.aaa.doctor.service.PatientService;
 import com.aaa.doctor.service.RegistredListService;
 import com.aaa.doctor.vo.RegisteredListVo;
 import com.aaa.doctor.vo.SchedulingVoo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author 刘鸿飞
@@ -19,9 +25,16 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("doctor/registered")
 public class RegisteredListController {
-//    doctor/registered/getAllList
+
     @Autowired
     private RegistredListService registredListService;
+
+    @Autowired
+    private PatienFeign patienFeign;
+
+    @Autowired
+    private PatientService patientService;
+
 
     /*
     * 查询出挂号列表数据并进行分页
@@ -68,28 +81,24 @@ public class RegisteredListController {
         return registredListService.findDoctocList(currentPage,pageSize,schedulingVoo);
     }
 
-
-    //根据挂号列表里的registration_id修改它收费状态
-    @GetMapping("updRegistrationId/{registrationId}/{status}")
-    public Result updRegistrationId(@PathVariable String registrationId ,@PathVariable String status){
-        System.out.println("registrationId = " + registrationId);
-        System.out.println("status = " + status);
-        Boolean aBoolean = registredListService.updRegistrationId(registrationId,status);
-        return new Result(2000,"修改状态收费成功",aBoolean);
+    /*
+     * 门诊挂号下的四个动态按钮
+     * */
+    @GetMapping("registeredItem")
+    public Result registeredItem() {
+        List<RegisteredItem> registeredItems = patienFeign.getAll();
+        return new Result(2000,"查询动态数组成功",registeredItems);
     }
 
-    //根据挂号列表里的registration_id修改它退费状态
-    @GetMapping("updRegistrationId2/{registrationId}/{status}")
-    public Result updRegistrationId2(@PathVariable String registrationId ,@PathVariable String status){
-        Boolean aBoolean = registredListService.updRegistrationId(registrationId,status);
-        return new Result(2000,"修改状态退费成功",aBoolean);
+    /*
+     * 门诊挂号查询身份信息
+     *  加载身份证信息
+     * */
+    @PostMapping("patientAll/{idCard}")
+    public Result<Patient> patientAll(@PathVariable String idCard) {
+        return patientService.patientAll(idCard);
     }
 
-    //根据挂号列表里的registration_id修改它作废状态
-    @GetMapping("updRegistrationId3/{registrationId}/{status}")
-    public Result updRegistrationId3(@PathVariable String registrationId ,@PathVariable String status){
-        Boolean aBoolean = registredListService.updRegistrationId(registrationId,status);
-        return new Result(2000,"修改状态作废成功",aBoolean);
-    }
+
 
 }

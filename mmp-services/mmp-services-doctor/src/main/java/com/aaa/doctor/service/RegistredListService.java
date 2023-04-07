@@ -32,6 +32,8 @@ public interface RegistredListService {
     Result<IPage<Scheduling>> findDoctocList(Integer currentPage, Integer pageSize,SchedulingVoo schedulingVoo);
 
 
-
+    //根据挂号列表里的registration_id修改它作废状态
     Boolean updRegistrationId(String registrationId, String status);
+
+
 }

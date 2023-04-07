@@ -17,7 +17,10 @@ public interface PatientService {
 
     Result<IPage<Patient>> findByPat(Integer currentPage, Integer pageSize, PatientVo patientVo);
 
-
+    /*
+     * 门诊挂号查询身份信息
+     *  加载身份证信息
+     * */
     Result<Patient> patientAll(String idCard);
 
 

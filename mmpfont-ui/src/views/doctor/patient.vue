@@ -318,7 +318,7 @@ export default {
     },
     // 获取处方详情
     ChuFangItem() {
-      this.$axios.get("doctor/patient/FindByItem/"+this.patientObj.patientId,+this.patientFileObj.chId).then(result=> {
+      this.$axios.get("doctor/careItem/FindByItem/"+this.patientObj.patientId,+this.patientFileObj.chId).then(result=> {
         this.careOrders = result.data.t;
       })
     },
@@ -446,7 +446,7 @@ export default {
       //   alert(JSON.stringify(result.data.t));
       // })
       // 处方
-      this.$axios.get("/doctor/patient/CareHistoryByIdAll/"+this.patientObj.patientId).then(result=> {
+      this.$axios.get("/doctor/Carepatient/CareHistoryByIdAll/"+this.patientObj.patientId).then(result=> {
         this.allPatientMsg = result.data.t;
 
       })

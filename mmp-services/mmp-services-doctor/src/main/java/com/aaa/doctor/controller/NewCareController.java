@@ -5,6 +5,7 @@ import com.aaa.core.entity.CheckItem;
 import com.aaa.core.vo.Result;
 import com.aaa.doctor.service.CareHistoryService;
 import com.aaa.doctor.service.CareOrderService;
+import com.aaa.doctor.service.RegistredListService;
 import com.aaa.doctor.vo.NewCareVo;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class NewCareController {
 
     @Autowired
     private CareOrderService careOrderService;
+
+    @Autowired
+    private RegistredListService registredListService;
 
     //根据前端传输的患者病历信息进行储存返回一个病历号码
 //    @PostMapping("insertCareHistory")
@@ -72,6 +76,30 @@ public Result queryCareHistoryId(@PathVariable String registrationId){
     public Result queryCareHistoryById(@PathVariable String chId){
         Boolean aBoolean = careHistoryService.queryCareHistoryById(chId);
         return new Result(2000,"根据病历id查询是否存在成功",aBoolean);
+    }
+
+
+    //根据挂号列表里的registration_id修改它收费状态
+    @GetMapping("updRegistrationId/{registrationId}/{status}")
+    public Result updRegistrationId(@PathVariable String registrationId ,@PathVariable String status){
+        System.out.println("registrationId = " + registrationId);
+        System.out.println("status = " + status);
+        Boolean aBoolean = registredListService.updRegistrationId(registrationId,status);
+        return new Result(2000,"修改状态收费成功",aBoolean);
+    }
+
+    //根据挂号列表里的registration_id修改它退费状态
+    @GetMapping("updRegistrationId2/{registrationId}/{status}")
+    public Result updRegistrationId2(@PathVariable String registrationId ,@PathVariable String status){
+        Boolean aBoolean = registredListService.updRegistrationId(registrationId,status);
+        return new Result(2000,"修改状态退费成功",aBoolean);
+    }
+
+    //根据挂号列表里的registration_id修改它作废状态
+    @GetMapping("updRegistrationId3/{registrationId}/{status}")
+    public Result updRegistrationId3(@PathVariable String registrationId ,@PathVariable String status){
+        Boolean aBoolean = registredListService.updRegistrationId(registrationId,status);
+        return new Result(2000,"修改状态作废成功",aBoolean);
     }
 
 }

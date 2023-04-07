@@ -79,6 +79,7 @@ public class RegistrationServiceImpl implements RegistrationService {
      */
     @Override
     public Boolean insertRegistration(String userId, String regItemAmount, Integer regItemId, Map<String, Object> obj) {
+        Registration registration = new Registration();
         Integer insert=0;
         //id随机生成
         String id="";
@@ -98,25 +99,27 @@ public class RegistrationServiceImpl implements RegistrationService {
         List<Patient> patients = patientDao.selectList(wrapper);
         System.out.println("----------------");
         System.out.println(patients.size());
-        if (patients.size()>0){
-            String token = WebUtil.getRequest().getHeader("token");
-            Map<String, Object> tokenData = JwtUtil.getTokenChaim(token);
-            String phone = (String) tokenData.get("username");
-            User user = userFeign.getByUsername(phone);
-            User userByUserId = userFeign.queryById(Long.valueOf(userId));
-            DateTime date = DateUtil.date();
-            String visitDate = DateUtil.format(date, "yyyy-MM-dd");
-            Integer regNumber = registrationDao.getRegNumber(scheduling.getDeptId());
-            System.out.println(scheduling.getDeptId());
-            System.out.println(Objects.nonNull(regNumber));
-            System.out.println(regNumber);
-            if (Objects.nonNull(regNumber)){
-                regNumber=regNumber+1;
-            }else {
-                regNumber=1;
-            }
+        String token = WebUtil.getRequest().getHeader("token");
+        Map<String, Object> tokenData = JwtUtil.getTokenChaim(token);
+        String phone = (String) tokenData.get("username");
+        User user = userFeign.getByUsername(phone);
+        User userByUserId = userFeign.queryById(Long.valueOf(userId));
+        DateTime date = DateUtil.date();
+        String visitDate = DateUtil.format(date, "yyyy-MM-dd");
+        // 获取当前部门的挂号单号
+        Integer regNumber = registrationDao.getRegNumber(scheduling.getDeptId());
+        System.out.println(scheduling.getDeptId());
+        System.out.println(Objects.nonNull(regNumber));
+        System.out.println(regNumber);
+        if (Objects.nonNull(regNumber)){
+            regNumber=regNumber+1;
+        }else {
+            regNumber=1;
+        }
 
-            Registration registration = new Registration();
+        if (patients.size()>0){
+
+            // 添加挂号信息
             id= "GH"+idWorker.nextId();
             registration.setRegistrationId(id);//挂号流水
             registration.setPatientId(patient.getPatientId());//患者id
@@ -137,11 +140,45 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 
             insert = registrationDao.insert(registration);
+            boolean aBoolean = userFeign.updDeptRegNumByDeptId(scheduling.getDeptId(), regNumber);
+            if (aBoolean) {
+                insert=-1;
+            }else {
+                insert=0;
+            }
+
         }else {
             id="HZ"+idWorker.nextId();
             patient.setPatientId(id);
             patient.setCreateTime(new Date());
             insert = patientDao.insert(patient);
+            // 添加挂号信息
+            id= "GH"+idWorker.nextId();
+            registration.setRegistrationId(id);//挂号流水
+            registration.setPatientId(patient.getPatientId());//患者id
+            registration.setPatientName(patient.getName());//患者姓名
+            registration.setUserId(scheduling.getUserId());//接诊医生id
+            registration.setDoctorName(userByUserId.getUserName());//接诊医生id
+            registration.setDeptId(scheduling.getDeptId());//科室id
+            registration.setRegistrationItemId(Long.valueOf(regItemId));//挂号费用id
+            registration.setRegistrationAmount(new BigDecimal(regItemAmount));//挂号总金额 挂号费
+            registration.setRegistrationNumber(regNumber);//挂号编号
+            registration.setRegistrationStatus("0");//挂号状态 1待接诊
+            registration.setVisitDate(visitDate);//就诊日期
+            registration.setSchedulingType(scheduling.getSchedulingType());//排班类型 门诊 急诊等
+            registration.setSubsectionType(scheduling.getSubsectionType());//排班时段 上午 下午
+            registration.setCreateTime(new Date()); //创建时间
+            registration.setUpdateTime(new Date());//更新时间
+            registration.setCreateBy(user.getUserName());//创建人
+
+            insert = registrationDao.insert(registration);
+            boolean aBoolean = userFeign.updDeptRegNumByDeptId(scheduling.getDeptId(), regNumber);
+            if (aBoolean) {
+                insert=-1;
+            }else {
+                insert=0;
+            }
+
         }
 
         return insert>0?true:false;
