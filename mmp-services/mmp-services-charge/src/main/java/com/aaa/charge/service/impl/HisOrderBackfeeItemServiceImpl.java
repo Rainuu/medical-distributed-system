@@ -57,11 +57,7 @@ public class HisOrderBackfeeItemServiceImpl implements HisOrderBackfeeItemServic
         for (int i = 0; i < 10; i++) {
             backId += String.valueOf(random.nextInt(10));
         }
-        QueryWrapper<OrderCharge> wrapper = new QueryWrapper<>();
-        wrapper.eq("reg_id",regId);
-        List<OrderCharge> orderCharge = hisOrderChargeMapper.selectList(wrapper);
-        for (OrderCharge OrderCharge:orderCharge) {
-        if (OrderCharge.getPayType().equals("0")){
+
         hisOrderBackfeeMapper.insertAll(backId,regId,patientName,backAmount,createTime,backTime);
         //获取item状态
         List<PostObjVo1> orderBackfeeItemDtoList = postObjVov.getOrderBackfeeItemDtoList();
@@ -81,8 +77,7 @@ public class HisOrderBackfeeItemServiceImpl implements HisOrderBackfeeItemServic
             orderBackfeeItem.setStatus("2");
             hisOrderBackfeeItemMapper.insert(orderBackfeeItem);
         }
-        }
-        }
+
         return new Result<>(200,"退费成功");
     }
 
@@ -105,11 +100,7 @@ public class HisOrderBackfeeItemServiceImpl implements HisOrderBackfeeItemServic
         for (int i = 0; i < 10; i++) {
             backId += String.valueOf(random.nextInt(10));
         }
-        QueryWrapper<OrderCharge> wrapper = new QueryWrapper<>();
-        wrapper.eq("reg_id",regId);
-        List<OrderCharge> orderCharge = hisOrderChargeMapper.selectList(wrapper);
-        for (OrderCharge OrderCharge:orderCharge) {
-            if (OrderCharge.getPayType().equals("1")) {
+
                 hisOrderBackfeeMapper.insertAllzfb(backId, regId, patientName, backAmount, createTime, bcakTime);
                 //获取item状态
                 List<PostObjVo1> orderBackfeeItemDtoList = postObjVoV.getOrderBackfeeItemDtoList();
@@ -128,8 +119,8 @@ public class HisOrderBackfeeItemServiceImpl implements HisOrderBackfeeItemServic
                     orderBackfeeItem.setCoId(orderBackfeeItemDtoList.get(i).getCoId());
                     orderBackfeeItem.setStatus("2");
                     hisOrderBackfeeItemMapper.insert(orderBackfeeItem);
-                }
-            }
+
+
         }
         return new Result<>(200,"退费成功");
     }
