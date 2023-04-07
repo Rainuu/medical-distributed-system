@@ -34,7 +34,7 @@
     <div>
       <el-table v-loading="loading" ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" border max-height="330px" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center"/>
-        <el-table-column label="单据ID" align="center" width="200" prop="purchaseId">
+        <el-table-column label="单据ID" align="center" width="190px" prop="purchaseId">
           <template slot-scope="scope">
             <router-link :to="'/stock/purchase/editPurchase/'+scope.row.purchaseId" class="link-type">
               <span>{{ scope.row.purchaseId }}</span>
@@ -48,11 +48,11 @@
           </template>
         </el-table-column>
         <el-table-column prop="status" label="状态" align="center" width="80px" :formatter="(row)=>this.dictFormat(row,row.status,'his_order_status')"/>
-        <el-table-column prop="applyUserName" label="申请人" align="center" width="80px"/>
+        <el-table-column prop="applyUserName" label="申请人" align="center" width="75px"/>
         <el-table-column prop="storageOptUser" label="入库操作人" align="center" width="100px"/>
-        <el-table-column prop="storageOptTime" label="入库时间" align="center" width="160px"/>
+        <el-table-column prop="storageOptTime" label="入库时间" align="center" width="155px"/>
         <el-table-column prop="auditMsg" label="审核信息" align="center" width="80px"/>
-        <el-table-column prop="createTime" label="创建时间" align="center" width="160px"/>
+        <el-table-column prop="createTime" label="创建时间" align="center" width="155px"/>
       </el-table><br><br>
       <!-- 分页插件 -->
       <el-pagination v-show="total>0" :current-page="current" :page-size="size" :total="total"

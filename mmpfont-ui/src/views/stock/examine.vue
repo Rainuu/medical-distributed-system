@@ -34,12 +34,12 @@
             <span>{{ scope.row.purchaseTradeTotalAmount | rounding }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="状态" align="center" width="80px" :formatter="(row)=>this.dictFormat(row,row.status,'his_order_status')"/>
+        <el-table-column prop="status" label="状态" align="center" width="65px" :formatter="(row)=>this.dictFormat(row,row.status,'his_order_status')"/>
         <el-table-column prop="applyUserName" label="申请人" align="center" width="80px"/>
         <el-table-column prop="storageOptUser" label="入库操作人" align="center" width="100px"/>
-        <el-table-column prop="storageOptTime" label="入库时间" align="center" width="160px"/>
+        <el-table-column prop="storageOptTime" label="入库时间" align="center" width="155px"/>
         <el-table-column prop="auditMsg" label="审核信息" align="center" width="80px"/>
-        <el-table-column prop="createTime" label="创建时间" align="center" width="160px"/>
+        <el-table-column prop="createTime" label="创建时间" align="center" width="155px"/>
       </el-table><br><br>
       <!-- 分页插件 -->
       <el-pagination v-show="total>0" :current-page="current" :page-size="size" :total="total"
@@ -136,7 +136,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        alert(purchaseId)
+        // alert(purchaseId)
         this.$axios.post("stock/api/purchase/auditPass"+"/"+purchaseId).then(res => {
           this.$message({type: 'success', message: '审核通过成功!'});
           this.initTable();// 全查询

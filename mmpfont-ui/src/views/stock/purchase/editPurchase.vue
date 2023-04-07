@@ -345,10 +345,16 @@ export default {
         this.form.purchaseId=purchaseId;
         this.form.providerId=res.data.t[0].providerId;
         // alert(JSON.stringify(this.form));
+        // alert(res.data.t[0].status);
+
         // 如果当前单据的状态为1或者4那么不能进行其它操作
-        if (res.data.t.status === '1' || res.data.t.status === '4') {
-          this.isSubmit = false
-        }
+        this.isSubmit = true
+
+        // if (res.data.t[0].status === '1' || res.data.t[0].status === '4') {
+        //   this.isSubmit = false
+        // } else if(res.data.t[0].status === '2' || res.data.t[0].status === '3' || res.data.t[0].status === '5'){
+        //   this.isSubmit = true
+        // }
       })
     },
     // 分页————改变每页展示的数据数量，在size变化时触发

@@ -18,7 +18,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -104,6 +106,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
         String phone = (String) info.get("username");
         User byUsername = feign.getByUsername(phone);
         String userName = byUsername.getUserName();
+
         Purchase purchase = new Purchase();
 
         purchase.setPurchaseId(purchaseId);
@@ -117,6 +120,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
         purchase.setUpdateBy(userName);
         purchase.setApplyUserName(userName);
         // purchase.setExamine();
+
         purchaseDao.insert(purchase);
 
 
@@ -134,6 +138,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
             BigDecimal tradeTotalAmount = purchaseAllVo.getPurchaseItemDtos().get(i).getTradeTotalAmount();
             String batchNumber = purchaseAllVo.getPurchaseItemDtos().get(i).getBatchNumber();
             String remark = purchaseAllVo.getPurchaseItemDtos().get(i).getRemark();
+
             PurchaseItem purchaseItem = new PurchaseItem();
 
             purchaseItem.setPurchaseId(purchaseId);
@@ -150,6 +155,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
             purchaseItem.setConversion(conversion);
             purchaseItem.setUnit(unit);
             purchaseItem.setKeywords(keywords);
+
             purchaseItemDao.insert(purchaseItem);
         }
         return new Result<>(200,"成功");
@@ -235,6 +241,10 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
     @Override
     public void doInventory(String purchaseId) {
 
+        // 修改状态
+        purchaseDao.RuKuUpd(purchaseId);
+
+        // 添加入库操作人、入库时间
         HttpServletRequest request = WebUtil.getRequest();
         String token = request.getHeader("token");
         Map<String, Object> info = JwtUtil.getTokenChaim(token);
@@ -242,14 +252,13 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
         User byUsername = feign.getByUsername(phone);
         String userName = byUsername.getUserName();
 
-        // 添加入库操作人
+        // 直接用实体，传通用的
         Purchase purchase = new Purchase();
-        purchase.setStorageOptUser(userName);
         purchase.setStorageOptTime(new Date());
-        purchaseDao.update(purchase,null);
+        purchase.setPurchaseId(purchaseId);
+        purchase.setStorageOptUser(userName);
 
-        // 修改状态
-        purchaseDao.RuKuUpd(purchaseId);
+        purchaseDao.updateById(purchase);
 
         // 获取ID相同的订单
         List<PurchaseItem> byPurchaseId = purchaseItemDao.getByPurchaseId(purchaseId);
@@ -294,6 +303,8 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
 
             // 修改入库
             medicinalService.AddNum(inventoryLog.getInventoryLogNum().toString(),inventoryLog.getMedicinesName());
+            System.out.println("--------------------------------");
+
         }
 
 

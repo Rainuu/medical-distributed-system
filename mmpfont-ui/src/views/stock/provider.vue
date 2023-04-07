@@ -69,15 +69,15 @@
     <div>
       <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" border max-height="330px" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center"/>
-        <el-table-column prop="providerId" label="供应商ID" align="center" width="80px"/>
+        <el-table-column prop="providerId" label="供应商ID" align="center" width="78px"/>
         <el-table-column prop="providerName" label="供应商名称" align="center"/>
-        <el-table-column prop="contactName" label="联系人" align="center" width="75px"/>
+        <el-table-column prop="contactName" label="联系人" align="center" width="70px"/>
         <el-table-column prop="contactMobile" label="联系人手机" align="center" width="110px"/>
         <el-table-column prop="contactTel" label="联系人电话" align="center" width="110px"/>
         <el-table-column prop="bankAccount" label="银行账号" align="center" width="170px"/>
         <el-table-column prop="providerAddress" label="供销商地址" align="center" width="95px"/>
         <el-table-column prop="status" label="状态" align="center" width="55px" :formatter="(row)=>this.dictFormat(row,row.status,'sys_normal_disable')"/>
-        <el-table-column prop="createTime" label="创建时间" align="center" width="160px"/>
+        <el-table-column prop="createTime" label="创建时间" align="center" width="155px"/>
         <el-table-column fixed="right" label="操作" align="center" width="120px">
           <template slot-scope="scope">
             <el-button @click="updPro(scope.row)" type="text" size="small" icon="el-icon-delete">修改</el-button>

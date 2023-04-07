@@ -7,6 +7,10 @@
         VALUES (#{purchase.purchaseId},#{purchase.providerId},#{purchase.purchaseTradeTotalAmount},3,#{purchase.applyUserName},#{purchase.storageOptUser},#{purchase.storageOptTime},#{purchase.auditMsg},#{purchase.createTime});
     </insert>
 
+    <update id="doAudit">
+        UPDATE stock_purchase SET status=2 WHERE purchase_id=#{purchaseId}
+    </update>
+
     <update id="auditPass">
         UPDATE stock_purchase SET status=3 WHERE purchase_id=#{purchaseId}
     </update>
@@ -17,10 +21,6 @@
 
     <update id="updateByPurchaseId">
         UPDATE stock_purchase SET status=5 WHERE purchase_id=#{purchaseId}
-    </update>
-
-    <update id="doAudit">
-        UPDATE stock_purchase SET status=2 WHERE purchase_id=#{purchaseId}
     </update>
 
     <update id="RuKuUpd">

@@ -129,7 +129,7 @@
           <el-table-column label="生产厂家" width="260px" align="center" prop="producterId" :formatter="ProducterNameDict"/>
           <el-table-column label="药品类型" align="center" prop="medicinesType" width="80px" :formatter="(row)=>this.dictFormat(row,row.medicinesType,'his_medicines_type')"/>
           <el-table-column label="处方类型" align="center" prop="prescriptionType" width="80px" :formatter="(row)=>this.dictFormat(row,row.prescriptionType,'his_prescription_type')"/>
-          <el-table-column label="入库时间" width="180px" align="center" prop="createTime" />
+          <el-table-column label="入库时间" width="155px" align="center" prop="createTime" />
         </el-table>
         <el-pagination v-show="totalLog>0" :current-page="current2" :page-size="size2" :total="totalLog"
                        :page-sizes="[5, 10, 15, 20]" layout="total, sizes, prev, pager, next, jumper"
