@@ -209,6 +209,17 @@ export default {
       }
       return a;
     },
+    // 条件查询
+    handleQuery() {
+      this.current=1;
+      this.getMedicinesList()
+    },
+    // 重置查询条件
+    resetQuery() {
+      this.queryParams={};
+      this.current=1;
+      this.getMedicinesList();
+    },
     // 弹出层————显示药品数据列表
     getMedicinesList() {
       this.loading = true
@@ -227,17 +238,6 @@ export default {
           })
         })
       })
-    },
-    // 条件查询
-    handleQuery() {
-      this.current=1;
-      this.getMedicinesList()
-    },
-    // 重置查询条件
-    resetQuery() {
-      this.queryParams={};
-      this.current=1;
-      this.getMedicinesList();
     },
     // 数据表格的多选择框选择时触发
     handleSelectionChnage(selection) {
@@ -291,15 +291,14 @@ export default {
       this.batchSetOpen = false
     },
     // ---------------------暂存---------------------------------------
-    // 暂存
     handleSubmit() {
       if (this.purchaseItemList.length > 0) {
         this.$refs['form'].validate((valid) => {
           if (valid) {
             // 组装要提交到后台的数据
-            const purcheseObj = { 'purchaseDto': this.form, 'purchaseItemDtos': this.purchaseItemList }
-            console.log(JSON.stringify(purcheseObj))
-            this.$axios.post("/stock/api/purchase/addPurchase", {params: purcheseObj}).then(res => {
+            const purchaseAllVo = { 'purchaseDto': this.form, 'purchaseItemDtos': this.purchaseItemList }
+            // console.log(JSON.stringify(purchaseAllVo))
+            this.$axios.post("/stock/api/purchase/editPurchase", purchaseAllVo).then(res => {
               this.$message({type: 'success', message: '暂存成功!'});
             }).catch(() => {
               this.$message({type: 'error', message: '暂存失败!'});
@@ -310,15 +309,14 @@ export default {
         this.$message({type: 'info', message: '药品数据项不能为空'});
       }
     },
-    //-------------------------提交审核----------------------------------------
-    // 保存并提交审核
+    //-------------------------保存并提交审核----------------------------------------
     handleSubmitAndAudit() {
       if (this.purchaseItemList.length > 0) {
         this.$refs['form'].validate((valid) => {
           if (valid) {
             // 组装要提交到后台的数据
-            const purcheseObj = { 'purchaseDto': this.form, 'purchaseItemDtos': this.purchaseItemList }
-            this.$axios.post("/stock/api/purchase/addPurchaseToAudit", {params: purcheseObj}).then(res => {
+            const purchaseAllVo = { 'purchaseDto': this.form, 'purchaseItemDtos': this.purchaseItemList }
+            this.$axios.post("/stock/api/purchase/editPurchaseToAudit", purchaseAllVo).then(res => {
               this.$message({type: 'success', message: '提交审核成功!'});
               // 上面的四个按钮不能按了
               this.isSubmit = true
@@ -348,13 +346,13 @@ export default {
         // alert(res.data.t[0].status);
 
         // 如果当前单据的状态为1或者4那么不能进行其它操作
-        this.isSubmit = true
+        // this.isSubmit = true
 
-        // if (res.data.t[0].status === '1' || res.data.t[0].status === '4') {
-        //   this.isSubmit = false
-        // } else if(res.data.t[0].status === '2' || res.data.t[0].status === '3' || res.data.t[0].status === '5'){
-        //   this.isSubmit = true
-        // }
+        if (res.data.t[0].status === '1' || res.data.t[0].status === '4') {
+          this.isSubmit = false
+        } else if(res.data.t[0].status === '2' || res.data.t[0].status === '3' || res.data.t[0].status === '5' || res.data.t[0].status === '6'){
+          this.isSubmit = true
+        }
       })
     },
     // 分页————改变每页展示的数据数量，在size变化时触发

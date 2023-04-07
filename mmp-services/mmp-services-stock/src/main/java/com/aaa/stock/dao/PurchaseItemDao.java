@@ -5,6 +5,7 @@ import com.aaa.stock.vo.PurchaseItemVo;
 import com.aaa.stock.vo.editPurchaseVo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -24,4 +25,6 @@ public interface PurchaseItemDao extends BaseMapper<PurchaseItem> {
     List<editPurchaseVo> getAllById(String purchaseId);
 
     List<PurchaseItem> getByPurchaseId(String purchaseId);
+
+    void delByPurchaseId(@Param("purchaseId") String purchaseId);
 }
