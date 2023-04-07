@@ -268,7 +268,7 @@ export default {
             this.form.parentId=0
           }
           if (this.form.menuId === undefined) {
-            this.$axios.post('system/api/menu/add',qs.stringify(this.form)).then(res => {
+            this.$axios.post('system/api/menu/add',this.form).then(res => {
               this.$message.success('保存成功')
               this.loading = false
               this.getMenuList()// 列表重新查询
@@ -278,7 +278,7 @@ export default {
               this.loading = false
             })
           } else { // 做修改
-            this.$axios.post('system/api/menu/add',qs.stringify(this.form)).then(res => {
+            this.$axios.post('system/api/menu/add',this.form).then(res => {
               this.$message.success('修改成功')
               this.loading = false
               this.getMenuList()// 列表重新查询
@@ -328,6 +328,7 @@ export default {
       })
     },
     selectTree(list,menuOptions){
+      this.menuOptions=[]
       list.forEach(item=>{
         if (item.children!=null){
           const node={menuId:0,menuName:'',children:[]}

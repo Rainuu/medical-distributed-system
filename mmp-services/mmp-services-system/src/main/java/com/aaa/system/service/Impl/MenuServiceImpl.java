@@ -88,14 +88,14 @@ public class MenuServiceImpl implements MenuService {
 
         if(menu.getMenuId()==null){
             menu.setParentIds(String.valueOf(menu.getParentId()));
-            menu.setCreateBy((String) tokenChaim.get("username"));
+            menu.setCreateBy((String) tokenChaim.get("username2"));
             menu.setCreateTime(new Date());
-            menu.setUpdateBy((String) tokenChaim.get("username"));
+            menu.setUpdateBy((String) tokenChaim.get("username2"));
             menu.setUpdateTime(new Date());
             int insert = dao.insert(menu);
             return insert;
         }else {
-            menu.setUpdateBy((String) tokenChaim.get("username"));
+            menu.setUpdateBy((String) tokenChaim.get("username2"));
             menu.setUpdateTime(new Date());
             int i = dao.updateById(menu);
             return i;

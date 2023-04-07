@@ -82,4 +82,37 @@ public class DeptServiceimpl implements DeptService {
         Dept selectOne = deptDao.selectById(deptId);
         return selectOne;
     }
+
+    @Override
+    public boolean addNum(Long id, Integer num) {
+        Dept dept = deptDao.selectById(id);
+        Integer regNumber = dept.getRegNumber();
+        Dept dept1 = new Dept();
+        dept1.setDeptId(id);
+        dept1.setRegNumber(regNumber+num);
+        int i = deptDao.updateById(dept1);
+        if (i>0){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean jianNum(Long id, Integer num) {
+        Dept dept = deptDao.selectById(id);
+        Integer regNumber = dept.getRegNumber();
+        Dept dept1 = new Dept();
+        dept1.setDeptId(id);
+        if (regNumber-num>=0){
+            dept1.setRegNumber(regNumber-num);
+        }else {
+            return false;
+        }
+
+        int i = deptDao.updateById(dept1);
+        if (i>0){
+            return true;
+        }
+        return false;
+    }
 }

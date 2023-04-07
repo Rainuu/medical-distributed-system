@@ -307,7 +307,9 @@ export default {
     dictFormat(row, column, dictType){
       return this.formatDict( this.dictList,column, dictType)
     },
-
+    reset(){
+      this.form=[]
+    },
     //初始化字典
     getDict() {
       this.$axios.get('/system/api/dict/data/getall').then(res => {

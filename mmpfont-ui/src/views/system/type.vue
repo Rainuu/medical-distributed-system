@@ -253,6 +253,7 @@ export default {
         }
           }
       )
+      this.getDict();
     },
     //批量删除
     pldel(){
@@ -335,14 +336,6 @@ export default {
         remark: undefined
       }
       this.resetForm('form')
-    },
-    // 缓存同步
-    handleCacheAsync() {
-      this.loading = true
-      this.$axios.get().then(res => {
-        this.loading = false
-        this.$message.success('缓存同步成功')
-      })
     },
     //字典解析
     dictFormat(row, column, dictType){

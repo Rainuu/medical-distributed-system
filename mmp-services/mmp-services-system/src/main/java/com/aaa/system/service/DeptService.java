@@ -20,4 +20,7 @@ public interface DeptService {
 
     //通过deptId获取Dept
     Dept getDeptByDeptId(Long deptId);
+
+    boolean addNum(Long id,Integer num);
+    boolean jianNum(Long id,Integer num);
 }

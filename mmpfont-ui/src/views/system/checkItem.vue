@@ -302,7 +302,7 @@ export default {
       }).then(() => {
         tx.loading = true
         for (var i = 0; i < checkItemIds.length; i++) {
-        this.$axios.delete("system/api/checkItem/" + checkItemIds).then(res => {
+        this.$axios.delete("system/api/checkItem/" + checkItemIds[i]).then(res => {
         })
       }
         tx.handleQuery()// 全查询
@@ -370,7 +370,9 @@ export default {
       this.title = ''
       this.form={}
     },
-
+    reset() {
+    this.form=[]
+    },
     //字典解析
     dictFormat(row, column, dictType){
       return this.formatDict( this.dictList,column, dictType)

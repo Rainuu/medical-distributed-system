@@ -41,7 +41,7 @@ axios.interceptors.response.use(response=>{
   if(response.data.code===200){
 
     return response;
-  }else if(response.data.code===305){
+  }else if(response.data.code===503){
    this.$route.path('/login')
   }else{
     return response;

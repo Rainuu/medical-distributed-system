@@ -75,7 +75,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID" align="center" prop="noticeId" />
       <el-table-column label="名称" align="center" prop="noticeTitle" />
-      <el-table-column label="公告类型" prop="noticeType" align="center" :formatter="(row)=>dictFormat(row,row.status,'sys_notice_type')" />
+      <el-table-column label="公告类型" prop="noticeType" align="center" :formatter="(row)=>dictFormat(row,row.noticeType,'sys_notice_type')" />
       <el-table-column label="状态" prop="status" align="center" :formatter="(row)=>dictFormat(row,row.status,'sys_normal_disable')" />
       <el-table-column label="发布者" align="center" prop="createBy" />
       <el-table-column label="创建时间" align="center" prop="createTime" />
@@ -312,12 +312,14 @@ export default {
       }).then(() => {
        for (var i=0;i<dataIds.length;i++){
         this.$axios.delete("system/api/notice/"+dataIds[i]).then(res => {
+
         })}
+       this.mohu()
       }).catch(() => {
         this.$message.success('删除已取消')
         this.loading = false
       })
-      this.mohu()
+
     },
     // 执行删除
     handleDelete(row) {

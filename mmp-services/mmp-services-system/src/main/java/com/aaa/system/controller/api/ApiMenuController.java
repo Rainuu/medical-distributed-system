@@ -39,7 +39,7 @@ public class ApiMenuController {
     }
 
     @PostMapping("add")
-    public Result add(Menu menu){
+    public Result add(@RequestBody Menu menu){
         int i = Sercvice.addMenu(menu);
         if (i>0){
             return new Result(200,"添加成功",true);

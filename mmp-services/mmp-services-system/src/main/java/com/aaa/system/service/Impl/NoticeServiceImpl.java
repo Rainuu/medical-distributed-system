@@ -1,6 +1,8 @@
 package com.aaa.system.service.Impl;
 
 import com.aaa.core.entity.Notice;
+import com.aaa.core.util.JwtUtil;
+import com.aaa.core.util.WebUtil;
 import com.aaa.core.vo.Result;
 import com.aaa.system.dao.NoticeDao;
 import com.aaa.system.service.NoticeService;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @author lml
@@ -42,10 +45,13 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public Result saveAndUp(Notice notice) {
+        String token = WebUtil.getRequest().getHeader("token");
+        Map<String, Object> tokenChaim = JwtUtil.getTokenChaim(token);
         if (notice.getNoticeId()==null){
             notice.setCreateTime(new Date());
             notice.setUpdateTime(new Date());
-
+            notice.setCreateBy((String) tokenChaim.get("username2"));
+            notice.setUpdateBy((String) tokenChaim.get("username2"));
             int insert = dao.insert(notice);
             if (insert>0){
                 return new Result(200,null,true);
@@ -53,6 +59,7 @@ public class NoticeServiceImpl implements NoticeService {
             return new Result(200,null,false);
         }else {
             notice.setUpdateTime(new Date());
+            notice.setUpdateBy((String) tokenChaim.get("username2"));
             int i = dao.updateById(notice);
             if (i>0){
                 return new Result(200,null,true);

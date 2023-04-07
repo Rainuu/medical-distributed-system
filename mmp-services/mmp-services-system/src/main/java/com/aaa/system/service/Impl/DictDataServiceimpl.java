@@ -98,7 +98,7 @@ public class DictDataServiceimpl implements DictDataService {
 
     @Override
     public Result selectById(Long id) {
-        return new Result(200,null,dictDataDao.selectById(id));
+        return new Result(200,null,dictTypeDao.selectById(id));
     }
 
     @Override

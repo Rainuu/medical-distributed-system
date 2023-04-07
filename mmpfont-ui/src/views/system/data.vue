@@ -196,9 +196,9 @@ export default {
     // 取路由路径上的参数
     this.queryParams.dictId = this.$route.params && this.$route.params.dictId // 路由传参
     // 做分页查询
+    this.getTypeById()
     this.getDictDataList()
     this.getDict()
-    this.GetDictType()
   },
   deactivated() {
     //解决vue组件 前进刷新，后退不刷新，
@@ -206,6 +206,11 @@ export default {
     this.$destroy();
   },
   methods: {
+    getTypeById(){
+      this.$axios.get('system/api/dict/data/'+this.queryParams.dictId).then(res=>{
+        this.defaultDictType=res.data.t.dictType
+      })
+    },
     // 查询字典数据
     getDictDataList() {
       this.loading = true
