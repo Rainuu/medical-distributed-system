@@ -24,6 +24,7 @@ public class CareOrderItemController {
     @Autowired
     private CareOrderItemService careOrderItemService;
 
+    //查询
     @PostMapping("selectAll")
     public Result<List<CareOrderItem>> selectAll (
             @RequestBody CheckItemVo checkItemVo

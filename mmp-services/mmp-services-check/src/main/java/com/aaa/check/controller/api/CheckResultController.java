@@ -24,6 +24,7 @@ public class CheckResultController {
     @Autowired
     private CheckResultService checkResultService;
 
+    //查询
     @PostMapping("listStatus/{current}/{size}")
     public Result<IPage<CheckResult>> listStatus(
             @PathVariable Integer current,
@@ -33,11 +34,13 @@ public class CheckResultController {
         return checkResultService.getByPageStatus(current,size,checkItemVo);
     }
 
+    //录入检查结果
     @GetMapping("addMsg")
     public Result addMsg(String cocId,String textarea,String name,String url){
         return checkResultService.addMsg(cocId,textarea,name,url);
     }
 
+    //开始检查
     @GetMapping("addAll")
     public Result addAll(CheckResult checkResult){
         return checkResultService.addAll(checkResult);

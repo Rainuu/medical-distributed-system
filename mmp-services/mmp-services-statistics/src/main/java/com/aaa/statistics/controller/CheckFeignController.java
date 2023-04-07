@@ -26,7 +26,7 @@ public class CheckFeignController {
 //        checkResultVo.setPatientName(patientName);
 //        checkResultVo.setCheckItemId(checkItemId);
 //        checkResultVo.setDateRange(dateRange);
-        System.out.println("---------------------------------------------"+checkResultVo.getCheckItemId());
+        //System.out.println("---------------------------------------------"+checkResultVo.getCheckItemId());
         return checkService.selectAll(checkResultVo);
     };
 

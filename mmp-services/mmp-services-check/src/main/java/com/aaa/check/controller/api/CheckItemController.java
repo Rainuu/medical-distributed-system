@@ -25,6 +25,7 @@ public class CheckItemController {
     @Autowired
     private CheckItemService checkItemService;
 
+    //查询所有检查项目
     @GetMapping("selectAllCheckItem")
     public Result<List<CheckItem>> selectAllCheckItem (){
         return checkItemService.selectAllCheckItem();
