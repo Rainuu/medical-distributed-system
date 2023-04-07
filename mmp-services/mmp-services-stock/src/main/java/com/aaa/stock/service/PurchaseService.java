@@ -32,9 +32,14 @@ public interface PurchaseService extends IService<Purchase> {
 
     Result<List<PurchaseItem>> addPurchaseToAudit(PurchaseAllVo purchaseAllVo);
 
+    Result<List<PurchaseItem>> editPurchase(PurchaseAllVo purchaseAllVo);
+
+    Result<List<PurchaseItem>> editPurchaseToAudit(PurchaseAllVo purchaseAllVo);
+
     void doInvalid(String purchaseId);
 
     void doAudit(String purchaseId);
 
     void doInventory(String purchaseId);
+
 }

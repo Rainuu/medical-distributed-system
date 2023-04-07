@@ -291,7 +291,6 @@ export default {
       this.batchSetOpen = false
     },
     // ---------------------暂存---------------------------------------
-    // 暂存
     handleSubmit() {
       if (this.purchaseItemList.length > 0) {
         this.$refs['form'].validate((valid) => {
@@ -311,8 +310,7 @@ export default {
         this.$message({type: 'info', message: '药品数据项不能为空'});
       }
     },
-    //-------------------------提交审核----------------------------------------
-    // 保存并提交审核
+    //-------------------------保存并提交审核----------------------------------------
     handleSubmitAndAudit() {
       if (this.purchaseItemList.length > 0) {
         this.$refs['form'].validate((valid) => {

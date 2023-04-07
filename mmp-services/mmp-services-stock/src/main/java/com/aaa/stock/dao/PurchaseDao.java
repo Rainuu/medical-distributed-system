@@ -31,4 +31,7 @@ public interface PurchaseDao extends BaseMapper<Purchase> {
 
     void RuKuUpd(String purchaseId);
 
+    void updateStatusTo1(@Param("purchaseId") String purchaseId);
+
+    void updateStatusTo2(@Param("purchaseId") String purchaseId);
 }

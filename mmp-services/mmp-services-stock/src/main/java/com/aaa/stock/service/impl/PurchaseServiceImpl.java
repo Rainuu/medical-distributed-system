@@ -229,6 +229,126 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
     }
 
     @Override
+    public Result<List<PurchaseItem>> editPurchase(PurchaseAllVo purchaseAllVo) {
+
+        String purchaseId = purchaseAllVo.getPurchaseDto().getPurchaseId();
+        String providerId = purchaseAllVo.getPurchaseDto().getProviderId();
+        BigDecimal purchaseTradeTotalAmount = purchaseAllVo.getPurchaseDto().getPurchaseTradeTotalAmount();
+        HttpServletRequest request = WebUtil.getRequest();
+        String token = request.getHeader("token");
+        Map<String, Object> info = JwtUtil.getTokenChaim(token);
+        String phone = (String) info.get("username");
+        User byUsername = feign.getByUsername(phone);
+        String userName = byUsername.getUserName();
+        // purchaseDao.insert(purchase);
+
+        //批量删除
+        purchaseItemDao.delByPurchaseId(purchaseId);
+
+        //修改状态为暂存
+        purchaseDao.updateStatusTo1(purchaseId);
+
+        // 批量插入
+        List<PurchaseItemDtosVo> purchaseItemDtosVos = purchaseAllVo.getPurchaseItemDtos();
+        for (int i = 0; i < purchaseItemDtosVos.size(); i++) {
+            String medicinesId = purchaseAllVo.getPurchaseItemDtos().get(i).getMedicinesId().toString();
+            String medicinesName = purchaseAllVo.getPurchaseItemDtos().get(i).getMedicinesName();
+            Integer purchaseNumber = purchaseAllVo.getPurchaseItemDtos().get(i).getPurchaseNumber();
+            String medicinesType = purchaseAllVo.getPurchaseItemDtos().get(i).getMedicinesType();
+            String prescriptionType = purchaseAllVo.getPurchaseItemDtos().get(i).getPrescriptionType();
+            String unit = purchaseAllVo.getPurchaseItemDtos().get(i).getUnit();
+            Integer conversion = purchaseAllVo.getPurchaseItemDtos().get(i).getConversion();
+            String keywords = purchaseAllVo.getPurchaseItemDtos().get(i).getKeywords();
+            BigDecimal tradePrice = purchaseAllVo.getPurchaseItemDtos().get(i).getTradePrice();
+            BigDecimal tradeTotalAmount = purchaseAllVo.getPurchaseItemDtos().get(i).getTradeTotalAmount();
+            String batchNumber = purchaseAllVo.getPurchaseItemDtos().get(i).getBatchNumber();
+            String remark = purchaseAllVo.getPurchaseItemDtos().get(i).getRemark();
+            String producterId = purchaseAllVo.getPurchaseItemDtos().get(i).getProducterId();
+
+            PurchaseItem purchaseItem = new PurchaseItem();
+
+            purchaseItem.setPurchaseId(purchaseId);
+            purchaseItem.setMedicinesId(medicinesId);
+            purchaseItem.setPurchaseNumber(purchaseNumber);
+            purchaseItem.setTradePrice(tradePrice);
+            purchaseItem.setTradeTotalAmount(tradeTotalAmount);
+            purchaseItem.setBatchNumber(batchNumber);
+            purchaseItem.setRemark(remark);
+            purchaseItem.setMedicinesName(medicinesName);
+            purchaseItem.setMedicinesType(medicinesType);
+            purchaseItem.setPrescriptionType(prescriptionType);
+            purchaseItem.setPurchaseId(purchaseId);
+            purchaseItem.setConversion(conversion);
+            purchaseItem.setUnit(unit);
+            purchaseItem.setKeywords(keywords);
+            purchaseItem.setProducterId(producterId);
+
+            purchaseItemDao.insert(purchaseItem);
+        }
+        return new Result<>(200,"成功");
+    }
+
+    @Override
+    public Result<List<PurchaseItem>> editPurchaseToAudit(PurchaseAllVo purchaseAllVo) {
+        // 单插
+        String purchaseId = purchaseAllVo.getPurchaseDto().getPurchaseId();
+        String providerId = purchaseAllVo.getPurchaseDto().getProviderId();
+        BigDecimal purchaseTradeTotalAmount = purchaseAllVo.getPurchaseDto().getPurchaseTradeTotalAmount();
+
+        HttpServletRequest request = WebUtil.getRequest();
+        String token = request.getHeader("token");
+        Map<String, Object> info = JwtUtil.getTokenChaim(token);
+        String phone = (String) info.get("username");
+        User byUsername = feign.getByUsername(phone);
+        String userName = byUsername.getUserName();
+        // LocalDateTime localDateTime = LocalDateTime.now(); // 当前日期和时间】
+        Date date = new Date();
+
+        //批量删除
+        purchaseItemDao.delByPurchaseId(purchaseId);
+
+        //修改状态为待审核2
+        purchaseDao.updateStatusTo2(purchaseId);
+
+        List<PurchaseItemDtosVo> purchaseItemDtosVos = purchaseAllVo.getPurchaseItemDtos();
+        for (int i = 0; i < purchaseItemDtosVos.size(); i++) {
+            String medicinesId = purchaseAllVo.getPurchaseItemDtos().get(i).getMedicinesId().toString();
+            String medicinesName = purchaseAllVo.getPurchaseItemDtos().get(i).getMedicinesName();
+            Integer purchaseNumber = purchaseAllVo.getPurchaseItemDtos().get(i).getPurchaseNumber();
+            String medicinesType = purchaseAllVo.getPurchaseItemDtos().get(i).getMedicinesType();
+            String prescriptionType = purchaseAllVo.getPurchaseItemDtos().get(i).getPrescriptionType();
+            String unit = purchaseAllVo.getPurchaseItemDtos().get(i).getUnit();
+            String producterId = purchaseAllVo.getPurchaseItemDtos().get(i).getProducterId();
+            Integer conversion = purchaseAllVo.getPurchaseItemDtos().get(i).getConversion();
+            String keywords = purchaseAllVo.getPurchaseItemDtos().get(i).getKeywords();
+            BigDecimal tradePrice = purchaseAllVo.getPurchaseItemDtos().get(i).getTradePrice();
+            BigDecimal tradeTotalAmount = purchaseAllVo.getPurchaseItemDtos().get(i).getTradeTotalAmount();
+            String batchNumber = purchaseAllVo.getPurchaseItemDtos().get(i).getBatchNumber();
+            String remark = purchaseAllVo.getPurchaseItemDtos().get(i).getRemark();
+
+            PurchaseItem purchaseItem = new PurchaseItem();
+
+            purchaseItem.setProducterId(producterId);
+            purchaseItem.setPurchaseId(purchaseId);
+            purchaseItem.setMedicinesId(medicinesId);
+            purchaseItem.setPurchaseNumber(purchaseNumber);
+            purchaseItem.setTradePrice(tradePrice);
+            purchaseItem.setTradeTotalAmount(tradeTotalAmount);
+            purchaseItem.setBatchNumber(batchNumber);
+            purchaseItem.setRemark(remark);
+            purchaseItem.setMedicinesName(medicinesName);
+            purchaseItem.setMedicinesType(medicinesType);
+            purchaseItem.setPrescriptionType(prescriptionType);
+            purchaseItem.setPurchaseId(purchaseId);
+            purchaseItem.setConversion(conversion);
+            purchaseItem.setUnit(unit);
+            purchaseItem.setKeywords(keywords);
+            purchaseItemDao.insert(purchaseItem);
+        }
+        return new Result<>(200,"成功");
+    }
+
+    @Override
     public void doInvalid(String purchaseId) {
         purchaseDao.updateByPurchaseId(purchaseId);
     }

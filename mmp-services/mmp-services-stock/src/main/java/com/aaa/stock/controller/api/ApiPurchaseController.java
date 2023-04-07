@@ -48,19 +48,35 @@ public class ApiPurchaseController {
         return new Result<>(200,"单据号生成成功",purchaseId);
     }
 
-    // 暂存 status=1
+    // ---------------------------------新增库存------------------------------------------------
+
+    // 添加 & 暂存[未提交] status=1
     @PostMapping("addPurchase")
     public Result<List<PurchaseItem>> addPurchase(@RequestBody PurchaseAllVo purchaseAllVo){
         return purchaseService.addPurchase(purchaseAllVo);
     }
 
-    // 提交审核[待审核]
+    // 添加 & 提交审核[待审核] status=2
     @PostMapping("addPurchaseToAudit")
     public Result<List<PurchaseItem>> addPurchaseToAudit(@RequestBody PurchaseAllVo purchaseAllVo){
         return purchaseService.addPurchaseToAudit(purchaseAllVo);
     }
 
-    // 提交审核[待审核]
+    // ---------------------------------编辑库存------------------------------------------------
+    // 添加 & 暂存[未提交] status=1
+    @PostMapping("editPurchase")
+    public Result<List<PurchaseItem>> editPurchase(@RequestBody PurchaseAllVo purchaseAllVo){
+        return purchaseService.editPurchase(purchaseAllVo);
+    }
+    // 添加 & 提交审核[待审核] status=2
+    @PostMapping("editPurchaseToAudit")
+    public Result<List<PurchaseItem>> editPurchaseToAudit(@RequestBody PurchaseAllVo purchaseAllVo){
+        return purchaseService.editPurchaseToAudit(purchaseAllVo);
+    }
+
+    // ------------------------------------------------------------------------------------------
+
+    // 采购入库 & 提交审核[待审核] status=2
     @PostMapping("doAudit/{purchaseId}")
     public void doAudit(@PathVariable String purchaseId){
         purchaseService.doAudit(purchaseId);
