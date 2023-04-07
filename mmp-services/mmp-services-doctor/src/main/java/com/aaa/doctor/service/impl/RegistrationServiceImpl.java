@@ -140,9 +140,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 
             insert = registrationDao.insert(registration);
-            boolean aBoolean = userFeign.updDeptRegNumByDeptId(scheduling.getDeptId(), regNumber);
+            Boolean aBoolean = userFeign.updDeptRegNumByDeptId(scheduling.getDeptId(), regNumber);
             if (aBoolean) {
-                insert=-1;
+                insert=1;
             }else {
                 insert=0;
             }
@@ -172,9 +172,9 @@ public class RegistrationServiceImpl implements RegistrationService {
             registration.setCreateBy(user.getUserName());//创建人
 
             insert = registrationDao.insert(registration);
-            boolean aBoolean = userFeign.updDeptRegNumByDeptId(scheduling.getDeptId(), regNumber);
+            Boolean aBoolean = userFeign.updDeptRegNumByDeptId(scheduling.getDeptId(), regNumber);
             if (aBoolean) {
-                insert=-1;
+                insert=1;
             }else {
                 insert=0;
             }
