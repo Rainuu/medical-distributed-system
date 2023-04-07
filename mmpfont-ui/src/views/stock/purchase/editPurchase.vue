@@ -247,7 +247,7 @@ export default {
         let flag = false
         // 判断purchaseItemList里面有没有已选择的ID
         this.purchaseItemList.filter(purch => {
-          if (m1.medicinesId === purch.medicinesId) {
+          if (m1.medicinesId == purch.medicinesId) {
             flag = true
           }
         })

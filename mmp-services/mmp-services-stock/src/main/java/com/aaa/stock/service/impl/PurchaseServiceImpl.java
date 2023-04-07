@@ -138,6 +138,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
             BigDecimal tradeTotalAmount = purchaseAllVo.getPurchaseItemDtos().get(i).getTradeTotalAmount();
             String batchNumber = purchaseAllVo.getPurchaseItemDtos().get(i).getBatchNumber();
             String remark = purchaseAllVo.getPurchaseItemDtos().get(i).getRemark();
+            String producterId = purchaseAllVo.getPurchaseItemDtos().get(i).getProducterId();
 
             PurchaseItem purchaseItem = new PurchaseItem();
 
@@ -155,6 +156,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
             purchaseItem.setConversion(conversion);
             purchaseItem.setUnit(unit);
             purchaseItem.setKeywords(keywords);
+            purchaseItem.setProducterId(producterId);
 
             purchaseItemDao.insert(purchaseItem);
         }
