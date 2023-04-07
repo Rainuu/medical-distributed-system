@@ -115,7 +115,6 @@ public class RegistredListServiceImpl implements RegistredListService {
         if (Objects.nonNull(schedulingVoo.getSchedulingDay())) {
             wrapper.eq("scheduling_day",schedulingVoo.getSchedulingDay());
         }
-//        List<Scheduling> schedulings = schedulingDao.selectList(wrapper);
         IPage<Scheduling> page1 = schedulingDao.selectPage(page, wrapper);
         return new Result<>(2000,"查询医生排班成功",page1);
     }

@@ -1223,6 +1223,7 @@ export default {
           this.submitCareOrder.careOrderItems.filter(i => {
             if (i.itemRefId === obj.itemRefId) {
               i.num = i.num + 1
+              i.amount=i.price * i.num
               flag = true// 说明之前加过
             }
           })
@@ -1246,6 +1247,7 @@ export default {
           this.submitCareOrder.careOrderItems.filter(i => {
             if (i.itemRefId === obj.itemRefId) {
               i.num = i.num + 1
+              i.amount=i.price * i.num
               flag = true// 说明之前加过
             }
           })

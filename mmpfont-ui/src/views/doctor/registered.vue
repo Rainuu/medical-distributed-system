@@ -445,10 +445,6 @@ export default {
       //清空之后获取按钮数据取第一个里面的数据赋值给表单 默认选中第一个
       this.queryDeptParams.regItemId=this.regItemOptions[0].regItemId
       this.queryDeptParams.regItemAmount=this.regItemOptions[0].regItemFee
-
-
-
-
     },
     // 挂号收费
     handleRegistration() {

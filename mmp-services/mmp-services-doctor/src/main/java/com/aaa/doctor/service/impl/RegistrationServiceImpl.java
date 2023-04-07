@@ -85,7 +85,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         String id="";
         //生成id
         IdWorker idWorker = new IdWorker();
-        Object tableData = obj.get("tableData");
+        Object tableData = obj.get("tableData");// 前端传过来的数据
         String tableData1 = JSON.toJSONString(tableData);
         Scheduling scheduling = JSON.parseObject(tableData1, Scheduling.class);
 
