@@ -300,15 +300,14 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, Purchase> impl
             inventoryLog.setCreateTime(new Date());
             //inventoryLog.setProviderId(producterId);
             inventoryLogDao.insert(inventoryLog);
+            System.out.println("--------------------------------");
+
+            InventoryLog inventoryLog2 = new InventoryLog();
 
             // 修改入库
             medicinalService.AddNum(inventoryLog.getInventoryLogNum().toString(),inventoryLog.getMedicinesName());
-            System.out.println("--------------------------------");
 
         }
-
-
-        // 批量插入数据
     }
 
 }

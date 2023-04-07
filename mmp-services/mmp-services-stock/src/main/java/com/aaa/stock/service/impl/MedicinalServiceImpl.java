@@ -136,7 +136,7 @@ public class MedicinalServiceImpl extends ServiceImpl<MedicinalDao, Medicines> i
         wrapper1.eq("medicines_name",itemName);
         Medicines medicines = medicinalDao.selectOne(wrapper1);
         BigDecimal medicinesStockNum = new BigDecimal(medicines.getMedicinesStockNum());
-        BigDecimal a=medicinesStockNum.subtract(bigDecimal);
+        BigDecimal a=medicinesStockNum.add(bigDecimal);
         if(a.compareTo(BigDecimal.valueOf(0))> -1 ){
             BigDecimal i= medicinesStockNum.add(bigDecimal);
             Medicines medicines1=new Medicines();
