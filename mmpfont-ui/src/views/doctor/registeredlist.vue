@@ -38,7 +38,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="挂号时间" >
-        <el-date-picker v-model="registrationList.time" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期时间"   clearable>
+        <el-date-picker v-model="registrationList.time" value-format="yyyy-MM-dd HH:mm:ss" type="date" placeholder="选择日期时间"   clearable>
         </el-date-picker>
       </el-form-item>
       <el-form-item>

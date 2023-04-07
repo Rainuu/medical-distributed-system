@@ -1,5 +1,6 @@
 package com.aaa.doctor.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.aaa.core.entity.Registration;
 import com.aaa.core.entity.Scheduling;
 import com.aaa.core.vo.Result;
@@ -57,9 +58,10 @@ public class RegistredListServiceImpl implements RegistredListService {
         if (Objects.nonNull(registeredListVo.getStatus())) {
             wrapper.eq("registration_status",registeredListVo.getStatus());
         }
-        // 部门id
+        // 就诊时间
         if (Objects.nonNull(registeredListVo.getTime())) {
-            wrapper.eq("create_time",registeredListVo.getTime());
+            String time = DateUtil.format(registeredListVo.getTime(), "yyyy-MM-dd");
+            wrapper.eq("visit_date",time);
         }
         IPage<Registration> page1 = registredListDao.selectPage(page,wrapper);
         return new Result<IPage<Registration>>(2000,"查询患者信息成功",page1);
