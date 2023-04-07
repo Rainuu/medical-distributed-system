@@ -1,11 +1,13 @@
 package com.aaa.check.service.impl;
 
 import com.aaa.check.dao.CareOrderItemDao;
+import com.aaa.check.dao.OrderChargeItemDao;
 import com.aaa.check.feign.CheckResultFeign;
 import com.aaa.check.dao.CheckResultDao;
 import com.aaa.check.service.CheckResultService;
 
 
+import com.aaa.core.entity.OrderChargeItem;
 import com.aaa.core.entity.User;
 import com.aaa.core.util.JwtUtil;
 import com.aaa.core.util.WebUtil;
@@ -43,6 +45,9 @@ public class CheckResultServiceImpl implements CheckResultService {
    @Autowired
    private CareOrderItemDao careOrderItemDao;
 
+   @Autowired
+   private OrderChargeItemDao orderChargeItemDao;
+
    @Override
    public Result<IPage<CheckResult>> getByPageStatus(Integer current, Integer size, CheckItemVo checkItemVo) {
       IPage<CheckResult> page = new Page<>(current,size);
@@ -54,7 +59,8 @@ public class CheckResultServiceImpl implements CheckResultService {
    public Result addMsg(String cocId, String textarea,String name,String url) {
       String itemId= cocId;
       Boolean aBoolean1 = careOrderItemDao.updateStatus(itemId);
-      System.out.println("aBoolean1 = " + aBoolean1);
+      Boolean aBoolean2 = orderChargeItemDao.updateStatus(itemId);
+      //System.out.println("aBoolean1 = " + aBoolean1);
       Boolean aBoolean = checkResultDao.addMsg(cocId,textarea,url);
       return new Result(200,"录入结果成功",aBoolean);
    }

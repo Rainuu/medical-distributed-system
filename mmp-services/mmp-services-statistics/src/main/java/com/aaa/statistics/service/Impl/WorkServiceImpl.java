@@ -27,7 +27,7 @@ public class WorkServiceImpl implements WorkService {
             dateRange1=  String.valueOf(dateTime);
             dateRange2=String.valueOf(dateTime.plusDays(1));
         }
-        return workFeign.queryByDoctor(doctorName,dateRange1,doctorName);
+        return workFeign.queryByDoctor(doctorName,dateRange1,dateRange2);
     }
 
     @Override
@@ -40,6 +40,6 @@ public class WorkServiceImpl implements WorkService {
             dateRange1=  String.valueOf(dateTime);
             dateRange2=String.valueOf(dateTime.plusDays(1));
         }
-        return workFeign.queryByDoctor2(doctorName,dateRange1,doctorName);
+        return workFeign.queryByDoctor2(doctorName,dateRange1,dateRange2);
     }
 }
