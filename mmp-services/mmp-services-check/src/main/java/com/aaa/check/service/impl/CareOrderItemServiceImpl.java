@@ -28,9 +28,6 @@ public class CareOrderItemServiceImpl implements CareOrderItemService {
    @Autowired
    private CareOrderItemDao careOrderItemDao;
 
-   @Autowired
-   private CheckResultServiceImpl checkResultService;
-
    @Override
    public Result<List<CareOrderItem>> selectAll(CheckItemVo checkItemVo) {
       List checkItemIds = checkItemVo.getCheckItemIds();

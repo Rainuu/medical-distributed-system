@@ -1,5 +1,6 @@
 package com.aaa.check.service.impl;
 
+import com.aaa.check.dao.CareOrderItemDao;
 import com.aaa.check.feign.CheckResultFeign;
 import com.aaa.check.dao.CheckResultDao;
 import com.aaa.check.service.CheckResultService;
@@ -39,6 +40,9 @@ public class CheckResultServiceImpl implements CheckResultService {
    @Autowired
    private CheckResultFeign checkResultFeign;
 
+   @Autowired
+   private CareOrderItemDao careOrderItemDao;
+
    @Override
    public Result<IPage<CheckResult>> getByPageStatus(Integer current, Integer size, CheckItemVo checkItemVo) {
       IPage<CheckResult> page = new Page<>(current,size);
@@ -48,6 +52,9 @@ public class CheckResultServiceImpl implements CheckResultService {
 
    @Override
    public Result addMsg(String cocId, String textarea,String name,String url) {
+      String itemId= cocId;
+      Boolean aBoolean1 = careOrderItemDao.updateStatus(itemId);
+      System.out.println("aBoolean1 = " + aBoolean1);
       Boolean aBoolean = checkResultDao.addMsg(cocId,textarea,url);
       return new Result(200,"录入结果成功",aBoolean);
    }
@@ -71,6 +78,7 @@ public class CheckResultServiceImpl implements CheckResultService {
                                               String dateRange2) {
       System.out.println("====================================="+checkItemId);
       QueryWrapper<CheckResult> wrapper = new QueryWrapper<>();
+
       if (StringUtils.hasText(checkItemId)){
          wrapper.like("check_item_id",checkItemId);
       }

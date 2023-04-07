@@ -15,7 +15,5 @@ import java.util.List;
  * @since 2023-03-27 10:56:57
  */
 public interface CareOrderItemService {
-
-
     Result<List<CareOrderItem>> selectAll(CheckItemVo checkItemVo);
 }

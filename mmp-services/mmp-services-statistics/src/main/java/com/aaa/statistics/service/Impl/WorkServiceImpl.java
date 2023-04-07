@@ -8,6 +8,7 @@ import com.aaa.statistics.service.WorkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -21,6 +22,11 @@ public class WorkServiceImpl implements WorkService {
         String doctorName = registrationVo.getDoctorName();
         String dateRange1 = registrationVo.getDateRange1();
         String dateRange2 = registrationVo.getDateRange2();
+        LocalDate dateTime= LocalDate.now();
+        if (dateRange1==null&& dateRange2==null){
+            dateRange1=  String.valueOf(dateTime);
+            dateRange2=String.valueOf(dateTime.plusDays(1));
+        }
         return workFeign.queryByDoctor(doctorName,dateRange1,doctorName);
     }
 
@@ -29,6 +35,11 @@ public class WorkServiceImpl implements WorkService {
         String doctorName = registrationVo.getDoctorName();
         String dateRange1 = registrationVo.getDateRange1();
         String dateRange2 = registrationVo.getDateRange2();
+        LocalDate dateTime= LocalDate.now();
+        if (dateRange1==null&& dateRange2==null){
+            dateRange1=  String.valueOf(dateTime);
+            dateRange2=String.valueOf(dateTime.plusDays(1));
+        }
         return workFeign.queryByDoctor2(doctorName,dateRange1,doctorName);
     }
 }

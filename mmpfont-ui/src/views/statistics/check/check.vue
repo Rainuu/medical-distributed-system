@@ -113,10 +113,7 @@
 </template>
 
 <script>
-// import { selectAllCheckItem } from '@/api/system/checkItem'
-// import { queryCheck, queryCheckStat } from '@/api/statistics/check'
 import qs from "qs";
-
 export default {
   data() {
     return {
