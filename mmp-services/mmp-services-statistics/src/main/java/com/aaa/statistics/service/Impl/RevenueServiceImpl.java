@@ -20,9 +20,10 @@ public class RevenueServiceImpl implements RevenueService {
 @Autowired
 private RevenueFeign revenueFeign;
     @Override
-    public Result queryInfo(String[] createTime) {
+    public Result queryInfo(String dateRange1,String dateRange2) {
         LocalDate dateTime= LocalDate.now();
-        if (createTime==null){
+        String[] createTime=new String[]{dateRange1,dateRange2};
+        if (dateRange1==null&&dateRange2==null){
             createTime= new String[]{String.valueOf(dateTime), String.valueOf(dateTime.plusDays(1))};
 
         }

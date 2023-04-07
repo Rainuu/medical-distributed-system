@@ -92,7 +92,7 @@
       <el-table-column label="手机号码【登陆身份】" width="180" align="center" prop="phone" />
       <el-table-column label="性别" align="center" prop="sex" :formatter="(row)=>dictFormat(row,row.sex,'sys_user_sex')" />
       <el-table-column label="年龄" align="center" prop="age" />
-      <el-table-column label="是否排班" align="center" prop="schedulingFlag" :formatter="(row)=>dictFormat(row,row.schedulingFlag,'his_subsection_type')" />
+      <el-table-column label="是否排班" align="center" prop="schedulingFlag" :formatter="(row)=>dictFormat(row,row.schedulingFlag,'his_system_yesno')" />
       <el-table-column label="级别" prop="userRank" align="center"  :formatter="(row)=>dictFormat(row,row.userRank,'sys_user_level')"/>
       <el-table-column label="背景" prop="background" align="center" :formatter="(row)=>dictFormat(row,row.background,'sys_user_background')"/>
       <el-table-column label="状态" prop="status" align="center" :formatter="(row)=>dictFormat(row,row.status,'sys_normal_disable')"/>

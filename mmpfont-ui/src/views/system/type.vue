@@ -306,6 +306,7 @@ export default {
             }).catch(() => {
               this.loading = false
             })
+            this.tongbu()
           } else { // 做修改
             this.$axios.post("system/api/dictType/saveAndUp",qs.stringify(this.form)).then(res => {
               this.$message.success('修改成功')
@@ -315,6 +316,7 @@ export default {
             }).catch(() => {
               this.loading = false
             })
+            this.tongbu()
           }
         }
       })

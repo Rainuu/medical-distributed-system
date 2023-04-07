@@ -65,6 +65,7 @@
 
 <script>
 import PieChart from './components/PieChart'
+import qs from 'qs'
 export default {
   components: {
     PieChart
@@ -72,7 +73,9 @@ export default {
   data() {
     return {
       // 查询参数
-      queryParams: {},
+      queryParams: {
+        dateRange:[]
+      },
       // 数组结构
       revenueObj: {
         totalRevenue: 0.00, // 合计收入
@@ -118,7 +121,8 @@ export default {
     // 查询数据
     loadData() {
       this.loading = true
-      this.$axios.post('statistics/api/revenue/getInfo',this.queryParams).then(res => {
+      var param={'dateRange1':this.queryParams.dateRange[0],'dateRange2':this.queryParams.dateRange[1]}
+      this.$axios.post('statistics/api/revenue/getInfo',qs.stringify(param)).then(res => {
         this.revenueObj.totalRevenue = res.data.t.totalRevenue
         this.revenueObj.overview.refund=res.data.t.refund
         this.revenueObj.overview.toll=res.data.t.toll
@@ -138,7 +142,7 @@ export default {
     },
     // 重置查询条件
     resetQuery() {
-      this.queryParams={};
+      this.queryParams.dateRange=[];
       this.loadData()
     }
   }

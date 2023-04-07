@@ -207,6 +207,7 @@
                 this.$router.push('/login')
               }else {
                 this.$message.error(res.data.msg)
+                this.$router.push('/login')
               }
             })
           }

@@ -37,21 +37,19 @@ axios.interceptors.request.use(config=>{
   return config;
 })
 //返回相应
-/*axios.interceptors.response.use(response=>{
+axios.interceptors.response.use(response=>{
   if(response.data.code===200){
 
     return response;
-  }else if(response.data.code===4001){
-    alert("权限不足");
-    return Promise.reject(new Error())
+  }else if(response.data.code===305){
+   this.$route.path('/login')
   }else{
-    alert("响应错误");
-    return Promise.reject(new Error())
+    return response;
   }
 },error => {
 
   return Promise.reject(error)
-})*/
+})
 
 //设置路由守卫 to:目标路由   from:从哪个路由   next:放行到目标路由  跳转到指定路径
 router.beforeEach(((to, from, next) => {

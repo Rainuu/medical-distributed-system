@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
@@ -107,6 +108,7 @@ public class MedicinalServiceImpl extends ServiceImpl<MedicinalDao, Medicines> i
         return new Result<>(2000,"查询成功",medicinesPage1);
     }
 
+    @Transactional
     @Override
     //收费减库存接口
     public Boolean num(String num, String itemName) {
@@ -129,6 +131,7 @@ public class MedicinalServiceImpl extends ServiceImpl<MedicinalDao, Medicines> i
     return false;
     }
 
+    @Transactional
     @Override
     public Boolean AddNum(String num, String itemName) {
         BigDecimal bigDecimal = new BigDecimal(num);
