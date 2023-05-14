@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.check.dao.CheckItemDao">
+
+    <resultMap type="com.aaa.core.entity.CheckItem" id="SysCheckItemMap">
+        <result property="checkItemId" column="check_item_id"/>
+        <result property="checkItemName" column="check_item_name"/>
+        <result property="keywords" column="keywords"/>
+        <result property="unitPrice" column="unit_price"/>
+        <result property="cost" column="cost"/>
+        <result property="unit" column="unit"/>
+        <result property="typeId" column="type_id"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+    </resultMap>
+
+    <select id="selectAllCheckItem" resultType="java.lang.String">
+        select check_item_name
+        from sys_check_item
+    </select>
+</mapper>

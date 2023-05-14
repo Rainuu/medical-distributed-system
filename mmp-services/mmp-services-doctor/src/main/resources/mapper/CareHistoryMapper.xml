@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace 写的就是你要实现的那个接口的路径-->
+<!--1.sql语句     2.绑定接口-->
+<mapper namespace="com.aaa.doctor.dao.CareHistoryDao">
+    <!--查询使用的标签是select-->
+    <!--id 代表的是对应的接口的方法-->
+    <!--resultType 值 List  写的是List里面的泛型   Map-->
+
+    <select id="selectAll" resultType="com.aaa.core.entity.CareHistory">
+        select * from his_care_history where patient_id=#{patientId}
+    </select>
+</mapper>

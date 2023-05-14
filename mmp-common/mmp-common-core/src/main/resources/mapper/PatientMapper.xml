@@ -1,0 +1,1333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.PatientMapper">
+    <resultMap id="BaseResultMap" type="com.example.model.Patient">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="created_time" jdbcType="BIGINT" property="createdTime"/>
+        <result column="creator" jdbcType="BIGINT" property="creator"/>
+        <result column="is_removed" jdbcType="BIT" property="isRemoved"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="address_post_code" jdbcType="VARCHAR" property="addressPostCode"/>
+        <result column="address_street" jdbcType="VARCHAR" property="addressStreet"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="birthday" jdbcType="BIGINT" property="birthday"/>
+        <result column="check_no" jdbcType="VARCHAR" property="checkNo"/>
+        <result column="check_times" jdbcType="INTEGER" property="checkTimes"/>
+        <result column="community" jdbcType="VARCHAR" property="community"/>
+        <result column="contact_name" jdbcType="VARCHAR" property="contactName"/>
+        <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone"/>
+        <result column="costs_per_month" jdbcType="VARCHAR" property="costsPerMonth"/>
+        <result column="domicile" jdbcType="VARCHAR" property="domicile"/>
+        <result column="domicile_postcode" jdbcType="VARCHAR" property="domicilePostcode"/>
+        <result column="domicile_street" jdbcType="VARCHAR" property="domicileStreet"/>
+        <result column="education_degree" jdbcType="VARCHAR" property="educationDegree"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="gender" jdbcType="VARCHAR" property="gender"/>
+        <result column="height" jdbcType="VARCHAR" property="height"/>
+        <result column="history" jdbcType="VARCHAR" property="history"/>
+        <result column="identity" jdbcType="VARCHAR" property="identity"/>
+        <result column="if_married" jdbcType="VARCHAR" property="ifMarried"/>
+        <result column="institution_name" jdbcType="VARCHAR" property="institutionName"/>
+        <result column="manage_level" jdbcType="VARCHAR" property="manageLevel"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="national" jdbcType="VARCHAR" property="national"/>
+        <result column="payment" jdbcType="VARCHAR" property="payment"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="photo" jdbcType="VARCHAR" property="photo"/>
+        <result column="professional" jdbcType="VARCHAR" property="professional"/>
+        <result column="qc" jdbcType="VARCHAR" property="qc"/>
+        <result column="qc_tel" jdbcType="VARCHAR" property="qcTel"/>
+        <result column="relationship" jdbcType="VARCHAR" property="relationship"/>
+        <result column="screening_state" jdbcType="VARCHAR" property="screeningState"/>
+        <result column="screeninger" jdbcType="VARCHAR" property="screeninger"/>
+        <result column="screeninger_tel" jdbcType="VARCHAR" property="screeningerTel"/>
+        <result column="telephone" jdbcType="VARCHAR" property="telephone"/>
+        <result column="update_time" jdbcType="BIGINT" property="updateTime"/>
+        <result column="weight" jdbcType="VARCHAR" property="weight"/>
+        <result column="inst_id" jdbcType="BIGINT" property="instId"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from patient
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.example.model.Patient">
+        insert into patient (id, created_time, creator,
+                             is_removed, address, address_post_code,
+                             address_street, age, birthday,
+                             check_no, check_times, community,
+                             contact_name, contact_phone, costs_per_month,
+                             domicile, domicile_postcode, domicile_street,
+                             education_degree, email, gender,
+                             height, history, identity,
+                             if_married, institution_name, manage_level,
+                             name, national, payment,
+                             phone, photo, professional,
+                             qc, qc_tel, relationship,
+                             screening_state, screeninger, screeninger_tel,
+                             telephone, update_time, weight,
+                             inst_id)
+        values (#{id,jdbcType=BIGINT}, #{createdTime,jdbcType=BIGINT}, #{creator,jdbcType=BIGINT},
+                #{isRemoved,jdbcType=BIT}, #{address,jdbcType=VARCHAR}, #{addressPostCode,jdbcType=VARCHAR},
+                #{addressStreet,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{birthday,jdbcType=BIGINT},
+                #{checkNo,jdbcType=VARCHAR}, #{checkTimes,jdbcType=INTEGER}, #{community,jdbcType=VARCHAR},
+                #{contactName,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, #{costsPerMonth,jdbcType=VARCHAR},
+                #{domicile,jdbcType=VARCHAR}, #{domicilePostcode,jdbcType=VARCHAR}, #{domicileStreet,jdbcType=VARCHAR},
+                #{educationDegree,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR},
+                #{height,jdbcType=VARCHAR}, #{history,jdbcType=VARCHAR}, #{identity,jdbcType=VARCHAR},
+                #{ifMarried,jdbcType=VARCHAR}, #{institutionName,jdbcType=VARCHAR}, #{manageLevel,jdbcType=VARCHAR},
+                #{name,jdbcType=VARCHAR}, #{national,jdbcType=VARCHAR}, #{payment,jdbcType=VARCHAR},
+                #{phone,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, #{professional,jdbcType=VARCHAR},
+                #{qc,jdbcType=VARCHAR}, #{qcTel,jdbcType=VARCHAR}, #{relationship,jdbcType=VARCHAR},
+                #{screeningState,jdbcType=VARCHAR}, #{screeninger,jdbcType=VARCHAR}, #{screeningerTel,jdbcType=VARCHAR},
+                #{telephone,jdbcType=VARCHAR}, #{updateTime,jdbcType=BIGINT}, #{weight,jdbcType=VARCHAR},
+                #{instId,jdbcType=BIGINT})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.model.Patient">
+        update patient
+        set created_time      = #{createdTime,jdbcType=BIGINT},
+            creator           = #{creator,jdbcType=BIGINT},
+            is_removed        = #{isRemoved,jdbcType=BIT},
+            address           = #{address,jdbcType=VARCHAR},
+            address_post_code = #{addressPostCode,jdbcType=VARCHAR},
+            address_street    = #{addressStreet,jdbcType=VARCHAR},
+            age               = #{age,jdbcType=INTEGER},
+            birthday          = #{birthday,jdbcType=BIGINT},
+            check_no          = #{checkNo,jdbcType=VARCHAR},
+            check_times       = #{checkTimes,jdbcType=INTEGER},
+            community         = #{community,jdbcType=VARCHAR},
+            contact_name      = #{contactName,jdbcType=VARCHAR},
+            contact_phone     = #{contactPhone,jdbcType=VARCHAR},
+            costs_per_month   = #{costsPerMonth,jdbcType=VARCHAR},
+            domicile          = #{domicile,jdbcType=VARCHAR},
+            domicile_postcode = #{domicilePostcode,jdbcType=VARCHAR},
+            domicile_street   = #{domicileStreet,jdbcType=VARCHAR},
+            education_degree  = #{educationDegree,jdbcType=VARCHAR},
+            email             = #{email,jdbcType=VARCHAR},
+            gender            = #{gender,jdbcType=VARCHAR},
+            height            = #{height,jdbcType=VARCHAR},
+            history           = #{history,jdbcType=VARCHAR},
+            identity          = #{identity,jdbcType=VARCHAR},
+            if_married        = #{ifMarried,jdbcType=VARCHAR},
+            institution_name  = #{institutionName,jdbcType=VARCHAR},
+            manage_level      = #{manageLevel,jdbcType=VARCHAR},
+            name              = #{name,jdbcType=VARCHAR},
+            national          = #{national,jdbcType=VARCHAR},
+            payment           = #{payment,jdbcType=VARCHAR},
+            phone             = #{phone,jdbcType=VARCHAR},
+            photo             = #{photo,jdbcType=VARCHAR},
+            professional      = #{professional,jdbcType=VARCHAR},
+            qc                = #{qc,jdbcType=VARCHAR},
+            qc_tel            = #{qcTel,jdbcType=VARCHAR},
+            relationship      = #{relationship,jdbcType=VARCHAR},
+            screening_state   = #{screeningState,jdbcType=VARCHAR},
+            screeninger       = #{screeninger,jdbcType=VARCHAR},
+            screeninger_tel   = #{screeningerTel,jdbcType=VARCHAR},
+            telephone         = #{telephone,jdbcType=VARCHAR},
+            update_time       = #{updateTime,jdbcType=BIGINT},
+            weight            = #{weight,jdbcType=VARCHAR},
+            inst_id           = #{instId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id,
+               created_time,
+               creator,
+               is_removed,
+               address,
+               address_post_code,
+               address_street,
+               age,
+               birthday,
+               check_no,
+               check_times,
+               community,
+               contact_name,
+               contact_phone,
+               costs_per_month,
+               domicile,
+               domicile_postcode,
+               domicile_street,
+               education_degree,
+               email,
+               gender,
+               height,
+               history,
+               identity,
+               if_married,
+               institution_name,
+               manage_level,
+               name,
+               national,
+               payment,
+               phone,
+               photo,
+               professional,
+               qc,
+               qc_tel,
+               relationship,
+               screening_state,
+               screeninger,
+               screeninger_tel,
+               telephone,
+               update_time,
+               weight,
+               inst_id
+        from patient
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id,
+               created_time,
+               creator,
+               is_removed,
+               address,
+               address_post_code,
+               address_street,
+               age,
+               birthday,
+               check_no,
+               check_times,
+               community,
+               contact_name,
+               contact_phone,
+               costs_per_month,
+               domicile,
+               domicile_postcode,
+               domicile_street,
+               education_degree,
+               email,
+               gender,
+               height,
+               history,
+               identity,
+               if_married,
+               institution_name,
+               manage_level,
+               name,
+               national,
+               payment,
+               phone,
+               photo,
+               professional,
+               qc,
+               qc_tel,
+               relationship,
+               screening_state,
+               screeninger,
+               screeninger_tel,
+               telephone,
+               update_time,
+               weight,
+               inst_id
+        from patient
+    </select>
+    <resultMap id="BaseResultMap" type="com.example.model.Patient">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="created_time" jdbcType="BIGINT" property="createdTime"/>
+        <result column="creator" jdbcType="BIGINT" property="creator"/>
+        <result column="is_removed" jdbcType="BIT" property="isRemoved"/>
+        <result column="birthday" jdbcType="BIGINT" property="birthday"/>
+        <result column="gender" jdbcType="VARCHAR" property="gender"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="photo" jdbcType="VARCHAR" property="photo"/>
+        <result column="inst_id" jdbcType="BIGINT" property="instId"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="height" jdbcType="VARCHAR" property="height"/>
+        <result column="history" jdbcType="VARCHAR" property="history"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="weight" jdbcType="VARCHAR" property="weight"/>
+        <result column="check_no" jdbcType="VARCHAR" property="checkNo"/>
+        <result column="identity" jdbcType="VARCHAR" property="identity"/>
+        <result column="address_street" jdbcType="VARCHAR" property="addressStreet"/>
+        <result column="contact_name" jdbcType="VARCHAR" property="contactName"/>
+        <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone"/>
+        <result column="costs_per_month" jdbcType="VARCHAR" property="costsPerMonth"/>
+        <result column="domicile" jdbcType="VARCHAR" property="domicile"/>
+        <result column="domicile_street" jdbcType="VARCHAR" property="domicileStreet"/>
+        <result column="education_degree" jdbcType="VARCHAR" property="educationDegree"/>
+        <result column="if_married" jdbcType="VARCHAR" property="ifMarried"/>
+        <result column="national" jdbcType="VARCHAR" property="national"/>
+        <result column="payment" jdbcType="VARCHAR" property="payment"/>
+        <result column="professional" jdbcType="VARCHAR" property="professional"/>
+        <result column="relationship" jdbcType="VARCHAR" property="relationship"/>
+        <result column="address_post_code" jdbcType="VARCHAR" property="addressPostCode"/>
+        <result column="domicile_postcode" jdbcType="VARCHAR" property="domicilePostcode"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="telephone" jdbcType="VARCHAR" property="telephone"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="community" jdbcType="VARCHAR" property="community"/>
+        <result column="institution_name" jdbcType="VARCHAR" property="institutionName"/>
+        <result column="qc" jdbcType="VARCHAR" property="qc"/>
+        <result column="qc_tel" jdbcType="VARCHAR" property="qcTel"/>
+        <result column="screeninger" jdbcType="VARCHAR" property="screeninger"/>
+        <result column="screeninger_tel" jdbcType="VARCHAR" property="screeningerTel"/>
+        <result column="update_time" jdbcType="BIGINT" property="updateTime"/>
+        <result column="manage_level" jdbcType="VARCHAR" property="manageLevel"/>
+        <result column="screening_state" jdbcType="VARCHAR" property="screeningState"/>
+        <result column="check_times" jdbcType="INTEGER" property="checkTimes"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from patient
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.example.model.Patient">
+        insert into patient (id, created_time, creator,
+                             is_removed, birthday, gender,
+                             name, photo, inst_id,
+                             address, height, history,
+                             phone, weight, check_no,
+                             identity, address_street, contact_name,
+                             contact_phone, costs_per_month, domicile,
+                             domicile_street, education_degree, if_married,
+                             national, payment, professional,
+                             relationship, address_post_code, domicile_postcode,
+                             email, telephone, age,
+                             community, institution_name, qc,
+                             qc_tel, screeninger, screeninger_tel,
+                             update_time, manage_level, screening_state,
+                             check_times)
+        values (#{id,jdbcType=BIGINT}, #{createdTime,jdbcType=BIGINT}, #{creator,jdbcType=BIGINT},
+                #{isRemoved,jdbcType=BIT}, #{birthday,jdbcType=BIGINT}, #{gender,jdbcType=VARCHAR},
+                #{name,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, #{instId,jdbcType=BIGINT},
+                #{address,jdbcType=VARCHAR}, #{height,jdbcType=VARCHAR}, #{history,jdbcType=VARCHAR},
+                #{phone,jdbcType=VARCHAR}, #{weight,jdbcType=VARCHAR}, #{checkNo,jdbcType=VARCHAR},
+                #{identity,jdbcType=VARCHAR}, #{addressStreet,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR},
+                #{contactPhone,jdbcType=VARCHAR}, #{costsPerMonth,jdbcType=VARCHAR}, #{domicile,jdbcType=VARCHAR},
+                #{domicileStreet,jdbcType=VARCHAR}, #{educationDegree,jdbcType=VARCHAR}, #{ifMarried,jdbcType=VARCHAR},
+                #{national,jdbcType=VARCHAR}, #{payment,jdbcType=VARCHAR}, #{professional,jdbcType=VARCHAR},
+                #{relationship,jdbcType=VARCHAR}, #{addressPostCode,jdbcType=VARCHAR},
+                #{domicilePostcode,jdbcType=VARCHAR},
+                #{email,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER},
+                #{community,jdbcType=VARCHAR}, #{institutionName,jdbcType=VARCHAR}, #{qc,jdbcType=VARCHAR},
+                #{qcTel,jdbcType=VARCHAR}, #{screeninger,jdbcType=VARCHAR}, #{screeningerTel,jdbcType=VARCHAR},
+                #{updateTime,jdbcType=BIGINT}, #{manageLevel,jdbcType=VARCHAR}, #{screeningState,jdbcType=VARCHAR},
+                #{checkTimes,jdbcType=INTEGER})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.model.Patient">
+        update patient
+        set created_time      = #{createdTime,jdbcType=BIGINT},
+            creator           = #{creator,jdbcType=BIGINT},
+            is_removed        = #{isRemoved,jdbcType=BIT},
+            birthday          = #{birthday,jdbcType=BIGINT},
+            gender            = #{gender,jdbcType=VARCHAR},
+            name              = #{name,jdbcType=VARCHAR},
+            photo             = #{photo,jdbcType=VARCHAR},
+            inst_id           = #{instId,jdbcType=BIGINT},
+            address           = #{address,jdbcType=VARCHAR},
+            height            = #{height,jdbcType=VARCHAR},
+            history           = #{history,jdbcType=VARCHAR},
+            phone             = #{phone,jdbcType=VARCHAR},
+            weight            = #{weight,jdbcType=VARCHAR},
+            check_no          = #{checkNo,jdbcType=VARCHAR},
+            identity          = #{identity,jdbcType=VARCHAR},
+            address_street    = #{addressStreet,jdbcType=VARCHAR},
+            contact_name      = #{contactName,jdbcType=VARCHAR},
+            contact_phone     = #{contactPhone,jdbcType=VARCHAR},
+            costs_per_month   = #{costsPerMonth,jdbcType=VARCHAR},
+            domicile          = #{domicile,jdbcType=VARCHAR},
+            domicile_street   = #{domicileStreet,jdbcType=VARCHAR},
+            education_degree  = #{educationDegree,jdbcType=VARCHAR},
+            if_married        = #{ifMarried,jdbcType=VARCHAR},
+            national          = #{national,jdbcType=VARCHAR},
+            payment           = #{payment,jdbcType=VARCHAR},
+            professional      = #{professional,jdbcType=VARCHAR},
+            relationship      = #{relationship,jdbcType=VARCHAR},
+            address_post_code = #{addressPostCode,jdbcType=VARCHAR},
+            domicile_postcode = #{domicilePostcode,jdbcType=VARCHAR},
+            email             = #{email,jdbcType=VARCHAR},
+            telephone         = #{telephone,jdbcType=VARCHAR},
+            age               = #{age,jdbcType=INTEGER},
+            community         = #{community,jdbcType=VARCHAR},
+            institution_name  = #{institutionName,jdbcType=VARCHAR},
+            qc                = #{qc,jdbcType=VARCHAR},
+            qc_tel            = #{qcTel,jdbcType=VARCHAR},
+            screeninger       = #{screeninger,jdbcType=VARCHAR},
+            screeninger_tel   = #{screeningerTel,jdbcType=VARCHAR},
+            update_time       = #{updateTime,jdbcType=BIGINT},
+            manage_level      = #{manageLevel,jdbcType=VARCHAR},
+            screening_state   = #{screeningState,jdbcType=VARCHAR},
+            check_times       = #{checkTimes,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id,
+               created_time,
+               creator,
+               is_removed,
+               birthday,
+               gender,
+               name,
+               photo,
+               inst_id,
+               address,
+               height,
+               history,
+               phone,
+               weight,
+               check_no,
+               identity,
+               address_street,
+               contact_name,
+               contact_phone,
+               costs_per_month,
+               domicile,
+               domicile_street,
+               education_degree,
+               if_married,
+               national,
+               payment,
+               professional,
+               relationship,
+               address_post_code,
+               domicile_postcode,
+               email,
+               telephone,
+               age,
+               community,
+               institution_name,
+               qc,
+               qc_tel,
+               screeninger,
+               screeninger_tel,
+               update_time,
+               manage_level,
+               screening_state,
+               check_times
+        from patient
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id,
+               created_time,
+               creator,
+               is_removed,
+               birthday,
+               gender,
+               name,
+               photo,
+               inst_id,
+               address,
+               height,
+               history,
+               phone,
+               weight,
+               check_no,
+               identity,
+               address_street,
+               contact_name,
+               contact_phone,
+               costs_per_month,
+               domicile,
+               domicile_street,
+               education_degree,
+               if_married,
+               national,
+               payment,
+               professional,
+               relationship,
+               address_post_code,
+               domicile_postcode,
+               email,
+               telephone,
+               age,
+               community,
+               institution_name,
+               qc,
+               qc_tel,
+               screeninger,
+               screeninger_tel,
+               update_time,
+               manage_level,
+               screening_state,
+               check_times
+        from patient
+    </select>
+    <resultMap id="BaseResultMap" type="com.example.model.Patient">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="created_time" jdbcType="BIGINT" property="createdTime"/>
+        <result column="creator" jdbcType="BIGINT" property="creator"/>
+        <result column="is_removed" jdbcType="BIT" property="isRemoved"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="address_post_code" jdbcType="VARCHAR" property="addressPostCode"/>
+        <result column="address_street" jdbcType="VARCHAR" property="addressStreet"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="birthday" jdbcType="BIGINT" property="birthday"/>
+        <result column="check_no" jdbcType="VARCHAR" property="checkNo"/>
+        <result column="check_times" jdbcType="INTEGER" property="checkTimes"/>
+        <result column="community" jdbcType="VARCHAR" property="community"/>
+        <result column="contact_name" jdbcType="VARCHAR" property="contactName"/>
+        <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone"/>
+        <result column="costs_per_month" jdbcType="VARCHAR" property="costsPerMonth"/>
+        <result column="domicile" jdbcType="VARCHAR" property="domicile"/>
+        <result column="domicile_postcode" jdbcType="VARCHAR" property="domicilePostcode"/>
+        <result column="domicile_street" jdbcType="VARCHAR" property="domicileStreet"/>
+        <result column="education_degree" jdbcType="VARCHAR" property="educationDegree"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="gender" jdbcType="VARCHAR" property="gender"/>
+        <result column="height" jdbcType="VARCHAR" property="height"/>
+        <result column="history" jdbcType="VARCHAR" property="history"/>
+        <result column="identity" jdbcType="VARCHAR" property="identity"/>
+        <result column="if_married" jdbcType="VARCHAR" property="ifMarried"/>
+        <result column="institution_name" jdbcType="VARCHAR" property="institutionName"/>
+        <result column="manage_level" jdbcType="VARCHAR" property="manageLevel"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="national" jdbcType="VARCHAR" property="national"/>
+        <result column="payment" jdbcType="VARCHAR" property="payment"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="photo" jdbcType="VARCHAR" property="photo"/>
+        <result column="professional" jdbcType="VARCHAR" property="professional"/>
+        <result column="qc" jdbcType="VARCHAR" property="qc"/>
+        <result column="qc_tel" jdbcType="VARCHAR" property="qcTel"/>
+        <result column="relationship" jdbcType="VARCHAR" property="relationship"/>
+        <result column="screening_state" jdbcType="VARCHAR" property="screeningState"/>
+        <result column="screeninger" jdbcType="VARCHAR" property="screeninger"/>
+        <result column="screeninger_tel" jdbcType="VARCHAR" property="screeningerTel"/>
+        <result column="telephone" jdbcType="VARCHAR" property="telephone"/>
+        <result column="update_time" jdbcType="BIGINT" property="updateTime"/>
+        <result column="weight" jdbcType="VARCHAR" property="weight"/>
+        <result column="inst_id" jdbcType="BIGINT" property="instId"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from patient
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.example.model.Patient">
+        insert into patient (id, created_time, creator,
+                             is_removed, address, address_post_code,
+                             address_street, age, birthday,
+                             check_no, check_times, community,
+                             contact_name, contact_phone, costs_per_month,
+                             domicile, domicile_postcode, domicile_street,
+                             education_degree, email, gender,
+                             height, history, identity,
+                             if_married, institution_name, manage_level,
+                             name, national, payment,
+                             phone, photo, professional,
+                             qc, qc_tel, relationship,
+                             screening_state, screeninger, screeninger_tel,
+                             telephone, update_time, weight,
+                             inst_id)
+        values (#{id,jdbcType=BIGINT}, #{createdTime,jdbcType=BIGINT}, #{creator,jdbcType=BIGINT},
+                #{isRemoved,jdbcType=BIT}, #{address,jdbcType=VARCHAR}, #{addressPostCode,jdbcType=VARCHAR},
+                #{addressStreet,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{birthday,jdbcType=BIGINT},
+                #{checkNo,jdbcType=VARCHAR}, #{checkTimes,jdbcType=INTEGER}, #{community,jdbcType=VARCHAR},
+                #{contactName,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, #{costsPerMonth,jdbcType=VARCHAR},
+                #{domicile,jdbcType=VARCHAR}, #{domicilePostcode,jdbcType=VARCHAR}, #{domicileStreet,jdbcType=VARCHAR},
+                #{educationDegree,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR},
+                #{height,jdbcType=VARCHAR}, #{history,jdbcType=VARCHAR}, #{identity,jdbcType=VARCHAR},
+                #{ifMarried,jdbcType=VARCHAR}, #{institutionName,jdbcType=VARCHAR}, #{manageLevel,jdbcType=VARCHAR},
+                #{name,jdbcType=VARCHAR}, #{national,jdbcType=VARCHAR}, #{payment,jdbcType=VARCHAR},
+                #{phone,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, #{professional,jdbcType=VARCHAR},
+                #{qc,jdbcType=VARCHAR}, #{qcTel,jdbcType=VARCHAR}, #{relationship,jdbcType=VARCHAR},
+                #{screeningState,jdbcType=VARCHAR}, #{screeninger,jdbcType=VARCHAR}, #{screeningerTel,jdbcType=VARCHAR},
+                #{telephone,jdbcType=VARCHAR}, #{updateTime,jdbcType=BIGINT}, #{weight,jdbcType=VARCHAR},
+                #{instId,jdbcType=BIGINT})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.model.Patient">
+        update patient
+        set created_time      = #{createdTime,jdbcType=BIGINT},
+            creator           = #{creator,jdbcType=BIGINT},
+            is_removed        = #{isRemoved,jdbcType=BIT},
+            address           = #{address,jdbcType=VARCHAR},
+            address_post_code = #{addressPostCode,jdbcType=VARCHAR},
+            address_street    = #{addressStreet,jdbcType=VARCHAR},
+            age               = #{age,jdbcType=INTEGER},
+            birthday          = #{birthday,jdbcType=BIGINT},
+            check_no          = #{checkNo,jdbcType=VARCHAR},
+            check_times       = #{checkTimes,jdbcType=INTEGER},
+            community         = #{community,jdbcType=VARCHAR},
+            contact_name      = #{contactName,jdbcType=VARCHAR},
+            contact_phone     = #{contactPhone,jdbcType=VARCHAR},
+            costs_per_month   = #{costsPerMonth,jdbcType=VARCHAR},
+            domicile          = #{domicile,jdbcType=VARCHAR},
+            domicile_postcode = #{domicilePostcode,jdbcType=VARCHAR},
+            domicile_street   = #{domicileStreet,jdbcType=VARCHAR},
+            education_degree  = #{educationDegree,jdbcType=VARCHAR},
+            email             = #{email,jdbcType=VARCHAR},
+            gender            = #{gender,jdbcType=VARCHAR},
+            height            = #{height,jdbcType=VARCHAR},
+            history           = #{history,jdbcType=VARCHAR},
+            identity          = #{identity,jdbcType=VARCHAR},
+            if_married        = #{ifMarried,jdbcType=VARCHAR},
+            institution_name  = #{institutionName,jdbcType=VARCHAR},
+            manage_level      = #{manageLevel,jdbcType=VARCHAR},
+            name              = #{name,jdbcType=VARCHAR},
+            national          = #{national,jdbcType=VARCHAR},
+            payment           = #{payment,jdbcType=VARCHAR},
+            phone             = #{phone,jdbcType=VARCHAR},
+            photo             = #{photo,jdbcType=VARCHAR},
+            professional      = #{professional,jdbcType=VARCHAR},
+            qc                = #{qc,jdbcType=VARCHAR},
+            qc_tel            = #{qcTel,jdbcType=VARCHAR},
+            relationship      = #{relationship,jdbcType=VARCHAR},
+            screening_state   = #{screeningState,jdbcType=VARCHAR},
+            screeninger       = #{screeninger,jdbcType=VARCHAR},
+            screeninger_tel   = #{screeningerTel,jdbcType=VARCHAR},
+            telephone         = #{telephone,jdbcType=VARCHAR},
+            update_time       = #{updateTime,jdbcType=BIGINT},
+            weight            = #{weight,jdbcType=VARCHAR},
+            inst_id           = #{instId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id,
+               created_time,
+               creator,
+               is_removed,
+               address,
+               address_post_code,
+               address_street,
+               age,
+               birthday,
+               check_no,
+               check_times,
+               community,
+               contact_name,
+               contact_phone,
+               costs_per_month,
+               domicile,
+               domicile_postcode,
+               domicile_street,
+               education_degree,
+               email,
+               gender,
+               height,
+               history,
+               identity,
+               if_married,
+               institution_name,
+               manage_level,
+               name,
+               national,
+               payment,
+               phone,
+               photo,
+               professional,
+               qc,
+               qc_tel,
+               relationship,
+               screening_state,
+               screeninger,
+               screeninger_tel,
+               telephone,
+               update_time,
+               weight,
+               inst_id
+        from patient
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id,
+               created_time,
+               creator,
+               is_removed,
+               address,
+               address_post_code,
+               address_street,
+               age,
+               birthday,
+               check_no,
+               check_times,
+               community,
+               contact_name,
+               contact_phone,
+               costs_per_month,
+               domicile,
+               domicile_postcode,
+               domicile_street,
+               education_degree,
+               email,
+               gender,
+               height,
+               history,
+               identity,
+               if_married,
+               institution_name,
+               manage_level,
+               name,
+               national,
+               payment,
+               phone,
+               photo,
+               professional,
+               qc,
+               qc_tel,
+               relationship,
+               screening_state,
+               screeninger,
+               screeninger_tel,
+               telephone,
+               update_time,
+               weight,
+               inst_id
+        from patient
+    </select>
+    <resultMap id="BaseResultMap" type="com.example.model.Patient">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="created_time" jdbcType="BIGINT" property="createdTime"/>
+        <result column="creator" jdbcType="BIGINT" property="creator"/>
+        <result column="is_removed" jdbcType="BIT" property="isRemoved"/>
+        <result column="birthday" jdbcType="BIGINT" property="birthday"/>
+        <result column="gender" jdbcType="VARCHAR" property="gender"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="photo" jdbcType="VARCHAR" property="photo"/>
+        <result column="inst_id" jdbcType="BIGINT" property="instId"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="height" jdbcType="VARCHAR" property="height"/>
+        <result column="history" jdbcType="VARCHAR" property="history"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="weight" jdbcType="VARCHAR" property="weight"/>
+        <result column="check_no" jdbcType="VARCHAR" property="checkNo"/>
+        <result column="identity" jdbcType="VARCHAR" property="identity"/>
+        <result column="address_street" jdbcType="VARCHAR" property="addressStreet"/>
+        <result column="contact_name" jdbcType="VARCHAR" property="contactName"/>
+        <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone"/>
+        <result column="costs_per_month" jdbcType="VARCHAR" property="costsPerMonth"/>
+        <result column="domicile" jdbcType="VARCHAR" property="domicile"/>
+        <result column="domicile_street" jdbcType="VARCHAR" property="domicileStreet"/>
+        <result column="education_degree" jdbcType="VARCHAR" property="educationDegree"/>
+        <result column="if_married" jdbcType="VARCHAR" property="ifMarried"/>
+        <result column="national" jdbcType="VARCHAR" property="national"/>
+        <result column="payment" jdbcType="VARCHAR" property="payment"/>
+        <result column="professional" jdbcType="VARCHAR" property="professional"/>
+        <result column="relationship" jdbcType="VARCHAR" property="relationship"/>
+        <result column="address_post_code" jdbcType="VARCHAR" property="addressPostCode"/>
+        <result column="domicile_postcode" jdbcType="VARCHAR" property="domicilePostcode"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="telephone" jdbcType="VARCHAR" property="telephone"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="community" jdbcType="VARCHAR" property="community"/>
+        <result column="institution_name" jdbcType="VARCHAR" property="institutionName"/>
+        <result column="qc" jdbcType="VARCHAR" property="qc"/>
+        <result column="qc_tel" jdbcType="VARCHAR" property="qcTel"/>
+        <result column="screeninger" jdbcType="VARCHAR" property="screeninger"/>
+        <result column="screeninger_tel" jdbcType="VARCHAR" property="screeningerTel"/>
+        <result column="update_time" jdbcType="BIGINT" property="updateTime"/>
+        <result column="manage_level" jdbcType="VARCHAR" property="manageLevel"/>
+        <result column="screening_state" jdbcType="VARCHAR" property="screeningState"/>
+        <result column="check_times" jdbcType="INTEGER" property="checkTimes"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from patient
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.example.model.Patient">
+        insert into patient (id, created_time, creator,
+                             is_removed, birthday, gender,
+                             name, photo, inst_id,
+                             address, height, history,
+                             phone, weight, check_no,
+                             identity, address_street, contact_name,
+                             contact_phone, costs_per_month, domicile,
+                             domicile_street, education_degree, if_married,
+                             national, payment, professional,
+                             relationship, address_post_code, domicile_postcode,
+                             email, telephone, age,
+                             community, institution_name, qc,
+                             qc_tel, screeninger, screeninger_tel,
+                             update_time, manage_level, screening_state,
+                             check_times)
+        values (#{id,jdbcType=BIGINT}, #{createdTime,jdbcType=BIGINT}, #{creator,jdbcType=BIGINT},
+                #{isRemoved,jdbcType=BIT}, #{birthday,jdbcType=BIGINT}, #{gender,jdbcType=VARCHAR},
+                #{name,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, #{instId,jdbcType=BIGINT},
+                #{address,jdbcType=VARCHAR}, #{height,jdbcType=VARCHAR}, #{history,jdbcType=VARCHAR},
+                #{phone,jdbcType=VARCHAR}, #{weight,jdbcType=VARCHAR}, #{checkNo,jdbcType=VARCHAR},
+                #{identity,jdbcType=VARCHAR}, #{addressStreet,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR},
+                #{contactPhone,jdbcType=VARCHAR}, #{costsPerMonth,jdbcType=VARCHAR}, #{domicile,jdbcType=VARCHAR},
+                #{domicileStreet,jdbcType=VARCHAR}, #{educationDegree,jdbcType=VARCHAR}, #{ifMarried,jdbcType=VARCHAR},
+                #{national,jdbcType=VARCHAR}, #{payment,jdbcType=VARCHAR}, #{professional,jdbcType=VARCHAR},
+                #{relationship,jdbcType=VARCHAR}, #{addressPostCode,jdbcType=VARCHAR},
+                #{domicilePostcode,jdbcType=VARCHAR},
+                #{email,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER},
+                #{community,jdbcType=VARCHAR}, #{institutionName,jdbcType=VARCHAR}, #{qc,jdbcType=VARCHAR},
+                #{qcTel,jdbcType=VARCHAR}, #{screeninger,jdbcType=VARCHAR}, #{screeningerTel,jdbcType=VARCHAR},
+                #{updateTime,jdbcType=BIGINT}, #{manageLevel,jdbcType=VARCHAR}, #{screeningState,jdbcType=VARCHAR},
+                #{checkTimes,jdbcType=INTEGER})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.model.Patient">
+        update patient
+        set created_time      = #{createdTime,jdbcType=BIGINT},
+            creator           = #{creator,jdbcType=BIGINT},
+            is_removed        = #{isRemoved,jdbcType=BIT},
+            birthday          = #{birthday,jdbcType=BIGINT},
+            gender            = #{gender,jdbcType=VARCHAR},
+            name              = #{name,jdbcType=VARCHAR},
+            photo             = #{photo,jdbcType=VARCHAR},
+            inst_id           = #{instId,jdbcType=BIGINT},
+            address           = #{address,jdbcType=VARCHAR},
+            height            = #{height,jdbcType=VARCHAR},
+            history           = #{history,jdbcType=VARCHAR},
+            phone             = #{phone,jdbcType=VARCHAR},
+            weight            = #{weight,jdbcType=VARCHAR},
+            check_no          = #{checkNo,jdbcType=VARCHAR},
+            identity          = #{identity,jdbcType=VARCHAR},
+            address_street    = #{addressStreet,jdbcType=VARCHAR},
+            contact_name      = #{contactName,jdbcType=VARCHAR},
+            contact_phone     = #{contactPhone,jdbcType=VARCHAR},
+            costs_per_month   = #{costsPerMonth,jdbcType=VARCHAR},
+            domicile          = #{domicile,jdbcType=VARCHAR},
+            domicile_street   = #{domicileStreet,jdbcType=VARCHAR},
+            education_degree  = #{educationDegree,jdbcType=VARCHAR},
+            if_married        = #{ifMarried,jdbcType=VARCHAR},
+            national          = #{national,jdbcType=VARCHAR},
+            payment           = #{payment,jdbcType=VARCHAR},
+            professional      = #{professional,jdbcType=VARCHAR},
+            relationship      = #{relationship,jdbcType=VARCHAR},
+            address_post_code = #{addressPostCode,jdbcType=VARCHAR},
+            domicile_postcode = #{domicilePostcode,jdbcType=VARCHAR},
+            email             = #{email,jdbcType=VARCHAR},
+            telephone         = #{telephone,jdbcType=VARCHAR},
+            age               = #{age,jdbcType=INTEGER},
+            community         = #{community,jdbcType=VARCHAR},
+            institution_name  = #{institutionName,jdbcType=VARCHAR},
+            qc                = #{qc,jdbcType=VARCHAR},
+            qc_tel            = #{qcTel,jdbcType=VARCHAR},
+            screeninger       = #{screeninger,jdbcType=VARCHAR},
+            screeninger_tel   = #{screeningerTel,jdbcType=VARCHAR},
+            update_time       = #{updateTime,jdbcType=BIGINT},
+            manage_level      = #{manageLevel,jdbcType=VARCHAR},
+            screening_state   = #{screeningState,jdbcType=VARCHAR},
+            check_times       = #{checkTimes,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id,
+               created_time,
+               creator,
+               is_removed,
+               birthday,
+               gender,
+               name,
+               photo,
+               inst_id,
+               address,
+               height,
+               history,
+               phone,
+               weight,
+               check_no,
+               identity,
+               address_street,
+               contact_name,
+               contact_phone,
+               costs_per_month,
+               domicile,
+               domicile_street,
+               education_degree,
+               if_married,
+               national,
+               payment,
+               professional,
+               relationship,
+               address_post_code,
+               domicile_postcode,
+               email,
+               telephone,
+               age,
+               community,
+               institution_name,
+               qc,
+               qc_tel,
+               screeninger,
+               screeninger_tel,
+               update_time,
+               manage_level,
+               screening_state,
+               check_times
+        from patient
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id,
+               created_time,
+               creator,
+               is_removed,
+               birthday,
+               gender,
+               name,
+               photo,
+               inst_id,
+               address,
+               height,
+               history,
+               phone,
+               weight,
+               check_no,
+               identity,
+               address_street,
+               contact_name,
+               contact_phone,
+               costs_per_month,
+               domicile,
+               domicile_street,
+               education_degree,
+               if_married,
+               national,
+               payment,
+               professional,
+               relationship,
+               address_post_code,
+               domicile_postcode,
+               email,
+               telephone,
+               age,
+               community,
+               institution_name,
+               qc,
+               qc_tel,
+               screeninger,
+               screeninger_tel,
+               update_time,
+               manage_level,
+               screening_state,
+               check_times
+        from patient
+    </select>
+    <resultMap id="BaseResultMap" type="com.example.model.Patient">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="created_time" jdbcType="BIGINT" property="createdTime"/>
+        <result column="creator" jdbcType="BIGINT" property="creator"/>
+        <result column="is_removed" jdbcType="BIT" property="isRemoved"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="address_post_code" jdbcType="VARCHAR" property="addressPostCode"/>
+        <result column="address_street" jdbcType="VARCHAR" property="addressStreet"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="birthday" jdbcType="BIGINT" property="birthday"/>
+        <result column="check_no" jdbcType="VARCHAR" property="checkNo"/>
+        <result column="check_times" jdbcType="INTEGER" property="checkTimes"/>
+        <result column="community" jdbcType="VARCHAR" property="community"/>
+        <result column="contact_name" jdbcType="VARCHAR" property="contactName"/>
+        <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone"/>
+        <result column="costs_per_month" jdbcType="VARCHAR" property="costsPerMonth"/>
+        <result column="domicile" jdbcType="VARCHAR" property="domicile"/>
+        <result column="domicile_postcode" jdbcType="VARCHAR" property="domicilePostcode"/>
+        <result column="domicile_street" jdbcType="VARCHAR" property="domicileStreet"/>
+        <result column="education_degree" jdbcType="VARCHAR" property="educationDegree"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="gender" jdbcType="VARCHAR" property="gender"/>
+        <result column="height" jdbcType="VARCHAR" property="height"/>
+        <result column="history" jdbcType="VARCHAR" property="history"/>
+        <result column="identity" jdbcType="VARCHAR" property="identity"/>
+        <result column="if_married" jdbcType="VARCHAR" property="ifMarried"/>
+        <result column="institution_name" jdbcType="VARCHAR" property="institutionName"/>
+        <result column="manage_level" jdbcType="VARCHAR" property="manageLevel"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="national" jdbcType="VARCHAR" property="national"/>
+        <result column="payment" jdbcType="VARCHAR" property="payment"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="photo" jdbcType="VARCHAR" property="photo"/>
+        <result column="professional" jdbcType="VARCHAR" property="professional"/>
+        <result column="qc" jdbcType="VARCHAR" property="qc"/>
+        <result column="qc_tel" jdbcType="VARCHAR" property="qcTel"/>
+        <result column="relationship" jdbcType="VARCHAR" property="relationship"/>
+        <result column="screening_state" jdbcType="VARCHAR" property="screeningState"/>
+        <result column="screeninger" jdbcType="VARCHAR" property="screeninger"/>
+        <result column="screeninger_tel" jdbcType="VARCHAR" property="screeningerTel"/>
+        <result column="telephone" jdbcType="VARCHAR" property="telephone"/>
+        <result column="update_time" jdbcType="BIGINT" property="updateTime"/>
+        <result column="weight" jdbcType="VARCHAR" property="weight"/>
+        <result column="inst_id" jdbcType="BIGINT" property="instId"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from patient
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.example.model.Patient">
+        insert into patient (id, created_time, creator,
+                             is_removed, address, address_post_code,
+                             address_street, age, birthday,
+                             check_no, check_times, community,
+                             contact_name, contact_phone, costs_per_month,
+                             domicile, domicile_postcode, domicile_street,
+                             education_degree, email, gender,
+                             height, history, identity,
+                             if_married, institution_name, manage_level,
+                             name, national, payment,
+                             phone, photo, professional,
+                             qc, qc_tel, relationship,
+                             screening_state, screeninger, screeninger_tel,
+                             telephone, update_time, weight,
+                             inst_id)
+        values (#{id,jdbcType=BIGINT}, #{createdTime,jdbcType=BIGINT}, #{creator,jdbcType=BIGINT},
+                #{isRemoved,jdbcType=BIT}, #{address,jdbcType=VARCHAR}, #{addressPostCode,jdbcType=VARCHAR},
+                #{addressStreet,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{birthday,jdbcType=BIGINT},
+                #{checkNo,jdbcType=VARCHAR}, #{checkTimes,jdbcType=INTEGER}, #{community,jdbcType=VARCHAR},
+                #{contactName,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, #{costsPerMonth,jdbcType=VARCHAR},
+                #{domicile,jdbcType=VARCHAR}, #{domicilePostcode,jdbcType=VARCHAR}, #{domicileStreet,jdbcType=VARCHAR},
+                #{educationDegree,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR},
+                #{height,jdbcType=VARCHAR}, #{history,jdbcType=VARCHAR}, #{identity,jdbcType=VARCHAR},
+                #{ifMarried,jdbcType=VARCHAR}, #{institutionName,jdbcType=VARCHAR}, #{manageLevel,jdbcType=VARCHAR},
+                #{name,jdbcType=VARCHAR}, #{national,jdbcType=VARCHAR}, #{payment,jdbcType=VARCHAR},
+                #{phone,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, #{professional,jdbcType=VARCHAR},
+                #{qc,jdbcType=VARCHAR}, #{qcTel,jdbcType=VARCHAR}, #{relationship,jdbcType=VARCHAR},
+                #{screeningState,jdbcType=VARCHAR}, #{screeninger,jdbcType=VARCHAR}, #{screeningerTel,jdbcType=VARCHAR},
+                #{telephone,jdbcType=VARCHAR}, #{updateTime,jdbcType=BIGINT}, #{weight,jdbcType=VARCHAR},
+                #{instId,jdbcType=BIGINT})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.model.Patient">
+        update patient
+        set created_time      = #{createdTime,jdbcType=BIGINT},
+            creator           = #{creator,jdbcType=BIGINT},
+            is_removed        = #{isRemoved,jdbcType=BIT},
+            address           = #{address,jdbcType=VARCHAR},
+            address_post_code = #{addressPostCode,jdbcType=VARCHAR},
+            address_street    = #{addressStreet,jdbcType=VARCHAR},
+            age               = #{age,jdbcType=INTEGER},
+            birthday          = #{birthday,jdbcType=BIGINT},
+            check_no          = #{checkNo,jdbcType=VARCHAR},
+            check_times       = #{checkTimes,jdbcType=INTEGER},
+            community         = #{community,jdbcType=VARCHAR},
+            contact_name      = #{contactName,jdbcType=VARCHAR},
+            contact_phone     = #{contactPhone,jdbcType=VARCHAR},
+            costs_per_month   = #{costsPerMonth,jdbcType=VARCHAR},
+            domicile          = #{domicile,jdbcType=VARCHAR},
+            domicile_postcode = #{domicilePostcode,jdbcType=VARCHAR},
+            domicile_street   = #{domicileStreet,jdbcType=VARCHAR},
+            education_degree  = #{educationDegree,jdbcType=VARCHAR},
+            email             = #{email,jdbcType=VARCHAR},
+            gender            = #{gender,jdbcType=VARCHAR},
+            height            = #{height,jdbcType=VARCHAR},
+            history           = #{history,jdbcType=VARCHAR},
+            identity          = #{identity,jdbcType=VARCHAR},
+            if_married        = #{ifMarried,jdbcType=VARCHAR},
+            institution_name  = #{institutionName,jdbcType=VARCHAR},
+            manage_level      = #{manageLevel,jdbcType=VARCHAR},
+            name              = #{name,jdbcType=VARCHAR},
+            national          = #{national,jdbcType=VARCHAR},
+            payment           = #{payment,jdbcType=VARCHAR},
+            phone             = #{phone,jdbcType=VARCHAR},
+            photo             = #{photo,jdbcType=VARCHAR},
+            professional      = #{professional,jdbcType=VARCHAR},
+            qc                = #{qc,jdbcType=VARCHAR},
+            qc_tel            = #{qcTel,jdbcType=VARCHAR},
+            relationship      = #{relationship,jdbcType=VARCHAR},
+            screening_state   = #{screeningState,jdbcType=VARCHAR},
+            screeninger       = #{screeninger,jdbcType=VARCHAR},
+            screeninger_tel   = #{screeningerTel,jdbcType=VARCHAR},
+            telephone         = #{telephone,jdbcType=VARCHAR},
+            update_time       = #{updateTime,jdbcType=BIGINT},
+            weight            = #{weight,jdbcType=VARCHAR},
+            inst_id           = #{instId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id,
+               created_time,
+               creator,
+               is_removed,
+               address,
+               address_post_code,
+               address_street,
+               age,
+               birthday,
+               check_no,
+               check_times,
+               community,
+               contact_name,
+               contact_phone,
+               costs_per_month,
+               domicile,
+               domicile_postcode,
+               domicile_street,
+               education_degree,
+               email,
+               gender,
+               height,
+               history,
+               identity,
+               if_married,
+               institution_name,
+               manage_level,
+               name,
+               national,
+               payment,
+               phone,
+               photo,
+               professional,
+               qc,
+               qc_tel,
+               relationship,
+               screening_state,
+               screeninger,
+               screeninger_tel,
+               telephone,
+               update_time,
+               weight,
+               inst_id
+        from patient
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id,
+               created_time,
+               creator,
+               is_removed,
+               address,
+               address_post_code,
+               address_street,
+               age,
+               birthday,
+               check_no,
+               check_times,
+               community,
+               contact_name,
+               contact_phone,
+               costs_per_month,
+               domicile,
+               domicile_postcode,
+               domicile_street,
+               education_degree,
+               email,
+               gender,
+               height,
+               history,
+               identity,
+               if_married,
+               institution_name,
+               manage_level,
+               name,
+               national,
+               payment,
+               phone,
+               photo,
+               professional,
+               qc,
+               qc_tel,
+               relationship,
+               screening_state,
+               screeninger,
+               screeninger_tel,
+               telephone,
+               update_time,
+               weight,
+               inst_id
+        from patient
+    </select>
+    <resultMap id="BaseResultMap" type="com.example.model.Patient">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="created_time" jdbcType="BIGINT" property="createdTime"/>
+        <result column="creator" jdbcType="BIGINT" property="creator"/>
+        <result column="is_removed" jdbcType="BIT" property="isRemoved"/>
+        <result column="birthday" jdbcType="BIGINT" property="birthday"/>
+        <result column="gender" jdbcType="VARCHAR" property="gender"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="photo" jdbcType="VARCHAR" property="photo"/>
+        <result column="inst_id" jdbcType="BIGINT" property="instId"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="height" jdbcType="VARCHAR" property="height"/>
+        <result column="history" jdbcType="VARCHAR" property="history"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="weight" jdbcType="VARCHAR" property="weight"/>
+        <result column="check_no" jdbcType="VARCHAR" property="checkNo"/>
+        <result column="identity" jdbcType="VARCHAR" property="identity"/>
+        <result column="address_street" jdbcType="VARCHAR" property="addressStreet"/>
+        <result column="contact_name" jdbcType="VARCHAR" property="contactName"/>
+        <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone"/>
+        <result column="costs_per_month" jdbcType="VARCHAR" property="costsPerMonth"/>
+        <result column="domicile" jdbcType="VARCHAR" property="domicile"/>
+        <result column="domicile_street" jdbcType="VARCHAR" property="domicileStreet"/>
+        <result column="education_degree" jdbcType="VARCHAR" property="educationDegree"/>
+        <result column="if_married" jdbcType="VARCHAR" property="ifMarried"/>
+        <result column="national" jdbcType="VARCHAR" property="national"/>
+        <result column="payment" jdbcType="VARCHAR" property="payment"/>
+        <result column="professional" jdbcType="VARCHAR" property="professional"/>
+        <result column="relationship" jdbcType="VARCHAR" property="relationship"/>
+        <result column="address_post_code" jdbcType="VARCHAR" property="addressPostCode"/>
+        <result column="domicile_postcode" jdbcType="VARCHAR" property="domicilePostcode"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="telephone" jdbcType="VARCHAR" property="telephone"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="community" jdbcType="VARCHAR" property="community"/>
+        <result column="institution_name" jdbcType="VARCHAR" property="institutionName"/>
+        <result column="qc" jdbcType="VARCHAR" property="qc"/>
+        <result column="qc_tel" jdbcType="VARCHAR" property="qcTel"/>
+        <result column="screeninger" jdbcType="VARCHAR" property="screeninger"/>
+        <result column="screeninger_tel" jdbcType="VARCHAR" property="screeningerTel"/>
+        <result column="update_time" jdbcType="BIGINT" property="updateTime"/>
+        <result column="manage_level" jdbcType="VARCHAR" property="manageLevel"/>
+        <result column="screening_state" jdbcType="VARCHAR" property="screeningState"/>
+        <result column="check_times" jdbcType="INTEGER" property="checkTimes"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from patient
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.example.model.Patient">
+        insert into patient (id, created_time, creator,
+                             is_removed, birthday, gender,
+                             name, photo, inst_id,
+                             address, height, history,
+                             phone, weight, check_no,
+                             identity, address_street, contact_name,
+                             contact_phone, costs_per_month, domicile,
+                             domicile_street, education_degree, if_married,
+                             national, payment, professional,
+                             relationship, address_post_code, domicile_postcode,
+                             email, telephone, age,
+                             community, institution_name, qc,
+                             qc_tel, screeninger, screeninger_tel,
+                             update_time, manage_level, screening_state,
+                             check_times)
+        values (#{id,jdbcType=BIGINT}, #{createdTime,jdbcType=BIGINT}, #{creator,jdbcType=BIGINT},
+                #{isRemoved,jdbcType=BIT}, #{birthday,jdbcType=BIGINT}, #{gender,jdbcType=VARCHAR},
+                #{name,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, #{instId,jdbcType=BIGINT},
+                #{address,jdbcType=VARCHAR}, #{height,jdbcType=VARCHAR}, #{history,jdbcType=VARCHAR},
+                #{phone,jdbcType=VARCHAR}, #{weight,jdbcType=VARCHAR}, #{checkNo,jdbcType=VARCHAR},
+                #{identity,jdbcType=VARCHAR}, #{addressStreet,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR},
+                #{contactPhone,jdbcType=VARCHAR}, #{costsPerMonth,jdbcType=VARCHAR}, #{domicile,jdbcType=VARCHAR},
+                #{domicileStreet,jdbcType=VARCHAR}, #{educationDegree,jdbcType=VARCHAR}, #{ifMarried,jdbcType=VARCHAR},
+                #{national,jdbcType=VARCHAR}, #{payment,jdbcType=VARCHAR}, #{professional,jdbcType=VARCHAR},
+                #{relationship,jdbcType=VARCHAR}, #{addressPostCode,jdbcType=VARCHAR},
+                #{domicilePostcode,jdbcType=VARCHAR},
+                #{email,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER},
+                #{community,jdbcType=VARCHAR}, #{institutionName,jdbcType=VARCHAR}, #{qc,jdbcType=VARCHAR},
+                #{qcTel,jdbcType=VARCHAR}, #{screeninger,jdbcType=VARCHAR}, #{screeningerTel,jdbcType=VARCHAR},
+                #{updateTime,jdbcType=BIGINT}, #{manageLevel,jdbcType=VARCHAR}, #{screeningState,jdbcType=VARCHAR},
+                #{checkTimes,jdbcType=INTEGER})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.model.Patient">
+        update patient
+        set created_time      = #{createdTime,jdbcType=BIGINT},
+            creator           = #{creator,jdbcType=BIGINT},
+            is_removed        = #{isRemoved,jdbcType=BIT},
+            birthday          = #{birthday,jdbcType=BIGINT},
+            gender            = #{gender,jdbcType=VARCHAR},
+            name              = #{name,jdbcType=VARCHAR},
+            photo             = #{photo,jdbcType=VARCHAR},
+            inst_id           = #{instId,jdbcType=BIGINT},
+            address           = #{address,jdbcType=VARCHAR},
+            height            = #{height,jdbcType=VARCHAR},
+            history           = #{history,jdbcType=VARCHAR},
+            phone             = #{phone,jdbcType=VARCHAR},
+            weight            = #{weight,jdbcType=VARCHAR},
+            check_no          = #{checkNo,jdbcType=VARCHAR},
+            identity          = #{identity,jdbcType=VARCHAR},
+            address_street    = #{addressStreet,jdbcType=VARCHAR},
+            contact_name      = #{contactName,jdbcType=VARCHAR},
+            contact_phone     = #{contactPhone,jdbcType=VARCHAR},
+            costs_per_month   = #{costsPerMonth,jdbcType=VARCHAR},
+            domicile          = #{domicile,jdbcType=VARCHAR},
+            domicile_street   = #{domicileStreet,jdbcType=VARCHAR},
+            education_degree  = #{educationDegree,jdbcType=VARCHAR},
+            if_married        = #{ifMarried,jdbcType=VARCHAR},
+            national          = #{national,jdbcType=VARCHAR},
+            payment           = #{payment,jdbcType=VARCHAR},
+            professional      = #{professional,jdbcType=VARCHAR},
+            relationship      = #{relationship,jdbcType=VARCHAR},
+            address_post_code = #{addressPostCode,jdbcType=VARCHAR},
+            domicile_postcode = #{domicilePostcode,jdbcType=VARCHAR},
+            email             = #{email,jdbcType=VARCHAR},
+            telephone         = #{telephone,jdbcType=VARCHAR},
+            age               = #{age,jdbcType=INTEGER},
+            community         = #{community,jdbcType=VARCHAR},
+            institution_name  = #{institutionName,jdbcType=VARCHAR},
+            qc                = #{qc,jdbcType=VARCHAR},
+            qc_tel            = #{qcTel,jdbcType=VARCHAR},
+            screeninger       = #{screeninger,jdbcType=VARCHAR},
+            screeninger_tel   = #{screeningerTel,jdbcType=VARCHAR},
+            update_time       = #{updateTime,jdbcType=BIGINT},
+            manage_level      = #{manageLevel,jdbcType=VARCHAR},
+            screening_state   = #{screeningState,jdbcType=VARCHAR},
+            check_times       = #{checkTimes,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id,
+               created_time,
+               creator,
+               is_removed,
+               birthday,
+               gender,
+               name,
+               photo,
+               inst_id,
+               address,
+               height,
+               history,
+               phone,
+               weight,
+               check_no,
+               identity,
+               address_street,
+               contact_name,
+               contact_phone,
+               costs_per_month,
+               domicile,
+               domicile_street,
+               education_degree,
+               if_married,
+               national,
+               payment,
+               professional,
+               relationship,
+               address_post_code,
+               domicile_postcode,
+               email,
+               telephone,
+               age,
+               community,
+               institution_name,
+               qc,
+               qc_tel,
+               screeninger,
+               screeninger_tel,
+               update_time,
+               manage_level,
+               screening_state,
+               check_times
+        from patient
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id,
+               created_time,
+               creator,
+               is_removed,
+               birthday,
+               gender,
+               name,
+               photo,
+               inst_id,
+               address,
+               height,
+               history,
+               phone,
+               weight,
+               check_no,
+               identity,
+               address_street,
+               contact_name,
+               contact_phone,
+               costs_per_month,
+               domicile,
+               domicile_street,
+               education_degree,
+               if_married,
+               national,
+               payment,
+               professional,
+               relationship,
+               address_post_code,
+               domicile_postcode,
+               email,
+               telephone,
+               age,
+               community,
+               institution_name,
+               qc,
+               qc_tel,
+               screeninger,
+               screeninger_tel,
+               update_time,
+               manage_level,
+               screening_state,
+               check_times
+        from patient
+    </select>
+</mapper>

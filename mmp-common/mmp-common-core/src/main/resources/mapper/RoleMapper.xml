@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.RoleMapper">
+    <resultMap id="BaseResultMap" type="com.example.model.Role">
+        <id column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="created_time" jdbcType="BIGINT" property="createdTime"/>
+        <result column="creator" jdbcType="BIGINT" property="creator"/>
+        <result column="is_removed" jdbcType="BIT" property="isRemoved"/>
+        <result column="banned" jdbcType="BIT" property="banned"/>
+        <result column="built_in" jdbcType="BIT" property="builtIn"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+        <result column="proposer" jdbcType="VARCHAR" property="proposer"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from role
+        where name = #{name,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.example.model.Role">
+        insert into role (name, created_time, creator,
+                          is_removed, banned, built_in, description,
+                          nickname, proposer)
+        values (#{name,jdbcType=VARCHAR}, #{createdTime,jdbcType=BIGINT}, #{creator,jdbcType=BIGINT},
+                #{isRemoved,jdbcType=BIT}, #{banned,jdbcType=BIT}, #{builtIn,jdbcType=BIT},
+                #{description,jdbcType=VARCHAR},
+                #{nickname,jdbcType=VARCHAR}, #{proposer,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.model.Role">
+        update role
+        set created_time = #{createdTime,jdbcType=BIGINT},
+            creator      = #{creator,jdbcType=BIGINT},
+            is_removed   = #{isRemoved,jdbcType=BIT},
+            banned       = #{banned,jdbcType=BIT},
+            built_in     = #{builtIn,jdbcType=BIT},
+            description  = #{description,jdbcType=VARCHAR},
+            nickname     = #{nickname,jdbcType=VARCHAR},
+            proposer     = #{proposer,jdbcType=VARCHAR}
+        where name = #{name,jdbcType=VARCHAR}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select name,
+               created_time,
+               creator,
+               is_removed,
+               banned,
+               built_in,
+               description,
+               nickname,
+               proposer
+        from role
+        where name = #{name,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select name,
+               created_time,
+               creator,
+               is_removed,
+               banned,
+               built_in,
+               description,
+               nickname,
+               proposer
+        from role
+    </select>
+    <resultMap id="BaseResultMap" type="com.example.model.Role">
+        <id column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="created_time" jdbcType="BIGINT" property="createdTime"/>
+        <result column="creator" jdbcType="BIGINT" property="creator"/>
+        <result column="is_removed" jdbcType="BIT" property="isRemoved"/>
+        <result column="banned" jdbcType="BIT" property="banned"/>
+        <result column="built_in" jdbcType="BIT" property="builtIn"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+        <result column="proposer" jdbcType="VARCHAR" property="proposer"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from role
+        where name = #{name,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.example.model.Role">
+        insert into role (name, created_time, creator,
+                          is_removed, banned, built_in, description,
+                          nickname, proposer)
+        values (#{name,jdbcType=VARCHAR}, #{createdTime,jdbcType=BIGINT}, #{creator,jdbcType=BIGINT},
+                #{isRemoved,jdbcType=BIT}, #{banned,jdbcType=BIT}, #{builtIn,jdbcType=BIT},
+                #{description,jdbcType=VARCHAR},
+                #{nickname,jdbcType=VARCHAR}, #{proposer,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.model.Role">
+        update role
+        set created_time = #{createdTime,jdbcType=BIGINT},
+            creator      = #{creator,jdbcType=BIGINT},
+            is_removed   = #{isRemoved,jdbcType=BIT},
+            banned       = #{banned,jdbcType=BIT},
+            built_in     = #{builtIn,jdbcType=BIT},
+            description  = #{description,jdbcType=VARCHAR},
+            nickname     = #{nickname,jdbcType=VARCHAR},
+            proposer     = #{proposer,jdbcType=VARCHAR}
+        where name = #{name,jdbcType=VARCHAR}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select name,
+               created_time,
+               creator,
+               is_removed,
+               banned,
+               built_in,
+               description,
+               nickname,
+               proposer
+        from role
+        where name = #{name,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select name,
+               created_time,
+               creator,
+               is_removed,
+               banned,
+               built_in,
+               description,
+               nickname,
+               proposer
+        from role
+    </select>
+    <resultMap id="BaseResultMap" type="com.example.model.Role">
+        <id column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="created_time" jdbcType="BIGINT" property="createdTime"/>
+        <result column="creator" jdbcType="BIGINT" property="creator"/>
+        <result column="is_removed" jdbcType="BIT" property="isRemoved"/>
+        <result column="banned" jdbcType="BIT" property="banned"/>
+        <result column="built_in" jdbcType="BIT" property="builtIn"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+        <result column="proposer" jdbcType="VARCHAR" property="proposer"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from role
+        where name = #{name,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.example.model.Role">
+        insert into role (name, created_time, creator,
+                          is_removed, banned, built_in, description,
+                          nickname, proposer)
+        values (#{name,jdbcType=VARCHAR}, #{createdTime,jdbcType=BIGINT}, #{creator,jdbcType=BIGINT},
+                #{isRemoved,jdbcType=BIT}, #{banned,jdbcType=BIT}, #{builtIn,jdbcType=BIT},
+                #{description,jdbcType=VARCHAR},
+                #{nickname,jdbcType=VARCHAR}, #{proposer,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.model.Role">
+        update role
+        set created_time = #{createdTime,jdbcType=BIGINT},
+            creator      = #{creator,jdbcType=BIGINT},
+            is_removed   = #{isRemoved,jdbcType=BIT},
+            banned       = #{banned,jdbcType=BIT},
+            built_in     = #{builtIn,jdbcType=BIT},
+            description  = #{description,jdbcType=VARCHAR},
+            nickname     = #{nickname,jdbcType=VARCHAR},
+            proposer     = #{proposer,jdbcType=VARCHAR}
+        where name = #{name,jdbcType=VARCHAR}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select name,
+               created_time,
+               creator,
+               is_removed,
+               banned,
+               built_in,
+               description,
+               nickname,
+               proposer
+        from role
+        where name = #{name,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select name,
+               created_time,
+               creator,
+               is_removed,
+               banned,
+               built_in,
+               description,
+               nickname,
+               proposer
+        from role
+    </select>
+    <resultMap id="BaseResultMap" type="com.example.model.Role">
+        <id column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="created_time" jdbcType="BIGINT" property="createdTime"/>
+        <result column="creator" jdbcType="BIGINT" property="creator"/>
+        <result column="is_removed" jdbcType="BIT" property="isRemoved"/>
+        <result column="banned" jdbcType="BIT" property="banned"/>
+        <result column="built_in" jdbcType="BIT" property="builtIn"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+        <result column="proposer" jdbcType="VARCHAR" property="proposer"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from role
+        where name = #{name,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.example.model.Role">
+        insert into role (name, created_time, creator,
+                          is_removed, banned, built_in, description,
+                          nickname, proposer)
+        values (#{name,jdbcType=VARCHAR}, #{createdTime,jdbcType=BIGINT}, #{creator,jdbcType=BIGINT},
+                #{isRemoved,jdbcType=BIT}, #{banned,jdbcType=BIT}, #{builtIn,jdbcType=BIT},
+                #{description,jdbcType=VARCHAR},
+                #{nickname,jdbcType=VARCHAR}, #{proposer,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.model.Role">
+        update role
+        set created_time = #{createdTime,jdbcType=BIGINT},
+            creator      = #{creator,jdbcType=BIGINT},
+            is_removed   = #{isRemoved,jdbcType=BIT},
+            banned       = #{banned,jdbcType=BIT},
+            built_in     = #{builtIn,jdbcType=BIT},
+            description  = #{description,jdbcType=VARCHAR},
+            nickname     = #{nickname,jdbcType=VARCHAR},
+            proposer     = #{proposer,jdbcType=VARCHAR}
+        where name = #{name,jdbcType=VARCHAR}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select name,
+               created_time,
+               creator,
+               is_removed,
+               banned,
+               built_in,
+               description,
+               nickname,
+               proposer
+        from role
+        where name = #{name,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select name,
+               created_time,
+               creator,
+               is_removed,
+               banned,
+               built_in,
+               description,
+               nickname,
+               proposer
+        from role
+    </select>
+    <resultMap id="BaseResultMap" type="com.example.model.Role">
+        <id column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="created_time" jdbcType="BIGINT" property="createdTime"/>
+        <result column="creator" jdbcType="BIGINT" property="creator"/>
+        <result column="is_removed" jdbcType="BIT" property="isRemoved"/>
+        <result column="banned" jdbcType="BIT" property="banned"/>
+        <result column="built_in" jdbcType="BIT" property="builtIn"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+        <result column="proposer" jdbcType="VARCHAR" property="proposer"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from role
+        where name = #{name,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.example.model.Role">
+        insert into role (name, created_time, creator,
+                          is_removed, banned, built_in, description,
+                          nickname, proposer)
+        values (#{name,jdbcType=VARCHAR}, #{createdTime,jdbcType=BIGINT}, #{creator,jdbcType=BIGINT},
+                #{isRemoved,jdbcType=BIT}, #{banned,jdbcType=BIT}, #{builtIn,jdbcType=BIT},
+                #{description,jdbcType=VARCHAR},
+                #{nickname,jdbcType=VARCHAR}, #{proposer,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.model.Role">
+        update role
+        set created_time = #{createdTime,jdbcType=BIGINT},
+            creator      = #{creator,jdbcType=BIGINT},
+            is_removed   = #{isRemoved,jdbcType=BIT},
+            banned       = #{banned,jdbcType=BIT},
+            built_in     = #{builtIn,jdbcType=BIT},
+            description  = #{description,jdbcType=VARCHAR},
+            nickname     = #{nickname,jdbcType=VARCHAR},
+            proposer     = #{proposer,jdbcType=VARCHAR}
+        where name = #{name,jdbcType=VARCHAR}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select name,
+               created_time,
+               creator,
+               is_removed,
+               banned,
+               built_in,
+               description,
+               nickname,
+               proposer
+        from role
+        where name = #{name,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select name,
+               created_time,
+               creator,
+               is_removed,
+               banned,
+               built_in,
+               description,
+               nickname,
+               proposer
+        from role
+    </select>
+    <resultMap id="BaseResultMap" type="com.example.model.Role">
+        <id column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="created_time" jdbcType="BIGINT" property="createdTime"/>
+        <result column="creator" jdbcType="BIGINT" property="creator"/>
+        <result column="is_removed" jdbcType="BIT" property="isRemoved"/>
+        <result column="banned" jdbcType="BIT" property="banned"/>
+        <result column="built_in" jdbcType="BIT" property="builtIn"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+        <result column="proposer" jdbcType="VARCHAR" property="proposer"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from role
+        where name = #{name,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.example.model.Role">
+        insert into role (name, created_time, creator,
+                          is_removed, banned, built_in, description,
+                          nickname, proposer)
+        values (#{name,jdbcType=VARCHAR}, #{createdTime,jdbcType=BIGINT}, #{creator,jdbcType=BIGINT},
+                #{isRemoved,jdbcType=BIT}, #{banned,jdbcType=BIT}, #{builtIn,jdbcType=BIT},
+                #{description,jdbcType=VARCHAR},
+                #{nickname,jdbcType=VARCHAR}, #{proposer,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.model.Role">
+        update role
+        set created_time = #{createdTime,jdbcType=BIGINT},
+            creator      = #{creator,jdbcType=BIGINT},
+            is_removed   = #{isRemoved,jdbcType=BIT},
+            banned       = #{banned,jdbcType=BIT},
+            built_in     = #{builtIn,jdbcType=BIT},
+            description  = #{description,jdbcType=VARCHAR},
+            nickname     = #{nickname,jdbcType=VARCHAR},
+            proposer     = #{proposer,jdbcType=VARCHAR}
+        where name = #{name,jdbcType=VARCHAR}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select name,
+               created_time,
+               creator,
+               is_removed,
+               banned,
+               built_in,
+               description,
+               nickname,
+               proposer
+        from role
+        where name = #{name,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select name,
+               created_time,
+               creator,
+               is_removed,
+               banned,
+               built_in,
+               description,
+               nickname,
+               proposer
+        from role
+    </select>
+</mapper>

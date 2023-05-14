@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.charge.dao.HisOrderChargeMapper">
+
+    <update id="updByStatusType">
+        update his_order_charge oc,his_order_charge_item oci
+        set oc.pay_type="0",
+            oc.order_status="1",
+            oci.status="1"
+        where oc.order_id = #{orderId}
+          and oci.order_id = #{orderId}
+    </update>
+
+    <insert id="insertAll">
+        INSERT INTO his_order_charge (order_id, reg_id, patient_name, order_amount, order_status, pay_type, create_time,
+                                      pay_time)
+        VALUES (#{param1}, #{param2}, #{param3}, #{param4}, '1', '0', #{param5}, #{param6})
+    </insert>
+
+    <insert id="insertAllWX">
+        INSERT INTO his_order_charge (order_id, reg_id, patient_name, order_amount, order_status, pay_type, create_time,
+                                      pay_time)
+        VALUES (#{param1}, #{param2}, #{param3}, #{param4}, '2', '1', #{param5}, #{param6})
+    </insert>
+
+    <update id="updBystatus">
+        UPDATE his_order_charge
+        set order_status=1 and pay_type = 1
+        where order_id = #{orderId}
+    </update>
+</mapper>

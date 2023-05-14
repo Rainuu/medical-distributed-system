@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.CareOrderMapper">
+    <resultMap id="BaseResultMap" type="com.example.model.CareOrder">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="patient_id" jdbcType="BIGINT" property="patientId"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from care_order
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.example.model.CareOrder">
+        insert into care_order (id, patient_id, content,
+                                create_time, update_time)
+        values (#{id,jdbcType=BIGINT}, #{patientId,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR},
+                #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.model.CareOrder">
+        update care_order
+        set patient_id  = #{patientId,jdbcType=BIGINT},
+            content     = #{content,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id, patient_id, content, create_time, update_time
+        from care_order
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id, patient_id, content, create_time, update_time
+        from care_order
+    </select>
+    <resultMap id="BaseResultMap" type="com.example.model.CareOrder">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="patient_id" jdbcType="BIGINT" property="patientId"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from care_order
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.example.model.CareOrder">
+        insert into care_order (id, patient_id, content,
+                                create_time, update_time)
+        values (#{id,jdbcType=BIGINT}, #{patientId,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR},
+                #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.model.CareOrder">
+        update care_order
+        set patient_id  = #{patientId,jdbcType=BIGINT},
+            content     = #{content,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id, patient_id, content, create_time, update_time
+        from care_order
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id, patient_id, content, create_time, update_time
+        from care_order
+    </select>
+</mapper>

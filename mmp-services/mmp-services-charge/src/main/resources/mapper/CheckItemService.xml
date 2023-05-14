@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.charge.dao.HisOrderChargeItemMapper">
+
+    <select id="selectListAll" resultType="com.aaa.core.entity.OrderChargeItem">
+        SELECT item_id,
+               co_id,
+               item_name,
+               item_price,
+               item_num,
+               item_amount,
+               order_id,
+               item_type,
+               status
+        FROM his_order_charge_item
+        WHERE order_id = #{orderId}
+    </select>
+
+
+    <update id="updByDispense">
+        update his_order_charge_item
+        set status=3
+        where item_id = #{itemId}
+    </update>
+
+    <delete id="updataBystatus">
+        UPDATE his_order_charge t , his_order_charge_item tt ,his_care_order_item ttt
+        set t.order_status='1',
+            tt.status='1',
+            ttt.status='1'
+        where t.order_id = #{orderId}
+          and tt.order_id = #{orderId}
+          and tt.item_id = ttt.item_id
+    </delete>
+</mapper>

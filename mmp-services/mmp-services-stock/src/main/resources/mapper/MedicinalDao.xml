@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace 写的就是你要实现的那个接口的路径-->
+<mapper namespace="com.aaa.stock.dao.MedicinalDao">
+
+    <!--WHERE m.medicines_id = #{medicinalVo.medicinesId}-->
+    <!--    <select id="getMedById" resultType="com.aaa.core.entity.Medicines">-->
+    <!--        SELECT m.*,p.producer_name,p.producer_id-->
+    <!--        FROM stock_medicines m JOIN stock_producer p-->
+    <!--        ON m.producter_id = p.producer_id WHERE m.medicines_id != 0-->
+    <!--            <if test="medicinalVo.medicinesName != null &amp; medicinalVo.medicinesName != ''">-->
+    <!--                &lt;!&ndash;and m.medicines_name = #{medicinalVo.medicinesName}&ndash;&gt;-->
+    <!--                and m.medicines_name like concat('%',#{medicinalVo.medicinesName},'%')-->
+    <!--            </if>-->
+    <!--            <if test="medicinalVo.keywords != null &amp; medicinalVo.keywords != ''">-->
+    <!--                &lt;!&ndash;and m.keywords = #{medicinalVo.keywords}&ndash;&gt;-->
+    <!--                and m.keywords like concat('%',#{medicinalVo.keywords},'%')-->
+    <!--            </if>-->
+    <!--            <if test="medicinalVo.medicinesType != null &amp; medicinalVo.medicinesType != ''">-->
+    <!--                and m.medicines_type like concat('%',#{medicinalVo.medicinesType},'%')-->
+    <!--            </if>-->
+    <!--            <if test="medicinalVo.producerId != null &amp; medicinalVo.producerId != ''">-->
+    <!--                and m.producter_id like concat('%',#{medicinalVo.producerId},'%')-->
+    <!--            </if>-->
+    <!--            <if test="medicinalVo.producerName != null &amp; medicinalVo.producerName != ''">-->
+    <!--                and m.producer_name like concat('%',#{medicinalVo.producerName},'%')-->
+    <!--            </if>-->
+    <!--            <if test="medicinalVo.prescriptionType != null &amp; medicinalVo.prescriptionType != ''">-->
+    <!--                and m.prescription_type like concat('%',#{medicinalVo.prescriptionType},'%')-->
+    <!--            </if>-->
+    <!--            <if test="medicinalVo.status != null &amp; medicinalVo.status != ''">-->
+    <!--                and m.status like concat('%',#{medicinalVo.status},'%')-->
+    <!--            </if>-->
+    <!--    </select>-->
+
+    <update id="updById">
+        UPDATE
+        stock_medicines
+        SET
+        medicines_number=#{medicines.medicinesNumber},
+        medicines_name=#{medicines.medicinesName},
+        medicines_type=#{medicines.medicinesType},
+        prescription_type=#{medicines.prescriptionType},
+        prescription_price=#{medicines.prescriptionPrice},
+        unit=#{medicines.unit},
+        conversion=#{medicines.conversion},
+        keywords=#{medicines.keywords},
+        status=#{medicines.status},
+        producter_id=#{medicines.producterId},
+        medicines_stock_num=#{medicines.medicinesStockNum},
+        medicines_stock_danger_num=#{medicines.medicinesStockDangerNum},
+        create_time=#{medicines.createTime},
+        update_time=#{medicines.updateTime},
+        create_by=#{medicines.createBy},
+        update_by=#{medicines.updateBy},
+        del_flag=#{medicines.delFlag}
+        WHERE
+        medicines_id=#{medicines.medicinesId};
+    </update>
+</mapper>

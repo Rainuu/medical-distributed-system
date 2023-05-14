@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.charge.dao.HisOrderBackfeeMapper">
+
+    <select id="selectAll" resultType="com.aaa.core.entity.OrderBackfeeItem">
+        select item_id,
+               co_id,
+               item_name,
+               item_price,
+               item_num,
+               item_amount,
+               back_id,
+               item_type,
+               status
+        from his_order_backfee_item
+        where back_id = #{backId}
+    </select>
+
+    <insert id="insertAll">
+        INSERT INTO his_order_backfee (back_id, reg_id, patient_name, back_amount, back_status, back_type, create_time,
+                                       back_time)
+        VALUES (#{param1}, #{param2}, #{param3}, #{param4}, '1', '0', #{param5}, #{param6})
+    </insert>
+
+    <insert id="insertAllzfb">
+        INSERT INTO his_order_backfee (back_id, reg_id, patient_name, back_amount, back_status, back_type, create_time,
+                                       back_time)
+        VALUES (#{param1}, #{param2}, #{param3}, #{param4}, '1', '1', #{param5}, #{param6})
+    </insert>
+</mapper>
