@@ -9,9 +9,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION:
- * @USER: HZM
- * @DATE: 2023/3/22 13:26
  */
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @MapperScan(basePackages = {"com.aaa.charge.dao"})

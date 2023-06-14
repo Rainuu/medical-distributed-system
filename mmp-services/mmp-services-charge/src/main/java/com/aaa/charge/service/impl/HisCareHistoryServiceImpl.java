@@ -20,9 +20,7 @@ import java.util.Map;
 
 /**
  * 病例表(HisCareHistory)表服务实现类
- *
- * @author makejava
- * @since 2023-03-27 09:37:34
+
  */
 @Service
 public class HisCareHistoryServiceImpl implements HisCareHistoryService {

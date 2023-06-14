@@ -6,9 +6,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION: 接收前端用于查询的请求数据，封装前端用于模糊查询的字段,返回值类型要和前端对照
- * @USER: HZM
- * @DATE: 2023/3/24 14:56
  */
 @Data
 public class ProducterVo {

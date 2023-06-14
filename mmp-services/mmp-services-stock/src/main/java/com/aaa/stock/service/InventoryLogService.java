@@ -8,9 +8,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION:
- * @USER: HZM
- * @DATE: 2023/4/3 9:15
  */
 public interface InventoryLogService extends IService<InventoryLog> {
 

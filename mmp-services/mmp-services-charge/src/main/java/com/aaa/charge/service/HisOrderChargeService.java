@@ -12,9 +12,6 @@ import java.util.Map;
 
 /**
  * 收费表(HisOrderCharge)表服务接口
- *
- * @author makejava
- * @since 2023-03-24 09:56:35
  */
 
 public interface HisOrderChargeService {

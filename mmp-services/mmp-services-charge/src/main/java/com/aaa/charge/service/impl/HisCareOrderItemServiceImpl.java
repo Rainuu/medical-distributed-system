@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author lml 药品销售统计接口
+ *   药品销售统计接口
  */
 @Service
 public class HisCareOrderItemServiceImpl implements HisCareOrderItemService {

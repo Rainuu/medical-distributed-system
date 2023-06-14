@@ -14,9 +14,6 @@ import java.util.List;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION:
- * @USER: HZM
- * @DATE: 2023/3/27 16:51
  */
 @RestController
 @RequestMapping("stock/api/medicinal")

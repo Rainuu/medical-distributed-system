@@ -6,9 +6,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION:
- * @USER: HZM
- * @DATE: 2023/3/27 16:04
  */
 @Data
 public class MedicinalVo {

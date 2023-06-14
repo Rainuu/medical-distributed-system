@@ -13,9 +13,6 @@ import java.util.List;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION:
- * @USER: HZM
- * @DATE: 2023/3/26 16:09
  */
 @RestController
 @RequestMapping("stock/api/provider") //给前端提供的路径

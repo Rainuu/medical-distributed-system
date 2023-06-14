@@ -6,9 +6,6 @@ import org.springframework.stereotype.Repository;
 
 /**
  * 药用处方表(HisCareOrder)表数据库访问层
- *
- * @author makejava
- * @since 2023-03-27 15:41:16
  */
 @Repository
 public interface HisCareOrderMapper extends BaseMapper<CareOrder> {

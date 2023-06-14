@@ -9,9 +9,6 @@ import java.util.List;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION:
- * @USER: HZM
- * @DATE: 2023/4/3 7:58
  */
 public interface PurchaseItemService extends IService<PurchaseItem> {
 

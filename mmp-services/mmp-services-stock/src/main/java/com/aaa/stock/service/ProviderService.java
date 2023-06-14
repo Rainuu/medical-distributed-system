@@ -8,9 +8,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION:
- * @USER: HZM
- * @DATE: 2023/3/26 15:46
  */
 public interface ProviderService extends IService<Provider> {
     //查询页面所有数据，并实现分页

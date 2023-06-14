@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION:
- * @USER: HZM
- * @DATE: 2023/4/3 9:22
  */
 @RestController
 @RequestMapping("stock/api/InventoryLog") //给前端提供的路径

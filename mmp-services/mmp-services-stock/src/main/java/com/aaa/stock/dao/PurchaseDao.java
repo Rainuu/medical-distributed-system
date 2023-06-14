@@ -9,9 +9,6 @@ import org.apache.ibatis.annotations.Param;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION:
- * @USER: HZM
- * @DATE: 2023/3/28 19:51
  */
 @Mapper
 public interface PurchaseDao extends BaseMapper<Purchase> {

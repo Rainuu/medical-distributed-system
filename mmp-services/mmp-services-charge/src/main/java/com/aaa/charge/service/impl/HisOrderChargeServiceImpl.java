@@ -27,9 +27,6 @@ import java.util.*;
 
 /**
  * 收费表(HisOrderCharge)表服务实现类
- *
- * @author makejava
- * @since 2023-03-24 09:56:37
  */
 @Service
 public class HisOrderChargeServiceImpl implements HisOrderChargeService {

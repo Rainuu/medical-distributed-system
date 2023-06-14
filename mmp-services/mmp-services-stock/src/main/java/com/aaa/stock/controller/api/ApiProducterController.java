@@ -12,9 +12,7 @@ import java.util.List;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION: 给前端提供的接口，路径为 stock/api/producter
- * @USER: HZM
- * @DATE: 2023/3/24 11:06
+
  */
 @RestController
 @RequestMapping("stock/api/producter")

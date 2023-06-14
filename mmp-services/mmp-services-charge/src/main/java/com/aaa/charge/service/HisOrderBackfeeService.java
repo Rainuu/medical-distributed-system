@@ -13,9 +13,6 @@ import java.util.Map;
 
 /**
  * 退费主表(HisOrderBackfee)表服务接口
- *
- * @author makejava
- * @since 2023-03-25 11:09:21
  */
 public interface HisOrderBackfeeService {
     //退费列表查询,分页模糊

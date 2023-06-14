@@ -7,9 +7,6 @@ import org.apache.ibatis.annotations.Param;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION:
- * @USER: HZM
- * @DATE: 2023/3/26 15:40
  */
 @Mapper
 public interface ProviderDao extends BaseMapper<Provider> {

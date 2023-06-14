@@ -11,12 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 病例表(HisCareHistory)表控制层
- *
- * @author makejava
- * @since 2023-03-27 09:37:34
- */
+
 @RestController
 @RequestMapping("charge/api/hisCareHistory")
 public class ApiCareHistoryController {

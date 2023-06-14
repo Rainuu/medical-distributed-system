@@ -15,9 +15,6 @@ import java.util.Random;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION:
- * @USER: HZM
- * @DATE: 2023/3/28 19:55
  */
 @RestController
 @RequestMapping("stock/api/purchase") //给前端提供的路径

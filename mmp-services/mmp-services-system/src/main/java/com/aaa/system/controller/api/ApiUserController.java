@@ -2,7 +2,6 @@ package com.aaa.system.controller.api;
 
 import com.aaa.core.entity.User;
 import com.aaa.core.vo.Result;
-import com.aaa.system.aop.annotation.Log;
 import com.aaa.system.service.UserSercvice;
 import com.aaa.system.vo.UserVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -40,7 +39,6 @@ public class ApiUserController {
     }
 
     @PostMapping("saveandsupdate")
-    @Log(title = "添加或修改", business_type = "1")
     public Result saveAndUpdate(User user) {
         if (userSercvice.saveAndUp(user)) {
             return new Result(200, "成功", true);

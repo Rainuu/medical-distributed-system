@@ -8,9 +8,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION:
- * @USER: HZM
- * @DATE: 2023/3/24 10:45
  */
 public interface ProducterService extends IService<Producer> {
 

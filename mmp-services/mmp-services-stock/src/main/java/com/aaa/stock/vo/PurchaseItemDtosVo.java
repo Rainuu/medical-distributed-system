@@ -6,9 +6,6 @@ import java.math.BigDecimal;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION:
- * @USER: HZM
- * @DATE: 2023/4/3 21:30
  */
 @Data
 public class PurchaseItemDtosVo {

@@ -11,9 +11,6 @@ import java.util.Map;
 
 /**
  * 开诊细表(HisCareOrderItem)表数据库访问层
- *
- * @author makejava
- * @since 2023-03-27 15:41:40
  */
 @Repository
 public interface HisCareOrderItemMapper extends BaseMapper<CareOrderItem> {

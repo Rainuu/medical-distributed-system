@@ -50,7 +50,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    @LoginLog
+//    @LoginLog
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
@@ -64,7 +64,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.cors();
         http.csrf().disable();
-        http.authorizeRequests().anyRequest().authenticated();
+        http.authorizeRequests().anyRequest().permitAll();
     }
 
     //认证失败是处理的功能，失败时响应的json数据
@@ -75,7 +75,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 response.setContentType("application/json;charset=utf-8");
                 PrintWriter writer = response.getWriter();
                 Result<String> result = new Result<>(500, "登陆失败");
-                //把对象转为json字符串，使用阿里的fastjson,需要导包
+
                 String jsonString = JSON.toJSONString(result);
 
                 //把json响应给前端
@@ -90,9 +90,9 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
     //认证成功是处理的功能，成功时响应的json数据
     private AuthenticationSuccessHandler successHandler() {
-        // 匿名实现类,成功时的处理类，这里可返回json数据
+
         return new AuthenticationSuccessHandler() {
-            //Authentication:用户信息都封装到该对象中
+
             @Override
             public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
                 System.out.println("====== 成功 ======");

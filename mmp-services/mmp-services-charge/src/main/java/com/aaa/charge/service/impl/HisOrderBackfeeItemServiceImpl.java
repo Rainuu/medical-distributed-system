@@ -20,9 +20,6 @@ import java.util.Random;
 
 /**
  * 退费主表(HisOrderBackfee)表服务接口
- *
- * @author makejava
- * @since 2023-03-25 11:09:21
  */
 @Service
 public class HisOrderBackfeeItemServiceImpl implements HisOrderBackfeeItemService {

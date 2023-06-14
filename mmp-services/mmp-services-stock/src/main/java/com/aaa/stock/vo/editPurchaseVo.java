@@ -9,9 +9,6 @@ import java.util.Date;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION:
- * @USER: HZM
- * @DATE: 2023/4/4 11:36
  */
 @Data
 public class editPurchaseVo {

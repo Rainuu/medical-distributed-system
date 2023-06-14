@@ -9,9 +9,6 @@ import java.time.LocalDateTime;
 
 /**
  * 收费表(HisOrderCharge)表数据库访问层
- *
- * @author makejava
- * @since 2023-03-24 09:56:27
  */
 
 public interface HisOrderChargeMapper extends BaseMapper<OrderCharge> {

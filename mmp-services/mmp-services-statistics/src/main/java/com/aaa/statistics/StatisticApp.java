@@ -7,9 +7,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION:
- * @USER: HZM
- * @DATE: 2023/3/22 13:28
  */
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableFeignClients("com.aaa.statistics.feign") //扫描feign

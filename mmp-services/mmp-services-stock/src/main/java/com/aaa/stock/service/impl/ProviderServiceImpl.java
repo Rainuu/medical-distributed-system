@@ -18,9 +18,6 @@ import java.util.Objects;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION:
- * @USER: HZM
- * @DATE: 2023/3/26 15:48
  */
 @Service
 public class ProviderServiceImpl extends ServiceImpl<ProviderDao, Provider> implements ProviderService {

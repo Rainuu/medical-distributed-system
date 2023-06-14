@@ -12,9 +12,6 @@ import java.util.List;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION:
- * @USER: HZM
- * @DATE: 2023/3/28 19:52
  */
 public interface PurchaseService extends IService<Purchase> {
     //查询页面所有数据，并实现分页

@@ -16,9 +16,6 @@ import java.util.Map;
 
 /**
  * 收费表(HisOrderCharge)表控制层
- *
- * @author makejava
- * @since 2023-03-24 09:56:25
  */
 @RestController
 @RequestMapping("charge/api/hisOrderCharge")

@@ -17,9 +17,6 @@ import java.util.Objects;
 
 /**
  * @PROJECT_NAME: MedicalManagementPlatform
- * @DESCRIPTION:
- * @USER: HZM
- * @DATE: 2023/4/3 9:17
  */
 @Service
 public class InventoryLogServiceImpl extends ServiceImpl<InventoryLogDao, InventoryLog> implements InventoryLogService {

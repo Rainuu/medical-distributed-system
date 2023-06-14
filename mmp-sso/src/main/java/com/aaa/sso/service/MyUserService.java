@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +35,7 @@ public class MyUserService implements UserDetailsService {
         //查询用户权限
         List<Menu> menuList = menuFeign.findByUserid(user.getUserId());
         Collection<SimpleGrantedAuthority> authorities = menuList.stream().map(item -> new SimpleGrantedAuthority(item.getPercode())).collect(Collectors.toList());
-        return new org.springframework.security.core.userdetails.User(user.getPhone(), user.getPassword(), authorities);
+
+        return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(),authorities);
     }
 }
